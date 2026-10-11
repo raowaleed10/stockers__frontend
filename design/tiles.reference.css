@@ -1,0 +1,151 @@
+/*
+  Reference CSS for the table tiles, exactly as used in the approved designs
+  (design/html/03-live-board.html, 05-..., 06-..., 16-...).
+  Rebuild these as React components in apps/web/src/tiles using Tailwind + small CSS modules.
+  Keep the measurements and colours; class names here are only for reference.
+
+  Anatomy of a snooker tile:
+    <button class="t snk lit r-play">       wooden rail (13px padding) + status ring (box-shadow)
+      <span class="pk a|b2|c|d|e|f">        6 pockets (22px), corners + middle of the long sides
+      <div class="cl">                      green cloth, inner cushion, min-height 176px
+        <span class="bk"> <span class="dd"> baulk line at 21% and the D
+        (balls only when free)              reds triangle at 68%, colours on their spots
+        <div class="ct">                    content: number + label + pill, game type, players, timer + amount
+*/
+
+.t{position:relative;box-sizing:border-box;display:block;text-align:left;border:0;padding:0;margin:0;color:#F3ECDD;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.t[disabled]{cursor:not-allowed}
+.t:focus-visible{outline:3px solid #F3ECDD;outline-offset:6px}
+
+/* shared content */
+.ct{position:relative;z-index:2;display:flex;flex-direction:column;gap:5px;height:100%;box-sizing:border-box;text-shadow:0 1px 2px rgba(0,0,0,.55)}
+.top{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:6px 10px}
+.idn{display:flex;align-items:flex-end;gap:9px}
+.num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:58px;line-height:.8}
+.lab{font-size:14px;line-height:1.2;color:var(--sub,#D3E6D7);white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px 5px 7px;border-radius:999px;background:rgba(10,8,6,.55);font-size:14px;font-weight:600;white-space:nowrap;text-shadow:none;color:#F3ECDD}
+.dot{width:13px;height:13px;border-radius:50%;box-shadow:inset -3px -3px 0 rgba(0,0,0,.28);flex:0 0 auto}
+.gt{font-size:16px;font-weight:700}
+.gt span{font-weight:500;color:var(--sub,#D3E6D7)}
+.pl{font-size:17px}
+.pl span{color:var(--sub,#D3E6D7)}
+.bot{display:flex;align-items:baseline;justify-content:space-between;margin-top:auto}
+.tmr{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.amt{font-size:19px;font-weight:700}
+.cta{font-size:21px;font-weight:700;color:#BFF0CF}
+.hint{font-size:14px;color:var(--sub,#D3E6D7)}
+
+/* balls and coins */
+.b{position:absolute;width:9px;height:9px;border-radius:50%;z-index:1;box-shadow:0 1px 1.5px rgba(0,0,0,.55)}
+
+/* ---------------- snooker table ---------------- */
+.snk{padding:13px;border-radius:18px;background:linear-gradient(160deg,#82502C 0%,#4E2E17 48%,#6E4424 100%)}
+.snk::before{content:"";position:absolute;inset:0;border-radius:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -2px 0 rgba(0,0,0,.4),inset 0 0 0 1px rgba(0,0,0,.35);pointer-events:none}
+.cl{position:relative;height:100%;min-height:176px;box-sizing:border-box;border-radius:7px;padding:13px 18px 11px;overflow:hidden;
+  background:radial-gradient(ellipse 72% 85% at 50% 42%,#2A8C52 0%,#1D6E3F 58%,#14502D 100%);
+  box-shadow:inset 0 0 0 4px #16603A,inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 26px rgba(0,0,0,.45)}
+.lit .cl{background:radial-gradient(ellipse 58% 78% at 50% 44%,#3DB06B 0%,#239052 42%,#16582F 100%)}
+.dim .cl{background:radial-gradient(ellipse 72% 85% at 50% 42%,#4C6151 0%,#3A4C3F 58%,#2C3A30 100%)}
+.pk{position:absolute;z-index:3;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 50% 42%,#000 0 56%,#24170D 100%);box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+.pk.a{top:3px;left:3px}.pk.b2{top:3px;right:3px}.pk.c{bottom:3px;left:3px}.pk.d{bottom:3px;right:3px}
+.pk.e{top:1px;left:calc(50% - 11px)}.pk.f{bottom:1px;left:calc(50% - 11px)}
+.bk{position:absolute;z-index:0;top:4px;bottom:4px;left:21%;width:1.5px;background:rgba(255,255,255,.2)}
+.dd{position:absolute;z-index:0;left:calc(21% - 32px);top:calc(50% - 32px);width:33px;height:64px;box-sizing:border-box;border:1.5px solid rgba(255,255,255,.2);border-right:0;border-radius:32px 0 0 32px}
+.cover{position:absolute;inset:0;z-index:1;border-radius:7px;background:repeating-linear-gradient(135deg,#55595F 0 14px,#474A4F 14px 28px)}
+.rc{display:inline-block;padding:3px 10px 4px;border-radius:7px;background:#D92D20;color:#fff;box-shadow:0 2px 0 #8F1C14,0 0 0 2px rgba(255,255,255,.15);text-shadow:none}
+.cardi{width:10px;height:14px;border-radius:2px;background:#F0574F;transform:rotate(-12deg);box-shadow:0 1px 2px rgba(0,0,0,.4);flex:0 0 auto}
+
+/* ---------------- pool table ---------------- */
+.pool{padding:14px;border-radius:16px;background:linear-gradient(160deg,#3A3633 0%,#1E1B19 50%,#2E2A27 100%)}
+.pool::before{content:"";position:absolute;inset:0;border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(0,0,0,.5);pointer-events:none}
+.pool .cl{background:radial-gradient(ellipse 72% 85% at 50% 42%,#2F7FC4 0%,#1F5F9A 58%,#174775 100%);box-shadow:inset 0 0 0 4px #1A5288,inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 26px rgba(0,0,0,.45)}
+.pool.dim .cl{background:radial-gradient(ellipse 72% 85% at 50% 42%,#4B6278 0%,#3B4D60 58%,#2E3C4B 100%);box-shadow:inset 0 0 0 4px #34485B,inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 26px rgba(0,0,0,.45)}
+.pool .pk{width:24px;height:24px}
+.pool .pk.e{left:calc(50% - 12px)}.pool .pk.f{left:calc(50% - 12px)}
+.pool .lab,.pool .gt span,.pool .pl span,.pool .hint{--sub:#D2E2F2}
+.dm{position:absolute;z-index:3;width:6px;height:6px;background:#EDE6D6;transform:rotate(45deg);opacity:.85}
+.hs{position:absolute;z-index:0;top:4px;bottom:4px;left:25%;width:1.5px;background:rgba(255,255,255,.16)}
+
+/* ---------------- room ---------------- */
+.room{padding:9px;border-radius:18px;background:#2B221B;border:3px solid #8A7660;display:flex;gap:8px}
+.room .door{position:absolute;left:28px;bottom:-3px;width:54px;height:3px;background:#16110D}
+.room .swing{position:absolute;left:28px;bottom:0;width:40px;height:40px;border-top:1.5px dashed rgba(201,183,160,.45);border-right:1.5px dashed rgba(201,183,160,.45);border-radius:0 40px 0 0;box-sizing:border-box}
+.room .snk{flex:1 1 auto;min-width:0;padding:11px;border-radius:14px}
+.room .snk .cl{min-height:150px;padding:11px 14px 9px}
+.room .lab{font-size:13px}
+.room .snk .pk{width:19px;height:19px}
+.room .snk .pk.e,.room .snk .pk.f{left:calc(50% - 9.5px)}
+.sofa{flex:0 0 28px;position:relative;border-radius:12px;background:linear-gradient(90deg,#5E241C,#86372B 60%,#6E2B22);box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),inset 5px 0 0 rgba(0,0,0,.22);display:flex;flex-direction:column;gap:5px;padding:10px 4px 10px 9px;box-sizing:border-box}
+.sofa i{flex:1 1 0;border-radius:6px;background:linear-gradient(90deg,#9A4434,#7E3428);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+
+/* ---------------- carrom board ---------------- */
+.crm{aspect-ratio:1/1;padding:16px;border-radius:12px;background:linear-gradient(150deg,#6A4322 0%,#3B2312 55%,#59381C 100%)}
+.crm::before{content:"";position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(0,0,0,.4);pointer-events:none}
+.cb{position:relative;height:100%;box-sizing:border-box;border-radius:3px;padding:40px 40px 36px;overflow:hidden;color:#2A1A0C;
+  background:radial-gradient(ellipse at 45% 40%,#F6E4BC 0%,#ECD29F 60%,#DDBC82 100%);box-shadow:inset 0 0 0 2px rgba(80,45,15,.35),inset 0 0 18px rgba(90,50,10,.25)}
+.crm.dim .cb{background:radial-gradient(ellipse at 45% 40%,#D9CDB5 0%,#C9B999 60%,#B7A684 100%)}
+.cb svg.ln{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.cb .ct{text-shadow:0 0 3px #F3E2BC,0 0 6px #F3E2BC}
+.cb .num{font-size:52px}
+.cb .lab,.cb .gt span,.cb .pl span,.cb .hint{--sub:#6A4E30}
+.cb .cta{color:#1E6B45}
+.cpk{position:absolute;z-index:3;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 50% 45%,#000 0 58%,#3A2410 100%);box-shadow:0 0 0 2px rgba(60,35,15,.6)}
+.cb .pill{background:rgba(42,26,12,.82)}
+.cn{position:absolute;width:10px;height:10px;border-radius:50%;z-index:1;box-shadow:0 1px 1px rgba(0,0,0,.45)}
+
+/* ---------------- foosball table ---------------- */
+.fsw{position:relative;padding:12px 0}
+.fsb{padding:12px 14px;border-radius:12px;background:linear-gradient(180deg,#2C2C31 0%,#151518 100%)}
+.fsb::before{content:"";position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.15),inset 0 0 0 1px rgba(0,0,0,.6);pointer-events:none}
+.ff{position:relative;min-height:168px;height:100%;box-sizing:border-box;border-radius:4px;padding:12px 26px 10px;overflow:hidden;
+  background:repeating-linear-gradient(90deg,#2E8A47 0 9%,#287D40 9% 18%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.55),inset 0 0 22px rgba(0,0,0,.4)}
+.fsb.dim .ff{filter:saturate(.3) brightness(.85)}
+.ff .ml{position:absolute;z-index:0;top:0;bottom:0;left:calc(50% - 1px);width:2px;background:rgba(255,255,255,.45)}
+.ff .mc{position:absolute;z-index:0;left:calc(50% - 26px);top:calc(50% - 26px);width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.45);box-sizing:border-box}
+.ff .gb{position:absolute;z-index:0;top:calc(50% - 30px);width:22px;height:60px;border:2px solid rgba(255,255,255,.45);box-sizing:border-box}
+.ff .gb.l{left:-2px}.ff .gb.r{right:-2px}
+.goal{position:absolute;z-index:3;top:calc(50% - 20px);width:9px;height:40px;background:#050506;border-radius:2px}
+.goal.l{left:8px}.goal.r{right:8px}
+.rod{position:absolute;z-index:1;top:-12px;bottom:-12px;width:3px;background:linear-gradient(90deg,#8E959F,#E3E7EC,#8E959F);opacity:.32}
+.hd{position:absolute;z-index:0;width:10px;height:13px;border-radius:5px;background:linear-gradient(90deg,#1B1B1F,#4A4A52,#1B1B1F);box-shadow:0 0 0 1px #5C5C66}
+.man{position:absolute;z-index:1;width:8px;height:11px;border-radius:3px;opacity:.5;box-shadow:0 1px 1px rgba(0,0,0,.4)}
+
+/* ---------------- ludo ---------------- */
+.ldw{padding:12px;border-radius:14px;background:linear-gradient(150deg,#6A4322,#3B2312 55%,#59381C);display:flex;gap:14px;align-items:stretch}
+.ldw::before{content:"";position:absolute;inset:0;border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(0,0,0,.4);pointer-events:none}
+.ldb{flex:0 0 auto;width:128px;height:128px;align-self:center;border-radius:4px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.5);background:#FBF7EE}
+.ldw .ct{flex:1 1 auto;min-width:0;padding:4px 4px 2px 0;--sub:#D9CDB8}
+.ldw .num{font-size:50px}
+.ff .ct{text-shadow:0 1px 2px rgba(0,0,0,.7),0 0 6px rgba(0,0,0,.45)}
+.ldw.dim .ldb{filter:saturate(.25) brightness(.8)}
+
+/* ---------------- PlayStation screen ---------------- */
+.tvw{display:flex;flex-direction:column;align-items:center}
+.tv{position:relative;width:100%;box-sizing:border-box;padding:9px;border-radius:12px;background:linear-gradient(180deg,#26262A,#0C0C0E);box-shadow:inset 0 0 0 1px #3A3A40}
+.scr{position:relative;min-height:156px;box-sizing:border-box;border-radius:5px;padding:12px 14px 10px;overflow:hidden;
+  background:radial-gradient(ellipse 80% 90% at 25% 15%,#2A64B8 0%,#173E7C 45%,#0B1F42 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.scr::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.10) 0 30%,transparent 30%);pointer-events:none}
+.tv.off .scr{background:radial-gradient(ellipse 80% 90% at 25% 15%,#26282E 0%,#141519 60%,#08090B 100%)}
+.tv .ct{--sub:#C9D8F0}
+.tv .num{font-size:50px}
+.tv .lab{font-size:13px}
+.neck{width:34px;height:12px;background:linear-gradient(90deg,#1A1A1D,#2E2E33,#1A1A1D)}
+.foot{width:120px;height:8px;border-radius:4px 4px 6px 6px;background:linear-gradient(180deg,#2E2E33,#121214)}
+.pad{position:absolute;z-index:1;right:12px;bottom:12px;opacity:.28}
+
+/* status rings last, so they win over each shape's own shadow */
+.r-play{box-shadow:0 0 0 3px #16110D,0 0 0 6px #F0574F,0 12px 26px rgba(0,0,0,.55)}
+.r-over{box-shadow:0 0 0 3px #16110D,0 0 0 8px #F0574F,0 0 30px rgba(240,87,79,.55),0 12px 26px rgba(0,0,0,.55)}
+.r-pause{box-shadow:0 0 0 3px #16110D,0 0 0 6px #F2C14E,0 12px 26px rgba(0,0,0,.55)}
+.r-free{box-shadow:0 0 0 3px #16110D,0 0 0 6px #48C07F,0 12px 26px rgba(0,0,0,.55)}
+.r-ooo{box-shadow:0 12px 26px rgba(0,0,0,.4);outline:3px dashed #9AA0A6;outline-offset:3px}
+.r-none{box-shadow:0 12px 26px rgba(0,0,0,.4)}
+
+/* extra rules used on the power-cut board, the running-game panel and the Urdu board */
+.rsm{min-height:50px;padding:0 18px;border-radius:12px;border:2px solid #F2C14E;background:rgba(20,15,10,.82);color:#F3ECDD;font-size:17px;font-weight:700;text-shadow:none}
+.r-sel{box-shadow:0 0 0 3px #0D0A07,0 0 0 7px #E0AE52,0 12px 26px rgba(0,0,0,.55)}
+[dir=rtl] .t{text-align:right}
+[dir=rtl] .ct{line-height:1.55}
+[dir=rtl] .lab{line-height:1.5}
+[dir=rtl] .gt,[dir=rtl] .pl{line-height:1.7}
+[dir=rtl] .cta{font-size:19px}

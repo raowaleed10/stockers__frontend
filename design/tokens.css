@@ -1,0 +1,103 @@
+/* Stockers design tokens. Copy into apps/web/src/styles/tokens.css and import once per app.
+   Counter = dark (walnut and ivory). Owner = light with a walnut sidebar.
+   Values come from the approved designs in design/html. Do not change them without the owners. */
+
+:root {
+  /* ---------- fonts ---------- */
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-num: 'Barlow Condensed', 'Barlow', sans-serif;      /* numbers, timers, table numbers, clock, big amounts */
+  --font-urdu: 'Noto Nastaliq Urdu', 'Barlow', serif;
+
+  /* ---------- counter (dark) ---------- */
+  --c-page: #16110D;
+  --c-deep: #0D0A07;          /* behind dialogs */
+  --c-header: #110D0A;        /* top bar and bottom action bar */
+  --c-panel: #211913;         /* panels, dialogs */
+  --c-raised: #2B2119;        /* buttons, list rows, selected tab bg */
+  --c-raised-2: #3A2D21;      /* pressed / selected */
+  --c-line: #3B2F25;
+  --c-line-2: #4A3B2E;
+  --c-line-3: #6B5640;        /* dashed or strong borders */
+  --c-text: #F3ECDD;          /* ivory */
+  --c-text-2: #B9AC97;        /* secondary */
+  --c-text-3: #D9CDB8;        /* soft body on panels */
+  --c-brass: #E0AE52;         /* main action, selection */
+  --c-brass-ink: #1B140D;     /* text on brass */
+  --c-felt: #1E6B45;          /* sign-in panel, brand ball */
+
+  /* ---------- table status (D7, Q2) ---------- */
+  --s-free: #48C07F;
+  --s-play: #F0574F;
+  --s-over: #F0574F;          /* plus the red card */
+  --s-card: #D92D20;          /* red card behind the timer */
+  --s-card-edge: #8F1C14;
+  --s-pause: #F2C14E;
+  --s-ooo: #9AA0A6;           /* dashed */
+  --s-noprice: #E0AE52;
+  --s-pill-bg: rgba(10, 8, 6, 0.55);
+
+  /* ---------- table tiles ---------- */
+  --wood-1: #82502C; --wood-2: #4E2E17; --wood-3: #6E4424;          /* snooker rail */
+  --cloth-1: #2A8C52; --cloth-2: #1D6E3F; --cloth-3: #14502D;        /* snooker cloth */
+  --cloth-lit-1: #3DB06B; --cloth-lit-2: #239052; --cloth-lit-3: #16582F;
+  --cloth-dim-1: #4C6151; --cloth-dim-2: #3A4C3F; --cloth-dim-3: #2C3A30;
+  --cushion: #16603A;
+  --pocket: #000000;
+  --pool-rail-1: #3A3633; --pool-rail-2: #1E1B19;
+  --pool-cloth-1: #2F7FC4; --pool-cloth-2: #1F5F9A; --pool-cloth-3: #174775;
+  --room-wall: #8A7660; --room-floor: #2B221B; --sofa: #86372B;
+  --carrom-frame-1: #6A4322; --carrom-frame-2: #3B2312;
+  --carrom-board-1: #F6E4BC; --carrom-board-2: #DDBC82; --carrom-ink: #2A1A0C;
+  --foos-cabinet-1: #2C2C31; --foos-cabinet-2: #151518;
+  --foos-pitch-1: #2E8A47; --foos-pitch-2: #287D40;
+  --ludo-red: #D9342B; --ludo-green: #1E8A3E; --ludo-yellow: #E8B820; --ludo-blue: #2357C9;
+  --tv-bezel-1: #26262A; --tv-bezel-2: #0C0C0E;
+  --tv-screen-1: #2A64B8; --tv-screen-2: #173E7C; --tv-screen-3: #0B1F42;
+
+  /* ---------- owner (light) ---------- */
+  --o-page: #EEF2EF;
+  --o-card: #FFFFFF;
+  --o-line: #DCE3DE;
+  --o-line-2: #C9D2CC;
+  --o-soft: #F6F8F7;          /* table header rows, inner boxes */
+  --o-ink: #1D1A16;
+  --o-ink-2: #5F5A52;
+  --o-green: #1E6B45;         /* primary */
+  --o-green-hover: #0E5E31;
+  --o-green-tint: #E3F0E8;
+  --o-green-ink: #14532F;
+  --o-sidebar: #211913;
+  --o-sidebar-active: #3A2D21;
+  --o-sidebar-text: #D9CDB8;
+  --o-amber-ink: #8A5C14;
+  --o-amber-ink-2: #6B4A10;
+  --o-amber-tint: #FBF1DC;
+  --o-amber-line: #EBD3A3;
+  --o-blue: #2A6FD6;
+  --o-blue-tint: #E6EEFB;
+  --o-blue-line: #B7CCF2;
+  --o-blue-ink: #1D3F82;
+  --o-red: #B42318;
+  --o-red-tint: #FBE7E5;
+  --o-chart: #178A4A;         /* one hue for charts; today's bar is hatched */
+
+  /* status on light backgrounds (owner phone live tables) */
+  --sl-free: #178A4A; --sl-play: #B42318; --sl-pause: #B7791F; --sl-ooo: #6B7280;
+
+  /* ---------- shape ---------- */
+  --r-tile: 18px;
+  --r-dialog: 26px;
+  --r-card: 18px;
+  --r-btn: 14px;
+  --r-btn-sm: 12px;
+  --r-input: 10px;
+  --shadow-dialog-dark: 0 30px 80px rgba(0, 0, 0, 0.55);
+  --shadow-dialog-light: 0 20px 50px rgba(20, 40, 80, 0.12);
+  --shadow-tile: 0 12px 26px rgba(0, 0, 0, 0.55);
+
+  /* ---------- touch ---------- */
+  --touch-counter: 56px;      /* minimum on the counter */
+  --touch-counter-main: 64px; /* footer actions, dialog main buttons */
+  --touch-key: 76px;          /* PIN and number keys */
+  --touch-owner: 44px;        /* minimum in the owner portal */
+}

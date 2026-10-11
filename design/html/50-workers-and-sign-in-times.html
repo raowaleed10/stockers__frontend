@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>50 Workers and sign-in times</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+:focus-visible{outline:3px solid #2A6FD6;outline-offset:2px}
+
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 1078px; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Owner menu" style="flex: 1 1 240px; background: #211913; color: #F3ECDD; padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 10px 18px">
+      <span style="width: 30px; height: 30px; border-radius: 50%; background: #1E6B45; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28); display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">Stockers</span>
+    </div>
+    <a href="O-Dashboard.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Dashboard</a>
+    <a href="Main.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Live tables</a>
+    <a href="O-Sheets-Months.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Sheets</a>
+    <a href="O-Players.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Players and credit</a>
+    <a href="O-Reports.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Reports</a>
+    <a href="O-Prices.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Games and prices</a>
+    <a href="O-Canteen.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Canteen</a>
+    <a href="O-Expenses.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Expenses</a>
+    <a href="O-Activity.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Activity</a>
+    <a href="O-Workers.dc.html" aria-current="page" style="min-height: 48px; padding: 0 14px; border-radius: 12px; background: #3A2D21; color: #F3ECDD; display: flex; align-items: center; font-size: 17px; font-weight: 700; text-decoration: none">Workers</a>
+    <a href="O-Settings.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 26px 30px 34px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h1 style="margin: 0; font-size: 32px; font-weight: 700">Workers and sign-in times</h1>
+        <span style="font-size: 16px; color: #5F5A52">Each worker has his own PIN and can sign in at the counter only in his time. Everything he does is saved with his name.</span>
+      </div>
+      <button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 0; background: #1E6B45; color: #FFFFFF; font-weight: 700">Add worker</button>
+    </div>
+    <section aria-labelledby="tl" style="padding: 22px 24px 26px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+        <h2 id="tl" style="margin: 0; font-size: 21px; font-weight: 700">Sign-in times, every day</h2>
+        <span style="font-size: 15px; color: #5F5A52">Only the time of day counts, not the date.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 150px 1fr; gap: 14px"><span></span><div style="position: relative; height: 18px"><span style="position: absolute; left: 0.000%; transform: translateX(0); font-size: 13px; color: #5F5A52; white-space: nowrap">12 AM</span><span style="position: absolute; left: 25.000%; transform: translateX(-50%); font-size: 13px; color: #5F5A52; white-space: nowrap">6 AM</span><span style="position: absolute; left: 50.000%; transform: translateX(-50%); font-size: 13px; color: #5F5A52; white-space: nowrap">12 PM</span><span style="position: absolute; left: 75.000%; transform: translateX(-50%); font-size: 13px; color: #5F5A52; white-space: nowrap">6 PM</span><span style="position: absolute; left: 100.000%; transform: translateX(-100%); font-size: 13px; color: #5F5A52; white-space: nowrap">12 AM</span><span style="position: absolute; top: -2px; left: 93.750%; transform: translateX(-108%); font-size: 13px; font-weight: 700; color: #B42318; white-space: nowrap; background: #FFFFFF; padding: 0 4px">Now 10:30 PM</span></div></div>
+        <div style="display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center">
+          <span style="font-size: 16px; font-weight: 700">Shabir</span>
+          <div style="position: relative; height: 52px; border-radius: 10px; background: #F6F8F7"><span style="position: absolute; top: 0; bottom: 0; left: 25.000%; width: 1px; background: #E4E9E6"></span><span style="position: absolute; top: 0; bottom: 0; left: 50.000%; width: 1px; background: #E4E9E6"></span><span style="position: absolute; top: 0; bottom: 0; left: 75.000%; width: 1px; background: #E4E9E6"></span><span title="2:00 AM to 10:00 AM" style="position: absolute; top: 8px; bottom: 8px; left: 8.333%; width: 33.333%; border-radius: 8px; background: #1E6B45; color: #FFFFFF; display: flex; align-items: center; padding: 0 10px; box-sizing: border-box; font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden">2:00 AM to 10:00 AM</span><span style="position: absolute; top: -6px; bottom: -6px; left: 93.750%; width: 2px; background: #B42318"></span></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center">
+          <span style="font-size: 16px; font-weight: 700">Zain</span>
+          <div style="position: relative; height: 52px; border-radius: 10px; background: #F6F8F7"><span style="position: absolute; top: 0; bottom: 0; left: 25.000%; width: 1px; background: #E4E9E6"></span><span style="position: absolute; top: 0; bottom: 0; left: 50.000%; width: 1px; background: #E4E9E6"></span><span style="position: absolute; top: 0; bottom: 0; left: 75.000%; width: 1px; background: #E4E9E6"></span><span title="2:00 PM to 11:00 PM" style="position: absolute; top: 8px; bottom: 8px; left: 58.333%; width: 37.500%; border-radius: 8px; background: #2A6FD6; color: #FFFFFF; display: flex; align-items: center; padding: 0 10px; box-sizing: border-box; font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden">2:00 PM to 11:00 PM</span><span style="position: absolute; top: -6px; bottom: -6px; left: 93.750%; width: 2px; background: #B42318"></span></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center">
+          <span style="font-size: 16px; font-weight: 700">Nobody</span>
+          <div style="position: relative; height: 52px; border-radius: 10px; background: #F6F8F7"><span style="position: absolute; top: 0; bottom: 0; left: 25.000%; width: 1px; background: #E4E9E6"></span><span style="position: absolute; top: 0; bottom: 0; left: 50.000%; width: 1px; background: #E4E9E6"></span><span style="position: absolute; top: 0; bottom: 0; left: 75.000%; width: 1px; background: #E4E9E6"></span><span style="position: absolute; top: 8px; bottom: 8px; left: 0.000%; width: 8.333%; border-radius: 8px; background: repeating-linear-gradient(135deg,#FBF1DC 0 6px,#F3DFB4 6px 12px); border: 1px dashed #D9A84E; box-sizing: border-box"></span><span style="position: absolute; top: 8px; bottom: 8px; left: 41.667%; width: 16.667%; border-radius: 8px; background: repeating-linear-gradient(135deg,#FBF1DC 0 6px,#F3DFB4 6px 12px); border: 1px dashed #D9A84E; box-sizing: border-box"></span><span style="position: absolute; top: 8px; bottom: 8px; left: 95.833%; width: 4.167%; border-radius: 8px; background: repeating-linear-gradient(135deg,#FBF1DC 0 6px,#F3DFB4 6px 12px); border: 1px dashed #D9A84E; box-sizing: border-box"></span><span style="position: absolute; top: -6px; bottom: -6px; left: 93.750%; width: 2px; background: #B42318"></span></div>
+        </div>
+      <div style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #FBF1DC; font-size: 15px; color: #6B4A10; line-height: 1.4">
+        <span style="width: 12px; height: 12px; margin-top: 4px; border-radius: 3px; background: repeating-linear-gradient(135deg,#FBF1DC 0 3px,#D9A84E 3px 5px); flex: 0 0 auto"></span>
+        <span>From 10:00 AM to 2:00 PM and from 11:00 PM to 2:00 AM no worker can sign in. Games keep running, but nobody can start or check out until a worker signs in.</span>
+      </div>
+    </section>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+      <div style="flex: 999 1 640px; min-width: 0; display: flex; flex-wrap: wrap; gap: 18px">
+      <section style="flex: 1 1 320px; min-width: 0; padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 2px solid #2A6FD6; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box">
+        <div style="display: flex; align-items: center; gap: 14px">
+          <span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 50%; background: #1E6B45; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700">S</span>
+          <div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 22px; font-weight: 700">Shabir</h2><span style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; color: #5F5A52"><span style="width: 9px; height: 9px; border-radius: 50%; background: #5F5A52"></span>Not signed in</span></div>
+        </div>
+        <div style="padding: 12px 14px; border-radius: 12px; background: #F6F8F7"><span style="font-size: 14px; color: #5F5A52">Can sign in</span><br><span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">2:00 AM to 10:00 AM</span></div>
+        <div><div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid #EEF2EF; font-size: 15px"><span style="color: #5F5A52">Last signed in</span><span style="font-weight: 600; text-align: right">Today 2:04 AM to 10:00 AM</span></div><div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid #EEF2EF; font-size: 15px"><span style="color: #5F5A52">Sheet 47 actions</span><span style="font-weight: 600; text-align: right">96, by name in Activity</span></div><div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid #EEF2EF; font-size: 15px"><span style="color: #5F5A52">PIN</span><span style="font-weight: 600; text-align: right">Set. Only Shabir knows it</span></div></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px"><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600; min-height: 44px; font-size: 15px">Change time</button><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600; min-height: 44px; font-size: 15px">Change PIN</button><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #E8B4AE; background: #FFFFFF; color: #B42318; font-weight: 700; min-height: 44px; font-size: 15px">Turn off sign-in</button></div>
+      </section>
+      <section style="flex: 1 1 320px; min-width: 0; padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box">
+        <div style="display: flex; align-items: center; gap: 14px">
+          <span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 50%; background: #2A6FD6; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700">Z</span>
+          <div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 22px; font-weight: 700">Zain</h2><span style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; color: #178A4A"><span style="width: 9px; height: 9px; border-radius: 50%; background: #178A4A"></span>Signed in now, since 2:06 PM</span></div>
+        </div>
+        <div style="padding: 12px 14px; border-radius: 12px; background: #F6F8F7"><span style="font-size: 14px; color: #5F5A52">Can sign in</span><br><span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">2:00 PM to 11:00 PM</span></div>
+        <div><div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid #EEF2EF; font-size: 15px"><span style="color: #5F5A52">Signed out</span><span style="font-weight: 600; text-align: right">Automatically at 11:00 PM</span></div><div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid #EEF2EF; font-size: 15px"><span style="color: #5F5A52">Tonight so far</span><span style="font-weight: 600; text-align: right">58 games, 23 checkouts, 1 expense</span></div><div style="display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px solid #EEF2EF; font-size: 15px"><span style="color: #5F5A52">PIN</span><span style="font-weight: 600; text-align: right">Set. Only Zain knows it</span></div></div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px"><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600; min-height: 44px; font-size: 15px">Change time</button><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600; min-height: 44px; font-size: 15px">Change PIN</button><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #E8B4AE; background: #FFFFFF; color: #B42318; font-weight: 700; min-height: 44px; font-size: 15px">Turn off sign-in</button></div>
+      </section>
+      </div>
+      <aside role="dialog" aria-labelledby="ed" style="flex: 1 1 380px; min-width: 0; padding: 22px; border-radius: 18px; background: #FFFFFF; border: 2px solid #2A6FD6; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 20px 50px rgba(20,40,80,0.12); box-sizing: border-box">
+        <h2 id="ed" style="margin: 0; font-size: 22px; font-weight: 700">Change Shabir&#8217;s sign-in time</h2>
+        <div style="display: flex; flex-direction: column; gap: 6px"><span id="from" style="font-size: 15px; font-weight: 600">From</span>
+            <div role="group" aria-labelledby="from" style="display: flex; align-items: center; gap: 6px">
+              <select aria-label="From hour" style="border: 1px solid #C9D2CC; background: #FFFFFF; min-height: 56px; border-radius: 10px; font-size: 22px; font-weight: 700; padding: 0 10px"><option>2</option></select><span style="font-size: 22px; font-weight: 700">:</span>
+              <select aria-label="From minutes" style="border: 1px solid #C9D2CC; background: #FFFFFF; min-height: 56px; border-radius: 10px; font-size: 22px; font-weight: 700; padding: 0 10px"><option>00</option></select>
+              <div role="radiogroup" aria-label="From AM or PM" style="display: flex; padding: 4px; border-radius: 12px; background: #F1F4F2; margin-left: 4px">
+                <button role="radio" aria-checked="true" style="min-height: 48px; padding: 0 14px; border-radius: 9px; border: 0; background: #FFFFFF; font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.12)">AM</button>
+                <button role="radio" aria-checked="false" style="min-height: 48px; padding: 0 14px; border-radius: 9px; border: 0; background: transparent; font-weight: 500; box-shadow: none">PM</button>
+              </div>
+            </div></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><span id="until" style="font-size: 15px; font-weight: 600">Until</span>
+            <div role="group" aria-labelledby="until" style="display: flex; align-items: center; gap: 6px">
+              <select aria-label="Until hour" style="border: 1px solid #C9D2CC; background: #FFFFFF; min-height: 56px; border-radius: 10px; font-size: 22px; font-weight: 700; padding: 0 10px"><option>10</option></select><span style="font-size: 22px; font-weight: 700">:</span>
+              <select aria-label="Until minutes" style="border: 1px solid #C9D2CC; background: #FFFFFF; min-height: 56px; border-radius: 10px; font-size: 22px; font-weight: 700; padding: 0 10px"><option>00</option></select>
+              <div role="radiogroup" aria-label="Until AM or PM" style="display: flex; padding: 4px; border-radius: 12px; background: #F1F4F2; margin-left: 4px">
+                <button role="radio" aria-checked="true" style="min-height: 48px; padding: 0 14px; border-radius: 9px; border: 0; background: #FFFFFF; font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.12)">AM</button>
+                <button role="radio" aria-checked="false" style="min-height: 48px; padding: 0 14px; border-radius: 9px; border: 0; background: transparent; font-weight: 500; box-shadow: none">PM</button>
+              </div>
+            </div></div>
+        <div style="padding: 12px 14px; border-radius: 12px; background: #E3F0E8; font-size: 16px; color: #14532F; line-height: 1.45">Shabir can sign in every day from <b>2:00 AM to 10:00 AM</b>. That is 8 hours.</div>
+        <span style="font-size: 15px; color: #5F5A52; line-height: 1.45">A time can cross midnight, for example 10:00 PM until 6:00 AM. Ten minutes before the end the counter warns him; at the end he is signed out and games keep running.</span>
+        <div style="display: flex; gap: 10px"><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600; flex: 1 1 0; min-height: 52px">Cancel</button><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 0; background: #1E6B45; color: #FFFFFF; font-weight: 700; flex: 2 1 0; min-height: 52px">Save time</button></div>
+        <span style="font-size: 14px; color: #5F5A52">Saved in Activity with your name.</span>
+      </aside>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

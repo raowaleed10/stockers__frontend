@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>14 Stop a frame without the normal charge</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0A07}
+button{font:inherit;cursor:pointer}
+textarea{font:inherit}
+a{color:#E0AE52}a:hover{color:#F0C670}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 900px; background: #0D0A07; color: #F3ECDD; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding: 14px 24px; background: #0B0806; border-bottom: 1px solid #2A2119; opacity: 0.55">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <span style="width: 34px; height: 34px; border-radius: 50%; background: #1E6B45; display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 30px">Stockers</span>
+    </div>
+    <span style="font-size: 17px; font-weight: 600">Sheet 48</span>
+    <div style="flex: 1 1 0"></div>
+    <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px">9:50 PM</span>
+  </header>
+
+  <main style="flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 28px 24px">
+    <section role="dialog" aria-labelledby="ds" style="width: 100%; max-width: 980px; background: #211913; border: 1px solid #4A3B2E; border-radius: 26px; padding: 26px 30px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 30px 80px rgba(0,0,0,0.55)">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h1 id="ds" style="margin: 0; font-size: 26px; font-weight: 700">Stop Table 6 without the normal charge</h1>
+        <span style="font-size: 17px; color: #B9AC97">Hamid Ali vs Tariq Jamil, single frame, Rs 250. Owners see every stopped frame with its reason.</span>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <button aria-pressed="true" style="flex: 1 1 260px; min-height: 140px; text-align: left; border-radius: 18px; border: 3px solid #E0AE52; background: #33271C; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 22px; font-weight: 700">Discard frame</span>
+          <span style="font-size: 16px; color: #D9CDB8; line-height: 1.4">Nobody pays. Use when the frame did not really happen.</span>
+        </button>
+        <button aria-pressed="false" style="flex: 1 1 260px; min-height: 140px; text-align: left; border-radius: 18px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 22px; font-weight: 700">Unpaid, dispute</span>
+          <span style="font-size: 16px; color: #D9CDB8; line-height: 1.4">Players are arguing. The frame waits, and an owner decides who pays.</span>
+        </button>
+        <button aria-pressed="false" style="flex: 1 1 260px; min-height: 140px; text-align: left; border-radius: 18px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 22px; font-weight: 700">Cancel, started by mistake</span>
+          <span style="font-size: 16px; color: #D9CDB8; line-height: 1.4">Wrong table or wrong players. In the first 2 minutes use Undo instead.</span>
+        </button>
+      </div>
+
+      <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+        <legend style="font-size: 18px; font-weight: 700; margin-bottom: 10px">Reason (required)</legend>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px">
+          <button aria-pressed="true" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 2px solid #E0AE52; background: #33271C; color: #F3ECDD; font-size: 17px; font-weight: 600">Players left halfway</button>
+          <button aria-pressed="false" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-size: 17px">Power cut ended the game</button>
+          <button aria-pressed="false" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-size: 17px">Table problem</button>
+          <button aria-pressed="false" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-size: 17px">Other</button>
+        </div>
+        <label for="nt" style="font-size: 16px; color: #B9AC97; margin-top: 4px">Note (optional)</label>
+        <textarea id="nt" rows="2" style="border-radius: 14px; background: #16110D; border: 2px solid #4A3B2E; color: #F3ECDD; font-size: 18px; padding: 12px 16px; resize: none">Tariq got a call and left after 12 minutes</textarea>
+      </fieldset>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <div style="flex: 1 1 0"></div>
+        <button style="min-height: 64px; padding: 0 26px; border-radius: 14px; border: 1px solid #3B2F25; background: #2B2119; color: #F3ECDD; font-size: 19px; font-weight: 600">Keep playing</button>
+        <button style="min-height: 64px; padding: 0 34px; border-radius: 14px; border: 0; background: #E0AE52; color: #1B140D; font-size: 20px; font-weight: 700">Discard frame</button>
+      </div>
+    </section>
+
+    <div role="status" style="width: 100%; max-width: 980px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 20px; border-radius: 18px; background: #F3ECDD; color: #1B140D; box-shadow: 0 20px 50px rgba(0,0,0,0.5); box-sizing: border-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1E6B45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      <span style="flex: 1 1 300px; font-size: 19px; font-weight: 600">Game started on Table 2 for Ahmed Nawaz and Ali Akbar.</span>
+      <span style="font-size: 16px; color: #5E5249">Undo for 1:42 more</span>
+      <button style="min-height: 56px; padding: 0 24px; border-radius: 12px; border: 2px solid #1B140D; background: transparent; color: #1B140D; display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+        Undo
+      </button>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

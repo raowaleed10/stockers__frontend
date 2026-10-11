@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>43 Players and credit</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 900px; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Owner menu" style="flex: 1 1 240px; background: #211913; color: #F3ECDD; padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 10px 18px">
+      <span style="width: 30px; height: 30px; border-radius: 50%; background: #1E6B45; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28); display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">Stockers</span>
+    </div>
+    <a href="O-Dashboard.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Dashboard</a>
+    <a href="Main.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Live tables</a>
+    <a href="O-Sheets-Months.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Sheets</a>
+    <a href="O-Players.dc.html" aria-current="page" style="min-height: 48px; padding: 0 14px; border-radius: 12px; background: #3A2D21; color: #F3ECDD; display: flex; align-items: center; font-size: 17px; font-weight: 700; text-decoration: none">Players and credit</a>
+    <a href="O-Reports.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Reports</a>
+    <a href="O-Prices.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Games and prices</a>
+    <a href="O-Canteen.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Canteen</a>
+    <a href="O-Expenses.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Expenses</a>
+    <a href="O-Activity.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Activity</a>
+    <a href="O-Workers.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Workers</a>
+    <a href="O-Settings.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 26px 30px 34px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px">
+      <h1 style="margin: 0; font-size: 32px; font-weight: 700">Players and credit</h1>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <button style="min-height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 16px; font-weight: 600">Enter old credit</button>
+        <button style="min-height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 16px; font-weight: 600">Download list</button>
+        <button style="min-height: 48px; padding: 0 18px; border-radius: 12px; border: 0; background: #1E6B45; color: #FFFFFF; font-size: 16px; font-weight: 700">Add player</button>
+      </div>
+    </div>
+
+    <section aria-label="Totals" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px">
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 16px; color: #8A5C14; font-weight: 600">Owed to the club</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 42px; font-weight: 700">Rs 49,600</span>
+        <span style="font-size: 15px; color: #5F5A52">42 players</span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FBF1DC; border: 1px solid #EBD3A3; display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 16px; color: #8A5C14; font-weight: 600">Older than 15 days</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 42px; font-weight: 700">Rs 12,500</span>
+        <span style="font-size: 15px; color: #6B4A10">9 players. Follow these up first.</span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 16px; color: #1E6B45; font-weight: 600">Advance held for players</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 42px; font-weight: 700">Rs 3,400</span>
+        <span style="font-size: 15px; color: #5F5A52">6 players paid ahead</span>
+      </div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+      <div style="flex: 1 1 320px; display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 16px; border-radius: 12px; background: #FFFFFF; border: 1px solid #C9D2CC">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5F5A52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <label for="oq" style="position: absolute; left: -9999px">Search players</label>
+        <input id="oq" placeholder="Name or phone" style="flex: 1 1 auto; border: 0; background: transparent; font-size: 17px; outline: none">
+      </div>
+      <div role="group" aria-label="Filter" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">All 312</button>
+        <button aria-pressed="true" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #1E6B45; background: #E3F0E8; font-size: 15px; font-weight: 700">Owe money 42</button>
+        <button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Old, 15+ days 9</button>
+        <button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Advance 6</button>
+        <button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">No phone 14</button>
+      </div>
+    </div>
+
+    <section style="border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; overflow-x: auto">
+      <div role="table" aria-label="Players who owe money" style="min-width: 820px">
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 12px 20px; font-size: 14px; color: #5F5A52; font-weight: 600; background: #F6F8F7; border-bottom: 1px solid #DCE3DE">
+          <span>Player</span><span>Phone</span><span style="text-align: right">Owes</span><span>Oldest unpaid</span><span>Last visit</span><span>Frames won</span><span></span>
+        </div>
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 14px 20px; font-size: 16px; border-bottom: 1px solid #EEF2EF; align-items: center">
+          <span style="font-weight: 700">Waqas Butt</span><span>0300 •••• 3391</span><span style="text-align: right; font-weight: 700">1,400</span><span>6 days</span><span>Today</span><span>40 of 71</span><a href="O-Player-Profile.dc.html" style="font-weight: 600">Open</a>
+        </div>
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 14px 20px; font-size: 16px; border-bottom: 1px solid #EEF2EF; align-items: center">
+          <a href="O-Player-Profile.dc.html" style="font-weight: 700">Kamran Iqbal</a><span>0313 •••• 2276</span><span style="text-align: right; font-weight: 700">1,350</span><span style="color: #8A5C14; font-weight: 600">18 days</span><span>Today</span><span>29 of 64</span><a href="O-Player-Profile.dc.html" style="font-weight: 600">Open</a>
+        </div>
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 14px 20px; font-size: 16px; border-bottom: 1px solid #EEF2EF; align-items: center">
+          <span style="font-weight: 700">Ali Haider</span><span>0321 •••• 5520</span><span style="text-align: right; font-weight: 700">1,200</span><span style="color: #8A5C14; font-weight: 600">25 days</span><span>12 days ago</span><span>11 of 30</span><a href="O-Player-Profile.dc.html" style="font-weight: 600">Open</a>
+        </div>
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 14px 20px; font-size: 16px; border-bottom: 1px solid #EEF2EF; align-items: center">
+          <span style="font-weight: 700">Junaid Akram</span><span>0334 •••• 7781</span><span style="text-align: right; font-weight: 700">900</span><span style="color: #8A5C14; font-weight: 600">31 days</span><span>Today</span><span>8 of 26</span><a href="O-Player-Profile.dc.html" style="font-weight: 600">Open</a>
+        </div>
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 14px 20px; font-size: 16px; border-bottom: 1px solid #EEF2EF; align-items: center">
+          <span style="font-weight: 700">Rizwan Ali</span><span style="color: #8A5C14">No phone yet</span><span style="text-align: right; font-weight: 700">800</span><span style="color: #8A5C14; font-weight: 600">16 days</span><span>16 days ago</span><span>3 of 9</span><a href="O-Player-Profile.dc.html" style="font-weight: 600">Open</a>
+        </div>
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 14px 20px; font-size: 16px; border-bottom: 1px solid #EEF2EF; align-items: center">
+          <span style="font-weight: 700">Shoaib Malik</span><span>0302 •••• 1209</span><span style="text-align: right; font-weight: 700">500</span><span>3 days</span><span>Today</span><span>22 of 48</span><a href="O-Player-Profile.dc.html" style="font-weight: 600">Open</a>
+        </div>
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 14px 20px; font-size: 16px; border-bottom: 1px solid #EEF2EF; align-items: center">
+          <span style="font-weight: 700">Bilal Ahmed</span><span>0300 •••• 4512</span><span style="text-align: right; font-weight: 700">300</span><span>Today</span><span>Today</span><span>35 of 88</span><a href="O-Player-Profile.dc.html" style="font-weight: 600">Open</a>
+        </div>
+        <div role="row" style="display: grid; grid-template-columns: 1.6fr 1.2fr 1fr 1.1fr 1fr 1fr 0.6fr; gap: 10px; padding: 14px 20px; font-size: 16px; align-items: center">
+          <span style="font-weight: 700">Zubair Khan</span><span>0311 •••• 0391</span><span style="text-align: right; font-weight: 700">200</span><span>Today</span><span>Today</span><span>19 of 50</span><a href="O-Player-Profile.dc.html" style="font-weight: 600">Open</a>
+        </div>
+      </div>
+    </section>
+    <p style="margin: 0; font-size: 15px; color: #5F5A52">Showing 8 of 42, after sheet 48 closed. Credit has no limit; the counter decides at checkout. Players are never blocked.</p>
+  </main>
+</div>
+
+</body>
+</html>

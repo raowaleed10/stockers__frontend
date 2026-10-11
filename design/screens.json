@@ -1,0 +1,598 @@
+[
+ {
+  "n": 1,
+  "part": "Counter screen",
+  "name": "Worker sign-in",
+  "app": "counter",
+  "route": "/sign-in",
+  "file": "01-worker-sign-in",
+  "size": "1440×900",
+  "now": "2026-10-03T21:42:00+05:00"
+ },
+ {
+  "n": 2,
+  "part": "Counter screen",
+  "name": "Not your time to sign in",
+  "app": "counter",
+  "route": "/sign-in?worker=shabir",
+  "file": "02-not-your-time-to-sign-in",
+  "size": "1440×900",
+  "now": "2026-10-03T21:42:00+05:00"
+ },
+ {
+  "n": 3,
+  "part": "Counter screen",
+  "name": "Live board",
+  "app": "counter",
+  "route": "/  (= /board/snooker)",
+  "file": "03-live-board",
+  "size": "1440×952",
+  "now": "2026-10-03T21:42:00+05:00"
+ },
+ {
+  "n": 4,
+  "part": "Counter screen",
+  "name": "Pool tables before a price is set",
+  "app": "counter",
+  "route": "/board/pool",
+  "file": "04-pool-tables-before-a-price-is-set",
+  "size": "1440×900",
+  "now": "2026-10-03T21:44:00+05:00"
+ },
+ {
+  "n": 5,
+  "part": "Counter screen",
+  "name": "Pool, carrom, foosball, ludo and PlayStation",
+  "app": "counter",
+  "route": "/dev/games-preview  (real: /board/carrom, /board/foosball, /board/ludo, /board/playstation)",
+  "file": "05-pool-carrom-foosball-ludo-and-playstation",
+  "size": "1440×1901",
+  "now": "2026-10-03T21:44:00+05:00"
+ },
+ {
+  "n": 6,
+  "part": "Counter screen",
+  "name": "Live board in Urdu",
+  "app": "counter",
+  "route": "/?lang=ur",
+  "file": "06-live-board-in-urdu",
+  "size": "1440×1040",
+  "now": "2026-10-03T21:42:00+05:00"
+ },
+ {
+  "n": 7,
+  "part": "Counter screen",
+  "name": "Start a game: choose the type",
+  "app": "counter",
+  "route": "/table/t2/start",
+  "file": "07-start-a-game-choose-the-type",
+  "size": "1440×900",
+  "now": "2026-10-03T21:46:00+05:00"
+ },
+ {
+  "n": 8,
+  "part": "Counter screen",
+  "name": "Start a game: pick the players",
+  "app": "counter",
+  "route": "/table/t2/start/players",
+  "file": "08-start-a-game-pick-the-players",
+  "size": "1440×900",
+  "now": "2026-10-03T21:46:00+05:00"
+ },
+ {
+  "n": 9,
+  "part": "Counter screen",
+  "name": "Double frame: pick the two sides",
+  "app": "counter",
+  "route": "/table/t2/start/double",
+  "file": "09-double-frame-pick-the-two-sides",
+  "size": "1440×900",
+  "now": "2026-10-03T21:47:00+05:00"
+ },
+ {
+  "n": 10,
+  "part": "Counter screen",
+  "name": "Add a new player",
+  "app": "counter",
+  "route": "/players/new?for=t2",
+  "file": "10-add-a-new-player",
+  "size": "1440×900",
+  "now": "2026-10-03T21:47:00+05:00"
+ },
+ {
+  "n": 11,
+  "part": "Counter screen",
+  "name": "A game that is running",
+  "app": "counter",
+  "route": "/table/t1",
+  "file": "11-a-game-that-is-running",
+  "size": "1440×900",
+  "now": "2026-10-03T21:42:00+05:00"
+ },
+ {
+  "n": 12,
+  "part": "Counter screen",
+  "name": "Change the game type",
+  "app": "counter",
+  "route": "/table/t2/change-type",
+  "file": "12-change-the-game-type",
+  "size": "1440×900",
+  "now": "2026-10-03T21:53:00+05:00"
+ },
+ {
+  "n": 13,
+  "part": "Counter screen",
+  "name": "Move to another table, or swap a player",
+  "app": "counter",
+  "route": "/table/t1/move",
+  "file": "13-move-to-another-table-or-swap-a-player",
+  "size": "1440×900",
+  "now": "2026-10-03T21:43:00+05:00"
+ },
+ {
+  "n": 14,
+  "part": "Counter screen",
+  "name": "Stop a frame without the normal charge",
+  "app": "counter",
+  "route": "/table/t6/stop",
+  "file": "14-stop-a-frame-without-the-normal-charge",
+  "size": "1440×900",
+  "now": "2026-10-03T21:50:00+05:00"
+ },
+ {
+  "n": 15,
+  "part": "Counter screen",
+  "name": "Damage charge",
+  "app": "counter",
+  "route": "/table/t1/damage",
+  "file": "15-damage-charge",
+  "size": "1440×900",
+  "now": "2026-10-03T21:45:00+05:00"
+ },
+ {
+  "n": 16,
+  "part": "Counter screen",
+  "name": "Power cut",
+  "app": "counter",
+  "route": "/?scenario=paused",
+  "file": "16-power-cut",
+  "size": "1440×966",
+  "now": "2026-10-03T22:01:00+05:00",
+  "scenario": "paused"
+ },
+ {
+  "n": 17,
+  "part": "Counter screen",
+  "name": "End a frame: who lost?",
+  "app": "counter",
+  "route": "/table/t1/end",
+  "file": "17-end-a-frame-who-lost",
+  "size": "1440×900",
+  "now": "2026-10-03T21:51:00+05:00"
+ },
+ {
+  "n": 18,
+  "part": "Counter screen",
+  "name": "Frame charged, next frame",
+  "app": "counter",
+  "route": "/table/t1/next",
+  "file": "18-frame-charged-next-frame",
+  "size": "1440×900",
+  "now": "2026-10-03T21:51:00+05:00"
+ },
+ {
+  "n": 19,
+  "part": "Counter screen",
+  "name": "Over 30 minutes: charge double?",
+  "app": "counter",
+  "route": "/table/t4/end/overtime",
+  "file": "19-over-30-minutes-charge-double",
+  "size": "1440×900",
+  "now": "2026-10-03T21:46:00+05:00"
+ },
+ {
+  "n": 20,
+  "part": "Counter screen",
+  "name": "End a double frame",
+  "app": "counter",
+  "route": "/table/t5/end",
+  "file": "20-end-a-double-frame",
+  "size": "1440×900",
+  "now": "2026-10-03T21:47:00+05:00"
+ },
+ {
+  "n": 21,
+  "part": "Counter screen",
+  "name": "End Century",
+  "app": "counter",
+  "route": "/table/t3/end",
+  "file": "21-end-century",
+  "size": "1440×900",
+  "now": "2026-10-03T21:47:00+05:00"
+ },
+ {
+  "n": 22,
+  "part": "Counter screen",
+  "name": "Start a room",
+  "app": "counter",
+  "route": "/room/r2/start",
+  "file": "22-start-a-room",
+  "size": "1440×900",
+  "now": "2026-10-03T21:52:00+05:00"
+ },
+ {
+  "n": 23,
+  "part": "Counter screen",
+  "name": "End a room",
+  "app": "counter",
+  "route": "/room/r1/end",
+  "file": "23-end-a-room",
+  "size": "1440×900",
+  "now": "2026-10-03T22:15:00+05:00"
+ },
+ {
+  "n": 24,
+  "part": "Counter screen",
+  "name": "Checkout: who is paying?",
+  "app": "counter",
+  "route": "/checkout",
+  "file": "24-checkout-who-is-paying",
+  "size": "1440×900",
+  "now": "2026-10-03T22:20:00+05:00",
+  "scenario": "checkout"
+ },
+ {
+  "n": 25,
+  "part": "Counter screen",
+  "name": "A player’s bill",
+  "app": "counter",
+  "route": "/checkout/bilal",
+  "file": "25-a-players-bill",
+  "size": "1440×900",
+  "now": "2026-10-03T22:20:00+05:00",
+  "scenario": "checkout"
+ },
+ {
+  "n": 26,
+  "part": "Counter screen",
+  "name": "Part payment",
+  "app": "counter",
+  "route": "/checkout/bilal/part",
+  "file": "26-part-payment",
+  "size": "1440×900",
+  "now": "2026-10-03T22:22:00+05:00",
+  "scenario": "checkout"
+ },
+ {
+  "n": 27,
+  "part": "Counter screen",
+  "name": "Give a discount",
+  "app": "counter",
+  "route": "/checkout/bilal/discount",
+  "file": "27-give-a-discount",
+  "size": "1440×900",
+  "now": "2026-10-03T22:21:00+05:00",
+  "scenario": "checkout"
+ },
+ {
+  "n": 28,
+  "part": "Counter screen",
+  "name": "Canteen sale",
+  "app": "counter",
+  "route": "/canteen",
+  "file": "28-canteen-sale",
+  "size": "1440×900",
+  "now": "2026-10-03T21:55:00+05:00"
+ },
+ {
+  "n": 29,
+  "part": "Counter screen",
+  "name": "Expense from the drawer",
+  "app": "counter",
+  "route": "/expense",
+  "file": "29-expense-from-the-drawer",
+  "size": "1440×900",
+  "now": "2026-10-03T20:15:00+05:00"
+ },
+ {
+  "n": 30,
+  "part": "Counter screen",
+  "name": "Players and their statements",
+  "app": "counter",
+  "route": "/players/kamran",
+  "file": "30-players-and-their-statements",
+  "size": "1440×900",
+  "now": "2026-10-03T22:25:00+05:00"
+ },
+ {
+  "n": 31,
+  "part": "Counter screen",
+  "name": "Today’s totals",
+  "app": "counter",
+  "route": "/today",
+  "file": "31-todays-totals",
+  "size": "1440×900",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 32,
+  "part": "Counter screen",
+  "name": "Close the sheet",
+  "app": "counter",
+  "route": "/close-sheet",
+  "file": "32-close-the-sheet",
+  "size": "1440×924",
+  "now": "2026-10-04T03:40:00+05:00",
+  "scenario": "closing"
+ },
+ {
+  "n": 33,
+  "part": "Counter screen",
+  "name": "New sheet opened",
+  "app": "counter",
+  "route": "/sheet-closed",
+  "file": "33-new-sheet-opened",
+  "size": "1440×900",
+  "now": "2026-10-04T03:40:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 34,
+  "part": "Counter screen",
+  "name": "Screen locked",
+  "app": "counter",
+  "route": "/?locked=1",
+  "file": "34-screen-locked",
+  "size": "1440×900",
+  "now": "2026-10-03T21:42:00+05:00"
+ },
+ {
+  "n": 35,
+  "part": "Owner portal on the computer",
+  "name": "Owner sign-in at the private address",
+  "app": "owner",
+  "route": "/sign-in",
+  "file": "35-owner-sign-in-at-the-private-address",
+  "size": "1440×900",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 36,
+  "part": "Owner portal on the computer",
+  "name": "Dashboard",
+  "app": "owner",
+  "route": "/",
+  "file": "36-dashboard",
+  "size": "1440×1479",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 37,
+  "part": "Owner portal on the computer",
+  "name": "Reports and comparisons",
+  "app": "owner",
+  "route": "/reports",
+  "file": "37-reports-and-comparisons",
+  "size": "1440×1818",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 38,
+  "part": "Owner portal on the computer",
+  "name": "Activity",
+  "app": "owner",
+  "route": "/activity",
+  "file": "38-activity",
+  "size": "1440×1377",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 39,
+  "part": "Owner portal on the computer",
+  "name": "Sheets: month folders",
+  "app": "owner",
+  "route": "/sheets",
+  "file": "39-sheets-month-folders",
+  "size": "1440×900",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 40,
+  "part": "Owner portal on the computer",
+  "name": "Sheets: days in a month",
+  "app": "owner",
+  "route": "/sheets/2026-10",
+  "file": "40-sheets-days-in-a-month",
+  "size": "1440×900",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 41,
+  "part": "Owner portal on the computer",
+  "name": "A day’s sheet",
+  "app": "owner",
+  "route": "/sheets/s48",
+  "file": "41-a-days-sheet",
+  "size": "1440×900",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 42,
+  "part": "Owner portal on the computer",
+  "name": "Correct a sheet",
+  "app": "owner",
+  "route": "/sheets/s48/edit",
+  "file": "42-correct-a-sheet",
+  "size": "1440×907",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 43,
+  "part": "Owner portal on the computer",
+  "name": "Players and credit",
+  "app": "owner",
+  "route": "/players",
+  "file": "43-players-and-credit",
+  "size": "1440×900",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 44,
+  "part": "Owner portal on the computer",
+  "name": "A player’s page",
+  "app": "owner",
+  "route": "/players/kamran",
+  "file": "44-a-players-page",
+  "size": "1440×900",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 45,
+  "part": "Owner portal on the computer",
+  "name": "Games and prices",
+  "app": "owner",
+  "route": "/prices",
+  "file": "45-games-and-prices",
+  "size": "1440×1420",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 46,
+  "part": "Owner portal on the computer",
+  "name": "Change a price",
+  "app": "owner",
+  "route": "/prices/t4",
+  "file": "46-change-a-price",
+  "size": "1440×942",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 47,
+  "part": "Owner portal on the computer",
+  "name": "Add a game or table",
+  "app": "owner",
+  "route": "/prices/add",
+  "file": "47-add-a-game-or-table",
+  "size": "1440×900",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 48,
+  "part": "Owner portal on the computer",
+  "name": "Canteen and stock",
+  "app": "owner",
+  "route": "/canteen",
+  "file": "48-canteen-and-stock",
+  "size": "1440×1073",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 49,
+  "part": "Owner portal on the computer",
+  "name": "Expenses",
+  "app": "owner",
+  "route": "/expenses",
+  "file": "49-expenses",
+  "size": "1440×1127",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 50,
+  "part": "Owner portal on the computer",
+  "name": "Workers and sign-in times",
+  "app": "owner",
+  "route": "/workers",
+  "file": "50-workers-and-sign-in-times",
+  "size": "1440×1078",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 51,
+  "part": "Owner portal on the computer",
+  "name": "Settings",
+  "app": "owner",
+  "route": "/settings",
+  "file": "51-settings",
+  "size": "1440×1936",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 52,
+  "part": "Owner portal on the phone",
+  "name": "Sign in",
+  "app": "owner (phone)",
+  "route": "/sign-in",
+  "file": "52-sign-in",
+  "size": "390×844",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 53,
+  "part": "Owner portal on the phone",
+  "name": "Home",
+  "app": "owner (phone)",
+  "route": "/",
+  "file": "53-home",
+  "size": "390×1715",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 54,
+  "part": "Owner portal on the phone",
+  "name": "Live tables",
+  "app": "owner (phone)",
+  "route": "/live",
+  "file": "54-live-tables",
+  "size": "390×1265",
+  "now": "2026-10-03T21:44:00+05:00"
+ },
+ {
+  "n": 55,
+  "part": "Owner portal on the phone",
+  "name": "Sheets",
+  "app": "owner (phone)",
+  "route": "/sheets/2026-10",
+  "file": "55-sheets",
+  "size": "390×853",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 56,
+  "part": "Owner portal on the phone",
+  "name": "A player’s statement",
+  "app": "owner (phone)",
+  "route": "/players/kamran",
+  "file": "56-a-players-statement",
+  "size": "390×1136",
+  "now": "2026-10-04T03:45:00+05:00",
+  "scenario": "closed"
+ },
+ {
+  "n": 57,
+  "part": "Owner portal on the phone",
+  "name": "Games and prices",
+  "app": "owner (phone)",
+  "route": "/prices",
+  "file": "57-games-and-prices",
+  "size": "390×1356",
+  "now": "2026-10-03T22:30:00+05:00"
+ },
+ {
+  "n": 58,
+  "part": "Owner portal on the phone",
+  "name": "Alerts",
+  "app": "owner (phone)",
+  "route": "/alerts",
+  "file": "58-alerts",
+  "size": "390×1033",
+  "now": "2026-10-03T22:30:00+05:00"
+ }
+]

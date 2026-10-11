@@ -1,0 +1,1919 @@
+{
+  "meta": {
+    "club": "Stockers",
+    "address": "Mian Plaza",
+    "timezone": "Asia/Karachi",
+    "demoNow": {
+      "counter": "2026-10-03T21:42:00+05:00",
+      "owner": "2026-10-03T22:30:00+05:00",
+      "afterClose": "2026-10-04T03:45:00+05:00"
+    },
+    "currentSheetId": "s48",
+    "ownerPathExample": "owner-k7m2q9",
+    "note": "One story for all screens. Counter screens are at 9:42 PM, owner dashboard at 10:30 PM, closing at 3:40 AM Sunday."
+  },
+  "owners": [
+    {
+      "id": "aqil",
+      "name": "Aqil Farooq",
+      "lastSeen": "2026-10-03T22:30:00+05:00"
+    },
+    {
+      "id": "adil",
+      "name": "Adil Farooq",
+      "lastSeen": "2026-10-03T21:58:00+05:00"
+    }
+  ],
+  "workers": [
+    {
+      "id": "shabir",
+      "name": "Shabir",
+      "slot": {
+        "start": "02:00",
+        "end": "10:00"
+      },
+      "enabled": true,
+      "pinSet": true,
+      "demoPin": "1111",
+      "lastSignIn": {
+        "at": "2026-10-03T02:04:00+05:00",
+        "until": "2026-10-03T10:00:00+05:00"
+      }
+    },
+    {
+      "id": "zain",
+      "name": "Zain",
+      "slot": {
+        "start": "14:00",
+        "end": "23:00"
+      },
+      "enabled": true,
+      "pinSet": true,
+      "demoPin": "2222",
+      "signedIn": {
+        "at": "2026-10-03T14:06:00+05:00"
+      }
+    }
+  ],
+  "paymentMethods": [
+    {
+      "id": "cash",
+      "name": "Cash",
+      "enabled": true,
+      "alwaysOn": true
+    },
+    {
+      "id": "bank",
+      "name": "Bank transfer",
+      "enabled": true
+    },
+    {
+      "id": "easypaisa",
+      "name": "Easypaisa",
+      "enabled": true
+    },
+    {
+      "id": "jazzcash",
+      "name": "JazzCash",
+      "enabled": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "snooker",
+      "name": "Snooker tables",
+      "kind": "snooker",
+      "pricing": "frame",
+      "centuryAllowed": true,
+      "order": 1,
+      "centuryRate": 15
+    },
+    {
+      "id": "room",
+      "name": "Rooms",
+      "kind": "room",
+      "pricing": "hour",
+      "centuryAllowed": false,
+      "order": 2,
+      "minMinutes": 60
+    },
+    {
+      "id": "pool",
+      "name": "Pool",
+      "kind": "pool",
+      "pricing": "game",
+      "centuryAllowed": false,
+      "order": 3
+    },
+    {
+      "id": "foosball",
+      "name": "Foosball",
+      "kind": "foosball",
+      "pricing": "game",
+      "centuryAllowed": false,
+      "order": 4
+    },
+    {
+      "id": "carrom",
+      "name": "Carrom",
+      "kind": "carrom",
+      "pricing": "game",
+      "centuryAllowed": false,
+      "order": 5
+    },
+    {
+      "id": "ludo",
+      "name": "Ludo",
+      "kind": "ludo",
+      "pricing": "game",
+      "centuryAllowed": false,
+      "order": 6
+    },
+    {
+      "id": "playstation",
+      "name": "PlayStation",
+      "kind": "playstation",
+      "pricing": "game",
+      "centuryAllowed": false,
+      "order": 7
+    }
+  ],
+  "tables": [
+    {
+      "id": "t1",
+      "categoryId": "snooker",
+      "kind": "snooker",
+      "number": "1",
+      "name": "Table 1",
+      "price": 250
+    },
+    {
+      "id": "t2",
+      "categoryId": "snooker",
+      "kind": "snooker",
+      "number": "2",
+      "name": "Table 2",
+      "price": 250
+    },
+    {
+      "id": "t3",
+      "categoryId": "snooker",
+      "kind": "snooker",
+      "number": "3",
+      "name": "Table 3",
+      "price": 250
+    },
+    {
+      "id": "t4",
+      "categoryId": "snooker",
+      "kind": "snooker",
+      "number": "4",
+      "name": "Table 4",
+      "price": 200
+    },
+    {
+      "id": "t5",
+      "categoryId": "snooker",
+      "kind": "snooker",
+      "number": "5",
+      "name": "Table 5",
+      "price": 200
+    },
+    {
+      "id": "t6",
+      "categoryId": "snooker",
+      "kind": "snooker",
+      "number": "6",
+      "name": "Table 6",
+      "price": 250
+    },
+    {
+      "id": "t7",
+      "categoryId": "snooker",
+      "kind": "snooker",
+      "number": "7",
+      "name": "Table 7",
+      "price": 200,
+      "outOfOrder": {
+        "note": "Cloth change",
+        "by": {
+          "id": "adil",
+          "name": "Adil Farooq",
+          "role": "owner"
+        },
+        "at": "2026-10-03T16:15:00+05:00"
+      }
+    },
+    {
+      "id": "r1",
+      "categoryId": "room",
+      "kind": "room",
+      "number": "R1",
+      "name": "Room 1",
+      "price": 1500
+    },
+    {
+      "id": "r2",
+      "categoryId": "room",
+      "kind": "room",
+      "number": "R2",
+      "name": "Room 2",
+      "price": 1500
+    },
+    {
+      "id": "po1",
+      "categoryId": "pool",
+      "kind": "pool",
+      "number": "1",
+      "name": "Pool table 1",
+      "price": null
+    },
+    {
+      "id": "po2",
+      "categoryId": "pool",
+      "kind": "pool",
+      "number": "2",
+      "name": "Pool table 2",
+      "price": null
+    },
+    {
+      "id": "po3",
+      "categoryId": "pool",
+      "kind": "pool",
+      "number": "3",
+      "name": "Pool table 3",
+      "price": null
+    },
+    {
+      "id": "po4",
+      "categoryId": "pool",
+      "kind": "pool",
+      "number": "4",
+      "name": "Pool table 4",
+      "price": null
+    },
+    {
+      "id": "fo1",
+      "categoryId": "foosball",
+      "kind": "foosball",
+      "number": "1",
+      "name": "Foosball 1",
+      "price": null
+    },
+    {
+      "id": "fo2",
+      "categoryId": "foosball",
+      "kind": "foosball",
+      "number": "2",
+      "name": "Foosball 2",
+      "price": null
+    },
+    {
+      "id": "fo3",
+      "categoryId": "foosball",
+      "kind": "foosball",
+      "number": "3",
+      "name": "Foosball 3",
+      "price": null
+    },
+    {
+      "id": "ca1",
+      "categoryId": "carrom",
+      "kind": "carrom",
+      "number": "1",
+      "name": "Carrom 1",
+      "price": null
+    },
+    {
+      "id": "ca2",
+      "categoryId": "carrom",
+      "kind": "carrom",
+      "number": "2",
+      "name": "Carrom 2",
+      "price": null
+    },
+    {
+      "id": "ca3",
+      "categoryId": "carrom",
+      "kind": "carrom",
+      "number": "3",
+      "name": "Carrom 3",
+      "price": null
+    },
+    {
+      "id": "lu1",
+      "categoryId": "ludo",
+      "kind": "ludo",
+      "number": "1",
+      "name": "Ludo 1",
+      "price": null
+    },
+    {
+      "id": "lu2",
+      "categoryId": "ludo",
+      "kind": "ludo",
+      "number": "2",
+      "name": "Ludo 2",
+      "price": null
+    },
+    {
+      "id": "lu3",
+      "categoryId": "ludo",
+      "kind": "ludo",
+      "number": "3",
+      "name": "Ludo 3",
+      "price": null
+    },
+    {
+      "id": "lu4",
+      "categoryId": "ludo",
+      "kind": "ludo",
+      "number": "4",
+      "name": "Ludo 4",
+      "price": null
+    },
+    {
+      "id": "pl1",
+      "categoryId": "playstation",
+      "kind": "playstation",
+      "number": "1",
+      "name": "PlayStation 1",
+      "price": null
+    },
+    {
+      "id": "pl2",
+      "categoryId": "playstation",
+      "kind": "playstation",
+      "number": "2",
+      "name": "PlayStation 2",
+      "price": null
+    },
+    {
+      "id": "pl3",
+      "categoryId": "playstation",
+      "kind": "playstation",
+      "number": "3",
+      "name": "PlayStation 3",
+      "price": null
+    },
+    {
+      "id": "pl4",
+      "categoryId": "playstation",
+      "kind": "playstation",
+      "number": "4",
+      "name": "PlayStation 4",
+      "price": null
+    },
+    {
+      "id": "pl5",
+      "categoryId": "playstation",
+      "kind": "playstation",
+      "number": "5",
+      "name": "PlayStation 5",
+      "price": null
+    }
+  ],
+  "players": [
+    {
+      "id": "ali-raza",
+      "name": "Ali Raza",
+      "phone": "0300 1231964",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 41,
+      "framesWon": 52,
+      "framesPlayed": 80,
+      "centuryMinutes": 120,
+      "spent": 21400,
+      "since": "2026-02-01T12:00:00+05:00"
+    },
+    {
+      "id": "bilal",
+      "name": "Bilal Ahmed",
+      "phone": "0300 7654512",
+      "balance": 500,
+      "oldestUnpaidAt": "2026-09-21T22:10:00+05:00",
+      "visits": 38,
+      "framesWon": 35,
+      "framesPlayed": 88,
+      "centuryMinutes": 90,
+      "spent": 18350,
+      "since": "2026-01-01T12:00:00+05:00"
+    },
+    {
+      "id": "kamran",
+      "name": "Kamran Iqbal",
+      "phone": "0313 1452276",
+      "balance": 1100,
+      "oldestUnpaidAt": "2026-09-15T21:10:00+05:00",
+      "visits": 27,
+      "framesWon": 29,
+      "framesPlayed": 64,
+      "centuryMinutes": 410,
+      "spent": 31250,
+      "since": "2026-03-01T12:00:00+05:00",
+      "nick": "Kami",
+      "note": "Pays at the end of the month. Usually plays with Faisal."
+    },
+    {
+      "id": "faisal",
+      "name": "Faisal Mehmood",
+      "phone": "0301 4418803",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 30,
+      "framesWon": 33,
+      "framesPlayed": 70,
+      "centuryMinutes": 60,
+      "spent": 16900,
+      "since": "2026-02-01T12:00:00+05:00"
+    },
+    {
+      "id": "imran",
+      "name": "Imran Shah",
+      "phone": "0302 5566604",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 22,
+      "framesWon": 20,
+      "framesPlayed": 51,
+      "centuryMinutes": 0,
+      "spent": 11200,
+      "since": "2026-04-01T12:00:00+05:00"
+    },
+    {
+      "id": "naveed",
+      "name": "Naveed Akhtar",
+      "phone": "0345 2233318",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 19,
+      "framesWon": 15,
+      "framesPlayed": 40,
+      "centuryMinutes": 0,
+      "spent": 9800,
+      "since": "2026-05-01T12:00:00+05:00"
+    },
+    {
+      "id": "usman-t",
+      "name": "Usman Tariq",
+      "phone": "0333 9087731",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 15,
+      "framesWon": 18,
+      "framesPlayed": 39,
+      "centuryMinutes": 30,
+      "spent": 6120,
+      "since": "2026-06-01T12:00:00+05:00"
+    },
+    {
+      "id": "zubair",
+      "name": "Zubair Khan",
+      "phone": "0311 7720391",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 26,
+      "framesWon": 19,
+      "framesPlayed": 50,
+      "centuryMinutes": 0,
+      "spent": 8800,
+      "since": "2026-03-01T12:00:00+05:00"
+    },
+    {
+      "id": "saad",
+      "name": "Saad Hussain",
+      "phone": "0300 4407720",
+      "balance": -200,
+      "oldestUnpaidAt": null,
+      "visits": 22,
+      "framesWon": 0,
+      "framesPlayed": 0,
+      "centuryMinutes": 980,
+      "spent": 9840,
+      "since": "2026-01-01T12:00:00+05:00"
+    },
+    {
+      "id": "hamid",
+      "name": "Hamid Ali",
+      "phone": "0321 8826645",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 12,
+      "framesWon": 9,
+      "framesPlayed": 25,
+      "centuryMinutes": 0,
+      "spent": 5200,
+      "since": "2026-07-01T12:00:00+05:00"
+    },
+    {
+      "id": "tariq",
+      "name": "Tariq Jamil",
+      "phone": "0333 1196150",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 14,
+      "framesWon": 11,
+      "framesPlayed": 27,
+      "centuryMinutes": 0,
+      "spent": 5900,
+      "since": "2026-06-01T12:00:00+05:00"
+    },
+    {
+      "id": "ali-hassan",
+      "name": "Ali Hassan",
+      "phone": "0345 6619034",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 9,
+      "framesWon": 0,
+      "framesPlayed": 0,
+      "centuryMinutes": 0,
+      "spent": 7900,
+      "since": "2026-05-01T12:00:00+05:00"
+    },
+    {
+      "id": "ali-haider",
+      "name": "Ali Haider",
+      "phone": "0321 4405520",
+      "balance": 1200,
+      "oldestUnpaidAt": "2026-09-08T20:30:00+05:00",
+      "visits": 18,
+      "framesWon": 11,
+      "framesPlayed": 30,
+      "centuryMinutes": 0,
+      "spent": 7400,
+      "since": "2026-04-01T12:00:00+05:00"
+    },
+    {
+      "id": "waqas",
+      "name": "Waqas Butt",
+      "phone": "0300 2213391",
+      "balance": 950,
+      "oldestUnpaidAt": "2026-09-27T21:00:00+05:00",
+      "visits": 33,
+      "framesWon": 40,
+      "framesPlayed": 71,
+      "centuryMinutes": 200,
+      "spent": 15800,
+      "since": "2026-02-01T12:00:00+05:00"
+    },
+    {
+      "id": "junaid",
+      "name": "Junaid Akram",
+      "phone": "0334 5527781",
+      "balance": 900,
+      "oldestUnpaidAt": "2026-09-02T22:15:00+05:00",
+      "visits": 16,
+      "framesWon": 8,
+      "framesPlayed": 26,
+      "centuryMinutes": 0,
+      "spent": 6100,
+      "since": "2026-05-01T12:00:00+05:00"
+    },
+    {
+      "id": "rizwan",
+      "name": "Rizwan Ali",
+      "phone": null,
+      "balance": 800,
+      "oldestUnpaidAt": "2026-09-17T19:40:00+05:00",
+      "visits": 6,
+      "framesWon": 3,
+      "framesPlayed": 9,
+      "centuryMinutes": 0,
+      "spent": 2600,
+      "since": "2026-08-01T12:00:00+05:00"
+    },
+    {
+      "id": "shoaib",
+      "name": "Shoaib Malik",
+      "phone": "0302 8841209",
+      "balance": 250,
+      "oldestUnpaidAt": "2026-09-30T23:10:00+05:00",
+      "visits": 24,
+      "framesWon": 22,
+      "framesPlayed": 48,
+      "centuryMinutes": 60,
+      "spent": 10400,
+      "since": "2026-03-01T12:00:00+05:00"
+    },
+    {
+      "id": "ahmed-nawaz",
+      "name": "Ahmed Nawaz",
+      "phone": "0333 6612209",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 11,
+      "framesWon": 6,
+      "framesPlayed": 18,
+      "centuryMinutes": 0,
+      "spent": 4100,
+      "since": "2026-06-01T12:00:00+05:00"
+    },
+    {
+      "id": "ali-akbar",
+      "name": "Ali Akbar",
+      "phone": "0300 9941187",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 8,
+      "framesWon": 4,
+      "framesPlayed": 15,
+      "centuryMinutes": 0,
+      "spent": 3300,
+      "since": "2026-07-01T12:00:00+05:00"
+    },
+    {
+      "id": "danish",
+      "name": "Danish Iqbal",
+      "phone": "0301 3307012",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 5,
+      "framesWon": 0,
+      "framesPlayed": 0,
+      "centuryMinutes": 0,
+      "spent": 6000,
+      "since": "2026-08-01T12:00:00+05:00"
+    },
+    {
+      "id": "usman-g",
+      "name": "Usman Ghani",
+      "phone": "0300 7710842",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 7,
+      "framesWon": 5,
+      "framesPlayed": 13,
+      "centuryMinutes": 0,
+      "spent": 2800,
+      "since": "2026-08-01T12:00:00+05:00"
+    }
+  ],
+  "sheets": [
+    {
+      "id": "s46",
+      "number": 46,
+      "openedAt": "2026-10-01T10:45:00+05:00",
+      "openedBy": {
+        "id": "adil",
+        "name": "Adil Farooq",
+        "role": "owner"
+      },
+      "closedAt": "2026-10-02T10:30:00+05:00",
+      "closedBy": {
+        "id": "shabir",
+        "name": "Shabir",
+        "role": "worker"
+      },
+      "earned": 24600
+    },
+    {
+      "id": "s47",
+      "number": 47,
+      "openedAt": "2026-10-02T10:30:00+05:00",
+      "openedBy": {
+        "id": "shabir",
+        "name": "Shabir",
+        "role": "worker"
+      },
+      "closedAt": "2026-10-03T11:10:00+05:00",
+      "closedBy": {
+        "id": "adil",
+        "name": "Adil Farooq",
+        "role": "owner"
+      },
+      "earned": 28400,
+      "editedBy": [
+        {
+          "id": "adil",
+          "name": "Adil Farooq",
+          "role": "owner"
+        }
+      ]
+    },
+    {
+      "id": "s48",
+      "number": 48,
+      "openedAt": "2026-10-03T11:10:00+05:00",
+      "openedBy": {
+        "id": "adil",
+        "name": "Adil Farooq",
+        "role": "owner"
+      },
+      "final": {
+        "closedAt": "2026-10-04T03:40:00+05:00",
+        "closedBy": {
+          "id": "shabir",
+          "name": "Shabir",
+          "role": "worker"
+        },
+        "earned": 35150,
+        "received": 33300,
+        "oldCreditPaid": 1800,
+        "newCredit": 3650,
+        "discounts": {
+          "count": 2,
+          "total": 150
+        },
+        "frames": 81,
+        "centuryMinutes": 276,
+        "roomMinutes": 250,
+        "cash": {
+          "received": 22250,
+          "drawerExpenses": 500,
+          "expected": 21750,
+          "counted": 21550,
+          "difference": -200,
+          "note": "Gave Rs 200 change from the drawer for a bank payment"
+        },
+        "online": {
+          "bank": 4400,
+          "easypaisa": 5350,
+          "jazzcash": 1300
+        },
+        "byTable": {
+          "t1": 5250,
+          "t2": 4425,
+          "t3": 3590,
+          "t4": 3600,
+          "t5": 3000,
+          "t6": 4625,
+          "t7": 0,
+          "r1": 2500,
+          "r2": 3750
+        },
+        "canteen": {
+          "sales": 4560,
+          "items": 97,
+          "profit": 1780
+        }
+      }
+    }
+  ],
+  "games": [
+    {
+      "id": "g-t1-3",
+      "tableId": "t1",
+      "sheetId": "s48",
+      "type": "single",
+      "status": "running",
+      "startedAt": "2026-10-03T21:23:18+05:00",
+      "startedBy": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "pausedMs": 0,
+      "price": 250,
+      "playerIds": [
+        "ali-raza",
+        "bilal"
+      ],
+      "sessionId": "sess-t1",
+      "frameNo": 3
+    },
+    {
+      "id": "g-t3-c",
+      "tableId": "t3",
+      "sheetId": "s48",
+      "type": "century",
+      "status": "running",
+      "startedAt": "2026-10-03T21:04:55+05:00",
+      "startedBy": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "pausedMs": 0,
+      "price": 15,
+      "underPlayerId": "saad"
+    },
+    {
+      "id": "g-t4-1",
+      "tableId": "t4",
+      "sheetId": "s48",
+      "type": "single",
+      "status": "running",
+      "startedAt": "2026-10-03T21:07:50+05:00",
+      "startedBy": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "pausedMs": 0,
+      "price": 200,
+      "playerIds": [
+        "usman-t",
+        "zubair"
+      ]
+    },
+    {
+      "id": "g-t5-d",
+      "tableId": "t5",
+      "sheetId": "s48",
+      "type": "double",
+      "status": "running",
+      "startedAt": "2026-10-03T21:19:50+05:00",
+      "startedBy": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "pausedMs": 0,
+      "price": 400,
+      "sides": [
+        [
+          "kamran",
+          "faisal"
+        ],
+        [
+          "imran",
+          "naveed"
+        ]
+      ]
+    },
+    {
+      "id": "g-t6-1",
+      "tableId": "t6",
+      "sheetId": "s48",
+      "type": "single",
+      "status": "paused",
+      "startedAt": "2026-10-03T21:26:56+05:00",
+      "startedBy": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "pausedAt": "2026-10-03T21:39:00+05:00",
+      "pausedMs": 0,
+      "price": 250,
+      "playerIds": [
+        "hamid",
+        "tariq"
+      ]
+    },
+    {
+      "id": "g-r1",
+      "tableId": "r1",
+      "sheetId": "s48",
+      "type": "room",
+      "status": "running",
+      "startedAt": "2026-10-03T20:29:55+05:00",
+      "startedBy": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "pausedMs": 0,
+      "price": 1500,
+      "underPlayerId": "ali-hassan"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess-t1",
+      "tableId": "t1",
+      "playerIds": [
+        "ali-raza",
+        "bilal"
+      ],
+      "frames": [
+        {
+          "no": 1,
+          "loserIds": [
+            "bilal"
+          ],
+          "amount": 250,
+          "endedAt": "2026-10-03T20:55:00+05:00"
+        },
+        {
+          "no": 2,
+          "loserIds": [
+            "bilal"
+          ],
+          "amount": 250,
+          "endedAt": "2026-10-03T21:23:00+05:00"
+        }
+      ]
+    }
+  ],
+  "waiting": [
+    {
+      "playerId": "bilal",
+      "summary": "2 frames lost, 2 teas",
+      "tonight": 600
+    },
+    {
+      "playerId": "zubair",
+      "summary": "1 frame lost",
+      "tonight": 200
+    },
+    {
+      "playerId": "kamran",
+      "summary": "Half of a double",
+      "tonight": 250
+    },
+    {
+      "playerId": "faisal",
+      "summary": "Half of a double",
+      "tonight": 250
+    },
+    {
+      "playerId": "tariq",
+      "summary": "1 frame lost",
+      "tonight": 250
+    }
+  ],
+  "statementExamples": {
+    "kamran": [
+      {
+        "at": "2026-09-04T21:15:00+05:00",
+        "kind": "frame",
+        "text": "Frame, Table 1, lost to Faisal",
+        "charge": 250,
+        "balance": 250,
+        "doneBy": {
+          "id": "shabir",
+          "name": "Shabir",
+          "role": "worker"
+        }
+      },
+      {
+        "at": "2026-09-06T22:40:00+05:00",
+        "kind": "payment",
+        "text": "Payment, cash",
+        "paid": 250,
+        "balance": 0,
+        "doneBy": {
+          "id": "zain",
+          "name": "Zain",
+          "role": "worker"
+        },
+        "method": "cash"
+      },
+      {
+        "at": "2026-09-15T21:10:00+05:00",
+        "kind": "frame",
+        "text": "Frame, Table 2, lost to Imran",
+        "charge": 250,
+        "balance": 250,
+        "doneBy": {
+          "id": "zain",
+          "name": "Zain",
+          "role": "worker"
+        }
+      },
+      {
+        "at": "2026-09-15T21:40:00+05:00",
+        "kind": "frame",
+        "text": "Frame, Table 2, lost to Imran",
+        "charge": 250,
+        "balance": 500,
+        "doneBy": {
+          "id": "zain",
+          "name": "Zain",
+          "role": "worker"
+        }
+      },
+      {
+        "at": "2026-09-15T22:15:00+05:00",
+        "kind": "canteen",
+        "text": "Cold drink, canteen",
+        "charge": 120,
+        "balance": 620,
+        "doneBy": {
+          "id": "zain",
+          "name": "Zain",
+          "role": "worker"
+        }
+      },
+      {
+        "at": "2026-09-16T04:02:00+05:00",
+        "kind": "left-without-checkout",
+        "text": "Left without checkout, moved to credit",
+        "balance": 620,
+        "doneBy": {
+          "id": "shabir",
+          "name": "Shabir",
+          "role": "worker"
+        }
+      },
+      {
+        "at": "2026-09-22T20:20:00+05:00",
+        "kind": "century",
+        "text": "Century, Table 3, 32 min at Rs 15",
+        "charge": 480,
+        "balance": 1100,
+        "doneBy": {
+          "id": "zain",
+          "name": "Zain",
+          "role": "worker"
+        }
+      },
+      {
+        "at": "2026-10-03T21:20:00+05:00",
+        "kind": "double",
+        "text": "Half of a double, Table 2",
+        "charge": 250,
+        "balance": 1350,
+        "doneBy": {
+          "id": "zain",
+          "name": "Zain",
+          "role": "worker"
+        }
+      }
+    ]
+  },
+  "canteenItems": [
+    {
+      "id": "tea",
+      "name": "Tea",
+      "category": "drinks",
+      "sell": 50,
+      "buy": 18,
+      "buyIsEstimate": true,
+      "stock": null,
+      "lowAt": 0
+    },
+    {
+      "id": "green-tea",
+      "name": "Green tea",
+      "category": "drinks",
+      "sell": 60,
+      "buy": 15,
+      "buyIsEstimate": true,
+      "stock": null,
+      "lowAt": 0
+    },
+    {
+      "id": "coffee",
+      "name": "Coffee",
+      "category": "drinks",
+      "sell": 120,
+      "buy": 45,
+      "buyIsEstimate": true,
+      "stock": null,
+      "lowAt": 0
+    },
+    {
+      "id": "water",
+      "name": "Water, small",
+      "category": "drinks",
+      "sell": 70,
+      "buy": 50,
+      "stock": 34,
+      "lowAt": 6
+    },
+    {
+      "id": "cold-drink",
+      "name": "Cold drink",
+      "category": "drinks",
+      "sell": 120,
+      "buy": 95,
+      "stock": 24,
+      "lowAt": 6
+    },
+    {
+      "id": "energy",
+      "name": "Energy drink",
+      "category": "drinks",
+      "sell": 250,
+      "buy": 200,
+      "stock": 8,
+      "lowAt": 3
+    },
+    {
+      "id": "chips",
+      "name": "Chips",
+      "category": "food",
+      "sell": 60,
+      "buy": 48,
+      "stock": 3,
+      "lowAt": 5
+    },
+    {
+      "id": "biscuits",
+      "name": "Biscuits",
+      "category": "food",
+      "sell": 40,
+      "buy": 30,
+      "stock": 18,
+      "lowAt": 5
+    },
+    {
+      "id": "samosa",
+      "name": "Samosa",
+      "category": "food",
+      "sell": 50,
+      "buy": 32,
+      "stock": 12,
+      "lowAt": 4
+    },
+    {
+      "id": "nimco",
+      "name": "Nimco",
+      "category": "food",
+      "sell": 80,
+      "buy": 60,
+      "stock": 15,
+      "lowAt": 4
+    },
+    {
+      "id": "cig-single",
+      "name": "Cigarette, single",
+      "category": "cigarettes",
+      "sell": 40,
+      "buy": 35,
+      "stock": 60,
+      "lowAt": 10
+    },
+    {
+      "id": "cig-pack",
+      "name": "Cigarette pack",
+      "category": "cigarettes",
+      "sell": 650,
+      "buy": 615,
+      "stock": 0,
+      "lowAt": 1
+    }
+  ],
+  "expenses": [
+    {
+      "id": "e8",
+      "at": "2026-10-03T20:15:00+05:00",
+      "what": "Dinner for staff",
+      "category": "food-petrol",
+      "amount": 500,
+      "paidFrom": "drawer",
+      "source": "counter",
+      "doneBy": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "sheetId": "s48"
+    },
+    {
+      "id": "e7",
+      "at": "2026-10-03T18:15:00+05:00",
+      "what": "Milk, sugar and tea leaves",
+      "category": "cleaning-tea",
+      "amount": 950,
+      "paidFrom": "owner",
+      "source": "owner",
+      "doneBy": {
+        "id": "adil",
+        "name": "Adil Farooq",
+        "role": "owner"
+      }
+    },
+    {
+      "id": "e6",
+      "at": "2026-10-03T16:30:00+05:00",
+      "what": "Table 7 cloth change",
+      "category": "repairs",
+      "amount": 2500,
+      "paidFrom": "owner",
+      "source": "owner",
+      "doneBy": {
+        "id": "adil",
+        "name": "Adil Farooq",
+        "role": "owner"
+      }
+    },
+    {
+      "id": "e5",
+      "at": "2026-10-02T13:10:00+05:00",
+      "what": "Generator diesel",
+      "category": "generator",
+      "amount": 3800,
+      "paidFrom": "owner",
+      "source": "owner",
+      "doneBy": {
+        "id": "aqil",
+        "name": "Aqil Farooq",
+        "role": "owner"
+      }
+    },
+    {
+      "id": "e4",
+      "at": "2026-10-02T12:05:00+05:00",
+      "what": "Cleaning supplies",
+      "category": "cleaning-tea",
+      "amount": 850,
+      "paidFrom": "owner",
+      "source": "owner",
+      "doneBy": {
+        "id": "adil",
+        "name": "Adil Farooq",
+        "role": "owner"
+      }
+    },
+    {
+      "id": "e3",
+      "at": "2026-10-01T14:00:00+05:00",
+      "what": "Advance, Shabir",
+      "category": "staff",
+      "amount": 5000,
+      "paidFrom": "owner",
+      "staffName": "Shabir",
+      "source": "owner",
+      "doneBy": {
+        "id": "aqil",
+        "name": "Aqil Farooq",
+        "role": "owner"
+      }
+    },
+    {
+      "id": "e2",
+      "at": "2026-10-01T13:30:00+05:00",
+      "what": "Internet bill, September",
+      "category": "bills",
+      "amount": 3000,
+      "paidFrom": "bank",
+      "source": "owner",
+      "doneBy": {
+        "id": "aqil",
+        "name": "Aqil Farooq",
+        "role": "owner"
+      }
+    },
+    {
+      "id": "e1",
+      "at": "2026-10-01T12:40:00+05:00",
+      "what": "Cue tips and chalk",
+      "category": "repairs",
+      "amount": 2400,
+      "paidFrom": "owner",
+      "source": "owner",
+      "doneBy": {
+        "id": "adil",
+        "name": "Adil Farooq",
+        "role": "owner"
+      }
+    }
+  ],
+  "activity": [
+    {
+      "id": "a12",
+      "at": "2026-10-04T03:40:00+05:00",
+      "by": {
+        "id": "shabir",
+        "name": "Shabir",
+        "role": "worker"
+      },
+      "type": "cash-difference",
+      "title": "Cash short when sheet 48 closed",
+      "detail": "Note: “Gave Rs 200 change from the drawer for a bank payment”",
+      "amount": -200,
+      "sheetId": "s48"
+    },
+    {
+      "id": "a11",
+      "at": "2026-10-04T03:40:00+05:00",
+      "by": {
+        "id": "shabir",
+        "name": "Shabir",
+        "role": "worker"
+      },
+      "type": "left-without-checkout",
+      "title": "Left without checkout: Waqas Butt, Shoaib Malik",
+      "detail": "Moved to their credit at sheet close",
+      "amount": 700,
+      "sheetId": "s48"
+    },
+    {
+      "id": "a10",
+      "at": "2026-10-03T22:21:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "discount",
+      "title": "Discount for Bilal Ahmed",
+      "detail": "Rounded the bill. “Rounded Rs 1,350 down to Rs 1,300”",
+      "amount": -50,
+      "sheetId": "s48"
+    },
+    {
+      "id": "a9",
+      "at": "2026-10-03T22:05:00+05:00",
+      "by": {
+        "id": "adil",
+        "name": "Adil Farooq",
+        "role": "owner"
+      },
+      "type": "edit",
+      "title": "Edited sheet 47: Table 3 Century minutes 55 to 45",
+      "detail": "“Players stopped 10 min early, timer left running”",
+      "amount": -150,
+      "sheetId": "s47"
+    },
+    {
+      "id": "a8",
+      "at": "2026-10-03T21:58:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "pause-all",
+      "title": "All games paused, power cut",
+      "detail": "Resumed 10:03 PM. 5 minutes not charged on 6 tables.",
+      "sheetId": "s48"
+    },
+    {
+      "id": "a7",
+      "at": "2026-10-03T21:50:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "discard",
+      "title": "Frame discarded on Table 6",
+      "detail": "Players left halfway. “Tariq got a call and left after 12 minutes”",
+      "amount": 250,
+      "sheetId": "s48"
+    },
+    {
+      "id": "a6",
+      "at": "2026-10-03T21:46:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "double-charge",
+      "title": "Charged double on Table 4",
+      "detail": "Frame ran 36 minutes. Zubair Khan paid Rs 400 instead of Rs 200.",
+      "amount": 200,
+      "sheetId": "s48"
+    },
+    {
+      "id": "a5",
+      "at": "2026-10-03T21:45:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "damage",
+      "title": "Damage charge for Ali Raza, Table 1",
+      "detail": "Cue. “Cue snapped at the joint after he hit the cushion”",
+      "amount": 1500,
+      "sheetId": "s48"
+    },
+    {
+      "id": "a4",
+      "at": "2026-10-03T20:15:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "drawer-expense",
+      "title": "Expense from the drawer: food",
+      "detail": "“Dinner for staff”. Taken off the cash the drawer should have.",
+      "amount": -500,
+      "sheetId": "s48"
+    },
+    {
+      "id": "a3",
+      "at": "2026-10-03T20:12:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "undo",
+      "title": "Game undone on Table 5",
+      "detail": "Started by mistake, undone after 40 seconds. No reason needed.",
+      "sheetId": "s48"
+    },
+    {
+      "id": "a2",
+      "at": "2026-10-03T20:10:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "dispute",
+      "title": "Unpaid, dispute on Table 3",
+      "detail": "Faisal Mehmood vs Naveed Akhtar, frame 3. “Both say the other fouled on the black”",
+      "amount": 250,
+      "sheetId": "s48",
+      "needsDecision": true
+    },
+    {
+      "id": "a1",
+      "at": "2026-10-03T18:30:00+05:00",
+      "by": {
+        "id": "zain",
+        "name": "Zain",
+        "role": "worker"
+      },
+      "type": "discount",
+      "title": "Discount for Usman Tariq",
+      "detail": "Table problem. “Cushion on Table 4 was loose”",
+      "amount": -100,
+      "sheetId": "s48"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "n6",
+      "at": "2026-10-04T03:40:00+05:00",
+      "kind": "sheet-closed",
+      "title": "Sheet 48 closed by Shabir",
+      "text": "Earned Rs 35,150. Cash counted Rs 21,550, Rs 200 short.",
+      "amount": 35150,
+      "read": false
+    },
+    {
+      "id": "n5",
+      "at": "2026-10-04T03:40:00+05:00",
+      "kind": "left-without-checkout",
+      "title": "Left without checkout",
+      "text": "Waqas Butt Rs 450 and Shoaib Malik Rs 250 moved to their credit.",
+      "amount": 700,
+      "read": false
+    },
+    {
+      "id": "n4",
+      "at": "2026-10-03T22:05:00+05:00",
+      "kind": "edited",
+      "title": "Adil edited sheet 47",
+      "text": "Table 3 Century 55 to 45 minutes.",
+      "amount": -150,
+      "read": true
+    },
+    {
+      "id": "n3",
+      "at": "2026-10-03T21:50:00+05:00",
+      "kind": "cancelled-or-discarded",
+      "title": "Frame discarded on Table 6",
+      "text": "“Tariq got a call and left after 12 minutes”",
+      "amount": 250,
+      "read": true
+    },
+    {
+      "id": "n2",
+      "at": "2026-10-03T21:12:00+05:00",
+      "kind": "low-stock",
+      "title": "Chips running low",
+      "text": "3 left. Cigarette packs are sold out.",
+      "read": true
+    },
+    {
+      "id": "n1",
+      "at": "2026-10-03T20:12:00+05:00",
+      "kind": "cancelled-or-discarded",
+      "title": "Game cancelled on Table 5",
+      "text": "Started by mistake and undone after 40 seconds.",
+      "read": true
+    }
+  ],
+  "settings": {
+    "rules": {
+      "doubleAfterMin": 30,
+      "lockAfterMin": 5,
+      "undoWindowSec": 120,
+      "changeTypeWindowMin": 5,
+      "oldCreditDays": 15,
+      "roomMinMinutes": 60,
+      "slotWarningMin": 10
+    },
+    "alerts": {
+      "sheet-closed": true,
+      "left-without-checkout": true,
+      "cancelled-or-discarded": true,
+      "edited": true,
+      "low-stock": true
+    },
+    "email": {
+      "aqil": null,
+      "adil": null
+    },
+    "language": {
+      "counter": "en",
+      "owner": "en"
+    },
+    "backups": {
+      "last": "2026-10-04T03:40:00+05:00",
+      "thisComputer": true,
+      "usb": true,
+      "keep": 60
+    },
+    "club": {
+      "name": "Stockers",
+      "address": "Mian Plaza",
+      "logo": null,
+      "domain": null
+    }
+  },
+  "aggregates": {
+    "dashboardAt": "2026-10-03T22:30:00+05:00",
+    "today": {
+      "earned": 33000,
+      "frames": 62,
+      "centuryMinutes": 214,
+      "rooms": 2,
+      "received": 27050,
+      "cashReceived": 18450,
+      "online": 8600,
+      "onlineByMethod": {
+        "bank": 3200,
+        "easypaisa": 4100,
+        "jazzcash": 1300
+      },
+      "newCredit": 2350,
+      "oldCreditPaid": 1800,
+      "expensesPaidToday": 1450,
+      "moneyInHand": 25600,
+      "tablesInUse": 6,
+      "tablesTotal": 9,
+      "over30": 1,
+      "drawerExpenses": 500,
+      "drawerExpected": 17950
+    },
+    "october": {
+      "days": 3,
+      "earned": 86000,
+      "expenses": 19000,
+      "canteenCost": 5100,
+      "profit": 61900,
+      "vsSeptemberFirst3DaysPct": 22,
+      "byGame": {
+        "frames": 51400,
+        "century": 15500,
+        "rooms": 10800,
+        "canteen": 8300
+      }
+    },
+    "credit": {
+      "total": 48300,
+      "players": 41,
+      "olderThan15Days": {
+        "total": 12500,
+        "players": 9
+      },
+      "advanceHeld": 3400
+    },
+    "earnedPerDayLast30": {
+      "from": "2026-09-04",
+      "values": [
+        22100,
+        23400,
+        21900,
+        24800,
+        30500,
+        33900,
+        22600,
+        21700,
+        23100,
+        22800,
+        24900,
+        31200,
+        34100,
+        23000,
+        22400,
+        21600,
+        24100,
+        25200,
+        32100,
+        35100,
+        22900,
+        22400,
+        21800,
+        35600,
+        22400,
+        21800,
+        23900,
+        24600,
+        28400,
+        33000
+      ],
+      "best": {
+        "date": "2026-09-27",
+        "earned": 35600
+      },
+      "todayOpen": true
+    },
+    "busyHours": {
+      "12": 2.1,
+      "13": 2.4,
+      "14": 2.9,
+      "15": 3.2,
+      "16": 3.8,
+      "17": 4.3,
+      "18": 5.0,
+      "19": 5.9,
+      "20": 6.8,
+      "21": 7.4,
+      "22": 7.8,
+      "23": 7.1,
+      "0": 6.2,
+      "1": 5.0,
+      "2": 3.6,
+      "3": 2.4,
+      "4": 1.5
+    },
+    "reports": {
+      "month": "2026-09",
+      "compare": "2026-08",
+      "earned": [
+        773000,
+        735200
+      ],
+      "expenses": [
+        214000,
+        208500
+      ],
+      "canteenCost": [
+        42500,
+        40300
+      ],
+      "profit": [
+        516500,
+        486400
+      ],
+      "creditPendingAtEnd": 46900,
+      "byGame": {
+        "frames": [
+          471500,
+          452000
+        ],
+        "century": [
+          139100,
+          128900
+        ],
+        "rooms": [
+          92800,
+          88300
+        ],
+        "canteen": [
+          69600,
+          66000
+        ]
+      },
+      "byTable": {
+        "t3": 106800,
+        "t1": 101200,
+        "t2": 94300,
+        "t6": 91400,
+        "t4": 77500,
+        "t5": 76100,
+        "t7": 63300,
+        "r1": 49500,
+        "r2": 43300
+      },
+      "byMethod": {
+        "cash": [
+          512600,
+          487900
+        ],
+        "bank": [
+          101400,
+          95800
+        ],
+        "easypaisa": [
+          88900,
+          84300
+        ],
+        "jazzcash": [
+          31300,
+          28600
+        ]
+      },
+      "year2026": {
+        "01": 641000,
+        "02": 598000,
+        "03": 612000,
+        "04": 668000,
+        "05": 702000,
+        "06": 688000,
+        "07": 721000,
+        "08": 735200,
+        "09": 773000,
+        "10": 86000
+      }
+    },
+    "sheetFolders": [
+      {
+        "month": "2026-10",
+        "days": 4,
+        "sheets": 4,
+        "earned": 89600
+      },
+      {
+        "month": "2026-09",
+        "days": 30,
+        "sheets": 33,
+        "earned": 773000
+      },
+      {
+        "month": "2026-08",
+        "days": 31,
+        "sheets": 34,
+        "earned": 735200
+      },
+      {
+        "month": "2026-07",
+        "days": 31,
+        "sheets": 33,
+        "earned": 721000
+      },
+      {
+        "month": "2026-06",
+        "days": 30,
+        "sheets": 31,
+        "earned": 688000
+      },
+      {
+        "month": "2026-05",
+        "days": 31,
+        "sheets": 32,
+        "earned": 702000
+      },
+      {
+        "month": "2026-04",
+        "days": 30,
+        "sheets": 31,
+        "earned": 668000
+      },
+      {
+        "month": "2026-03",
+        "days": 31,
+        "sheets": 31,
+        "earned": 612000
+      }
+    ]
+  },
+  "scenarios": {
+    "paused": {
+      "now": "2026-10-03T22:01:00+05:00",
+      "note": "Power cut. Zain pressed Pause all at 9:58 PM; every running game is paused (screen 16).",
+      "pauseAll": {
+        "at": "2026-10-03T21:58:00+05:00",
+        "doneBy": {
+          "id": "zain",
+          "name": "Zain",
+          "role": "worker"
+        }
+      }
+    },
+    "checkout": {
+      "now": "2026-10-03T22:20:00+05:00",
+      "note": "Later the same night: 8 players waiting to pay (screens 24-27). Tariq has already paid.",
+      "waiting": [
+        {
+          "playerId": "bilal",
+          "summary": "3 frames, 2 teas tonight. Old credit Rs 500.",
+          "oldCredit": 500,
+          "tonight": 850,
+          "total": 1350
+        },
+        {
+          "playerId": "ali-hassan",
+          "summary": "Room 1, 1 h 40 min",
+          "oldCredit": 0,
+          "tonight": 2500,
+          "total": 2500
+        },
+        {
+          "playerId": "kamran",
+          "summary": "Half a double tonight. Old credit Rs 1,100, 18 days.",
+          "oldCredit": 1100,
+          "tonight": 250,
+          "total": 1350
+        },
+        {
+          "playerId": "saad",
+          "summary": "Century Rs 630. Advance Rs 200 used.",
+          "oldCredit": -200,
+          "tonight": 630,
+          "total": 430
+        },
+        {
+          "playerId": "zubair",
+          "summary": "2 frames, one charged double",
+          "oldCredit": 0,
+          "tonight": 600,
+          "total": 600
+        },
+        {
+          "playerId": "faisal",
+          "summary": "Half a double",
+          "oldCredit": 0,
+          "tonight": 250,
+          "total": 250
+        },
+        {
+          "playerId": "imran",
+          "summary": "Half a double on Table 5",
+          "oldCredit": 0,
+          "tonight": 200,
+          "total": 200
+        },
+        {
+          "playerId": "naveed",
+          "summary": "Half a double on Table 5",
+          "oldCredit": 0,
+          "tonight": 200,
+          "total": 200
+        }
+      ],
+      "waitingTotal": 6880
+    },
+    "closing": {
+      "now": "2026-10-04T03:40:00+05:00",
+      "note": "Shabir is about to close sheet 48 (screen 32). Close preview numbers come from sheets[s48].final.",
+      "signedIn": {
+        "id": "shabir",
+        "name": "Shabir",
+        "role": "worker"
+      },
+      "games": [
+        {
+          "id": "g-t2-c",
+          "tableId": "t2",
+          "sheetId": "s48",
+          "type": "century",
+          "status": "running",
+          "startedAt": "2026-10-04T03:22:00+05:00",
+          "startedBy": {
+            "id": "shabir",
+            "name": "Shabir",
+            "role": "worker"
+          },
+          "pausedMs": 0,
+          "rate": 15,
+          "underPlayerId": "ahmed-nawaz"
+        }
+      ],
+      "waiting": [
+        {
+          "playerId": "waqas",
+          "summary": "1 frame, 2 teas",
+          "oldCredit": 0,
+          "tonight": 450,
+          "total": 450
+        },
+        {
+          "playerId": "shoaib",
+          "summary": "1 frame lost",
+          "oldCredit": 0,
+          "tonight": 250,
+          "total": 250
+        }
+      ],
+      "waitingTotal": 700
+    },
+    "closed": {
+      "now": "2026-10-04T03:45:00+05:00",
+      "note": "Sheet 48 closed at 3:40 AM by Shabir; sheet 49 is open (screen 33 and the owner screens after close).",
+      "signedIn": {
+        "id": "shabir",
+        "name": "Shabir",
+        "role": "worker"
+      },
+      "closeSheet": "s48",
+      "openSheet": {
+        "id": "s49",
+        "number": 49,
+        "openedAt": "2026-10-04T03:40:00+05:00",
+        "openedBy": {
+          "id": "shabir",
+          "name": "Shabir",
+          "role": "worker"
+        }
+      },
+      "moved": [
+        {
+          "gameId": "g-t2-c",
+          "toSheetId": "s49"
+        }
+      ],
+      "leftWithoutCheckout": [
+        {
+          "playerId": "waqas",
+          "amount": 450
+        },
+        {
+          "playerId": "shoaib",
+          "amount": 250
+        }
+      ]
+    },
+    "empty": {
+      "note": "No games, no waiting bills, no activity yet. Use it to build and check the empty states.",
+      "games": [],
+      "waiting": [],
+      "activity": []
+    }
+  }
+}

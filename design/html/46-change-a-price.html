@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>46 Change a price</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+:focus-visible{outline:3px solid #2A6FD6;outline-offset:2px}
+
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 942px; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Owner menu" style="flex: 1 1 240px; background: #211913; color: #F3ECDD; padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 10px 18px">
+      <span style="width: 30px; height: 30px; border-radius: 50%; background: #1E6B45; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28); display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">Stockers</span>
+    </div>
+    <a href="O-Dashboard.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Dashboard</a>
+    <a href="Main.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Live tables</a>
+    <a href="O-Sheets-Months.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Sheets</a>
+    <a href="O-Players.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Players and credit</a>
+    <a href="O-Reports.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Reports</a>
+    <a href="O-Prices.dc.html" aria-current="page" style="min-height: 48px; padding: 0 14px; border-radius: 12px; background: #3A2D21; color: #F3ECDD; display: flex; align-items: center; font-size: 17px; font-weight: 700; text-decoration: none">Games and prices</a>
+    <a href="O-Canteen.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Canteen</a>
+    <a href="O-Expenses.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Expenses</a>
+    <a href="O-Activity.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Activity</a>
+    <a href="O-Workers.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Workers</a>
+    <a href="O-Settings.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 26px 30px 34px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <nav aria-label="Breadcrumb" style="font-size: 16px; color: #5F5A52; display: flex; gap: 8px"><a href="O-Prices.dc.html">Games and prices</a><span aria-hidden="true">/</span><span style="color: #1D1A16; font-weight: 600">Table 4</span></nav>
+    <h1 style="margin: 0; font-size: 32px; font-weight: 700">Change a price</h1>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+      <section aria-label="Snooker tables" style="flex: 999 1 520px; min-width: 0; padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 16px">
+        <h2 style="margin: 0; font-size: 22px; font-weight: 700">Snooker tables</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px">
+        <div style="min-width: 0; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+          <div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: #1E6B45; color: #FFFFFF; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.25); display: inline-flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px">1</span><div style="display: flex; flex-direction: column"><span style="font-size: 19px; font-weight: 700">Table 1</span><span style="font-size: 14px; color: #5F5A52">Open for games</span></div></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Single frame</span><span style="font-weight: 700">Rs 250</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Double frame</span><span style="font-weight: 700">Rs 500</span></div>
+          <a href="O-Price-Edit.dc.html" aria-label="Change price for Table 1" style="min-height: 44px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; text-decoration: none; color: #1D1A16">Change price</a>
+        </div>
+        <div style="min-width: 0; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+          <div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: #1E6B45; color: #FFFFFF; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.25); display: inline-flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px">2</span><div style="display: flex; flex-direction: column"><span style="font-size: 19px; font-weight: 700">Table 2</span><span style="font-size: 14px; color: #5F5A52">Open for games</span></div></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Single frame</span><span style="font-weight: 700">Rs 250</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Double frame</span><span style="font-weight: 700">Rs 500</span></div>
+          <a href="O-Price-Edit.dc.html" aria-label="Change price for Table 2" style="min-height: 44px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; text-decoration: none; color: #1D1A16">Change price</a>
+        </div>
+        <div style="min-width: 0; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+          <div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: #1E6B45; color: #FFFFFF; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.25); display: inline-flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px">3</span><div style="display: flex; flex-direction: column"><span style="font-size: 19px; font-weight: 700">Table 3</span><span style="font-size: 14px; color: #5F5A52">Open for games</span></div></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Single frame</span><span style="font-weight: 700">Rs 250</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Double frame</span><span style="font-weight: 700">Rs 500</span></div>
+          <a href="O-Price-Edit.dc.html" aria-label="Change price for Table 3" style="min-height: 44px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; text-decoration: none; color: #1D1A16">Change price</a>
+        </div>
+        <div style="min-width: 0; padding: 16px; border-radius: 14px; background: #E6EEFB; border: 2px solid #2A6FD6; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+          <div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: #1E6B45; color: #FFFFFF; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.25); display: inline-flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px">4</span><div style="display: flex; flex-direction: column"><span style="font-size: 19px; font-weight: 700">Table 4</span><span style="font-size: 14px; color: #5F5A52">Open for games</span></div></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Single frame</span><span style="font-weight: 700">Rs 200</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Double frame</span><span style="font-weight: 700">Rs 400</span></div>
+          <a href="O-Price-Edit.dc.html" aria-label="Change price for Table 4" style="min-height: 44px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; text-decoration: none; color: #1D1A16">Change price</a>
+        </div>
+        <div style="min-width: 0; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+          <div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: #1E6B45; color: #FFFFFF; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.25); display: inline-flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px">5</span><div style="display: flex; flex-direction: column"><span style="font-size: 19px; font-weight: 700">Table 5</span><span style="font-size: 14px; color: #5F5A52">Open for games</span></div></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Single frame</span><span style="font-weight: 700">Rs 200</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Double frame</span><span style="font-weight: 700">Rs 400</span></div>
+          <a href="O-Price-Edit.dc.html" aria-label="Change price for Table 5" style="min-height: 44px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; text-decoration: none; color: #1D1A16">Change price</a>
+        </div>
+        <div style="min-width: 0; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+          <div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: #1E6B45; color: #FFFFFF; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.25); display: inline-flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px">6</span><div style="display: flex; flex-direction: column"><span style="font-size: 19px; font-weight: 700">Table 6</span><span style="font-size: 14px; color: #5F5A52">Open for games</span></div></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Single frame</span><span style="font-weight: 700">Rs 250</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Double frame</span><span style="font-weight: 700">Rs 500</span></div>
+          <a href="O-Price-Edit.dc.html" aria-label="Change price for Table 6" style="min-height: 44px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; text-decoration: none; color: #1D1A16">Change price</a>
+        </div>
+        <div style="min-width: 0; padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box">
+          <div style="display: flex; align-items: center; gap: 12px"><span aria-hidden="true" style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; background: #1E6B45; color: #FFFFFF; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.25); display: inline-flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 26px">7</span><div style="display: flex; flex-direction: column"><span style="font-size: 19px; font-weight: 700">Table 7</span><span style="font-size: 14px; color: #B42318; font-weight: 600">Out of order</span></div></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Single frame</span><span style="font-weight: 700">Rs 200</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 16px"><span style="color: #5F5A52">Double frame</span><span style="font-weight: 700">Rs 400</span></div>
+          <a href="O-Price-Edit.dc.html" aria-label="Change price for Table 7" style="min-height: 44px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; text-decoration: none; color: #1D1A16">Change price</a>
+        </div>
+        </div>
+        <div style="border-top: 1px solid #DCE3DE; padding-top: 14px; display: flex; flex-direction: column; gap: 8px">
+          <h3 style="margin: 0; font-size: 17px; font-weight: 700">Price history, Table 4</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 15px"><span style="flex: 0 0 120px; color: #5F5A52">12 Mar 2026</span><span>Aqil Farooq changed single frame from Rs 180 to Rs 200</span></div>
+          <div style="display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 15px"><span style="flex: 0 0 120px; color: #5F5A52">1 Jan 2026</span><span>Set up at Rs 180 a frame</span></div>
+        </div>
+      </section>
+
+      <aside role="dialog" aria-labelledby="pe" style="flex: 1 1 360px; min-width: 0; padding: 22px; border-radius: 18px; background: #FFFFFF; border: 2px solid #2A6FD6; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 20px 50px rgba(20,40,80,0.12); box-sizing: border-box">
+        <h2 id="pe" style="margin: 0; font-size: 22px; font-weight: 700">Table 4, single frame</h2>
+        <div style="display: flex; gap: 12px; align-items: flex-end">
+          <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #5F5A52">Now</span><span style="min-height: 56px; display: flex; align-items: center; padding: 0 14px; border-radius: 10px; background: #F1F4F2; font-size: 22px; font-weight: 600; color: #5F5A52; text-decoration: line-through">Rs 200</span></div>
+          <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 6px"><label for="np" style="font-size: 14px; font-weight: 600">New price, Rs</label><input id="np" value="250" inputmode="numeric" style="min-height: 56px; padding: 0 14px; border-radius: 10px; border: 2px solid #2A6FD6; font-size: 24px; font-weight: 700; width: 100%; box-sizing: border-box"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 14px; border-radius: 12px; background: #F6F8F7; font-size: 16px"><span>Double frame becomes</span><span><span style="text-decoration: line-through; color: #5F5A52">Rs 400</span> <b>Rs 500</b></span></div>
+
+        <div style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #E3F0E8; font-size: 16px; color: #14532F"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14532F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b>Starts the moment you save.</b> The counter shows the new price straight away.</span></div>
+
+        <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px">
+          <legend style="font-size: 16px; font-weight: 700; padding: 0 0 8px">Same change for other Rs 200 tables?</legend>
+          <label style="min-height: 48px; display: flex; align-items: center; gap: 12px; font-size: 16px"><input type="checkbox" style="width: 22px; height: 22px; accent-color: #1E6B45">Table 5</label>
+          <label style="min-height: 48px; display: flex; align-items: center; gap: 12px; font-size: 16px"><input type="checkbox" style="width: 22px; height: 22px; accent-color: #1E6B45">Table 7</label>
+        </fieldset>
+
+        <div style="padding: 12px 14px; border-radius: 12px; background: #FBF1DC; font-size: 15px; color: #6B4A10; line-height: 1.4">Usman and Zubair started a frame on Table 4 at 9:10 PM. That frame stays at Rs 200.</div>
+        <div style="display: flex; gap: 10px">
+          <button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600; flex: 1 1 0; min-height: 52px">Cancel</button>
+          <button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 0; background: #1E6B45; color: #FFFFFF; font-weight: 700; flex: 2 1 0; min-height: 52px">Save new price</button>
+        </div>
+        <span style="font-size: 14px; color: #5F5A52">Saved in Activity with your name.</span>
+      </aside>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

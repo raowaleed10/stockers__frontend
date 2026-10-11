@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>24 Checkout: who is paying?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#16110D}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+a{color:#E0AE52}a:hover{color:#F0C670}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 900px; background: #16110D; color: #F3ECDD; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 18px; padding: 14px 24px; background: #110D0A; border-bottom: 1px solid #3B2F25">
+    <a href="Main.dc.html" style="min-height: 56px; padding: 0 18px; border-radius: 14px; border: 1px solid #3B2F25; background: #211913; color: #F3ECDD; display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600; text-decoration: none">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Tables
+    </a>
+    <h1 style="margin: 0; font-size: 28px; font-weight: 700">Checkout</h1>
+    <div style="flex: 1 1 0"></div>
+    <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px">10:20 PM</span>
+  </header>
+
+  <main style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 16px; padding: 18px 24px 24px">
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+      <div style="flex: 1 1 420px; display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 0 18px; border-radius: 16px; background: #211913; border: 2px solid #4A3B2E">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B9AC97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <label for="cq" style="position: absolute; left: -9999px">Search any player</label>
+        <input id="cq" placeholder="Search any player by name or phone" style="flex: 1 1 auto; background: transparent; border: 0; color: #F3ECDD; font-size: 20px; outline: none">
+      </div>
+      <div role="group" aria-label="Show" style="display: flex; background: #211913; border: 1px solid #3B2F25; border-radius: 14px; padding: 4px">
+        <button aria-pressed="true" style="min-height: 54px; padding: 0 18px; border: 0; border-radius: 11px; background: #3A2D21; color: #F3ECDD; font-size: 17px; font-weight: 600">Waiting to pay (8)</button>
+        <button aria-pressed="false" style="min-height: 54px; padding: 0 18px; border: 0; border-radius: 11px; background: transparent; color: #B9AC97; font-size: 17px">Owes from before</button>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+      <button style="min-height: 132px; border-radius: 18px; border: 3px solid #E0AE52; background: #2B2119; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+        <span style="display: flex; justify-content: space-between; width: 100%; align-items: baseline"><span style="font-size: 21px; font-weight: 700">Bilal Ahmed</span><span style="font-size: 15px; color: #B9AC97">•••• 4512</span></span>
+        <span style="font-size: 16px; color: #D9CDB8">3 frames, 2 teas tonight. Old credit Rs 500.</span>
+        <span style="margin-top: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700">Rs 1,350</span>
+      </button>
+      <button style="min-height: 132px; border-radius: 18px; border: 1px solid #3B2F25; background: #211913; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+        <span style="display: flex; justify-content: space-between; width: 100%; align-items: baseline"><span style="font-size: 21px; font-weight: 700">Ali Hassan</span><span style="font-size: 15px; color: #B9AC97">•••• 9034</span></span>
+        <span style="font-size: 16px; color: #D9CDB8">Room 1, 1 h 40 min</span>
+        <span style="margin-top: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700">Rs 2,500</span>
+      </button>
+      <button style="min-height: 132px; border-radius: 18px; border: 1px solid #3B2F25; background: #211913; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+        <span style="display: flex; justify-content: space-between; width: 100%; align-items: baseline"><span style="font-size: 21px; font-weight: 700">Kamran Iqbal</span><span style="font-size: 15px; color: #B9AC97">•••• 2276</span></span>
+        <span style="font-size: 16px; color: #F5D488">Half a double tonight. Old credit Rs 1,100, 18 days.</span>
+        <span style="margin-top: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700">Rs 1,350</span>
+      </button>
+      <button style="min-height: 132px; border-radius: 18px; border: 1px solid #3B2F25; background: #211913; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+        <span style="display: flex; justify-content: space-between; width: 100%; align-items: baseline"><span style="font-size: 21px; font-weight: 700">Saad Hussain</span><span style="font-size: 15px; color: #B9AC97">•••• 7720</span></span>
+        <span style="font-size: 16px; color: #8FDDB2">Century Rs 630. Advance Rs 200 used.</span>
+        <span style="margin-top: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700">Rs 430</span>
+      </button>
+      <button style="min-height: 132px; border-radius: 18px; border: 1px solid #3B2F25; background: #211913; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+        <span style="display: flex; justify-content: space-between; width: 100%; align-items: baseline"><span style="font-size: 21px; font-weight: 700">Zubair Khan</span><span style="font-size: 15px; color: #B9AC97">•••• 0391</span></span>
+        <span style="font-size: 16px; color: #D9CDB8">2 frames, one charged double</span>
+        <span style="margin-top: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700">Rs 600</span>
+      </button>
+      <button style="min-height: 132px; border-radius: 18px; border: 1px solid #3B2F25; background: #211913; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+        <span style="display: flex; justify-content: space-between; width: 100%; align-items: baseline"><span style="font-size: 21px; font-weight: 700">Faisal Mehmood</span><span style="font-size: 15px; color: #B9AC97">•••• 8803</span></span>
+        <span style="font-size: 16px; color: #D9CDB8">Half a double</span>
+        <span style="margin-top: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700">Rs 250</span>
+      </button>
+      <button style="min-height: 132px; border-radius: 18px; border: 1px solid #3B2F25; background: #211913; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+        <span style="display: flex; justify-content: space-between; width: 100%; align-items: baseline"><span style="font-size: 21px; font-weight: 700">Imran Shah</span><span style="font-size: 15px; color: #B9AC97">•••• 6604</span></span>
+        <span style="font-size: 16px; color: #D9CDB8">Half a double on Table 5</span>
+        <span style="margin-top: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700">Rs 200</span>
+      </button>
+      <button style="min-height: 132px; border-radius: 18px; border: 1px solid #3B2F25; background: #211913; color: #F3ECDD; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; text-align: left">
+        <span style="display: flex; justify-content: space-between; width: 100%; align-items: baseline"><span style="font-size: 21px; font-weight: 700">Naveed Akhtar</span><span style="font-size: 15px; color: #B9AC97">•••• 3318</span></span>
+        <span style="font-size: 16px; color: #D9CDB8">Half a double on Table 5</span>
+        <span style="margin-top: auto; font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700">Rs 200</span>
+      </button>
+      </div>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 14px 18px; border-radius: 14px; background: #211913; border: 1px solid #3B2F25; font-size: 17px; color: #B9AC97">
+      <span>Anyone not checked out when the sheet closes is moved to credit and marked “Left without checkout”.</span>
+      <span style="color: #F3ECDD; font-weight: 700">Waiting tonight Rs 6,880</span>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

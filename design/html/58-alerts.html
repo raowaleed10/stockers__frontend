@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>58 Alerts</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+:focus-visible{outline:3px solid #2A6FD6;outline-offset:2px}
+
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="width: 390px; min-height: 1033px; margin: 0 auto; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-direction: column">
+  <header style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 16px 6px">
+    <a href="P-Dashboard.dc.html" style="min-height: 44px; display: flex; align-items: center; gap: 2px; margin-left: -8px; padding-right: 8px; font-size: 17px; font-weight: 600; text-decoration: none; color: #1E6B45"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1E6B45" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>Home</a>
+    
+  </header>
+  <main style="flex: 1 0 auto; padding: 6px 16px 22px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 700">Alerts</h1>
+      <button style="min-height: 44px; padding: 0 12px; border-radius: 10px; border: 0; background: transparent; color: #1E6B45; font-size: 15px; font-weight: 600">Mark all read</button>
+    </div>
+    <div role="group" aria-label="Filter" style="display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px; padding: 0 16px">
+      <button aria-pressed="true" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #1E6B45; background: #E3F0E8; font-size: 15px; font-weight: 700; white-space: nowrap">All</button>
+      <button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px; white-space: nowrap">Sheets</button>
+      <button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px; white-space: nowrap">Games</button>
+      <button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px; white-space: nowrap">Edits</button>
+      <button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px; white-space: nowrap">Stock</button>
+    </div>
+    <section style="padding: 4px 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #DCE3DE">
+      <h2 style="margin: 10px 0 0; font-size: 15px; color: #5F5A52; font-weight: 600">Today, Sunday 4 October</h2>
+      <div role="list">
+        <div role="listitem" style="display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid #EEF2EF;">
+          <span aria-label="New" style="width: 9px; height: 9px; border-radius: 50%; background: #2A6FD6; flex: 0 0 auto; margin-top: 8px"></span>
+          <span style="flex: 0 0 auto; width: 4px; border-radius: 2px; background: #178A4A"></span>
+          <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 16px; font-weight: 700">Sheet 48 closed by Shabir</span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">Rs 35,150</span></div>
+            <span style="font-size: 14px; color: #5F5A52; line-height: 1.35">Earned Rs 35,150. Cash counted Rs 21,550, Rs 200 short: &#8220;Gave Rs 200 change for a bank payment&#8221;</span>
+            <span style="font-size: 13px; color: #5F5A52">3:40 AM</span>
+          </div>
+        </div>
+        <div role="listitem" style="display: flex; gap: 10px; padding: 12px 0; ">
+          <span aria-label="New" style="width: 9px; height: 9px; border-radius: 50%; background: #2A6FD6; flex: 0 0 auto; margin-top: 8px"></span>
+          <span style="flex: 0 0 auto; width: 4px; border-radius: 2px; background: #B7791F"></span>
+          <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 16px; font-weight: 700">Left without checkout</span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">Rs 700</span></div>
+            <span style="font-size: 14px; color: #5F5A52; line-height: 1.35">Waqas Butt Rs 450 and Shoaib Malik Rs 250 moved to their credit.</span>
+            <span style="font-size: 13px; color: #5F5A52">3:40 AM</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section style="padding: 4px 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #DCE3DE">
+      <h2 style="margin: 10px 0 0; font-size: 15px; color: #5F5A52; font-weight: 600">Yesterday, Saturday 3 October</h2>
+      <div role="list">
+        <div role="listitem" style="display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid #EEF2EF;">
+          <span style="width: 9px; flex: 0 0 auto"></span>
+          <span style="flex: 0 0 auto; width: 4px; border-radius: 2px; background: #2A6FD6"></span>
+          <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 16px; font-weight: 600">Adil edited sheet 47</span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">&#8722; 150</span></div>
+            <span style="font-size: 14px; color: #5F5A52; line-height: 1.35">Table 3 Century 55 to 45 minutes. &#8220;Players stopped 10 min early&#8221;</span>
+            <span style="font-size: 13px; color: #5F5A52">10:05 PM</span>
+          </div>
+        </div>
+        <div role="listitem" style="display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid #EEF2EF;">
+          <span style="width: 9px; flex: 0 0 auto"></span>
+          <span style="flex: 0 0 auto; width: 4px; border-radius: 2px; background: #5F5A52"></span>
+          <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 16px; font-weight: 600">Frame discarded on Table 6</span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">250</span></div>
+            <span style="font-size: 14px; color: #5F5A52; line-height: 1.35">&#8220;Tariq got a call and left after 12 minutes&#8221;</span>
+            <span style="font-size: 13px; color: #5F5A52">9:50 PM</span>
+          </div>
+        </div>
+        <div role="listitem" style="display: flex; gap: 10px; padding: 12px 0; border-bottom: 1px solid #EEF2EF;">
+          <span style="width: 9px; flex: 0 0 auto"></span>
+          <span style="flex: 0 0 auto; width: 4px; border-radius: 2px; background: #B7791F"></span>
+          <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 16px; font-weight: 600">Chips running low</span></div>
+            <span style="font-size: 14px; color: #5F5A52; line-height: 1.35">3 left. Cigarette packs are sold out.</span>
+            <span style="font-size: 13px; color: #5F5A52">9:12 PM</span>
+          </div>
+        </div>
+        <div role="listitem" style="display: flex; gap: 10px; padding: 12px 0; ">
+          <span style="width: 9px; flex: 0 0 auto"></span>
+          <span style="flex: 0 0 auto; width: 4px; border-radius: 2px; background: #5F5A52"></span>
+          <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+            <div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 16px; font-weight: 600">Game cancelled on Table 5</span></div>
+            <span style="font-size: 14px; color: #5F5A52; line-height: 1.35">Started by mistake and undone after 40 seconds.</span>
+            <span style="font-size: 13px; color: #5F5A52">8:12 PM</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <a href="O-Settings.dc.html" style="min-height: 44px; display: flex; align-items: center; font-size: 15px; font-weight: 600">Choose which alerts you get</a>
+  </main>
+  <nav aria-label="Main" style="margin-top: auto; display: flex; padding: 4px 6px 14px; background: #FFFFFF; border-top: 1px solid #DCE3DE">
+    <a href="P-Dashboard.dc.html" aria-current="page" style="flex: 1 1 0; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #1E6B45; text-decoration: none; font-size: 13px; font-weight: 700"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1E6B45" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h5v-6h4v6h5V9.5"/></svg>Home</a><a href="P-Live.dc.html" style="flex: 1 1 0; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #6E685F; text-decoration: none; font-size: 13px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6E685F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Live</a><a href="P-Sheets.dc.html" style="flex: 1 1 0; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #6E685F; text-decoration: none; font-size: 13px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6E685F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2.5h8.5A1.5 1.5 0 0 1 21 9v9.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5Z"/></svg>Sheets</a><a href="P-Player.dc.html" style="flex: 1 1 0; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #6E685F; text-decoration: none; font-size: 13px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6E685F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M17.5 14.5c2.2.3 3.6 1.9 4 4.5"/></svg>Players</a><a href="P-Prices.dc.html" style="flex: 1 1 0; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: #6E685F; text-decoration: none; font-size: 13px; font-weight: 500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6E685F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>More</a>
+  </nav>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>37 Reports and comparisons</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer}
+select{font:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 1818px; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Owner menu" style="flex: 1 1 240px; background: #211913; color: #F3ECDD; padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 10px 18px">
+      <span style="width: 30px; height: 30px; border-radius: 50%; background: #1E6B45; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28); display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">Stockers</span>
+    </div>
+    <a href="O-Dashboard.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Dashboard</a>
+    <a href="Main.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Live tables</a>
+    <a href="O-Sheets-Months.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Sheets</a>
+    <a href="O-Players.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Players and credit</a>
+    <a href="O-Reports.dc.html" aria-current="page" style="min-height: 48px; padding: 0 14px; border-radius: 12px; background: #3A2D21; color: #F3ECDD; display: flex; align-items: center; font-size: 17px; font-weight: 700; text-decoration: none">Reports</a>
+    <a href="O-Prices.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Games and prices</a>
+    <a href="O-Canteen.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Canteen</a>
+    <a href="O-Expenses.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Expenses</a>
+    <a href="O-Activity.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Activity</a>
+    <a href="O-Workers.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Workers</a>
+    <a href="O-Settings.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 26px 30px 34px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px">
+      <h1 style="margin: 0; font-size: 32px; font-weight: 700">Reports</h1>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <button style="min-height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+          PDF
+        </button>
+        <button style="min-height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+          Excel
+        </button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 16px; background: #FFFFFF; border: 1px solid #DCE3DE">
+      <div role="group" aria-label="Period type" style="display: flex; background: #EEF2EF; border-radius: 12px; padding: 4px">
+        <button aria-pressed="false" style="min-height: 44px; padding: 0 16px; border: 0; border-radius: 9px; background: transparent; color: #5F5A52; font-size: 16px">Day</button>
+        <button aria-pressed="true" style="min-height: 44px; padding: 0 16px; border: 0; border-radius: 9px; background: #FFFFFF; color: #1D1A16; font-size: 16px; font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,0.08)">Month</button>
+        <button aria-pressed="false" style="min-height: 44px; padding: 0 16px; border: 0; border-radius: 9px; background: transparent; color: #5F5A52; font-size: 16px">Year</button>
+      </div>
+      <label for="p1" style="font-size: 16px; color: #5F5A52">Show</label>
+      <select id="p1" style="min-height: 46px; padding: 0 12px; border-radius: 10px; border: 1px solid #C9D2CC; background: #FFFFFF; color: #1D1A16; font-size: 16px; font-weight: 600"><option>September 2026</option></select>
+      <label for="p2" style="font-size: 16px; color: #5F5A52">compared with</label>
+      <select id="p2" style="min-height: 46px; padding: 0 12px; border-radius: 10px; border: 1px solid #C9D2CC; background: #FFFFFF; color: #1D1A16; font-size: 16px; font-weight: 600"><option>August 2026</option></select>
+    </div>
+
+    <section aria-label="Totals" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px">
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 16px; color: #5F5A52; font-weight: 600">Earned</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700">Rs 773,000</span>
+        <span style="font-size: 15px"><b style="color: #1E6B45">+5.1%</b> <span style="color: #5F5A52">vs Rs 735,200</span></span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 16px; color: #5F5A52; font-weight: 600">Expenses</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700">Rs 214,000</span>
+        <span style="font-size: 15px"><b style="color: #8A5C14">+2.6%</b> <span style="color: #5F5A52">vs Rs 208,500</span></span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #1E6B45; color: #F3ECDD; display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 16px; font-weight: 600">Profit</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700">Rs 516,500</span>
+        <span style="font-size: 15px; color: #CFE5D7"><b>+6.2%</b> vs Rs 486,400. After expenses and canteen buying cost.</span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 16px; color: #8A5C14; font-weight: 600">Credit pending at month end</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700">Rs 46,900</span>
+        <span style="font-size: 15px; color: #5F5A52">Counted in earned, not yet received</span>
+      </div>
+    </section>
+
+    <section aria-label="Month race" style="padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 700">Earned through the month, day by day</h2>
+        <div style="display: flex; gap: 18px; font-size: 15px">
+          <span style="display: flex; align-items: center; gap: 8px"><span style="width: 22px; height: 3px; border-radius: 2px; background: #178A4A"></span>September</span>
+          <span style="display: flex; align-items: center; gap: 8px"><span style="width: 22px; height: 3px; border-radius: 2px; background: #2A6FD6"></span>August</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px">
+        <div aria-hidden="true" style="display: flex; flex-direction: column; justify-content: space-between; height: 240px; font-size: 13px; color: #5F5A52; text-align: right">
+          <span>800k</span><span>600k</span><span>400k</span><span>200k</span><span>0</span>
+        </div>
+        <div style="flex: 1 1 auto; position: relative; height: 240px">
+          <svg role="img" aria-label="Running total of earnings: September ends at Rs 773,000, August at Rs 735,200" viewBox="0 0 600 220" preserveAspectRatio="none" width="100%" height="240" style="display: block">
+            <line x1="0" y1="20" x2="600" y2="20" stroke="#EEF2EF" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <line x1="0" y1="70" x2="600" y2="70" stroke="#EEF2EF" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <line x1="0" y1="120" x2="600" y2="120" stroke="#EEF2EF" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <line x1="0" y1="170" x2="600" y2="170" stroke="#EEF2EF" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <line x1="0" y1="220" x2="600" y2="220" stroke="#C9D2CC" stroke-width="1" vector-effect="non-scaling-stroke"/>
+            <polyline fill="none" stroke="#2A6FD6" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke" points="0.0,214.5 20.0,209.3 40.0,203.8 60.0,198.0 80.0,191.0 100.0,183.7 120.0,178.9 140.0,174.4 160.0,169.4 180.0,164.2 200.0,158.1 220.0,150.6 240.0,142.8 260.0,138.0 280.0,133.3 300.0,128.2 320.0,122.8 340.0,116.5 360.0,108.9 380.0,101.0 400.0,95.9 420.0,91.0 440.0,85.7 460.0,80.2 480.0,73.8 500.0,65.9 520.0,57.7 540.0,52.6 560.0,47.6 580.0,42.2 600.0,36.2"/>
+            <polyline fill="none" stroke="#178A4A" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke" points="0.0,214.0 20.0,208.4 40.0,202.4 60.0,196.1 80.0,188.5 100.0,180.5 120.0,175.4 140.0,170.4 160.0,165.1 180.0,159.3 200.0,152.7 220.0,144.6 240.0,136.1 260.0,130.8 280.0,125.7 300.0,120.2 320.0,114.3 340.0,107.5 360.0,99.3 380.0,90.6 400.0,85.1 420.0,79.8 440.0,74.0 460.0,68.0 480.0,61.1 500.0,52.5 520.0,43.6 540.0,38.0 560.0,32.6 580.0,26.8"/>
+          </svg>
+          <span style="position: absolute; right: 30px; top: 0px; font-size: 14px; font-weight: 700; background: #FFFFFF; padding: 0 4px">Sep Rs 773,000</span>
+          <span style="position: absolute; right: 0px; top: 46px; font-size: 14px; font-weight: 700; background: #FFFFFF; padding: 0 4px">Aug Rs 735,200</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding-left: 40px; font-size: 13px; color: #5F5A52"><span>Day 1</span><span>Day 10</span><span>Day 20</span><span>Day 31</span></div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+      <section aria-label="By game" style="padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px">
+        <h2 style="margin: 0 0 8px; font-size: 20px; font-weight: 700">By game</h2>
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 8px 0; font-size: 14px; color: #5F5A52; font-weight: 600; border-bottom: 1px solid #DCE3DE"><span>Game</span><span style="text-align: right">September</span><span style="text-align: right">August</span><span style="text-align: right">Change</span></div>
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EEF2EF"><span>Snooker frames</span><span style="text-align: right; font-weight: 600">471,500</span><span style="text-align: right">452,000</span><span style="text-align: right; color: #1E6B45; font-weight: 600">+4.3%</span></div>
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EEF2EF"><span>Century</span><span style="text-align: right; font-weight: 600">139,100</span><span style="text-align: right">128,900</span><span style="text-align: right; color: #1E6B45; font-weight: 600">+7.9%</span></div>
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EEF2EF"><span>Rooms</span><span style="text-align: right; font-weight: 600">92,800</span><span style="text-align: right">88,300</span><span style="text-align: right; color: #1E6B45; font-weight: 600">+5.1%</span></div>
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EEF2EF"><span>Canteen sales</span><span style="text-align: right; font-weight: 600">69,600</span><span style="text-align: right">66,000</span><span style="text-align: right; color: #1E6B45; font-weight: 600">+5.5%</span></div>
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; color: #5F5A52"><span>Pool, foosball, carrom, ludo, PlayStation</span><span style="text-align: right">–</span><span style="text-align: right">–</span><span style="text-align: right">Not priced</span></div>
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 12px 0 0; font-size: 17px; font-weight: 700; border-top: 2px solid #DCE3DE"><span>Total, Rs</span><span style="text-align: right">773,000</span><span style="text-align: right">735,200</span><span style="text-align: right; color: #1E6B45">+5.1%</span></div>
+      </section>
+
+      <section aria-label="By table" style="padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0 0 4px; font-size: 20px; font-weight: 700">By table, September</h2>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Table 3</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 100%"></div><span style="text-align: right; font-weight: 700">106,800</span></div>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Table 1</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 95%"></div><span style="text-align: right; font-weight: 700">101,200</span></div>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Table 2</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 88%"></div><span style="text-align: right; font-weight: 700">94,300</span></div>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Table 6</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 86%"></div><span style="text-align: right; font-weight: 700">91,400</span></div>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Table 4</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 73%"></div><span style="text-align: right; font-weight: 700">77,500</span></div>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Table 5</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 71%"></div><span style="text-align: right; font-weight: 700">76,100</span></div>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Table 7</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 59%"></div><span style="text-align: right; font-weight: 700">63,300</span></div>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Room 1</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 46%"></div><span style="text-align: right; font-weight: 700">49,500</span></div>
+        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 10px; align-items: center; font-size: 16px"><span>Room 2</span><div style="height: 12px; border-radius: 4px; background: #178A4A; width: 41%"></div><span style="text-align: right; font-weight: 700">43,300</span></div>
+        <span style="font-size: 15px; color: #5F5A52">Frames and Century together for each table. Table 7 was closed 2 days for a cloth change.</span>
+      </section>
+    </div>
+
+    <section aria-label="By payment method" style="padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px">
+      <h2 style="margin: 0 0 8px; font-size: 20px; font-weight: 700">Money received, by payment method</h2>
+      <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 8px 0; font-size: 14px; color: #5F5A52; font-weight: 600; border-bottom: 1px solid #DCE3DE"><span>Method</span><span style="text-align: right">September</span><span style="text-align: right">August</span><span style="text-align: right">Change</span></div>
+      <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EEF2EF"><span>Cash</span><span style="text-align: right; font-weight: 600">512,600</span><span style="text-align: right; color: #5F5A52">487,900</span><span style="text-align: right; color: #1E6B45">+5.1%</span></div><div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EEF2EF"><span>Bank transfer</span><span style="text-align: right; font-weight: 600">101,400</span><span style="text-align: right; color: #5F5A52">95,800</span><span style="text-align: right; color: #1E6B45">+5.8%</span></div><div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EEF2EF"><span>Easypaisa</span><span style="text-align: right; font-weight: 600">88,900</span><span style="text-align: right; color: #5F5A52">84,300</span><span style="text-align: right; color: #1E6B45">+5.5%</span></div><div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EEF2EF"><span>JazzCash</span><span style="text-align: right; font-weight: 600">31,300</span><span style="text-align: right; color: #5F5A52">28,600</span><span style="text-align: right; color: #1E6B45">+9.4%</span></div>
+      <div style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 0.7fr; gap: 8px; padding: 12px 0 0; font-size: 17px; font-weight: 700; border-top: 2px solid #DCE3DE"><span>Received, Rs</span><span style="text-align: right">734,200</span><span style="text-align: right">696,600</span><span style="text-align: right">+5.4%</span></div>
+      <span style="font-size: 15px; color: #5F5A52; margin-top: 6px">Includes old credit paid back. What is still owed shows under credit pending.</span>
+    </section>
+
+    <section aria-label="Year" style="padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 700">2026 month by month</h2>
+        <span style="font-size: 15px; color: #5F5A52">Earned so far this year: Rs 6,224,000</span>
+      </div>
+      <div role="img" aria-label="Earned per month in 2026 from January Rs 641,000 to September Rs 773,000" style="display: flex; align-items: flex-end; gap: 14px; height: 170px; border-bottom: 1px solid #C9D2CC">
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">641k</span><div style="width: 100%; height: 128px; background: #178A4A; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">598k</span><div style="width: 100%; height: 120px; background: #178A4A; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">612k</span><div style="width: 100%; height: 122px; background: #178A4A; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">668k</span><div style="width: 100%; height: 134px; background: #178A4A; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">702k</span><div style="width: 100%; height: 140px; background: #178A4A; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">688k</span><div style="width: 100%; height: 138px; background: #178A4A; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">721k</span><div style="width: 100%; height: 144px; background: #178A4A; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">735k</span><div style="width: 100%; height: 147px; background: #178A4A; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #1D1A16; font-weight: 700">773k</span><div style="width: 100%; height: 155px; background: #0E5E31; border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 13px; color: #5F5A52">so far</span><div style="width: 100%; height: 17px; background: repeating-linear-gradient(135deg, #0E5E31 0 4px, #178A4A 4px 8px); border-radius: 4px 4px 0 0"></div></div>
+        <div style="flex: 1 1 0"></div>
+        <div style="flex: 1 1 0"></div>
+      </div>
+      <div style="display: flex; gap: 14px; font-size: 13px; color: #5F5A52">
+        <span style="flex: 1 1 0; text-align: center">Jan</span><span style="flex: 1 1 0; text-align: center">Feb</span><span style="flex: 1 1 0; text-align: center">Mar</span><span style="flex: 1 1 0; text-align: center">Apr</span><span style="flex: 1 1 0; text-align: center">May</span><span style="flex: 1 1 0; text-align: center">Jun</span><span style="flex: 1 1 0; text-align: center">Jul</span><span style="flex: 1 1 0; text-align: center">Aug</span><span style="flex: 1 1 0; text-align: center">Sep</span><span style="flex: 1 1 0; text-align: center">Oct</span><span style="flex: 1 1 0; text-align: center">Nov</span><span style="flex: 1 1 0; text-align: center">Dec</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

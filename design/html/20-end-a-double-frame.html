@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>20 End a double frame</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0A07}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+a{color:#E0AE52}a:hover{color:#F0C670}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 900px; background: #0D0A07; color: #F3ECDD; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding: 14px 24px; background: #0B0806; border-bottom: 1px solid #2A2119; opacity: 0.55">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <span style="width: 34px; height: 34px; border-radius: 50%; background: #1E6B45; display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 30px">Stockers</span>
+    </div>
+    <span style="font-size: 17px; font-weight: 600">Sheet 48</span>
+    <div style="flex: 1 1 0"></div>
+    <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px">9:47 PM</span>
+  </header>
+
+  <main style="flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: 28px 24px">
+    <section role="dialog" aria-labelledby="de" style="width: 100%; max-width: 1100px; background: #211913; border: 1px solid #4A3B2E; border-radius: 26px; padding: 28px 32px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 30px 80px rgba(0,0,0,0.55)">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 17px; color: #B9AC97">Table 5, double frame ended after 27 minutes</span>
+          <h1 id="de" style="margin: 0; font-size: 34px; font-weight: 700">Which side lost?</h1>
+        </div>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 600">Rs 400</span>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 16px">
+        <button aria-pressed="false" style="flex: 1 1 380px; min-height: 150px; border-radius: 22px; border: 2px solid #4A3B2E; background: #2B2119; color: #F3ECDD; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 6px; padding: 0 24px; text-align: left">
+          <span style="font-size: 17px; color: #B9AC97">Side A</span>
+          <span style="font-size: 28px; font-weight: 700">Kamran Iqbal and Faisal Mehmood</span>
+        </button>
+        <button aria-pressed="true" style="flex: 1 1 380px; min-height: 150px; border-radius: 22px; border: 3px solid #E0AE52; background: #33271C; color: #F3ECDD; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 6px; padding: 0 24px; text-align: left">
+          <span style="font-size: 17px; color: #E0AE52; font-weight: 600">Side B lost</span>
+          <span style="font-size: 28px; font-weight: 700">Imran Shah and Naveed Akhtar</span>
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; border-radius: 18px; background: #2B2119; border: 1px solid #3B2F25">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+          <h2 style="margin: 0; font-size: 20px; font-weight: 700">How the Rs 400 is split</h2>
+          <div role="group" aria-label="Split" style="display: flex; background: #16110D; border: 1px solid #3B2F25; border-radius: 14px; padding: 4px">
+            <button aria-pressed="true" style="min-height: 52px; padding: 0 18px; border: 0; border-radius: 11px; background: #3A2D21; color: #F3ECDD; font-size: 17px; font-weight: 600">Half each</button>
+            <button aria-pressed="false" style="min-height: 52px; padding: 0 18px; border: 0; border-radius: 11px; background: transparent; color: #B9AC97; font-size: 17px">One pays all</button>
+            <button aria-pressed="false" style="min-height: 52px; padding: 0 18px; border: 0; border-radius: 11px; background: transparent; color: #B9AC97; font-size: 17px">Custom</button>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px">
+          <div style="flex: 1 1 280px; display: flex; align-items: center; justify-content: space-between; min-height: 72px; padding: 0 20px; border-radius: 14px; background: #211913; border: 1px solid #4A3B2E">
+            <label for="s1" style="font-size: 20px; font-weight: 600">Imran Shah</label>
+            <span style="display: flex; align-items: baseline; gap: 6px"><span style="color: #B9AC97; font-size: 18px">Rs</span><input id="s1" value="200" style="width: 90px; background: transparent; border: 0; color: #F3ECDD; font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 600; text-align: right"></span>
+          </div>
+          <div style="flex: 1 1 280px; display: flex; align-items: center; justify-content: space-between; min-height: 72px; padding: 0 20px; border-radius: 14px; background: #211913; border: 1px solid #4A3B2E">
+            <label for="s2" style="font-size: 20px; font-weight: 600">Naveed Akhtar</label>
+            <span style="display: flex; align-items: baseline; gap: 6px"><span style="color: #B9AC97; font-size: 18px">Rs</span><input id="s2" value="200" style="width: 90px; background: transparent; border: 0; color: #F3ECDD; font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 600; text-align: right"></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <button style="min-height: 64px; padding: 0 24px; border-radius: 14px; border: 1px solid #3B2F25; background: #2B2119; color: #F3ECDD; font-size: 19px; font-weight: 600">Keep playing</button>
+        <div style="flex: 1 1 0"></div>
+        <button style="min-height: 64px; padding: 0 34px; border-radius: 14px; border: 0; background: #E0AE52; color: #1B140D; font-size: 20px; font-weight: 700">Charge Imran and Naveed</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

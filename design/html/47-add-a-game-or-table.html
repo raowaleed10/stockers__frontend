@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>47 Add a game or table</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+:focus-visible{outline:3px solid #2A6FD6;outline-offset:2px}
+
+.t{position:relative;box-sizing:border-box;display:block;text-align:left;border:0;padding:0;margin:0;color:#F3ECDD;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.t[disabled]{cursor:not-allowed}
+.t:focus-visible{outline:3px solid #F3ECDD;outline-offset:6px}
+
+/* shared content */
+.ct{position:relative;z-index:2;display:flex;flex-direction:column;gap:5px;height:100%;box-sizing:border-box;text-shadow:0 1px 2px rgba(0,0,0,.55)}
+.top{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:6px 10px}
+.idn{display:flex;align-items:flex-end;gap:9px}
+.num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:58px;line-height:.8}
+.lab{font-size:14px;line-height:1.2;color:var(--sub,#D3E6D7);white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px 5px 7px;border-radius:999px;background:rgba(10,8,6,.55);font-size:14px;font-weight:600;white-space:nowrap;text-shadow:none;color:#F3ECDD}
+.dot{width:13px;height:13px;border-radius:50%;box-shadow:inset -3px -3px 0 rgba(0,0,0,.28);flex:0 0 auto}
+.gt{font-size:16px;font-weight:700}
+.gt span{font-weight:500;color:var(--sub,#D3E6D7)}
+.pl{font-size:17px}
+.pl span{color:var(--sub,#D3E6D7)}
+.bot{display:flex;align-items:baseline;justify-content:space-between;margin-top:auto}
+.tmr{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.amt{font-size:19px;font-weight:700}
+.cta{font-size:21px;font-weight:700;color:#BFF0CF}
+.hint{font-size:14px;color:var(--sub,#D3E6D7)}
+
+/* balls and coins */
+.b{position:absolute;width:9px;height:9px;border-radius:50%;z-index:1;box-shadow:0 1px 1.5px rgba(0,0,0,.55)}
+
+/* ---------------- snooker table ---------------- */
+.snk{padding:13px;border-radius:18px;background:linear-gradient(160deg,#82502C 0%,#4E2E17 48%,#6E4424 100%)}
+.snk::before{content:"";position:absolute;inset:0;border-radius:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -2px 0 rgba(0,0,0,.4),inset 0 0 0 1px rgba(0,0,0,.35);pointer-events:none}
+.cl{position:relative;height:100%;min-height:176px;box-sizing:border-box;border-radius:7px;padding:13px 18px 11px;overflow:hidden;
+  background:radial-gradient(ellipse 72% 85% at 50% 42%,#2A8C52 0%,#1D6E3F 58%,#14502D 100%);
+  box-shadow:inset 0 0 0 4px #16603A,inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 26px rgba(0,0,0,.45)}
+.lit .cl{background:radial-gradient(ellipse 58% 78% at 50% 44%,#3DB06B 0%,#239052 42%,#16582F 100%)}
+.dim .cl{background:radial-gradient(ellipse 72% 85% at 50% 42%,#4C6151 0%,#3A4C3F 58%,#2C3A30 100%)}
+.pk{position:absolute;z-index:3;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 50% 42%,#000 0 56%,#24170D 100%);box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+.pk.a{top:3px;left:3px}.pk.b2{top:3px;right:3px}.pk.c{bottom:3px;left:3px}.pk.d{bottom:3px;right:3px}
+.pk.e{top:1px;left:calc(50% - 11px)}.pk.f{bottom:1px;left:calc(50% - 11px)}
+.bk{position:absolute;z-index:0;top:4px;bottom:4px;left:21%;width:1.5px;background:rgba(255,255,255,.2)}
+.dd{position:absolute;z-index:0;left:calc(21% - 32px);top:calc(50% - 32px);width:33px;height:64px;box-sizing:border-box;border:1.5px solid rgba(255,255,255,.2);border-right:0;border-radius:32px 0 0 32px}
+.cover{position:absolute;inset:0;z-index:1;border-radius:7px;background:repeating-linear-gradient(135deg,#55595F 0 14px,#474A4F 14px 28px)}
+.rc{display:inline-block;padding:3px 10px 4px;border-radius:7px;background:#D92D20;color:#fff;box-shadow:0 2px 0 #8F1C14,0 0 0 2px rgba(255,255,255,.15);text-shadow:none}
+.cardi{width:10px;height:14px;border-radius:2px;background:#F0574F;transform:rotate(-12deg);box-shadow:0 1px 2px rgba(0,0,0,.4);flex:0 0 auto}
+
+/* ---------------- pool table ---------------- */
+.pool{padding:14px;border-radius:16px;background:linear-gradient(160deg,#3A3633 0%,#1E1B19 50%,#2E2A27 100%)}
+.pool::before{content:"";position:absolute;inset:0;border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(0,0,0,.5);pointer-events:none}
+.pool .cl{background:radial-gradient(ellipse 72% 85% at 50% 42%,#2F7FC4 0%,#1F5F9A 58%,#174775 100%);box-shadow:inset 0 0 0 4px #1A5288,inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 26px rgba(0,0,0,.45)}
+.pool.dim .cl{background:radial-gradient(ellipse 72% 85% at 50% 42%,#4B6278 0%,#3B4D60 58%,#2E3C4B 100%);box-shadow:inset 0 0 0 4px #34485B,inset 0 0 0 5px rgba(0,0,0,.25),inset 0 0 26px rgba(0,0,0,.45)}
+.pool .pk{width:24px;height:24px}
+.pool .pk.e{left:calc(50% - 12px)}.pool .pk.f{left:calc(50% - 12px)}
+.pool .lab,.pool .gt span,.pool .pl span,.pool .hint{--sub:#D2E2F2}
+.dm{position:absolute;z-index:3;width:6px;height:6px;background:#EDE6D6;transform:rotate(45deg);opacity:.85}
+.hs{position:absolute;z-index:0;top:4px;bottom:4px;left:25%;width:1.5px;background:rgba(255,255,255,.16)}
+
+/* ---------------- room ---------------- */
+.room{padding:9px;border-radius:18px;background:#2B221B;border:3px solid #8A7660;display:flex;gap:8px}
+.room .door{position:absolute;left:28px;bottom:-3px;width:54px;height:3px;background:#16110D}
+.room .swing{position:absolute;left:28px;bottom:0;width:40px;height:40px;border-top:1.5px dashed rgba(201,183,160,.45);border-right:1.5px dashed rgba(201,183,160,.45);border-radius:0 40px 0 0;box-sizing:border-box}
+.room .snk{flex:1 1 auto;min-width:0;padding:11px;border-radius:14px}
+.room .snk .cl{min-height:150px;padding:11px 14px 9px}
+.room .lab{font-size:13px}
+.room .snk .pk{width:19px;height:19px}
+.room .snk .pk.e,.room .snk .pk.f{left:calc(50% - 9.5px)}
+.sofa{flex:0 0 28px;position:relative;border-radius:12px;background:linear-gradient(90deg,#5E241C,#86372B 60%,#6E2B22);box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),inset 5px 0 0 rgba(0,0,0,.22);display:flex;flex-direction:column;gap:5px;padding:10px 4px 10px 9px;box-sizing:border-box}
+.sofa i{flex:1 1 0;border-radius:6px;background:linear-gradient(90deg,#9A4434,#7E3428);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+
+/* ---------------- carrom board ---------------- */
+.crm{aspect-ratio:1/1;padding:16px;border-radius:12px;background:linear-gradient(150deg,#6A4322 0%,#3B2312 55%,#59381C 100%)}
+.crm::before{content:"";position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(0,0,0,.4);pointer-events:none}
+.cb{position:relative;height:100%;box-sizing:border-box;border-radius:3px;padding:40px 40px 36px;overflow:hidden;color:#2A1A0C;
+  background:radial-gradient(ellipse at 45% 40%,#F6E4BC 0%,#ECD29F 60%,#DDBC82 100%);box-shadow:inset 0 0 0 2px rgba(80,45,15,.35),inset 0 0 18px rgba(90,50,10,.25)}
+.crm.dim .cb{background:radial-gradient(ellipse at 45% 40%,#D9CDB5 0%,#C9B999 60%,#B7A684 100%)}
+.cb svg.ln{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.cb .ct{text-shadow:0 0 3px #F3E2BC,0 0 6px #F3E2BC}
+.cb .num{font-size:52px}
+.cb .lab,.cb .gt span,.cb .pl span,.cb .hint{--sub:#6A4E30}
+.cb .cta{color:#1E6B45}
+.cpk{position:absolute;z-index:3;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 50% 45%,#000 0 58%,#3A2410 100%);box-shadow:0 0 0 2px rgba(60,35,15,.6)}
+.cb .pill{background:rgba(42,26,12,.82)}
+.cn{position:absolute;width:10px;height:10px;border-radius:50%;z-index:1;box-shadow:0 1px 1px rgba(0,0,0,.45)}
+
+/* ---------------- foosball table ---------------- */
+.fsw{position:relative;padding:12px 0}
+.fsb{padding:12px 14px;border-radius:12px;background:linear-gradient(180deg,#2C2C31 0%,#151518 100%)}
+.fsb::before{content:"";position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.15),inset 0 0 0 1px rgba(0,0,0,.6);pointer-events:none}
+.ff{position:relative;min-height:168px;height:100%;box-sizing:border-box;border-radius:4px;padding:12px 26px 10px;overflow:hidden;
+  background:repeating-linear-gradient(90deg,#2E8A47 0 9%,#287D40 9% 18%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.55),inset 0 0 22px rgba(0,0,0,.4)}
+.fsb.dim .ff{filter:saturate(.3) brightness(.85)}
+.ff .ml{position:absolute;z-index:0;top:0;bottom:0;left:calc(50% - 1px);width:2px;background:rgba(255,255,255,.45)}
+.ff .mc{position:absolute;z-index:0;left:calc(50% - 26px);top:calc(50% - 26px);width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.45);box-sizing:border-box}
+.ff .gb{position:absolute;z-index:0;top:calc(50% - 30px);width:22px;height:60px;border:2px solid rgba(255,255,255,.45);box-sizing:border-box}
+.ff .gb.l{left:-2px}.ff .gb.r{right:-2px}
+.goal{position:absolute;z-index:3;top:calc(50% - 20px);width:9px;height:40px;background:#050506;border-radius:2px}
+.goal.l{left:8px}.goal.r{right:8px}
+.rod{position:absolute;z-index:1;top:-12px;bottom:-12px;width:3px;background:linear-gradient(90deg,#8E959F,#E3E7EC,#8E959F);opacity:.32}
+.hd{position:absolute;z-index:0;width:10px;height:13px;border-radius:5px;background:linear-gradient(90deg,#1B1B1F,#4A4A52,#1B1B1F);box-shadow:0 0 0 1px #5C5C66}
+.man{position:absolute;z-index:1;width:8px;height:11px;border-radius:3px;opacity:.5;box-shadow:0 1px 1px rgba(0,0,0,.4)}
+
+/* ---------------- ludo ---------------- */
+.ldw{padding:12px;border-radius:14px;background:linear-gradient(150deg,#6A4322,#3B2312 55%,#59381C);display:flex;gap:14px;align-items:stretch}
+.ldw::before{content:"";position:absolute;inset:0;border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(0,0,0,.4);pointer-events:none}
+.ldb{flex:0 0 auto;width:128px;height:128px;align-self:center;border-radius:4px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.5);background:#FBF7EE}
+.ldw .ct{flex:1 1 auto;min-width:0;padding:4px 4px 2px 0;--sub:#D9CDB8}
+.ldw .num{font-size:50px}
+.ff .ct{text-shadow:0 1px 2px rgba(0,0,0,.7),0 0 6px rgba(0,0,0,.45)}
+.ldw.dim .ldb{filter:saturate(.25) brightness(.8)}
+
+/* ---------------- PlayStation screen ---------------- */
+.tvw{display:flex;flex-direction:column;align-items:center}
+.tv{position:relative;width:100%;box-sizing:border-box;padding:9px;border-radius:12px;background:linear-gradient(180deg,#26262A,#0C0C0E);box-shadow:inset 0 0 0 1px #3A3A40}
+.scr{position:relative;min-height:156px;box-sizing:border-box;border-radius:5px;padding:12px 14px 10px;overflow:hidden;
+  background:radial-gradient(ellipse 80% 90% at 25% 15%,#2A64B8 0%,#173E7C 45%,#0B1F42 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.scr::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.10) 0 30%,transparent 30%);pointer-events:none}
+.tv.off .scr{background:radial-gradient(ellipse 80% 90% at 25% 15%,#26282E 0%,#141519 60%,#08090B 100%)}
+.tv .ct{--sub:#C9D8F0}
+.tv .num{font-size:50px}
+.tv .lab{font-size:13px}
+.neck{width:34px;height:12px;background:linear-gradient(90deg,#1A1A1D,#2E2E33,#1A1A1D)}
+.foot{width:120px;height:8px;border-radius:4px 4px 6px 6px;background:linear-gradient(180deg,#2E2E33,#121214)}
+.pad{position:absolute;z-index:1;right:12px;bottom:12px;opacity:.28}
+
+/* status rings last, so they win over each shape's own shadow */
+.r-play{box-shadow:0 0 0 3px #16110D,0 0 0 6px #F0574F,0 12px 26px rgba(0,0,0,.55)}
+.r-over{box-shadow:0 0 0 3px #16110D,0 0 0 8px #F0574F,0 0 30px rgba(240,87,79,.55),0 12px 26px rgba(0,0,0,.55)}
+.r-pause{box-shadow:0 0 0 3px #16110D,0 0 0 6px #F2C14E,0 12px 26px rgba(0,0,0,.55)}
+.r-free{box-shadow:0 0 0 3px #16110D,0 0 0 6px #48C07F,0 12px 26px rgba(0,0,0,.55)}
+.r-ooo{box-shadow:0 12px 26px rgba(0,0,0,.4);outline:3px dashed #9AA0A6;outline-offset:3px}
+.r-none{box-shadow:0 12px 26px rgba(0,0,0,.4)}
+
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 900px; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Owner menu" style="flex: 1 1 240px; background: #211913; color: #F3ECDD; padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 10px 18px">
+      <span style="width: 30px; height: 30px; border-radius: 50%; background: #1E6B45; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28); display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">Stockers</span>
+    </div>
+    <a href="O-Dashboard.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Dashboard</a>
+    <a href="Main.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Live tables</a>
+    <a href="O-Sheets-Months.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Sheets</a>
+    <a href="O-Players.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Players and credit</a>
+    <a href="O-Reports.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Reports</a>
+    <a href="O-Prices.dc.html" aria-current="page" style="min-height: 48px; padding: 0 14px; border-radius: 12px; background: #3A2D21; color: #F3ECDD; display: flex; align-items: center; font-size: 17px; font-weight: 700; text-decoration: none">Games and prices</a>
+    <a href="O-Canteen.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Canteen</a>
+    <a href="O-Expenses.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Expenses</a>
+    <a href="O-Activity.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Activity</a>
+    <a href="O-Workers.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Workers</a>
+    <a href="O-Settings.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 26px 30px 34px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <nav aria-label="Breadcrumb" style="font-size: 16px; color: #5F5A52; display: flex; gap: 8px"><a href="O-Prices.dc.html">Games and prices</a><span aria-hidden="true">/</span><span style="color: #1D1A16; font-weight: 600">Add</span></nav>
+    <h1 style="margin: 0; font-size: 32px; font-weight: 700">Add a game or table</h1>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+      <section style="flex: 999 1 560px; min-width: 0; padding: 24px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 26px; box-sizing: border-box">
+      <div style="display: flex; gap: 16px; align-items: flex-start">
+        <span aria-hidden="true" style="flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%; background: #1D1A16; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px">1</span>
+        <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 4px 0 0; font-size: 20px; font-weight: 700">What are you adding?</h2>
+        <div role="radiogroup" aria-label="What are you adding" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px">
+          <label style="min-height: 84px; padding: 14px 16px; border-radius: 14px; border: 2px solid #1E6B45; background: #E3F0E8; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box">
+            <input type="radio" name="kind" checked style="margin-top: 3px; width: 22px; height: 22px; accent-color: #1E6B45">
+            <span style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 700">Another snooker table</span><span style="font-size: 15px; color: #5F5A52">It will be Table 8</span></span>
+          </label>
+          <label style="min-height: 84px; padding: 14px 16px; border-radius: 14px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box">
+            <input type="radio" name="kind"  style="margin-top: 3px; width: 22px; height: 22px; accent-color: #1E6B45">
+            <span style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 700">Another room</span><span style="font-size: 15px; color: #5F5A52">It will be Room 3</span></span>
+          </label>
+          <label style="min-height: 84px; padding: 14px 16px; border-radius: 14px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box">
+            <input type="radio" name="kind"  style="margin-top: 3px; width: 22px; height: 22px; accent-color: #1E6B45">
+            <span style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 700">Another pool table</span><span style="font-size: 15px; color: #5F5A52">It will be Pool table 5</span></span>
+          </label>
+          <label style="min-height: 84px; padding: 14px 16px; border-radius: 14px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; gap: 12px; align-items: flex-start; box-sizing: border-box">
+            <input type="radio" name="kind"  style="margin-top: 3px; width: 22px; height: 22px; accent-color: #1E6B45">
+            <span style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 700">A new kind of game</span><span style="font-size: 15px; color: #5F5A52">For example table tennis. Gets its own tab.</span></span>
+          </label>
+        </div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 16px; align-items: flex-start">
+        <span aria-hidden="true" style="flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%; background: #1D1A16; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px">2</span>
+        <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 4px 0 0; font-size: 20px; font-weight: 700">Name</h2>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
+            <div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 6px"><label for="gname" style="font-size: 15px; font-weight: 600">Name</label><input id="gname" value="Table 8" style="min-height: 52px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9D2CC; font-size: 19px; font-weight: 600; box-sizing: border-box; width: 100%"></div>
+            <div style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 6px"><label for="gnum" style="font-size: 15px; font-weight: 600">Number on the tile</label><input id="gnum" value="8" style="min-height: 52px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9D2CC; font-size: 19px; font-weight: 600; box-sizing: border-box; width: 100%"></div>
+          </div>
+          <span style="font-size: 15px; color: #5F5A52">Numbers follow on from the tables you already have.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 16px; align-items: flex-start">
+        <span aria-hidden="true" style="flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%; background: #1D1A16; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px">3</span>
+        <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 4px 0 0; font-size: 20px; font-weight: 700">Price</h2>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="gp1" style="font-size: 15px; font-weight: 600">Single frame, Rs</label><input id="gp1" value="250" inputmode="numeric" style="min-height: 52px; padding: 0 14px; border-radius: 10px; border: 2px solid #1E6B45; font-size: 20px; font-weight: 700; box-sizing: border-box; width: 100%"></div>
+            <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 15px; font-weight: 600">Double frame</span><span style="min-height: 52px; padding: 0 14px; border-radius: 10px; background: #F1F4F2; display: flex; align-items: center; font-size: 20px; font-weight: 600">Rs 500</span></div>
+            <div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 15px; font-weight: 600">Century</span><span style="min-height: 52px; padding: 0 14px; border-radius: 10px; background: #F1F4F2; display: flex; align-items: center; font-size: 20px; font-weight: 600">Rs 15 a minute</span></div>
+          </div>
+          <span style="font-size: 15px; color: #5F5A52">Double frame is twice the single price. Century uses the rate for all snooker tables.</span>
+        </div>
+      </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; border-top: 1px solid #DCE3DE; padding-top: 18px">
+          <a href="O-Prices.dc.html" style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600">Cancel</a>
+          <button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 0; background: #1E6B45; color: #FFFFFF; font-weight: 700; min-width: 200px">Add Table 8</button>
+        </div>
+      </section>
+      <aside style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+        <div aria-label="Preview of Table 8 on the counter" style="padding: 22px 22px 18px; border-radius: 20px; background: #16110D; display: flex; flex-direction: column; gap: 16px"><span style="font-size: 14px; color: #B9AC97">How the counter will show it</span><button class="t snk r-free" aria-label="Table 8, free" style="width: 100%"><span class="pk a"></span><span class="pk b2"></span><span class="pk c"></span><span class="pk d"></span><span class="pk e"></span><span class="pk f"></span><div class="cl"><span class="bk"></span><span class="dd"></span><span class="b" style="left:calc(21% - 4.5px);top:calc(50% - 4.5px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#7A4A22 38%,#7A4A22 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(21% - 4.5px);top:calc(50% - 26px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#1E8A3E 38%,#1E8A3E 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(21% - 4.5px);top:calc(50% + 17px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#F2C230 38%,#F2C230 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(50% - 4.5px);top:calc(50% - 4.5px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#2357C9 38%,#2357C9 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% - 15px);top:calc(50% - 4.5px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#F08BB0 38%,#F08BB0 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(90% - 4.5px);top:calc(50% - 4.5px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#151515 38%,#151515 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 0.0px);top:calc(50% + -4.5px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 8.0px);top:calc(50% + -9.1px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 8.0px);top:calc(50% + 0.1px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 16.0px);top:calc(50% + -13.7px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 16.0px);top:calc(50% + -4.5px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 16.0px);top:calc(50% + 4.7px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 24.0px);top:calc(50% + -18.3px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 24.0px);top:calc(50% + -9.1px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 24.0px);top:calc(50% + 0.1px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(68% + 24.0px);top:calc(50% + 9.3px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#C8232C 38%,#C8232C 70%,rgba(0,0,0,.45) 100%)"></span><span class="b" style="left:calc(13% - 4.5px);top:calc(50% + 6px);width:9px;height:9px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75) 0 12%,#F4F1EA 38%,#F4F1EA 70%,rgba(0,0,0,.45) 100%)"></span><div class="ct"><div class="top"><div class="idn"><span class="num">8</span><span class="lab">Table<br>Rs 250 a frame</span></div><span class="pill"><span class="dot" style="background:#48C07F"></span>Free</span></div><div class="bot"><div style="display:flex;flex-direction:column;gap:3px"><span class="cta">Tap to start a game</span><span class="hint">Double Rs 500. Century Rs 15 a minute.</span></div></div></div></div></button><span style="font-size: 14px; color: #B9AC97">It appears after Table 7 on the live board.</span></div>
+        <div style="padding: 14px 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE3DE; font-size: 15px; color: #5F5A52; line-height: 1.45">A table can be marked out of order any time, and removed later. Old sheets keep its games.</div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

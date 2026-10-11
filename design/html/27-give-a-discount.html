@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>27 Give a discount</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0A07}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+a{color:#E0AE52}a:hover{color:#F0C670}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 900px; background: #0D0A07; color: #F3ECDD; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding: 14px 24px; background: #0B0806; border-bottom: 1px solid #2A2119; opacity: 0.55">
+    <span style="font-size: 22px; font-weight: 700">Bilal Ahmed</span>
+    <span style="font-size: 17px; color: #B9AC97">Checkout</span>
+    <div style="flex: 1 1 0"></div>
+    <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px">10:21 PM</span>
+  </header>
+
+  <main style="flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: 28px 24px">
+    <section role="dialog" aria-labelledby="dc" style="width: 100%; max-width: 1100px; background: #211913; border: 1px solid #4A3B2E; border-radius: 26px; padding: 28px 32px; display: flex; flex-wrap: wrap; gap: 28px; box-shadow: 0 30px 80px rgba(0,0,0,0.55)">
+      <div style="flex: 3 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <h1 id="dc" style="margin: 0; font-size: 30px; font-weight: 700">Give Bilal a discount</h1>
+          <span style="font-size: 17px; color: #B9AC97">Owners see every discount with its reason.</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <label for="da" style="font-size: 18px; font-weight: 600">Discount amount</label>
+          <div style="display: flex; align-items: center; gap: 10px; min-height: 76px; padding: 0 20px; border-radius: 16px; background: #16110D; border: 2px solid #E0AE52; box-sizing: border-box">
+            <span style="font-size: 22px; color: #B9AC97">Rs</span>
+            <input id="da" value="50" inputmode="numeric" style="flex: 1 1 auto; background: transparent; border: 0; color: #F3ECDD; font-family: 'Barlow Condensed', sans-serif; font-size: 48px; font-weight: 600">
+          </div>
+        </div>
+
+        <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+          <legend style="font-size: 18px; font-weight: 600; margin-bottom: 10px">Reason (required)</legend>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <button aria-pressed="true" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 2px solid #E0AE52; background: #33271C; color: #F3ECDD; font-size: 17px; font-weight: 600">Rounded the bill</button>
+            <button aria-pressed="false" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-size: 17px">Frame ended early</button>
+            <button aria-pressed="false" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-size: 17px">Table problem</button>
+            <button aria-pressed="false" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-size: 17px">Owner allowed</button>
+            <button aria-pressed="false" style="min-height: 56px; padding: 0 20px; border-radius: 999px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-size: 17px">Other</button>
+          </div>
+          <label for="dn" style="font-size: 16px; color: #B9AC97; margin-top: 4px">Note (optional)</label>
+          <input id="dn" value="Rounded Rs 1,350 down to Rs 1,300" style="min-height: 60px; padding: 0 16px; border-radius: 14px; background: #16110D; border: 2px solid #4A3B2E; color: #F3ECDD; font-size: 18px">
+        </fieldset>
+      </div>
+
+      <div style="flex: 2 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; flex-direction: column; border-radius: 18px; background: #2B2119; border: 1px solid #3B2F25; overflow: hidden">
+          <div style="display: flex; justify-content: space-between; padding: 16px 20px; font-size: 19px; border-bottom: 1px solid #3B2F25"><span>Bill</span><span style="font-weight: 600">Rs 1,350</span></div>
+          <div style="display: flex; justify-content: space-between; padding: 16px 20px; font-size: 19px; border-bottom: 1px solid #3B2F25; color: #8FDDB2"><span>Discount</span><span style="font-weight: 600">− Rs 50</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 20px"><span style="font-size: 21px; font-weight: 700">New total</span><span style="font-family: 'Barlow Condensed', sans-serif; font-size: 46px; font-weight: 700">Rs 1,300</span></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+          <button style="min-height: 64px; border-radius: 14px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 600">Rs 50</button>
+          <button style="min-height: 64px; border-radius: 14px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 600">Rs 100</button>
+          <button style="min-height: 64px; border-radius: 14px; border: 1px solid #4A3B2E; background: #2B2119; color: #F3ECDD; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 600">Rs 250</button>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: auto">
+          <button style="flex: 1 1 0; min-height: 64px; border-radius: 14px; border: 1px solid #3B2F25; background: #2B2119; color: #F3ECDD; font-size: 19px; font-weight: 600">Cancel</button>
+          <button style="flex: 2 1 0; min-height: 64px; border-radius: 14px; border: 0; background: #E0AE52; color: #1B140D; font-size: 20px; font-weight: 700">Apply Rs 50 discount</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

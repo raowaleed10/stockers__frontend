@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>49 Expenses</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+:focus-visible{outline:3px solid #2A6FD6;outline-offset:2px}
+
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 1127px; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Owner menu" style="flex: 1 1 240px; background: #211913; color: #F3ECDD; padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 10px 18px">
+      <span style="width: 30px; height: 30px; border-radius: 50%; background: #1E6B45; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28); display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">Stockers</span>
+    </div>
+    <a href="O-Dashboard.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Dashboard</a>
+    <a href="Main.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Live tables</a>
+    <a href="O-Sheets-Months.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Sheets</a>
+    <a href="O-Players.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Players and credit</a>
+    <a href="O-Reports.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Reports</a>
+    <a href="O-Prices.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Games and prices</a>
+    <a href="O-Canteen.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Canteen</a>
+    <a href="O-Expenses.dc.html" aria-current="page" style="min-height: 48px; padding: 0 14px; border-radius: 12px; background: #3A2D21; color: #F3ECDD; display: flex; align-items: center; font-size: 17px; font-weight: 700; text-decoration: none">Expenses</a>
+    <a href="O-Activity.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Activity</a>
+    <a href="O-Workers.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Workers</a>
+    <a href="O-Settings.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 26px 30px 34px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <h1 style="margin: 0; font-size: 32px; font-weight: 700">Expenses</h1>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+        <div style="display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE3DE">
+          <button aria-label="Previous month" style="width: 44px; height: 44px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D1A16" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+          <span style="min-width: 130px; text-align: center; font-size: 17px; font-weight: 700">October 2026</span>
+          <button aria-label="Next month" disabled style="width: 44px; height: 44px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; justify-content: center; opacity: 0.35"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D1A16" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+        <button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600">Download</button>
+        <button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 0; background: #1E6B45; color: #FFFFFF; font-weight: 700">Add expense</button>
+      </div>
+    </div>
+    <section aria-label="Expense totals" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px">
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-size: 16px; color: #5F5A52; font-weight: 600">October so far</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; line-height: 1.1">Rs 19,000</span>
+        <span style="font-size: 15px; color: #5F5A52">8 expenses in 3 days</span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-size: 16px; color: #5F5A52; font-weight: 600">September, whole month</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; line-height: 1.1">Rs 214,000</span>
+        <span style="font-size: 15px; color: #5F5A52">Salaries and electricity were the biggest</span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-size: 16px; color: #8A5C14; font-weight: 600">From the counter drawer</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; line-height: 1.1">Rs 500</span>
+        <span style="font-size: 15px; color: #5F5A52">Added by Zain at 8:15 PM: dinner for staff</span>
+      </div>
+    </section>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+      <div style="flex: 999 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+        <section aria-labelledby="bycat" style="padding: 20px 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 12px">
+          <h2 id="bycat" style="margin: 0 0 4px; font-size: 21px; font-weight: 700">Where it went, October</h2>
+          <div style="display: grid; grid-template-columns: minmax(0, 170px) 1fr; gap: 14px; align-items: center">
+            <span style="font-size: 15px">Staff salaries</span>
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0"><span title="Staff salaries: Rs 5,000" style="height: 22px; width: 83.3%; background: #178A4A; border-radius: 0 4px 4px 0; display: block"></span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">Rs 5,000</span></div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 170px) 1fr; gap: 14px; align-items: center">
+            <span style="font-size: 15px">Repairs and supplies</span>
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0"><span title="Repairs and supplies: Rs 4,900" style="height: 22px; width: 81.7%; background: #178A4A; border-radius: 0 4px 4px 0; display: block"></span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">Rs 4,900</span></div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 170px) 1fr; gap: 14px; align-items: center">
+            <span style="font-size: 15px">Generator</span>
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0"><span title="Generator: Rs 3,800" style="height: 22px; width: 63.3%; background: #178A4A; border-radius: 0 4px 4px 0; display: block"></span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">Rs 3,800</span></div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 170px) 1fr; gap: 14px; align-items: center">
+            <span style="font-size: 15px">Bills</span>
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0"><span title="Bills: Rs 3,000" style="height: 22px; width: 50.0%; background: #178A4A; border-radius: 0 4px 4px 0; display: block"></span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">Rs 3,000</span></div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 170px) 1fr; gap: 14px; align-items: center">
+            <span style="font-size: 15px">Cleaning and tea</span>
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0"><span title="Cleaning and tea: Rs 1,800" style="height: 22px; width: 30.0%; background: #178A4A; border-radius: 0 4px 4px 0; display: block"></span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">Rs 1,800</span></div>
+          </div>
+          <div style="display: grid; grid-template-columns: minmax(0, 170px) 1fr; gap: 14px; align-items: center">
+            <span style="font-size: 15px">Food and petrol</span>
+            <div style="display: flex; align-items: center; gap: 10px; min-width: 0"><span title="Food and petrol: Rs 500" style="height: 22px; width: 8.3%; background: #178A4A; border-radius: 0 4px 4px 0; display: block"></span><span style="font-size: 15px; font-weight: 700; white-space: nowrap">Rs 500</span></div>
+          </div>
+        </section>
+        <section style="border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; overflow-x: auto">
+          <div style="padding: 16px 18px 12px"><h2 style="margin: 0; font-size: 21px; font-weight: 700">All expenses, October</h2></div>
+          <div role="table" aria-label="Expenses in October" style="min-width: 720px; font-variant-numeric: tabular-nums">
+            <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 10px 18px; font-size: 14px; color: #5F5A52; font-weight: 600; background: #F6F8F7; border-top: 1px solid #DCE3DE">
+              <span>When</span><span>What for</span><span>Type</span><span>Paid from</span><span>Added by</span><span style="text-align: right">Rs</span>
+            </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 12px 18px; font-size: 15px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="color: #5F5A52">3 Oct, 8:15 PM</span><span style="font-weight: 600; font-size: 16px">Dinner for staff</span><span>Food and petrol</span><span>Drawer cash</span><span>Zain</span><span style="text-align: right; font-weight: 700; font-size: 16px">500</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 12px 18px; font-size: 15px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="color: #5F5A52">3 Oct, 6:15 PM</span><span style="font-weight: 600; font-size: 16px">Milk, sugar and tea leaves</span><span>Cleaning and tea</span><span>Owner</span><span>Adil</span><span style="text-align: right; font-weight: 700; font-size: 16px">950</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 12px 18px; font-size: 15px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="color: #5F5A52">3 Oct, 4:30 PM</span><span style="font-weight: 600; font-size: 16px">Table 7 cloth change</span><span>Repairs and supplies</span><span>Owner</span><span>Adil</span><span style="text-align: right; font-weight: 700; font-size: 16px">2,500</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 12px 18px; font-size: 15px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="color: #5F5A52">2 Oct, 1:10 PM</span><span style="font-weight: 600; font-size: 16px">Generator diesel</span><span>Generator</span><span>Owner</span><span>Aqil</span><span style="text-align: right; font-weight: 700; font-size: 16px">3,800</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 12px 18px; font-size: 15px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="color: #5F5A52">2 Oct, 12:05 PM</span><span style="font-weight: 600; font-size: 16px">Cleaning supplies</span><span>Cleaning and tea</span><span>Owner</span><span>Adil</span><span style="text-align: right; font-weight: 700; font-size: 16px">850</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 12px 18px; font-size: 15px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="color: #5F5A52">1 Oct, 2:00 PM</span><span style="font-weight: 600; font-size: 16px">Advance, Shabir</span><span>Staff salaries</span><span>Owner</span><span>Aqil</span><span style="text-align: right; font-weight: 700; font-size: 16px">5,000</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 12px 18px; font-size: 15px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="color: #5F5A52">1 Oct, 1:30 PM</span><span style="font-weight: 600; font-size: 16px">Internet bill, September</span><span>Bills</span><span>Bank</span><span>Aqil</span><span style="text-align: right; font-weight: 700; font-size: 16px">3,000</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 12px 18px; font-size: 15px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="color: #5F5A52">1 Oct, 12:40 PM</span><span style="font-weight: 600; font-size: 16px">Cue tips and chalk</span><span>Repairs and supplies</span><span>Owner</span><span>Adil</span><span style="text-align: right; font-weight: 700; font-size: 16px">2,400</span>
+          </div>
+            <div role="row" style="display: grid; grid-template-columns: 1.15fr 1.6fr 1.3fr 1fr 0.8fr 0.7fr; gap: 8px; padding: 14px 18px; font-size: 16px; border-top: 2px solid #DCE3DE; font-weight: 700">
+              <span>Total</span><span></span><span></span><span></span><span></span><span style="text-align: right">18,500</span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <aside role="dialog" aria-labelledby="ae" style="flex: 1 1 360px; min-width: 0; padding: 20px; border-radius: 18px; background: #FFFFFF; border: 2px solid #2A6FD6; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 50px rgba(20,40,80,0.12); box-sizing: border-box">
+        <h2 id="ae" style="margin: 0; font-size: 20px; font-weight: 700">Add an expense</h2>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="ea" style="font-size: 15px; font-weight: 600">Amount, Rs</label><input id="ea" value="2,000" style="min-height: 52px; padding: 0 14px; border-radius: 10px; border: 2px solid #2A6FD6; font-size: 22px; font-weight: 700; width: 100%; box-sizing: border-box"></div>
+        <div role="radiogroup" aria-label="What for" style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 15px; font-weight: 600">What for</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px"><button aria-pressed="true" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #1E6B45; background: #E3F0E8; font-size: 15px; font-weight: 700">Staff salaries</button><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Bills</button><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Generator</button><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Repairs and supplies</button><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Cleaning and tea</button><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Rent</button><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Other</button></div></div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 15px; font-weight: 600">Staff member</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px"><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Shabir, counter</button><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Zain, counter</button><button aria-pressed="true" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 2px solid #1E6B45; background: #E3F0E8; font-size: 15px; font-weight: 700">Sajid, cleaning and tea</button><button aria-pressed="false" style="min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Add staff</button></div></div>
+        <div style="display: flex; gap: 6px"><label style="flex: 1 1 0; min-height: 48px; padding: 0 10px; border-radius: 10px; border: 2px solid #1E6B45; background: #E3F0E8; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 700; white-space: nowrap"><input type="radio" name="sa" checked style="position: absolute; opacity: 0; width: 1px; height: 1px">Advance</label><label style="flex: 1 1 0; min-height: 48px; padding: 0 10px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; white-space: nowrap"><input type="radio" name="sa" style="position: absolute; opacity: 0; width: 1px; height: 1px">Salary</label></div>
+        <div style="padding: 12px 14px; border-radius: 12px; background: #F6F8F7; font-size: 15px; line-height: 1.45">Sajid&#8217;s salary is Rs 22,000 a month. No advance yet in October. This advance is taken off his October salary.</div>
+        <div role="radiogroup" aria-label="Paid from" style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 15px; font-weight: 600">Paid from</span>
+          <div style="display: flex; gap: 6px"><label style="flex: 1 1 0; min-height: 48px; padding: 0 10px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; white-space: nowrap"><input type="radio" name="pf" style="position: absolute; opacity: 0; width: 1px; height: 1px">Owner</label><label style="flex: 1 1 0; min-height: 48px; padding: 0 10px; border-radius: 10px; border: 2px solid #1E6B45; background: #E3F0E8; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 700; white-space: nowrap"><input type="radio" name="pf" checked style="position: absolute; opacity: 0; width: 1px; height: 1px">Counter cash</label><label style="flex: 1 1 0; min-height: 48px; padding: 0 10px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; white-space: nowrap"><input type="radio" name="pf" style="position: absolute; opacity: 0; width: 1px; height: 1px">Bank</label></div></div>
+        <span style="font-size: 14px; color: #6B4A10">Counter cash is taken off the cash the counter should have at close.</span>
+        <div style="display: flex; gap: 10px"><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600; flex: 1 1 0; min-height: 52px">Cancel</button><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 0; background: #1E6B45; color: #FFFFFF; font-weight: 700; flex: 2 1 0; min-height: 52px">Save expense</button></div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

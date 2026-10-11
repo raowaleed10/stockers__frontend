@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>22 Start a room</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0A07}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+a{color:#E0AE52}a:hover{color:#F0C670}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 900px; background: #0D0A07; color: #F3ECDD; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding: 14px 24px; background: #0B0806; border-bottom: 1px solid #2A2119; opacity: 0.55">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <span style="width: 34px; height: 34px; border-radius: 50%; background: #1E6B45; display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 30px">Stockers</span>
+    </div>
+    <span style="font-size: 17px; font-weight: 600">Sheet 48</span>
+    <div style="flex: 1 1 0"></div>
+    <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 34px">9:52 PM</span>
+  </header>
+
+  <main style="flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: 28px 24px">
+    <section role="dialog" aria-labelledby="rs" style="width: 100%; max-width: 1000px; background: #211913; border: 1px solid #4A3B2E; border-radius: 26px; padding: 28px 32px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 30px 80px rgba(0,0,0,0.55)">
+      <div style="display: flex; align-items: flex-end; gap: 16px">
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 80px; line-height: 0.8">R2</span>
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 17px; color: #B9AC97">Room 2, snooker table with sofa seating</span>
+          <h1 id="rs" style="margin: 0; font-size: 32px; font-weight: 700">Start Room 2</h1>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="font-size: 18px; font-weight: 700">Under</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: stretch">
+          <div style="flex: 2 1 360px; min-height: 76px; border-radius: 16px; background: #1E2A22; border: 2px solid #2F6B48; padding: 8px 18px; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box">
+            <span style="display: flex; flex-direction: column"><span style="font-size: 22px; font-weight: 700">Danish Iqbal</span><span style="font-size: 15px; color: #B9AC97">0301 •••• 7012. The whole room bill goes to him.</span></span>
+            <button style="min-height: 52px; padding: 0 16px; border-radius: 12px; border: 1px solid #3B2F25; background: transparent; color: #F3ECDD; font-size: 16px; font-weight: 600">Change</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 18px; padding: 20px 22px; border-radius: 18px; background: #2B2119; border: 1px solid #3B2F25">
+        <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 4px">
+          <label for="hr" style="font-size: 19px; font-weight: 700">Price for one hour</label>
+          <span style="font-size: 16px; color: #B9AC97">Starts at Rs 1,500. Change it if the owners agreed a different price.</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px">
+          <button aria-label="Lower by 100 rupees" style="width: 64px; height: 64px; border-radius: 16px; border: 1px solid #4A3B2E; background: #211913; color: #F3ECDD; font-size: 30px; font-weight: 600">−</button>
+          <div style="display: flex; align-items: center; gap: 6px; padding: 0 16px; min-height: 64px; border-radius: 16px; background: #16110D; border: 2px solid #E0AE52; box-sizing: border-box">
+            <span style="font-size: 18px; color: #B9AC97">Rs</span>
+            <input id="hr" value="1,500" inputmode="numeric" style="width: 110px; background: transparent; border: 0; color: #F3ECDD; font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 600; text-align: center">
+          </div>
+          <button aria-label="Raise by 100 rupees" style="width: 64px; height: 64px; border-radius: 16px; border: 1px solid #4A3B2E; background: #211913; color: #F3ECDD; font-size: 30px; font-weight: 600">+</button>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <div style="flex: 1 1 260px; padding: 16px 20px; border-radius: 16px; background: #16110D; border: 1px solid #3B2F25; display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 16px; color: #B9AC97">First hour (minimum)</span>
+          <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 600">Rs 1,500</span>
+        </div>
+        <div style="flex: 1 1 260px; padding: 16px 20px; border-radius: 16px; background: #16110D; border: 1px solid #3B2F25; display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 16px; color: #B9AC97">After that, every minute</span>
+          <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 600">Rs 25</span>
+        </div>
+        <div style="flex: 1 1 260px; padding: 16px 20px; border-radius: 16px; background: #16110D; border: 1px solid #3B2F25; display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 16px; color: #B9AC97">Example, 1 hour 40 min</span>
+          <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 600">Rs 2,500</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <span style="align-self: center; font-size: 16px; color: #B9AC97">Start time is filled in when you tap Start.</span>
+        <div style="flex: 1 1 0"></div>
+        <button style="min-height: 64px; padding: 0 24px; border-radius: 14px; border: 1px solid #3B2F25; background: #2B2119; color: #F3ECDD; font-size: 19px; font-weight: 600">Cancel</button>
+        <button style="min-height: 64px; padding: 0 34px; border-radius: 14px; border: 0; background: #E0AE52; color: #1B140D; font-size: 20px; font-weight: 700">Start Room 2</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

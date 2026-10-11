@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>42 Correct a sheet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer}
+input,textarea{font:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 907px; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Owner menu" style="flex: 1 1 240px; background: #211913; color: #F3ECDD; padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 10px 18px">
+      <span style="width: 30px; height: 30px; border-radius: 50%; background: #1E6B45; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28); display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">Stockers</span>
+    </div>
+    <a href="O-Dashboard.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Dashboard</a>
+    <a href="Main.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Live tables</a>
+    <a href="O-Sheets-Months.dc.html" aria-current="page" style="min-height: 48px; padding: 0 14px; border-radius: 12px; background: #3A2D21; color: #F3ECDD; display: flex; align-items: center; font-size: 17px; font-weight: 700; text-decoration: none">Sheets</a>
+    <a href="O-Players.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Players and credit</a>
+    <a href="O-Reports.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Reports</a>
+    <a href="O-Prices.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Games and prices</a>
+    <a href="O-Canteen.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Canteen</a>
+    <a href="O-Expenses.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Expenses</a>
+    <a href="O-Activity.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Activity</a>
+    <a href="O-Workers.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Workers</a>
+    <a href="O-Settings.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 22px 30px 30px; display: flex; flex-direction: column; gap: 14px; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 14px; background: #E6EEFB; border: 1px solid #B7CCF2">
+      <span style="font-size: 16px; color: #1D3F82"><b>Editing sheet 48.</b> Tap a value to change it. Each change needs a reason and is kept in the history.</span>
+      <a href="O-Sheet-View.dc.html" style="min-height: 44px; padding: 0 16px; border-radius: 10px; background: #FFFFFF; border: 1px solid #B7CCF2; display: flex; align-items: center; font-size: 15px; font-weight: 700; text-decoration: none">Done editing</a>
+    </div>
+
+    <div role="tablist" aria-label="Sheet pages" style="display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid #C9D2CC">
+      <button role="tab" aria-selected="false" style="min-height: 46px; padding: 0 16px; border: 0; background: transparent; color: #5F5A52; font-size: 16px; white-space: nowrap">Summary</button>
+      <button role="tab" aria-selected="true" style="min-height: 46px; padding: 0 16px; border: 1px solid #C9D2CC; border-bottom: 0; border-radius: 10px 10px 0 0; background: #FFFFFF; color: #1D1A16; font-size: 16px; font-weight: 700; white-space: nowrap">Snooker tables</button>
+      <button role="tab" aria-selected="false" style="min-height: 46px; padding: 0 16px; border: 0; background: transparent; color: #5F5A52; font-size: 16px; white-space: nowrap">Rooms</button>
+      <button role="tab" aria-selected="false" style="min-height: 46px; padding: 0 16px; border: 0; background: transparent; color: #5F5A52; font-size: 16px; white-space: nowrap">Players and payments</button>
+      <button role="tab" aria-selected="false" style="min-height: 46px; padding: 0 16px; border: 0; background: transparent; color: #5F5A52; font-size: 16px; white-space: nowrap">Canteen</button>
+      <button role="tab" aria-selected="false" style="min-height: 46px; padding: 0 16px; border: 0; background: transparent; color: #5F5A52; font-size: 16px; white-space: nowrap">Discounts, edits, cancels</button>
+    </div>
+
+    <div role="group" aria-label="Table" style="display: flex; flex-wrap: wrap; gap: 6px">
+      <button style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Table 1</button>
+      <button style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Table 2</button>
+      <button aria-pressed="true" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 2px solid #1E6B45; background: #E3F0E8; font-size: 15px; font-weight: 700">Table 3</button>
+      <button style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Table 4</button>
+      <button style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Table 5</button>
+      <button style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Table 6</button>
+      <button style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Table 7</button>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+      <div style="flex: 999 1 560px; min-width: 0; overflow-x: auto; border: 1px solid #C9D2CC; border-radius: 12px; background: #FFFFFF">
+        <div role="table" aria-label="Table 3 games on sheet 48" style="min-width: 720px; font-size: 15px; font-variant-numeric: tabular-nums">
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; background: #1E6B45; color: #FFFFFF; font-weight: 700">
+            <span style="padding: 10px 12px">Time</span><span style="padding: 10px 12px">Game</span><span style="padding: 10px 12px">Players</span><span style="padding: 10px 12px">Pays</span><span style="padding: 10px 12px; text-align: right">Min</span><span style="padding: 10px 12px; text-align: right">Rs</span><span style="padding: 10px 12px">Status</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; border-top: 1px solid #DCE3DE">
+            <span style="padding: 10px 12px">11:32–11:58 AM</span><span style="padding: 10px 12px">Single</span><span style="padding: 10px 12px">Junaid vs Shoaib</span><span style="padding: 10px 12px">Shoaib Malik</span><span style="padding: 10px 12px; text-align: right">26</span><span style="padding: 10px 12px; text-align: right">250</span><span style="padding: 10px 12px">Paid, cash</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; border-top: 1px solid #DCE3DE; background: #FAFBFA">
+            <span style="padding: 10px 12px">12:05–12:41 PM</span><span style="padding: 10px 12px">Single</span><span style="padding: 10px 12px">Junaid vs Shoaib</span><span style="padding: 10px 12px">Junaid Akram</span><span style="padding: 10px 12px; text-align: right">36</span><span style="padding: 10px 12px; text-align: right">250</span><span style="padding: 10px 12px; color: #8A5C14">Credit</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; border-top: 1px solid #DCE3DE">
+            <span style="padding: 10px 12px">1:10–2:05 PM</span><span style="padding: 10px 12px">Century</span><span style="padding: 10px 12px">4 players</span><span style="padding: 10px 12px">Waqas Butt</span><span style="padding: 10px 12px; text-align: right">55</span><span style="padding: 10px 12px; text-align: right">825</span><span style="padding: 10px 12px">Paid, Easypaisa</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; border-top: 1px solid #DCE3DE; background: #FAFBFA">
+            <span style="padding: 10px 12px">2:20–2:47 PM</span><span style="padding: 10px 12px">Single</span><span style="padding: 10px 12px">Hamid vs Tariq</span><span style="padding: 10px 12px">Tariq Jamil</span><span style="padding: 10px 12px; text-align: right">27</span><span style="padding: 10px 12px; text-align: right">250</span><span style="padding: 10px 12px">Paid, cash</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; border-top: 1px solid #DCE3DE">
+            <span style="padding: 10px 12px">4:30–5:29 PM</span><span style="padding: 10px 12px">Century</span><span style="padding: 10px 12px">3 players</span><span style="padding: 10px 12px">Imran Shah</span><span style="padding: 10px 12px; text-align: right">59</span><span style="padding: 10px 12px; text-align: right">885</span><span style="padding: 10px 12px">Paid, cash</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; border-top: 1px solid #DCE3DE; background: #FAFBFA">
+            <span style="padding: 10px 12px">6:00–6:31 PM</span><span style="padding: 10px 12px">Single</span><span style="padding: 10px 12px">Faisal vs Naveed</span><span style="padding: 10px 12px">Naveed Akhtar</span><span style="padding: 10px 12px; text-align: right">31</span><span style="padding: 10px 12px; text-align: right">250</span><span style="padding: 10px 12px">Paid, JazzCash</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; border-top: 1px solid #DCE3DE">
+            <span style="padding: 10px 12px">7:40–8:02 PM</span><span style="padding: 10px 12px">Single</span><span style="padding: 10px 12px">Faisal vs Naveed</span><span style="padding: 10px 12px">Faisal Mehmood</span><span style="padding: 10px 12px; text-align: right">22</span><span style="padding: 10px 12px; text-align: right">250</span><span style="padding: 10px 12px">Paid, cash</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.3fr 0.9fr 1.7fr 1.3fr 0.6fr 0.8fr 1.1fr; border-top: 1px solid #DCE3DE; background: #E6EEFB; outline: 2px solid #2A6FD6; outline-offset: -2px">
+            <span style="padding: 10px 12px">9:04–9:47 PM</span><span style="padding: 10px 12px">Century</span><span style="padding: 10px 12px">Under Saad</span><span style="padding: 10px 12px">Saad Hussain</span><span style="padding: 10px 12px; text-align: right; font-weight: 700; text-decoration: underline">42</span><span style="padding: 10px 12px; text-align: right; font-weight: 700">630</span><span style="padding: 10px 12px">Paid</span>
+          </div>
+        </div>
+      </div>
+
+      <aside role="dialog" aria-labelledby="ed" style="flex: 1 1 340px; min-width: 0; padding: 20px; border-radius: 16px; background: #FFFFFF; border: 2px solid #2A6FD6; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 50px rgba(20,40,80,0.12)">
+        <h2 id="ed" style="margin: 0; font-size: 20px; font-weight: 700">Change Century minutes</h2>
+        <span style="font-size: 15px; color: #5F5A52">Table 3, 9:04–9:47 PM, under Saad Hussain, Rs 15 a minute</span>
+        <div style="display: flex; gap: 12px; align-items: flex-end">
+          <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 14px; color: #5F5A52">Was</span><span style="min-height: 52px; display: flex; align-items: center; padding: 0 14px; border-radius: 10px; background: #F1F4F2; font-size: 20px; font-weight: 600; text-decoration: line-through; color: #5F5A52">42 min</span></div>
+          <div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 6px"><label for="nm2" style="font-size: 14px; color: #1D1A16; font-weight: 600">Change to</label><input id="nm2" value="37" style="min-height: 52px; padding: 0 14px; border-radius: 10px; border: 2px solid #2A6FD6; font-size: 20px; font-weight: 700; box-sizing: border-box; width: 100%"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 12px 14px; border-radius: 12px; background: #F6F8F7; font-size: 16px"><span>New amount</span><span><span style="text-decoration: line-through; color: #5F5A52">Rs 630</span> <b>Rs 555</b></span></div>
+        <label for="rs2" style="font-size: 15px; font-weight: 600">Reason (required)</label>
+        <textarea id="rs2" rows="3" style="border-radius: 10px; border: 1px solid #C9D2CC; padding: 10px 12px; font-size: 16px; resize: none">Players stopped at 9:42, the counter ended it late</textarea>
+        <div style="padding: 12px 14px; border-radius: 12px; background: #FBF1DC; font-size: 15px; color: #6B4A10; line-height: 1.4">Saad already paid Rs 630. The Rs 75 difference becomes advance on his account.</div>
+        <div style="display: flex; gap: 10px">
+          <button style="flex: 1 1 0; min-height: 50px; border-radius: 12px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 16px; font-weight: 600">Cancel</button>
+          <button style="flex: 2 1 0; min-height: 50px; border-radius: 12px; border: 0; background: #1E6B45; color: #FFFFFF; font-size: 16px; font-weight: 700">Save change</button>
+        </div>
+        <div style="border-top: 1px solid #DCE3DE; padding-top: 12px; display: flex; flex-direction: column; gap: 8px">
+          <h3 style="margin: 0; font-size: 16px; font-weight: 700">History of this game</h3>
+          <span style="font-size: 14px; color: #5F5A52">9:04 PM, Zain: started, rate Rs 15</span>
+          <span style="font-size: 14px; color: #5F5A52">9:47 PM, Zain: ended, 42 min 35 sec, charged 42 min</span>
+          <span style="font-size: 14px; color: #5F5A52">10:24 PM, Zain: paid, advance Rs 200 + cash Rs 430</span>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

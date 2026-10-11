@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>48 Canteen and stock</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF2EF}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+a{color:#1E6B45}a:hover{color:#0E5E31}
+:focus-visible{outline:3px solid #2A6FD6;outline-offset:2px}
+
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+<div style="min-height: 1073px; background: #EEF2EF; color: #1D1A16; font-family: 'Barlow', system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Owner menu" style="flex: 1 1 240px; background: #211913; color: #F3ECDD; padding: 22px 14px; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 10px 18px">
+      <span style="width: 30px; height: 30px; border-radius: 50%; background: #1E6B45; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.28); display: inline-block"></span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 28px">Stockers</span>
+    </div>
+    <a href="O-Dashboard.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Dashboard</a>
+    <a href="Main.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Live tables</a>
+    <a href="O-Sheets-Months.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Sheets</a>
+    <a href="O-Players.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Players and credit</a>
+    <a href="O-Reports.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Reports</a>
+    <a href="O-Prices.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Games and prices</a>
+    <a href="O-Canteen.dc.html" aria-current="page" style="min-height: 48px; padding: 0 14px; border-radius: 12px; background: #3A2D21; color: #F3ECDD; display: flex; align-items: center; font-size: 17px; font-weight: 700; text-decoration: none">Canteen</a>
+    <a href="O-Expenses.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Expenses</a>
+    <a href="O-Activity.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Activity</a>
+    <a href="O-Workers.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Workers</a>
+    <a href="O-Settings.dc.html" style="min-height: 48px; padding: 0 14px; border-radius: 12px; color: #D9CDB8; display: flex; align-items: center; font-size: 17px; text-decoration: none">Settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 26px 30px 34px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h1 style="margin: 0; font-size: 32px; font-weight: 700">Canteen</h1>
+        <span style="font-size: 16px; color: #5F5A52">October so far, 3 days. Stock bought is kept here, not in Expenses.</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px"><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600">Add item</button><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 0; background: #1E6B45; color: #FFFFFF; font-weight: 700">Add stock bought</button></div>
+    </div>
+    <section aria-label="Canteen totals" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px">
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-size: 16px; color: #5F5A52; font-weight: 600">Sales</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; line-height: 1.1">Rs 9,110</span>
+        <span style="font-size: 15px; color: #5F5A52">136 items sold</span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-size: 16px; color: #1E6B45; font-weight: 600">Profit</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; line-height: 1.1">Rs 3,522</span>
+        <span style="font-size: 15px; color: #5F5A52">39% of sales, after buying price</span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-size: 16px; color: #5F5A52; font-weight: 600">Stock on the shelf</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; line-height: 1.1">Rs 9,648</span>
+        <span style="font-size: 15px; color: #5F5A52">At buying price</span>
+      </div>
+      <div style="padding: 18px 20px; border-radius: 18px; background: #FBF1DC; border: 1px solid #EBD3A3; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="font-size: 16px; color: #8A5C14; font-weight: 600">Running low</span>
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; line-height: 1.1">2 items</span>
+        <span style="font-size: 15px; color: #6B4A10">Chips: 3 left. Cigarette pack: sold out.</span>
+      </div>
+    </section>
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+      <section style="flex: 999 1 640px; min-width: 0; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; overflow-x: auto">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 18px 12px">
+          <h2 style="margin: 0; font-size: 21px; font-weight: 700">Items</h2>
+          <div role="group" aria-label="Filter items" style="display: flex; flex-wrap: wrap; gap: 6px"><button aria-pressed="true" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 2px solid #1E6B45; background: #E3F0E8; font-size: 15px; font-weight: 700">All 12</button><button aria-pressed="false" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Drinks 6</button><button aria-pressed="false" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Food 4</button><button aria-pressed="false" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Cigarettes 2</button><button aria-pressed="false" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DCE3DE; background: #FFFFFF; font-size: 15px">Low stock 2</button></div>
+        </div>
+        <div role="table" aria-label="Canteen items, October" style="min-width: 700px; font-variant-numeric: tabular-nums">
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 10px 18px; font-size: 14px; color: #5F5A52; font-weight: 600; background: #F6F8F7; border-top: 1px solid #DCE3DE">
+            <span>Item</span><span style="text-align: right">Sells for</span><span style="text-align: right">Buys for</span><span style="text-align: right">Profit each</span><span style="text-align: right">In stock</span><span style="text-align: right">Sold, Oct</span><span style="text-align: right">Profit, Oct</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="font-weight: 600">Tea</span><span style="text-align: right">50</span><span style="text-align: right">18<span style="color: #5F5A52"> est.</span></span><span style="text-align: right">32</span><span style="text-align: right"><span style="color: #5F5A52">Made fresh</span></span><span style="text-align: right">50</span><span style="text-align: right; font-weight: 700">1,600</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="font-weight: 600">Green tea</span><span style="text-align: right">60</span><span style="text-align: right">15<span style="color: #5F5A52"> est.</span></span><span style="text-align: right">45</span><span style="text-align: right"><span style="color: #5F5A52">Made fresh</span></span><span style="text-align: right">10</span><span style="text-align: right; font-weight: 700">450</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="font-weight: 600">Coffee</span><span style="text-align: right">120</span><span style="text-align: right">45<span style="color: #5F5A52"> est.</span></span><span style="text-align: right">75</span><span style="text-align: right"><span style="color: #5F5A52">Made fresh</span></span><span style="text-align: right">5</span><span style="text-align: right; font-weight: 700">375</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="font-weight: 600">Water, small</span><span style="text-align: right">70</span><span style="text-align: right">50</span><span style="text-align: right">20</span><span style="text-align: right">34</span><span style="text-align: right">12</span><span style="text-align: right; font-weight: 700">240</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="font-weight: 600">Cold drink</span><span style="text-align: right">120</span><span style="text-align: right">95</span><span style="text-align: right">25</span><span style="text-align: right">24</span><span style="text-align: right">10</span><span style="text-align: right; font-weight: 700">250</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="font-weight: 600">Energy drink</span><span style="text-align: right">250</span><span style="text-align: right">200</span><span style="text-align: right">50</span><span style="text-align: right">8</span><span style="text-align: right">2</span><span style="text-align: right; font-weight: 700">100</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="font-weight: 600">Chips</span><span style="text-align: right">60</span><span style="text-align: right">48</span><span style="text-align: right">12</span><span style="text-align: right"><span style="color: #8A5C14; font-weight: 700">3, low</span></span><span style="text-align: right">9</span><span style="text-align: right; font-weight: 700">108</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="font-weight: 600">Biscuits</span><span style="text-align: right">40</span><span style="text-align: right">30</span><span style="text-align: right">10</span><span style="text-align: right">18</span><span style="text-align: right">6</span><span style="text-align: right; font-weight: 700">60</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="font-weight: 600">Samosa</span><span style="text-align: right">50</span><span style="text-align: right">32</span><span style="text-align: right">18</span><span style="text-align: right">12</span><span style="text-align: right">8</span><span style="text-align: right; font-weight: 700">144</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="font-weight: 600">Nimco</span><span style="text-align: right">80</span><span style="text-align: right">60</span><span style="text-align: right">20</span><span style="text-align: right">15</span><span style="text-align: right">3</span><span style="text-align: right; font-weight: 700">60</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center;">
+            <span style="font-weight: 600">Cigarette, single</span><span style="text-align: right">40</span><span style="text-align: right">35</span><span style="text-align: right">5</span><span style="text-align: right">60</span><span style="text-align: right">20</span><span style="text-align: right; font-weight: 700">100</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 12px 18px; font-size: 16px; border-top: 1px solid #EEF2EF; align-items: center; background: #FAFBFA;">
+            <span style="font-weight: 600">Cigarette pack</span><span style="text-align: right">650</span><span style="text-align: right">615</span><span style="text-align: right">35</span><span style="text-align: right"><span style="color: #B42318; font-weight: 700">Sold out</span></span><span style="text-align: right">1</span><span style="text-align: right; font-weight: 700">35</span>
+          </div>
+          <div role="row" style="display: grid; grid-template-columns: 1.7fr 0.9fr 0.9fr 0.9fr 1fr 0.9fr 1fr; gap: 8px; padding: 14px 18px; font-size: 16px; border-top: 2px solid #DCE3DE; font-weight: 700">
+            <span>Total</span><span></span><span></span><span></span><span></span><span style="text-align: right">136</span><span style="text-align: right">3,522</span>
+          </div>
+        </div>
+        <p style="margin: 0; padding: 12px 18px 16px; font-size: 15px; color: #5F5A52; border-top: 1px solid #EEF2EF">Tea, green tea and coffee are made fresh, so their buying price is your estimate for one cup. Change it any time.</p>
+      </section>
+      <aside style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <section role="dialog" aria-labelledby="sb" style="padding: 20px; border-radius: 18px; background: #FFFFFF; border: 2px solid #2A6FD6; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 50px rgba(20,40,80,0.12)">
+          <h2 id="sb" style="margin: 0; font-size: 20px; font-weight: 700">Add stock bought</h2>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="si" style="font-size: 15px; font-weight: 600">Item</label>
+            <select id="si" style="min-height: 52px; padding: 0 12px; border-radius: 10px; border: 1px solid #C9D2CC; background: #FFFFFF; font-size: 17px; font-weight: 600"><option>Chips</option></select></div>
+          <div style="display: flex; gap: 10px">
+            <div style="flex: 1 1 0"><div style="display: flex; flex-direction: column; gap: 6px"><label for="sq" style="font-size: 15px; font-weight: 600">How many</label><input id="sq" value="48" style="min-height: 52px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9D2CC; font-size: 22px; font-weight: 700; width: 100%; box-sizing: border-box"></div></div>
+            <div style="flex: 1 1 0"><div style="display: flex; flex-direction: column; gap: 6px"><label for="sp" style="font-size: 15px; font-weight: 600">Paid in total, Rs</label><input id="sp" value="2,304" style="min-height: 52px; padding: 0 14px; border-radius: 10px; border: 2px solid #2A6FD6; font-size: 22px; font-weight: 700; width: 100%; box-sizing: border-box"></div></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 12px 14px; border-radius: 12px; background: #F6F8F7; font-size: 16px"><span>Buying price becomes</span><b>Rs 48 each</b></div>
+          <div role="radiogroup" aria-label="Paid from" style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 15px; font-weight: 600">Paid from</span>
+            <div style="display: flex; gap: 6px"><label style="flex: 1 1 0; min-height: 48px; padding: 0 10px; border-radius: 10px; border: 2px solid #1E6B45; background: #E3F0E8; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 700; white-space: nowrap"><input type="radio" name="pf" checked style="position: absolute; opacity: 0; width: 1px; height: 1px">Owner</label><label style="flex: 1 1 0; min-height: 48px; padding: 0 10px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; white-space: nowrap"><input type="radio" name="pf" style="position: absolute; opacity: 0; width: 1px; height: 1px">Counter cash</label><label style="flex: 1 1 0; min-height: 48px; padding: 0 10px; border-radius: 10px; border: 1px solid #DCE3DE; background: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; white-space: nowrap"><input type="radio" name="pf" style="position: absolute; opacity: 0; width: 1px; height: 1px">Bank</label></div></div>
+          <div style="padding: 12px 14px; border-radius: 12px; background: #E3F0E8; font-size: 15px; color: #14532F">Chips will show 51 in stock on the counter.</div>
+          <div style="display: flex; gap: 10px"><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 1px solid #DCE3DE; background: #FFFFFF; color: #1D1A16; font-weight: 600; flex: 1 1 0; min-height: 52px">Cancel</button><button style="min-height: 48px; padding: 0 18px; border-radius: 12px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; box-sizing: border-box; white-space: nowrap; border: 0; background: #1E6B45; color: #FFFFFF; font-weight: 700; flex: 2 1 0; min-height: 52px">Add stock</button></div>
+        </section>
+        <section style="padding: 18px 20px; border-radius: 18px; background: #FFFFFF; border: 1px solid #DCE3DE; display: flex; flex-direction: column; gap: 4px">
+          <h2 style="margin: 0 0 8px; font-size: 18px; font-weight: 700">Stock bought recently</h2>
+          <div style="display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid #EEF2EF; font-size: 15px"><span><b>Cold drink</b>, 24 bottles<br><span style="color: #5F5A52">2 Oct, Adil, owner paid</span></span><span style="font-weight: 700">Rs 2,280</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid #EEF2EF; font-size: 15px"><span><b>Water, small</b>, 24 bottles<br><span style="color: #5F5A52">1 Oct, Adil, owner paid</span></span><span style="font-weight: 700">Rs 1,200</span></div>
+          <div style="display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; font-size: 15px"><span><b>Cigarette, single</b>, 60<br><span style="color: #5F5A52">1 Oct, Aqil, owner paid</span></span><span style="font-weight: 700">Rs 2,100</span></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
