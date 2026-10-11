@@ -1,0 +1,260 @@
+export type Rs = number; // whole rupees, integer
+export type ISO = string; // ISO date-time with +05:00
+export type HHMM = string; // "02:00", "23:00" (24 h)
+
+export type PersonRef = { id: string; name: string; role: 'worker' | 'owner' | 'system' };
+
+export interface Worker {
+  id: string;
+  name: string;
+  slot: { start: HHMM; end: HHMM };
+  enabled: boolean;
+  pinSet: boolean;
+  lastSignIn?: { at: ISO; until?: ISO };
+  signedIn?: { at: ISO };
+}
+export interface Owner {
+  id: 'aqil' | 'adil';
+  name: string;
+  lastSeen?: ISO;
+}
+
+export type TableKind =
+  'snooker' | 'room' | 'pool' | 'foosball' | 'carrom' | 'ludo' | 'playstation';
+export interface Category {
+  id: string;
+  name: string;
+  kind: TableKind;
+  pricing: 'frame' | 'hour' | 'game';
+  centuryAllowed: boolean;
+  order: number;
+}
+export interface Table {
+  id: string;
+  categoryId: string;
+  kind: TableKind;
+  number: string;
+  name: string;
+  price: Rs | null; // per frame / per hour / per game; null = price not set (locked)
+  outOfOrder?: { note: string; by: PersonRef; at: ISO };
+}
+
+export type GameType = 'single' | 'double' | 'century' | 'room' | 'game';
+export type GameStatus = 'running' | 'paused' | 'ended' | 'discarded' | 'dispute' | 'cancelled';
+export interface Game {
+  id: string;
+  tableId: string;
+  sheetId: string;
+  type: GameType;
+  status: GameStatus;
+  startedAt: ISO;
+  startedBy: PersonRef;
+  endedAt?: ISO;
+  endedBy?: PersonRef;
+  pausedAt?: ISO;
+  pausedMs: number; // total paused time, not charged
+  price: Rs; // frame / game price, or Century rate per minute, or room hourly
+  playerIds?: [string, string]; // single
+  sides?: [string[], string[]]; // double (1–2 players per side)
+  underPlayerId?: string; // century / room
+  sessionId?: string;
+  frameNo?: number;
+  result?: {
+    loserIds: string[];
+    amount: Rs;
+    chargedDouble?: boolean;
+    split?: Record<string, Rs>;
+    minutes?: number;
+  };
+}
+export interface Session {
+  id: string;
+  tableId: string;
+  playerIds: string[];
+  frames: { no: number; loserIds: string[]; amount: Rs; endedAt: ISO }[];
+}
+
+export interface Player {
+  id: string;
+  name: string;
+  phone?: string;
+  nick?: string;
+  note?: string;
+  since: ISO;
+  balance: Rs; // > 0 owes the club, < 0 advance held
+  oldestUnpaidAt?: ISO;
+  visits: number;
+  framesWon: number;
+  framesPlayed: number;
+  centuryMinutes: number;
+  spent: Rs;
+}
+export type LineKind =
+  | 'frame'
+  | 'double'
+  | 'century'
+  | 'room'
+  | 'game'
+  | 'canteen'
+  | 'damage'
+  | 'payment'
+  | 'discount'
+  | 'opening'
+  | 'left-without-checkout'
+  | 'correction'
+  | 'advance';
+export interface StatementLine {
+  id: string;
+  playerId: string;
+  at: ISO;
+  kind: LineKind;
+  text: string;
+  charge?: Rs;
+  paid?: Rs;
+  balance: Rs;
+  doneBy: PersonRef;
+  method?: string;
+  sheetId?: string;
+}
+export interface WaitingBill {
+  playerId: string;
+  name: string;
+  phoneTail?: string;
+  summary: string;
+  tonight: Rs;
+  oldCredit: Rs;
+  advance: Rs;
+  total: Rs;
+}
+
+export interface PaymentMethod {
+  id: 'cash' | 'bank' | 'easypaisa' | 'jazzcash' | string;
+  name: string;
+  enabled: boolean;
+  alwaysOn?: boolean;
+}
+export interface CheckoutRequest {
+  playerId: string;
+  parts: { method: string; amount: Rs }[];
+  toCredit: Rs;
+  discount?: { amount: Rs; reason: string; note?: string };
+}
+
+export interface CanteenItem {
+  id: string;
+  name: string;
+  category: 'drinks' | 'food' | 'cigarettes';
+  sell: Rs;
+  buy: Rs;
+  buyIsEstimate?: boolean;
+  stock: number | null; // null = made fresh
+  lowAt: number;
+}
+export interface CanteenSale {
+  id: string;
+  at: ISO;
+  playerId: string | null;
+  items: { itemId: string; qty: number; price: Rs }[];
+  total: Rs;
+  paidNow?: string;
+  doneBy: PersonRef;
+}
+
+export type ExpenseCategory =
+  'staff' | 'bills' | 'generator' | 'repairs' | 'cleaning-tea' | 'rent' | 'food-petrol' | 'other';
+export interface Expense {
+  id: string;
+  at: ISO;
+  what: string;
+  category: ExpenseCategory;
+  amount: Rs;
+  paidFrom: 'owner' | 'bank' | 'drawer';
+  staffName?: string;
+  source: 'owner' | 'counter';
+  doneBy: PersonRef;
+  sheetId?: string;
+}
+
+export interface Sheet {
+  id: string;
+  number: number;
+  openedAt: ISO;
+  openedBy: PersonRef;
+  closedAt?: ISO;
+  closedBy?: PersonRef;
+  earned: Rs;
+  received: Rs;
+  newCredit: Rs;
+  oldCreditPaid: Rs;
+  discounts: { count: number; total: Rs };
+  cash: {
+    received: Rs;
+    drawerExpenses: Rs;
+    expected: Rs;
+    counted?: Rs;
+    difference?: Rs;
+    note?: string;
+  };
+  online: Record<string, Rs>;
+  frames: number;
+  centuryMinutes: number;
+  roomMinutes: number;
+  editedBy?: PersonRef[];
+}
+
+export type ActivityType =
+  | 'discount'
+  | 'discard'
+  | 'dispute'
+  | 'cancel'
+  | 'undo'
+  | 'double-charge'
+  | 'damage'
+  | 'drawer-expense'
+  | 'edit'
+  | 'left-without-checkout'
+  | 'cash-difference'
+  | 'pause-all'
+  | 'price-change'
+  | 'worker-change'
+  | 'sign-in'
+  | 'sign-out';
+export interface ActivityEvent {
+  id: string;
+  at: ISO;
+  by: PersonRef;
+  type: ActivityType;
+  title: string;
+  detail?: string;
+  amount?: Rs;
+  sheetId?: string;
+  needsDecision?: boolean;
+}
+
+export interface AppNotification {
+  id: string;
+  at: ISO;
+  kind:
+    'sheet-closed' | 'left-without-checkout' | 'cancelled-or-discarded' | 'edited' | 'low-stock';
+  title: string;
+  text: string;
+  amount?: Rs;
+  read: boolean;
+}
+
+export interface Settings {
+  paymentMethods: PaymentMethod[];
+  rules: {
+    doubleAfterMin: 30;
+    lockAfterMin: 5;
+    undoWindowSec: 120;
+    changeTypeWindowMin: 5;
+    oldCreditDays: 15;
+    roomMinMinutes: 60;
+    slotWarningMin: 10;
+  };
+  alerts: Record<AppNotification['kind'], boolean>;
+  email: { aqil?: string; adil?: string };
+  language: { counter: 'en' | 'ur'; owner: 'en' | 'ur' };
+  club: { name: string; address: string; logo?: string; domain?: string };
+}

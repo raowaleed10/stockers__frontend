@@ -1,0 +1,20 @@
+# Kit files from the owners and designer: keep exactly as delivered
+design/
+docs/
+mock/
+prompts/
+*.md
+
+# Verbatim copies of design/ files
+apps/web/tailwind.preset.ts
+apps/web/src/styles/tokens.css
+
+# Generated
+node_modules/
+dist/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+apps/web/public/mockServiceWorker.js
+package-lock.json

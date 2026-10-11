@@ -1,0 +1,21 @@
+{
+  "name": "@stockers/shared",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Types and pure rules shared by the frontend and, later, the backend",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./rules": "./src/rules/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
+}

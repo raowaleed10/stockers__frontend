@@ -1,0 +1,10 @@
+{
+  "common": {
+    "brand": "Stockers",
+    "notFound": "صفحہ نہیں ملا",
+    "error": {
+      "title": "کچھ گڑبڑ ہو گئی",
+      "reload": "دوبارہ کھولیں"
+    }
+  }
+}
