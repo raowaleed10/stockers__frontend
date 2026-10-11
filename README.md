@@ -36,7 +36,8 @@ npm run lint          # ESLint (including the counter/owner import rule) and Pre
 npm test              # Vitest: shared rules and components
 npm run build         # two bundles: apps/web/dist/counter and apps/web/dist/owner
 npm run check:bundles # fails if dist/counter contains any owner code
-npm run test:e2e      # Playwright flows (starts the dev server by itself)
+npm run preview:owner # serves dist/owner under a fake secret address (http://localhost:4173/owner-preview-x7/); run the build first
+npm run test:e2e      # Playwright flows (starts the dev server and the owner preview by itself)
 npm run test:visual   # Playwright screenshots against design/screens (from P05 on)
 ```
 

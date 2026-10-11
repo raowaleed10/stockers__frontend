@@ -21,7 +21,8 @@
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "npm run test:e2e -w apps/web",
     "test:visual": "npm run test:visual -w apps/web",
-    "check:bundles": "node scripts/check-bundles.mjs"
+    "check:bundles": "node scripts/check-bundles.mjs",
+    "preview:owner": "node scripts/preview-owner.mjs"
   },
   "msw": {
     "workerDirectory": [

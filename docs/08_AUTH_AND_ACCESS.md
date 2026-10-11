@@ -18,8 +18,23 @@ New owner rules from 12 Oct 2026 (D49–D53). The **server** enforces all of thi
 3. **Nothing in the counter files.** The secret address is **never** written into frontend code or `.env` files that end up in the counter bundle. Add a build check that greps `dist/counter` for `owner-` and `/api/owner` and fails if found.
 4. **Base path at runtime.** The owner bundle is built with `base: './'` (relative asset paths). At runtime it reads its base path from `<meta name="app-base" content="/owner-k7m2q9/">`, which the server injects when it serves `owner.html` at the secret path. React Router uses that as `basename`.
 5. **Everything else is "Page not found".** Any address that is not `/`, the counter routes, or the secret path shows a plain "Page not found", the same as for a mistyped address. Never answer "this is the owner area".
-6. **In development** the owner app runs at `/owner-dev/`. A dev-only Vite plugin injects the meta tag. This path exists only in dev.
+6. **In development** the owner app runs at `/owner-dev/`. A dev-only Vite plugin injects the meta tag. This path exists only in dev. (Dev assets use absolute paths, so dev needs no `<base>` tag.)
 7. **Changing the address.** Owners can change it in Settings (screen 51). The server generates a new random slug and signs out every owner session. The app shows the new address once with a Copy button.
+
+### How the server serves the owner app (deep links)
+
+The owner bundle uses relative asset paths (`base: './'`). On a hard reload at a deep link such as `/<secret>/sheets/2026-10`, the browser would look for `/<secret>/sheets/assets/…` and find nothing. So the server follows these rules. The backend copies them exactly. `scripts/preview-owner.mjs` is a working example: `npm run preview:owner` serves `dist/owner` under the fake prefix `/owner-preview-x7/`, and `owner-deep-link.preview.spec.ts` tests it.
+
+1. **Every address under the secret prefix that is not a file in `dist/owner/assets/`** returns `owner.html` (status 200) with these two tags injected as the first children of `<head>`, before the script and link tags:
+   ```html
+   <base href="/<secret>/" />
+   <meta name="app-base" content="/<secret>/" />
+   ```
+   The `<base>` tag makes `./assets/…` resolve to `/<secret>/assets/…` from any depth. The meta tag gives the router its `basename`. Send `Cache-Control: no-cache`: the page names the hashed files and changes with every build.
+2. **Files under `/<secret>/assets/`** come from `dist/owner/assets/`. Their names carry a hash, so they can be cached for a long time (`public, max-age=31536000, immutable`). A file that is not there returns **404**, not `owner.html`, so a stale script shows up as an error and not as a page of HTML read as JavaScript.
+3. **Every other address shows "Page not found"** (status 404), the same page as for any mistyped address. Nothing in it hints that an owner area exists. This includes a longer word that only starts like the secret (`/<secret>x`), which is not under the prefix.
+4. **`/<secret>` without the closing slash** redirects (302) to `/<secret>/` and keeps the query string.
+5. **The slug is lower-case letters, digits and hyphens only.** The server checks this before it puts the slug into HTML.
 
 Note: the private address hides the door; the **owner password** is the lock. The owner sign-in page waits 15 minutes after 5 wrong tries (copy on screen 35).
 

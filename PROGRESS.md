@@ -6,7 +6,7 @@ Claude Code updates this file at the end of every step. The developer reads it b
 
 | Step | What | Status | Notes |
 |---|---|---|---|
-| P00 | Install everything and set up the project | ☑ | Done 12 Oct 2026. See the log and the questions below. |
+| P00 | Install everything and set up the project | ☑ | Done 12 Oct 2026. Follow-up done the same day (new location, audit notes, owner deep links). See the log and the questions below. |
 | P01 | Design system and shared UI | ☐ |  |
 | P02 | Table tiles | ☐ |  |
 | P03 | Data, rules and mock API | ☐ |  |
@@ -97,15 +97,37 @@ Tick a screen when it matches its PNG at the design size and its visual test pas
 
 (Claude Code adds questions here. The developer answers them before the next step.)
 
-**From P00**
+**From P00: answered by the developer on 12 Oct 2026 (done in the P00 follow-up)**
 
-1. **Deep links on the owner build (for P11 / P20 / the backend).** The owner bundle is built with `base: './'`, so its page loads `./assets/...`. On a hard reload at a deep link such as `/<secret>/sheets/2026-10` the browser looks for `/<secret>/sheets/assets/...` and finds nothing. The server that injects `<meta name="app-base">` should also inject `<base href="/<secret>/">` (or rewrite the asset paths). Not needed in dev, where assets are absolute. Please confirm which way to go.
-2. **Owner words inside the shared language files.** `src/locales/en.json` and `ur.json` are shared by both bundles. When owner screens arrive, their words should live in a namespace that only the owner entry loads, or the counter bundle will carry them. Today only `common` exists (brand, "Page not found", crash message).
+| # | Question | Answer | Result |
+|---|---|---|---|
+| 1 | Deep links on the owner build | Inject `<base href="/<secret>/">` as well as the app-base tag. Every address under the secret prefix that is not a file in `dist/owner/assets/` gets `owner.html`; files under `/<secret>/assets/` come from `dist/owner/assets/`; every other address is "Page not found". | Rule added to `docs/08_AUTH_AND_ACCESS.md` §1. `scripts/preview-owner.mjs` and `npm run preview:owner` serve `dist/owner` under the fake prefix `/owner-preview-x7/`. The Playwright project `preview` runs `owner-deep-link.preview.spec.ts` (hard reload of `/owner-preview-x7/sheets/2026-10`, its files, the redirect, the 404s). One detail the answer did not cover: a missing file under `/assets/` returns 404, not `owner.html`. This is written into doc 08 so the backend copies it. |
+| 4 | `npm audit` warnings (15) | No major upgrades now. Write `docs/AUDIT_NOTES.md`. Decide on upgrades in P20, once the visual tests can catch breakage. | `docs/AUDIT_NOTES.md` lists all 15. Only `react-router-dom` 6 ships, and neither of its two advisories applies today. See "Decisions" below. |
+| 5 | Stray `vite.config.js` outside the project | The project moved to `C:\Projects\stockers`. Keep the separate Vitest config for `packages/shared`. | Config kept. The project is no longer under `Downloads`, so Vitest does not reach that file. |
+| 7 | Urdu to check | Keep adding to `docs/URDU_TO_CHECK.md`. The whole list goes to the owners after P18. | Kept. No new Urdu strings in the follow-up. |
+| – | Extras beyond the P00 list (`.gitattributes`, pinned `@eslint/js` and `@types/node`, `globals`) | Fine. | Listed under "What P00 left in place". |
+| – | New location | Run `npm install` and every check again from `C:\Projects\stockers`. | Done. The two links in `node_modules/@stockers` still pointed at the old folder; `npm install` relinked them. `package-lock.json` did not change. |
+
+**From P00: still open**
+
+2. **Owner words inside the shared language files.** `src/locales/en.json` and `ur.json` are shared by both bundles. When owner screens arrive, their words should live in a namespace that only the owner entry loads, or the counter bundle will carry them. Today only `common` exists (brand, "Page not found", crash message). Please answer before P11, the first owner screens.
+
+**From P00: for information (no answer needed)**
+
 3. **Demo clock is on unless `VITE_DEMO_CLOCK=off`**, as P00 specifies. Production builds must set it to `off` (written in `apps/web/.env.example`). P20 should check this.
-4. **Security warnings from `npm audit` (15, none fixable without a major upgrade).** They sit in the tools we were told to keep: Vite 5, Vitest 2 (`tinypool`, critical) and Tailwind 3 (`braces`, `micromatch`, `chokidar`) are build and test tools that do not ship to the club. Two moderate ones are in `react-router-dom` 6, which does ship; the fix is React Router 7. I did not upgrade any major. Do you want a separate upgrade step later?
-5. **A stray file outside the project.** `C:\Users\Ali Raza\Downloads\vite.config.js` (it needs `@react-router/dev`) belongs to some other project. Vitest walked up the folders and loaded it, which broke `packages/shared` until I gave that package its own `vitest.config.ts`. It is safe to move or delete that file; I did not touch it.
 6. **Git identity.** At your request the global Git name and email are now `rwaowaleed10` / `raowaleed.codemachine@gmail.com` (they were `XtreemeTech`). This affects every repository on this PC.
-7. **Urdu to check.** Three new Urdu strings are in `docs/URDU_TO_CHECK.md` (Page not found, and the crash message with its button).
+
+## Decisions
+
+- **12 Oct 2026, npm audit:** no major upgrades before P20. We decide on them then, with the visual tests in place. Read `docs/AUDIT_NOTES.md` first; it also has the rules that keep the two React Router advisories from applying (no outside text into `<Link to>` or `navigate()`; stay on the plain `BrowserRouter`).
+- **12 Oct 2026, owner deep links:** the server injects `<base href>` and the app-base tag for every address under the secret prefix. The rule is in `docs/08_AUTH_AND_ACCESS.md` §1 and the backend copies it.
+
+## Carried to P20
+
+- Decide the upgrades listed in `docs/AUDIT_NOTES.md` and re-run `npm audit`.
+- Production builds must set `VITE_DEMO_CLOCK=off` (see question 3).
+- Leave `mockServiceWorker.js` out of production builds.
+- Check that the backend serves the owner app as `docs/08_AUTH_AND_ACCESS.md` §1 says; `scripts/preview-owner.mjs` is the working example.
 
 ## Differences from the designs that could not be fixed
 
@@ -118,12 +140,15 @@ Tick a screen when it matches its PNG at the design size and its visual test pas
 - **Wired, with no screens yet:** React Router, TanStack Query (`src/lib/query-client.ts`), Zustand (language store), react-i18next (`en`/`ur`, `useLanguage()`), Tailwind 3 with the design preset and tokens, bundled fonts (Barlow, Barlow Condensed, Noto Nastaliq Urdu), the clock (`src/lib/clock.ts`: `clock.now()`, `useNow()`), MSW (one health handler per API: `counter-handlers.ts`, `owner-handlers.ts`; real handlers are P03).
 - **Lint rules that now protect the golden rules:** counter and owner cannot import each other, and `ui`/`tiles`/`lib` cannot import either app; `Date.now()` and `new Date()` with no argument are errors in `counter`, `owner` and `ui` (tests exempt). Both were proved with throwaway snippets.
 - **Mocks switch:** on in dev unless `VITE_MOCKS=off`; in a build only when `VITE_MOCKS=on` (otherwise MSW is not in the bundle). `.env.development` exists locally but Git ignores it (the required `.gitignore` ignores `.env.*`), so the code defaults to mocks on in dev. `apps/web/.env.example` documents both switches.
-- **Small additions beyond the P00 list:** `.gitattributes` (`* text=auto eol=lf`, so Windows line endings do not break Prettier), pins `@eslint/js@^9` (latest is 10, which needs ESLint 10) and `@types/node@^20`, the `globals` package for ESLint, `docs/URDU_TO_CHECK.md`, React Router v7 future flags in `src/lib/router-future.ts` (silences upgrade warnings), and `packages/shared/vitest.config.ts` (see question 5).
-- **Not done / for later steps:** no screens, no focus ring or button styles (P01 defines them), no real mock data or handlers (P03), no visual tests (P05; `test:visual` passes with no tests until then). Playwright runs the `phone` project against the owner app only. MSW's `mockServiceWorker.js` is copied from `public/` into both `dist` folders even when mocks are off (inert, 9.6 KB); P20 can leave it out of production builds.
-- **Machine:** Windows 10, Node 24.13, npm 11.6, Git 2.52 (all above the minimums). The project path contains a space; scripts avoid absolute paths.
+- **Small additions beyond the P00 list (approved by the developer on 12 Oct 2026):** `.gitattributes` (`* text=auto eol=lf`, so Windows line endings do not break Prettier), pins `@eslint/js@^9` (latest is 10, which needs ESLint 10) and `@types/node@^20`, the `globals` package for ESLint, `docs/URDU_TO_CHECK.md`, React Router v7 future flags in `src/lib/router-future.ts` (silences upgrade warnings), and `packages/shared/vitest.config.ts` (kept on purpose, as the developer asked).
+- **Owner preview server (added in the follow-up):** `npm run build:owner -w apps/web`, then `npm run preview:owner` serves `dist/owner` at `http://localhost:4173/owner-preview-x7/` (fake address) the way the real server will: `<base href>` and the app-base tag injected for every address under the prefix, `/assets/` from `dist/owner/assets/` (a missing file is a 404), everything else "Page not found". `npm run test:e2e` builds the owner bundle and starts this server itself (Playwright project `preview`). The deep-link test checks today's "Page not found" heading on `/sheets/2026-10`; P13 swaps it for the real Sheets heading.
+- **Heads-up for later screens:** because of `<base href>`, a plain `href="#x"` points at the base address, not the current page. Use router links and buttons.
+- **Not done / for later steps:** no screens, no focus ring or button styles (P01 defines them), no real mock data or handlers (P03), no visual tests (P05; `test:visual` passes with no tests until then). Playwright runs the `phone` project against the owner app only, and the `preview` project against the built owner bundle. MSW's `mockServiceWorker.js` is copied from `public/` into both `dist` folders even when mocks are off (inert, 9.6 KB); P20 can leave it out of production builds.
+- **Machine:** Windows 10, Node 24.13, npm 11.6, Git 2.52 (all above the minimums). The project lives at `C:\Projects\stockers` (no space in the path; it was moved there on 12 Oct 2026).
 
 ## Log
 
 | Date | Step | What was done | Tests |
 |---|---|---|---|
 | 2026-10-12 | P00 | Checked the computer (nothing to install), set Git identity, `git init`, committed the kit. Created the npm workspace: `packages/shared` (types from docs/06) and `apps/web` (counter and owner entries, Vite 5 dev plugin for `/owner-dev/`, two-build script, Tailwind preset and tokens, fonts, i18n, clock, router, query, Zustand, MSW, ErrorBoundary, Page not found), ESLint + Prettier with the import and clock rules, `scripts/check-bundles.mjs`, Vitest and Playwright (counter, owner, phone), README. | Vitest: 16 in web (clock, language, both route sets, app-base), 3 in shared. Playwright: 10 smoke tests across the 3 projects, all passing. typecheck, lint, build and check:bundles pass from a clean `npm install`. |
+| 2026-10-12 | P00 follow-up | The project moved to `C:\Projects\stockers`: ran `npm install` (the two workspace links still pointed at the old folder and were relinked; the lock file did not change) and every check again. Wrote `docs/AUDIT_NOTES.md` (15 warnings, only `react-router-dom` 6 ships, no upgrades before P20). Added the owner deep-link rule to `docs/08_AUTH_AND_ACCESS.md` §1, `scripts/preview-owner.mjs`, `npm run preview:owner`, and the Playwright project `preview` with `owner-deep-link.preview.spec.ts`. Noted the approved extras. No new Urdu strings. Did not start P01. | Vitest: 16 in web, 3 in shared. Playwright: 18 passing (10 smoke + 8 deep-link). typecheck, lint, build and check:bundles pass. `test:visual` passes with no tests. I removed the `<base>` tag on purpose and the deep-link tests failed, then I put it back. |
