@@ -6,10 +6,10 @@ Shared, data-free components live in `apps/web/src/ui` and `apps/web/src/tiles`.
 
 | Component | Props (TypeScript) | Used on screens |
 |---|---|---|
-| `Button` | `variant: 'primary' \| 'secondary' \| 'outline' \| 'danger' \| 'ghost'`, `size: 'counter-main' \| 'counter' \| 'owner' \| 'owner-sm'`, `theme: 'counter' \| 'owner'`, `icon?`, `children` | everywhere |
+| `Button` | `variant: 'primary' \| 'secondary' \| 'outline' \| 'danger' \| 'ghost'`, `size: 'counter-main' \| 'counter' \| 'owner' \| 'ownerSm'`, `theme: 'counter' \| 'owner'`, `icon?`, `children` | everywhere |
 | `IconButton` | `label` (required, becomes aria-label), `icon`, `size`, `badge?: number` | top bars, close buttons |
 | `StatusPill` | `status: TableStatus`, `label?` (override text, e.g. Urdu), `tone: 'dark' \| 'light'` | tiles, phone list, table panel |
-| `Pill`/`Chip` | `selected`, `onClick`, `children`, `size`, `theme` | filters, reasons, categories |
+| `Chip` (the "Pill/Chip" of this table) | `selected`, `onClick`, `children`, `size`, `theme` | filters, reasons, categories |
 | `Card` | `tone: 'plain' \| 'amber' \| 'blue' \| 'green'`, `padding` | owner everywhere |
 | `StatCard` | `label`, `value`, `note`, `tone` | 31, 36, 37, 43, 48, 49 |
 | `CounterDialog` | `title`, `kicker?`, `icon?`, `tone: 'normal' \| 'warning'`, `actions`, `onClose`, `children` | 7–10, 12–15, 17–23, 27, 29 |
@@ -38,6 +38,22 @@ Shared, data-free components live in `apps/web/src/ui` and `apps/web/src/tiles`.
 | `BarChartDays`, `LineChartMonth`, `BusyHours`, `HBarList` | thin wrappers on Recharts with the tokens | 36, 37, 49, 53 |
 | `SignInTimeline` | `workers: {name, slot: {start, end}}[]`, `now` (24 h bar, gaps hatched) | 50 |
 | `TimeSlotPicker` | `value: {start:'HH:MM', end:'HH:MM'}`, `onChange` (hour, minute, AM/PM; crosses midnight) | 50 |
+
+### As built in P01 (read this before using the components)
+
+All of the above exist in `src/ui` except the charts, the timeline, and the top bars, action bar, tabs and sidebars (P04, P05, P11, P12, P16, P17). What differs from the table:
+
+- **`Button` size is `'ownerSm'`, not `'owner-sm'`.** `Button` is shared, so it is in the counter bundle, and `check:bundles` forbids the text `owner-` there.
+- `theme` is required on every component whose look differs. `Keypad`, `PinDots`, `OptionCard`, `PersonCard`, `CounterDialog` and `SidePanel` are counter-only; `OwnerAside` is owner-only.
+- `Chip` is the only "Pill/Chip" component (there is no static pill). `size` is `'md' | 'lg'`.
+- `StatusPill` uses `TableStatus`, now in `packages/shared/src/types.ts` (`free | playing | over30 | paused | outOfOrder | noPrice`).
+- `Keypad`: `keys?: 'pin' | 'amount'` (`'amount'` adds `00` and has no `onClear`).
+- `CounterDialog` adds `lead` (big number), `subtitle`, `titleSize`, `size`, `showClose` and `static` (draw in place, for the kit). `SidePanel` and `OwnerAside` also take `static`. `OptionCard` adds `layout: 'type' | 'price'` and `tone: 'danger'`. `PersonCard` adds `variant: 'row' | 'tile' | 'large'`.
+- `DataTable` needs `caption` (the screen-reader name) and `getRowKey`; columns take `nowrap`. `StatementTable` takes `caption`, `variant: 'bill' | 'statement'`, `showDoneBy` and `footer`. A scrolling table is a focusable region, so keyboard users can scroll it.
+- `Field` takes its control as a function: `{(control) => <MoneyInput {...control} />}`. `TextInput` was added next to `MoneyInput`, `TextArea` and `Select`.
+- `Card` and `StatCard` also take the counter theme (the dark boxes on screens 25, 26 and 31) and the tones `soft`, `solid` and `dark`.
+- `TimerText` switches to the red card by itself at 30:00 (`variant: 'auto'`, the default).
+- Dialogs: `useDialog` (`src/ui/use-dialog.ts`) traps focus, closes on Escape and returns focus. `OwnerAside` is a bottom sheet below 768 px.
 
 ## `src/tiles`: table tiles (see `04_DESIGN_SYSTEM.md` §6)
 

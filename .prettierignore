@@ -5,7 +5,7 @@ mock/
 prompts/
 *.md
 
-# Verbatim copies of design/ files
+# Copies of design/ files (P01 added colours at the end of each, see PROGRESS.md)
 apps/web/tailwind.preset.ts
 apps/web/src/styles/tokens.css
 

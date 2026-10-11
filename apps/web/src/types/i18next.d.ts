@@ -1,3 +1,4 @@
+import type kit from '@/dev/locales/en/kit.json';
 import type common from '@/locales/en/common.json';
 
 // Makes t('...') check its keys against the English files. Type-only, so nothing here reaches a bundle.
@@ -8,6 +9,7 @@ declare module 'i18next' {
     defaultNS: 'common';
     resources: {
       common: typeof common;
+      kit: typeof kit; // dev-only: the /dev/kit page
     };
   }
 }

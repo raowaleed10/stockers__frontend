@@ -20,10 +20,17 @@ const preset: Partial<Config> = {
           line: v('c-line'), 'line-2': v('c-line-2'), 'line-3': v('c-line-3'),
           text: v('c-text'), 'text-2': v('c-text-2'), 'text-3': v('c-text-3'),
           brass: v('c-brass'), 'brass-ink': v('c-brass-ink'), felt: v('c-felt'),
+          // added in P01 (see tokens.css)
+          'brass-press': v('c-brass-press'), selected: v('c-selected'), scrim: v('c-scrim'),
+          'warn-bg': v('c-warn-bg'), 'warn-line': v('c-warn-line'), 'warn-ink': v('c-warn-ink'),
+          'danger-bg': v('c-danger-bg'), 'danger-line': v('c-danger-line'), 'danger-ink': v('c-danger-ink'),
+          'info-bg': v('c-info-bg'), 'info-line': v('c-info-line'), 'info-ink': v('c-info-ink'),
+          'ok-bg': v('c-ok-bg'), 'ok-line': v('c-ok-line'), 'ok-ink': v('c-ok-ink'),
         },
         s: {
           free: v('s-free'), play: v('s-play'), over: v('s-over'), card: v('s-card'),
           pause: v('s-pause'), ooo: v('s-ooo'), noprice: v('s-noprice'),
+          'card-edge': v('s-card-edge'), 'pill-bg': v('s-pill-bg'),
         },
         o: {
           page: v('o-page'), card: v('o-card'), line: v('o-line'), 'line-2': v('o-line-2'), soft: v('o-soft'),
@@ -33,6 +40,9 @@ const preset: Partial<Config> = {
           'amber-ink': v('o-amber-ink'), 'amber-ink-2': v('o-amber-ink-2'), 'amber-tint': v('o-amber-tint'), 'amber-line': v('o-amber-line'),
           blue: v('o-blue'), 'blue-tint': v('o-blue-tint'), 'blue-line': v('o-blue-line'), 'blue-ink': v('o-blue-ink'),
           red: v('o-red'), 'red-tint': v('o-red-tint'), chart: v('o-chart'),
+          // added in P01 (see tokens.css)
+          'red-line': v('o-red-line'), track: v('o-track'), stripe: v('o-stripe'), divider: v('o-divider'),
+          'on-green': v('o-on-green'),
         },
         sl: { free: v('sl-free'), play: v('sl-play'), pause: v('sl-pause'), ooo: v('sl-ooo') },
       },
@@ -44,12 +54,22 @@ const preset: Partial<Config> = {
         'dialog-dark': v('shadow-dialog-dark'),
         'dialog-light': v('shadow-dialog-light'),
         tile: v('shadow-tile'),
+        dot: v('shadow-dot'), redcard: v('shadow-redcard'), thumb: v('shadow-thumb'),
       },
       minHeight: {
         touch: v('touch-counter'), 'touch-main': v('touch-counter-main'),
         key: v('touch-key'), 'touch-owner': v('touch-owner'),
       },
       minWidth: { touch: v('touch-counter'), 'touch-owner': v('touch-owner') },
+      // added in P01: square icon buttons need an exact height and width from the same tokens
+      height: {
+        touch: v('touch-counter'), 'touch-main': v('touch-counter-main'),
+        key: v('touch-key'), 'touch-owner': v('touch-owner'),
+      },
+      width: {
+        touch: v('touch-counter'), 'touch-main': v('touch-counter-main'),
+        key: v('touch-key'), 'touch-owner': v('touch-owner'),
+      },
       fontSize: {
         // counter
         'c-body': ['18px', '1.4'], 'c-small': ['15px', '1.35'], 'c-title': ['32px', '1.15'],

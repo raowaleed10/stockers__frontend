@@ -15,7 +15,8 @@ The owners want the English/Urdu switch on the counter **and** in the owner port
   - To add a namespace: add `<name>.json` to both `en/` and `ur/` of the right folder, then add one `import type` line and one entry in `src/types/i18next.d.ts` so `t()` checks the keys. The folder's `index.ts` picks the file up by itself.
   - A word both apps need goes in `common`, never copied into an app folder.
   - Shared components (`src/ui`, `src/tiles`) get their words through props, or from `common`. They never read an app folder.
-  - Dev-only words (the `/dev/kit` page) live in `src/dev/locales` and are loaded only in development.
+  - Dev-only words (the `/dev/kit` page) live in `src/dev/locales` and are loaded only in development. `check:bundles` also checks that they are in no production bundle. A kit sample that is word for word a real shipped word (for example a common word) is skipped by that check, because finding it proves nothing.
+  - Latin letters and digits inside Urdu text use Barlow, not the Nastaliq font's own Latin: only the Arabic-script part of Noto Nastaliq Urdu is bundled (`src/lib/fonts.ts`). Dates and clock times are wrapped in `<bdi dir="ltr">` so they keep their order inside right-to-left text.
 - Switching language sets `<html lang="ur" dir="rtl">` (or `lang="en" dir="ltr"`) and swaps the font: `font-urdu` for text. **Numbers, timers and table numbers stay in Barlow Condensed with Western digits.**
 - Each device remembers its language (localStorage is fine for this one preference). The default comes from Settings (counter: English).
 - Urdu text needs more height: line-height 1.6–1.9 for Nastaliq. Do not fix heights on text containers. Let them grow, and let rows wrap (the tile pill moves under the number when narrow, as on screen 6).

@@ -4,5 +4,38 @@
   "error": {
     "title": "Something went wrong",
     "reload": "Reload"
+  },
+  "close": "Close",
+  "closePanel": "Close panel",
+  "keypad": {
+    "clear": "Clear",
+    "delete": "Delete last digit"
+  },
+  "pin": {
+    "progress": "{{filled}} of 4 digits entered"
+  },
+  "status": {
+    "free": "Free",
+    "playing": "Playing",
+    "over30": "Over 30 min",
+    "paused": "Paused",
+    "outOfOrder": "Out of order",
+    "noPrice": "Price not set"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "ur": "اردو"
+  },
+  "statement": {
+    "date": "Date",
+    "details": "Details",
+    "by": "By",
+    "charge": "Charge",
+    "paid": "Paid",
+    "balance": "Balance",
+    "owed": "owed",
+    "advance": "advance",
+    "edit": "Edit"
   }
 }

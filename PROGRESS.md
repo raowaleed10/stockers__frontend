@@ -7,7 +7,7 @@ Claude Code updates this file at the end of every step. The developer reads it b
 | Step | What | Status | Notes |
 |---|---|---|---|
 | P00 | Install everything and set up the project | ☑ | Done 12 Oct 2026. Follow-up done the same day (new location, audit notes, owner deep links). See the log and the questions below. |
-| P01 | Design system and shared UI | ☐ |  |
+| P01 | Design system and shared UI | ☑ | Done 12 Oct 2026, after the language-file split (see Decisions). 26 components in `src/ui`, `format.ts` and `time.ts` in shared, and `/dev/kit` in both apps. Open questions and differences are below. |
 | P02 | Table tiles | ☐ |  |
 | P03 | Data, rules and mock API | ☐ |  |
 | P04 | Counter shell, worker sign-in, lock | ☐ |  |
@@ -113,6 +113,25 @@ Tick a screen when it matches its PNG at the design size and its visual test pas
 
 None. Question 2 was answered and closed at the start of P01 (see the table above and "Decisions").
 
+**From P01: please answer before P04 (the counter screens)**
+
+| # | Question | What I did meanwhile |
+|---|---|---|
+| 1 | **Touch size against the screens.** `CLAUDE.md` rule 3 says every counter target is at least 56 px. Screens 1 and 3 draw the language switch with 44 px buttons, and screen 30 draws its filter chips 48 px high. | I followed the rule: counter `Segmented`, `LanguageSwitch` and `Chip` are 56 px. The switch is about 10 px taller than the PNG. If you want the PNG size, say so and I make those two exceptions. |
+| 2 | **Light status pill (owner phone).** `docs/04` §5 says a 2 px border and text in the `--sl-*` colour. Screen 54 draws a tinted fill with no border. Also `--sl-free` (green) and `--sl-pause` (yellow) are under 4.5:1 on white, which axe reports as a serious issue. | I built the `docs/04` look (white, 2 px border) with darker text for green and yellow only, and wrote it into `docs/04` §5. Screen 54 is not in P01's list, so P17 (owner phone) should decide between the two. |
+| 3 | **Urdu words.** Ten new common Urdu words (Close, Clear, Delete last digit, Price not set, the statement columns and others). | Listed in `docs/URDU_TO_CHECK.md` for the owners. |
+
+**From P01: for information (no answer needed)**
+
+- **Design against doc, answered by you:** the normal dialog border is 1 px `#4A3B2E`, the warning dialog 2 px `#A8403A`, and a selected option card 3 px brass on `#33271C`. `docs/04` §4 and §7 are corrected.
+- **Same kind of disagreement, resolved the same way:** the amount keypad (screen 26) has 72 px keys, the PIN keypad (screen 1) has 76 px. `docs/04` said 76 for both.
+- **I added to `packages/shared`:** `TableStatus` (type), `formatAmount`, `formatDate` (`3 Oct`), `elapsed` and `isOver30` (`rules/time.ts`, the names from `docs/07` §2). P03 should extend these, not write them again. `formatClock` and `formatDay` read the club's UTC+5 offset, so they give the same text on every computer (tested in two other time zones). The Urdu clock words and month names are left for P18, because `docs/09` does not give the hour limits for صبح، دوپہر، شام، رات.
+- **`Button` size `'owner-sm'` is now `'ownerSm'`.** The text `owner-` in a shared component would be in the counter bundle, and `check:bundles` forbids it. `docs/05` is updated.
+- **New colours:** the screens use about 55 colours that were not tokens. Only the ones the P01 components needed were added, to `tokens.css` and the preset (list under "What P01 left in place"). Nothing existing changed. `.prettierignore` still treats both files as copies of `design/`; they now have P01 additions at the end.
+- **Fonts:** only the Arabic-script part of Noto Nastaliq Urdu is bundled now. Before, Latin letters and digits inside Urdu text used the Nastaliq font's own (serif) Latin, which looked wrong. They fall back to Barlow.
+- **The one thing in `base.css` I did not change:** my plan said to switch the Urdu rule to `:lang(ur)`. That would have lost to the body's `font-body` class on specificity, so the Urdu rule stays on `html[lang='ur'] body`, and the kit's Urdu column sets its own font class.
+- **Kit route in the owner app is `/owner-dev/dev/kit`** (the dev base path plus `/dev/kit`).
+
 **From P00: for information (no answer needed)**
 
 3. **Demo clock is on unless `VITE_DEMO_CLOCK=off`**, as P00 specifies. Production builds must set it to `off` (written in `apps/web/.env.example`). P20 should check this.
@@ -126,6 +145,7 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 
 ## Carried to P20
 
+- Check that the production counter and owner bundles contain no `/dev/kit` page or kit words (`check:bundles` does this; keep it in the release steps).
 - Decide the upgrades listed in `docs/AUDIT_NOTES.md` and re-run `npm audit`.
 - Production builds must set `VITE_DEMO_CLOCK=off` (see question 3).
 - Leave `mockServiceWorker.js` out of production builds.
@@ -133,7 +153,21 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 
 ## Differences from the designs that could not be fixed
 
-(Screen number, what is different, why.)
+(Screen number, what is different, why.) `test:visual` has no routes to compare until P05, so these come from comparing `/dev/kit` crops with the PNGs by eye at the design size (kit opened at 2400 px so the dialogs reach their real width).
+
+| Screen | Difference | Why |
+|---|---|---|
+| 1, 3 | The language switch buttons are 56 px, the PNG has 44 px | Counter touch rule (question 1 above) |
+| 30 | Counter filter chips are 56 px, the PNG has 48 px | Same |
+| 7 | The "Century rate" row in the kit is a labelled number box, not the − / Rs 15 a minute / + control of the PNG | That control belongs to the Start a game screen (P06); the kit shows the building blocks |
+| 7 | "Mark out of order" uses the standard outline button (`#6B5640` border, ivory text); the PNG has `#5A4A3C` and `#CDBFAE` | One outline button for screens 3, 7 and 25 |
+| 7, 19 | The dimmed page behind a dialog is one 92 % dark layer, not a separately dimmed header | A real dialog sits over a live page; the header cannot be dimmed on its own |
+| 43 | Stat card numbers are 40 px, the PNG has 42 px (49 has 40) | One `md` size, `text-o-stat` from the preset |
+| 54 | Light status pill: see question 2 above | Contrast |
+| 36, 43, 53 | Urdu amounts show `1,350 روپے` with the number in Barlow Condensed and the word in Nastaliq; these screens have no approved Urdu PNG except screen 6 | Per `docs/09` |
+| – | Toast and the counter `danger` button have no approved screen | Toast follows the Undo button of screen 18; `danger` follows the red option of screen 19 |
+
+Urdu, checked in the kit: nothing is clipped, dates and times keep their order (`<bdi dir="ltr">`), the keypad keeps 1-2-3 from the left, amounts keep Western digits. Digits inside running Urdu text are Barlow, not Barlow Condensed; P18 decides if that needs changing.
 
 ## What P00 left in place (read before P01)
 
@@ -148,9 +182,23 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 - **Not done / for later steps:** no screens, no focus ring or button styles (P01 defines them), no real mock data or handlers (P03), no visual tests (P05; `test:visual` passes with no tests until then). Playwright runs the `phone` project against the owner app only, and the `preview` project against the built owner bundle. MSW's `mockServiceWorker.js` is copied from `public/` into both `dist` folders even when mocks are off (inert, 9.6 KB); P20 can leave it out of production builds.
 - **Machine:** Windows 10, Node 24.13, npm 11.6, Git 2.52 (all above the minimums). The project lives at `C:\Projects\stockers` (no space in the path; it was moved there on 12 Oct 2026).
 
+## What P01 left in place (read before P02)
+
+- **Routes to open (`npm run dev`):** counter `http://localhost:5173/dev/kit`, owner `http://localhost:5173/owner-dev/dev/kit`. Add `?lang=ur` to put the whole page in Urdu (the kit always shows English and Urdu side by side), and open at 1440 px, at 390 px, and at 2400 px to see the dialogs at their real width. Both routes exist only in development.
+- **`src/ui` (all with tests or covered by the kit checks):** `Button`, `IconButton`, `StatusPill`, `Chip`, `Card`, `StatCard`, `CounterDialog`, `SidePanel`, `OwnerAside`, `OptionCard`, `PersonCard`, `Keypad`, `PinDots`, `MoneyText`, `TimerText`, `Toggle`, `Segmented`, `LanguageSwitch`, `Field` with `TextInput`, `MoneyInput`, `TextArea` and `Select`, `DataTable`, `StatementTable`, `EmptyState`, `Toast`. Helpers: `cx`, `theme` (focus rings), `useDialog`, `useMediaQuery`.
+- **Not in P01 (still to build):** `WorkerChip`, `CounterTopBar`, `CounterActionBar`, `CategoryTabs`, `OwnerSidebar`, `PhoneTopBar`, `PhoneTabBar`, the charts and the sign-in timeline.
+- **`packages/shared`:** `rules/format.ts` (`formatRs`, `formatAmount`, `formatSigned`, `formatTimer`, `formatClock`, `formatDate`, `formatDay`, `formatSlot`, `phoneTail`) and `rules/time.ts` (`elapsed`, `isOver30`), 29 tests.
+- **Tokens added** (`tokens.css` and the preset; screen in brackets): `--c-brass-press`, `--c-selected` (7, 25, 26), `--c-scrim` (7, 19), `--c-warn-*` (25, 26), `--c-danger-*` (19), `--c-info-*` (25), `--c-ok-*` (1, 26), `--o-red-line` (50, 51), `--o-track` (50, 51), `--o-stripe` (49), `--o-divider` (43, 49), `--o-on-green` (36), `--shadow-dot` (3), `--shadow-redcard` (3), `--shadow-thumb` (50, 51); preset `height` and `width` from the touch tokens, and `s.card-edge` and `s.pill-bg`.
+- **Tests:** Vitest, 109 in web (Button, IconButton, Keypad, PinDots, StatusPill, MoneyText in English and Urdu, TimerText on the demo clock, StatementTable, Toggle, the three dialogs, Chip, Segmented, LanguageSwitch, Field and the inputs) and 29 in shared. Playwright: `tests/e2e/kit-checks.ts`, run by `kit.counter.spec.ts` and `kit.owner.spec.ts` (the owner one also on the phone project): every component present, no console errors, axe with no serious or critical issues (English and `?lang=ur`), counter controls at least 56 px and owner controls at least 44 px, no sideways page scroll at 390 px.
+- **How the kit stays out of production:** each app adds the `/dev/kit` route only when `import.meta.env.DEV` is true, so a build drops it. `check:bundles` also searches both bundles for every kit word; it found none.
+- **Heads-up for P02 (tiles):** use `StatusPill`, `TimerText` (the red card is built there) and the status tokens; `TileProps.status` has one extra value, `selected`, on top of `TableStatus`.
+- **Heads-up for every screen:** put counter dialog content inside `CounterDialog` (it sets the lighter button colour for a panel); a table that scrolls sideways is a focusable region, so give `DataTable` a real `caption`.
+
 ## Log
 
 | Date | Step | What was done | Tests |
 |---|---|---|---|
 | 2026-10-12 | P00 | Checked the computer (nothing to install), set Git identity, `git init`, committed the kit. Created the npm workspace: `packages/shared` (types from docs/06) and `apps/web` (counter and owner entries, Vite 5 dev plugin for `/owner-dev/`, two-build script, Tailwind preset and tokens, fonts, i18n, clock, router, query, Zustand, MSW, ErrorBoundary, Page not found), ESLint + Prettier with the import and clock rules, `scripts/check-bundles.mjs`, Vitest and Playwright (counter, owner, phone), README. | Vitest: 16 in web (clock, language, both route sets, app-base), 3 in shared. Playwright: 10 smoke tests across the 3 projects, all passing. typecheck, lint, build and check:bundles pass from a clean `npm install`. |
 | 2026-10-12 | P00 follow-up | The project moved to `C:\Projects\stockers`: ran `npm install` (the two workspace links still pointed at the old folder and were relinked; the lock file did not change) and every check again. Wrote `docs/AUDIT_NOTES.md` (15 warnings, only `react-router-dom` 6 ships, no upgrades before P20). Added the owner deep-link rule to `docs/08_AUTH_AND_ACCESS.md` §1, `scripts/preview-owner.mjs`, `npm run preview:owner`, and the Playwright project `preview` with `owner-deep-link.preview.spec.ts`. Noted the approved extras. No new Urdu strings. Did not start P01. | Vitest: 16 in web, 3 in shared. Playwright: 18 passing (10 smoke + 8 deep-link). typecheck, lint, build and check:bundles pass. `test:visual` passes with no tests. I removed the `<base>` tag on purpose and the deep-link tests failed, then I put it back. |
+| 2026-10-12 | Language split | Closed P00 question 2. Words are split into `src/locales/{en,ur}/common.json`, `src/counter/locales` and `src/owner/locales`; `lib/i18n.ts` loads only `common` and each entry registers its own folder. `check:bundles` now fails if any owner text over 10 characters is in `dist/counter` (proved with a throwaway English, quoted and Urdu leak, twice). Docs: `docs/09`, `CLAUDE.md` layout, P18 step 1. | Vitest 16 + 3 before P01; typecheck, lint, build, check:bundles pass. Committed on its own. |
+| 2026-10-12 | P01 | Built the 26 `src/ui` components, `format.ts` and `time.ts` in shared, the dev-only `/dev/kit` page in both apps (both looks, English and Urdu side by side), new tokens, `useDialog`, and Arabic-only Urdu font. Corrected `docs/04`, `docs/05`, `docs/09`; added Urdu words to `docs/URDU_TO_CHECK.md`. Fixed along the way: scrolling tables leaked a 390 px page overflow, light pill contrast, scrambled dates in Urdu. | Vitest: 109 in web, 29 in shared (also in two other time zones). Playwright: 33 passing (kit axe, touch sizes, phone width, smoke, owner preview). typecheck, lint, build, check:bundles pass. `test:visual` has no tests until P05; screens compared by eye (see Differences). |

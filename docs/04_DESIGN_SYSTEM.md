@@ -38,7 +38,7 @@ Numbers use tabular figures (`font-variant-numeric: tabular-nums`) wherever they
 ## 4. Touch and states
 - Counter: every target is at least **56 px**. Main buttons are 60–80 px. PIN and number keys are **76 px**.
 - Owner: at least **44 px**. Primary buttons are 48 px.
-- Selected item on the counter: 2 px brass border with background `#2B2119`/`#33271C`, plus a brass tick circle on option cards.
+- Selected item on the counter: brass border on background `#33271C` (token `--c-selected`), plus a brass tick circle on option cards. The big option cards of screens 7 and 19 use a **3 px** border (the padding gets 2 px smaller so the card does not grow); smaller selected items such as chips and payment methods use 2 px. *(Corrected in P01 to match the approved screens 7, 25 and 26; this page said 2 px for all.)*
 - Selected item in the owner portal: 2 px green border with tint `#E3F0E8`.
 - Focus ring: 3 px outline, ivory on the counter, blue `#2A6FD6` in the owner portal, offset 2 to 6 px.
 - Disabled: 35–50 % opacity plus `cursor: not-allowed`, and the reason written next to it (for example "Price not set").
@@ -55,7 +55,7 @@ Numbers use tabular figures (`font-variant-numeric: tabular-nums`) wherever they
 | Out of order | 3 px dashed grey `#9AA0A6`, offset 3 | grey dot, "Out of order" | striped grey cover | note, for example "Cloth change, marked by Adil at 4:15 PM" |
 | Price not set | none | brass dot, "Price not set" | faded | disabled, "Locked until an owner sets the price" |
 
-The ring is `box-shadow: 0 0 0 3px <page>, 0 0 0 6px <status>` (a page-coloured gap, then the colour). The pill is `rgba(10,8,6,.55)` with ivory text. On light backgrounds (owner phone) use `--sl-*` for text and a 2 px border in the status colour.
+The ring is `box-shadow: 0 0 0 3px <page>, 0 0 0 6px <status>` (a page-coloured gap, then the colour). The pill is `rgba(10,8,6,.55)` with ivory text. On light backgrounds (owner phone) use a 2 px border in the `--sl-*` status colour and the same colour for the text, **except** green and yellow: `--sl-free` and `--sl-pause` are under 4.5:1 on white (axe, color-contrast), so their text is the darker `--o-green-ink` and `--o-amber-ink`. *(Added in P01.)*
 
 ## 6. Table tiles (`src/tiles`)
 
@@ -88,8 +88,8 @@ Text on cloth gets `text-shadow: 0 1px 2px rgba(0,0,0,.55)`. Text on the carrom 
   - Checkout (brass, 64 px), Canteen, Players, Today's totals, **Expense**, Pause all.
   - Then a spacer, "Backed up 9:00 PM", and Close sheet (outlined).
 - **Waiting to pay panel:** rows of 64 px showing name, phone tail and what for, with the amount at the end. The total is at the bottom.
-- **Counter dialog:** centred, max-width 1000–1060 px, panel colour, border 2 px (brass `#8C6E2E` normal, red `#A8403A` for warnings), icon ball 64 px on the start side. Cancel is outlined; the main action is brass.
-- **Keypad:** 3×4 grid of 76 px keys in Barlow Condensed 36 px, with Clear and Delete. The PIN shows as 4 dots.
+- **Counter dialog:** centred, max-width 1000–1060 px, panel colour, border 1 px `#4A3B2E` normally and 2 px red `#A8403A` for warnings, icon ball 64 px on the start side. *(Corrected in P01 to match screens 7 and 19; this page said a 2 px brass border for a normal dialog.)* Width: 1046 px for the standard dialog (screen 7), 1240 px for the two-column ones (screen 8). Cancel is outlined; the main action is brass.
+- **Keypad:** 3×4 grid of 76 px keys in Barlow Condensed 36 px, with Clear and Delete. The PIN shows as 4 dots. The amount keypad (screens 10, 26, 29) has 72 px keys and a "00" key instead of Clear. The pad keeps 1-2-3 from the left in Urdu.
 - **Owner sidebar:**
   - 240 px wide: brand at the top, then 11 items of 48 px. The active item has a `#3A2D21` background and bold text.
   - Order: Dashboard, Live tables, Sheets, Players and credit, Reports, Games and prices, Canteen, Expenses, Activity, **Workers**, Settings.

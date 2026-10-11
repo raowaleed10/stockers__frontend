@@ -84,6 +84,30 @@
   /* status on light backgrounds (owner phone live tables) */
   --sl-free: #178A4A; --sl-play: #B42318; --sl-pause: #B7791F; --sl-ooo: #6B7280;
 
+  /* ---------- added in P01 ----------
+     Colours the approved screens use that the first token list did not name. Nothing above changed.
+     The screen each one comes from is in PROGRESS.md. */
+  --c-brass-press: #F0C670;   /* pressed brass button (the link hover colour in the screens) */
+  --c-selected: #33271C;      /* selected option card or chip (7, 25, 26) */
+  --c-scrim: rgba(13, 10, 7, 0.92); /* behind a counter dialog (7, 19) */
+  --c-warn-bg: #2A2216;       /* amber box on dark (25, 26) */
+  --c-warn-line: #8C6E2E;
+  --c-warn-ink: #F5D488;
+  --c-danger-bg: #2E1918;     /* warning option and dialog (19) */
+  --c-danger-line: #A8403A;
+  --c-danger-ink: #F7A29C;
+  --c-info-bg: #1B2232;       /* blue option on dark (25) */
+  --c-info-line: #3A5A8C;
+  --c-info-ink: #A9C9FA;
+  --c-ok-bg: #1E2A22;         /* green box on dark (1, 26) */
+  --c-ok-line: #2F6B48;
+  --c-ok-ink: #8FDDB2;
+  --o-red-line: #E8B4AE;      /* border of a red button (50, 51) */
+  --o-track: #F1F4F2;         /* behind a segmented control (50, 51) */
+  --o-stripe: #FAFBFA;        /* every second table row (49) */
+  --o-divider: #EEF2EF;       /* thin line between rows (43, 49) */
+  --o-on-green: #CFE5D7;      /* small text on a solid green card (36) */
+
   /* ---------- shape ---------- */
   --r-tile: 18px;
   --r-dialog: 26px;
@@ -94,6 +118,9 @@
   --shadow-dialog-dark: 0 30px 80px rgba(0, 0, 0, 0.55);
   --shadow-dialog-light: 0 20px 50px rgba(20, 40, 80, 0.12);
   --shadow-tile: 0 12px 26px rgba(0, 0, 0, 0.55);
+  --shadow-dot: inset -3px -3px 0 rgba(0, 0, 0, 0.28);   /* status dot (added in P01, screen 3) */
+  --shadow-redcard: 0 2px 0 var(--s-card-edge), 0 0 0 2px rgba(255, 255, 255, 0.15); /* red-card timer (3) */
+  --shadow-thumb: 0 1px 3px rgba(0, 0, 0, 0.12);         /* selected segment (50, 51) */
 
   /* ---------- touch ---------- */
   --touch-counter: 56px;      /* minimum on the counter */

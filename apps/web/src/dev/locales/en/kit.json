@@ -1,0 +1,178 @@
+{
+  "chrome": {
+    "title": "UI kit",
+    "intro": "Every shared component in the counter look (dark) and the owner look (light), in English and Urdu. Development only: this page is not in a production build.",
+    "counter": "Counter look",
+    "owner": "Owner look",
+    "counterOnly": "Counter only",
+    "ownerOnly": "Owner only",
+    "s": {
+      "button": "Button",
+      "iconButton": "IconButton",
+      "statusPill": "StatusPill",
+      "chip": "Chip",
+      "card": "Card",
+      "statCard": "StatCard",
+      "dialog": "CounterDialog",
+      "sidePanel": "SidePanel",
+      "ownerAside": "OwnerAside",
+      "optionCard": "OptionCard",
+      "personCard": "PersonCard",
+      "keypad": "Keypad and PinDots",
+      "money": "MoneyText",
+      "timer": "TimerText",
+      "toggle": "Toggle",
+      "segmented": "Segmented and LanguageSwitch",
+      "fields": "Field, MoneyInput, TextArea, Select",
+      "dataTable": "DataTable",
+      "statement": "StatementTable",
+      "empty": "EmptyState",
+      "toast": "Toast"
+    }
+  },
+  "btn": {
+    "primary": "Next: pick players",
+    "secondary": "Cancel",
+    "outline": "Close sheet",
+    "danger": "Discard frame",
+    "ghost": "Clear",
+    "disabled": "Start game",
+    "icon": "Checkout",
+    "small": "Change time"
+  },
+  "bell": "Notifications",
+  "chip": {
+    "all": "All 312",
+    "owe": "Owe money 42",
+    "advance": "Advance 6"
+  },
+  "card": {
+    "oldCredit": "Old credit",
+    "oldCreditNote": "Unpaid since Monday 21 Sep, 12 days",
+    "paidNow": "Paid now",
+    "stays": "Stays as credit",
+    "info": "Sajid’s salary is Rs 22,000 a month. This advance is taken off his October salary."
+  },
+  "stat": {
+    "earned": "Earned today",
+    "earnedNote": "62 frames, 214 Century minutes, 2 rooms, canteen",
+    "owed": "Owed to the club",
+    "owedNote": "42 players",
+    "older": "Older than 15 days",
+    "olderNote": "9 players. Follow these up first.",
+    "advance": "Advance held for players",
+    "advanceNote": "6 players paid ahead",
+    "received": "Received",
+    "receivedNote": "Cash 18,450, online 8,600",
+    "total": "Total"
+  },
+  "dlg": {
+    "title": "Table 2 is free",
+    "ask": "What are they playing?",
+    "single": "Single frame",
+    "singleNote": "Two players. When the frame ends, the loser pays.",
+    "double": "Double frame",
+    "doubleNote": "Two against two, or one against two. The losing side splits it.",
+    "century": "Century",
+    "centuryNote": "Any number of players. Charged by the minute under one player.",
+    "centuryRate": "Rs 15 a minute",
+    "rate": "Century rate for this game",
+    "rateHint": "Starts at the owners’ price. Change it here if needed.",
+    "markOut": "Mark out of order",
+    "cancel": "Cancel",
+    "next": "Next: pick players",
+    "warnKicker": "Table 4 ran over 30 minutes",
+    "warnTitle": "This frame took 36 minutes. Charge double?",
+    "warnSub": "Zubair Khan lost to Usman Tariq. Choose what Zubair pays.",
+    "normal": "Normal price",
+    "doublePrice": "Double price",
+    "back": "Back"
+  },
+  "panel": {
+    "title": "Table 1, single frame",
+    "since": "Playing since 9:23 PM",
+    "players": "Ali Raza vs Bilal Ahmed",
+    "end": "End frame",
+    "pause": "Pause",
+    "move": "Move table"
+  },
+  "aside": {
+    "title": "Add an expense",
+    "amount": "Amount, Rs",
+    "whatFor": "What for",
+    "salaries": "Staff salaries",
+    "bills": "Bills",
+    "generator": "Generator",
+    "note": "Counter cash is taken off the cash the counter should have at close.",
+    "save": "Save expense"
+  },
+  "person": {
+    "playedNote": "Last played Thursday",
+    "busy": "Playing on Table 1",
+    "waiting": "Rs 600 waiting",
+    "won": "Won 2 frames tonight",
+    "who": "Who lost this frame?"
+  },
+  "pad": {
+    "pin": "Zain, enter your 4-digit PIN",
+    "amount": "Typing the Easypaisa amount"
+  },
+  "timer": {
+    "running": "Running",
+    "over": "Over 30 minutes",
+    "paused": "Paused",
+    "ended": "Ended"
+  },
+  "toggle": {
+    "bank": "Bank transfer",
+    "easypaisa": "Easypaisa",
+    "off": "JazzCash"
+  },
+  "seg": {
+    "from": "From AM or PM",
+    "am": "AM",
+    "pm": "PM"
+  },
+  "field": {
+    "amount": "Amount, Rs",
+    "amountError": "Enter an amount more than 0",
+    "reason": "Reason",
+    "reasonHint": "Say what the money was for.",
+    "paidFrom": "Paid from",
+    "owner": "Owner",
+    "counterCash": "Counter cash",
+    "bank": "Bank"
+  },
+  "table": {
+    "caption": "Expenses in October",
+    "when": "When",
+    "what": "What for",
+    "type": "Type",
+    "from": "Paid from",
+    "by": "Added by",
+    "r1": "Dinner for staff",
+    "r2": "Milk, sugar and tea leaves",
+    "r3": "Table 7 cloth change",
+    "t1": "Food and petrol",
+    "t2": "Cleaning and tea",
+    "t3": "Repairs and supplies",
+    "f1": "Drawer cash",
+    "f2": "Owner"
+  },
+  "stmt": {
+    "billCaption": "Tonight, sheet 48",
+    "statementCaption": "Statement for Kamran Iqbal",
+    "tonight": "Tonight",
+    "totalToPay": "Total to pay"
+  },
+  "empty": {
+    "title": "No expenses this month",
+    "text": "Add one with the Add expense button.",
+    "action": "Add expense"
+  },
+  "toast": {
+    "message": "Frame charged to Bilal Ahmed",
+    "undo": "Undo, 1:56 left"
+  },
+  "now": "Now"
+}

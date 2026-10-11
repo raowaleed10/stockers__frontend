@@ -13,3 +13,27 @@
     line-height: 1.8;
   }
 }
+
+@layer components {
+  /* docs/04 §9: dialogs fade and scale from 0.98 in 150 ms. */
+  .dialog-in {
+    animation: dialog-in 150ms ease-out;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog-in {
+    animation: none;
+  }
+}

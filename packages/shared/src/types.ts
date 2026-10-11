@@ -39,6 +39,9 @@ export interface Table {
   outOfOrder?: { note: string; by: PersonRef; at: ISO };
 }
 
+/** How a table is shown (decision D7): the ring, the pill text and the surface all follow this. */
+export type TableStatus = 'free' | 'playing' | 'over30' | 'paused' | 'outOfOrder' | 'noPrice';
+
 export type GameType = 'single' | 'double' | 'century' | 'room' | 'game';
 export type GameStatus = 'running' | 'paused' | 'ended' | 'discarded' | 'dispute' | 'cancelled';
 export interface Game {

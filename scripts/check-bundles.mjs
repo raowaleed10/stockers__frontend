@@ -16,6 +16,8 @@ const folder = path.resolve(explicitFolder ?? 'apps/web/dist/counter');
 const ownerFolder = path.resolve('apps/web/dist/owner');
 const OWNER_LOCALES = path.join(root, 'apps/web/src/owner/locales');
 const DEV_LOCALES = path.join(root, 'apps/web/src/dev/locales');
+const COMMON_LOCALES = path.join(root, 'apps/web/src/locales');
+const COUNTER_LOCALES = path.join(root, 'apps/web/src/counter/locales');
 
 async function* walk(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -123,8 +125,21 @@ try {
   process.exit(1);
 }
 let devTexts = [];
+let devSharedCount = 0;
 try {
-  devTexts = await readTexts(DEV_LOCALES);
+  const dev = await readTexts(DEV_LOCALES);
+  // A dev sample that is word for word a real shipped text (a common word, say) is not dev-only text:
+  // finding it in a bundle proves nothing. Owner text is never excused like this.
+  const shipped = new Set();
+  for (const dir of [COMMON_LOCALES, COUNTER_LOCALES]) {
+    try {
+      for (const item of await readTexts(dir)) shipped.add(item.text);
+    } catch {
+      // folder missing: nothing shipped from there
+    }
+  }
+  devTexts = dev.filter((item) => !shipped.has(item.text));
+  devSharedCount = dev.length - devTexts.length;
 } catch {
   // no dev language files yet
 }
@@ -169,5 +184,5 @@ const ownerNote =
     : `${ownerTexts.length} owner strings searched for`;
 console.log(
   `Bundle check passed: ${bundle.files.length} files in ${folder} have no owner code (${ownerNote}` +
-    `${devTexts.length > 0 ? `; ${devTexts.length} dev strings${ownerBundleChecked ? ' also checked in the owner bundle' : ''}` : ''}).`,
+    `${devTexts.length > 0 ? `; ${devTexts.length} dev-only strings${ownerBundleChecked ? ' also checked in the owner bundle' : ''}${devSharedCount > 0 ? `, ${devSharedCount} skipped because they are also real shipped words` : ''}` : ''}).`,
 );

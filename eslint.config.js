@@ -41,7 +41,7 @@ const forbidAppsInShared = {
   patterns: [
     {
       group: ['@/counter', '@/counter/**', '@/owner', '@/owner/**', '**/counter/**', '**/owner/**'],
-      message: 'Shared code (ui, tiles, lib) must not import from either app.',
+      message: 'Shared code (ui, tiles, lib, dev) must not import from either app.',
     },
   ],
 };
@@ -116,13 +116,13 @@ export default tseslint.config(
     rules: { 'no-restricted-imports': ['error', forbidCounterInOwner] },
   },
   {
-    files: ['apps/web/src/{ui,tiles,lib}/**/*.{ts,tsx}'],
+    files: ['apps/web/src/{ui,tiles,lib,dev}/**/*.{ts,tsx}'],
     rules: { 'no-restricted-imports': ['error', forbidAppsInShared] },
   },
 
   // Golden rule 7: time comes from the clock (src/lib is where the clock itself lives)
   {
-    files: ['apps/web/src/{counter,owner,ui}/**/*.{ts,tsx}'],
+    files: ['apps/web/src/{counter,owner,ui,dev}/**/*.{ts,tsx}'],
     ignores: ['**/*.test.{ts,tsx}'],
     rules: { 'no-restricted-syntax': ['error', ...noRawClock] },
   },

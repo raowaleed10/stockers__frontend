@@ -4,5 +4,38 @@
   "error": {
     "title": "کچھ گڑبڑ ہو گئی",
     "reload": "دوبارہ کھولیں"
+  },
+  "close": "بند کریں",
+  "closePanel": "پینل بند کریں",
+  "keypad": {
+    "clear": "صاف کریں",
+    "delete": "آخری ہندسہ مٹائیں"
+  },
+  "pin": {
+    "progress": "4 میں سے {{filled}} ہندسے درج ہو گئے"
+  },
+  "status": {
+    "free": "خالی",
+    "playing": "کھیل جاری",
+    "over30": "30 منٹ سے زیادہ",
+    "paused": "رکا ہوا",
+    "outOfOrder": "خراب",
+    "noPrice": "قیمت مقرر نہیں"
+  },
+  "language": {
+    "label": "زبان",
+    "en": "English",
+    "ur": "اردو"
+  },
+  "statement": {
+    "date": "تاریخ",
+    "details": "تفصیل",
+    "by": "کس نے",
+    "charge": "چارج",
+    "paid": "ادا",
+    "balance": "بقایا",
+    "owed": "باقی",
+    "advance": "ایڈوانس",
+    "edit": "ترمیم کریں"
   }
 }
