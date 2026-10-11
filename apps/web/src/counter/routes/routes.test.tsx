@@ -1,8 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
+import { registerResources } from '@/lib/i18n';
 import { routerFuture } from '@/lib/router-future';
+import { counterResources } from '../locales';
 import { CounterRoutes } from './index';
+
+registerResources(counterResources);
 
 const renderAt = (path: string) =>
   render(

@@ -1,0 +1,8 @@
+{
+  "brand": "Stockers",
+  "notFound": "Page not found",
+  "error": {
+    "title": "Something went wrong",
+    "reload": "Reload"
+  }
+}

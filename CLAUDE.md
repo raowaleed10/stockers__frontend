@@ -109,7 +109,7 @@ apps/web/
     tiles/     table tiles (snooker, room, pool, carrom, foosball, ludo, playstation, mini)
     lib/       clock, format, i18n, query client, events
     mocks/     msw handlers, seed loader, live-event simulator
-    locales/   en.json, ur.json
+    locales/   en/common.json, ur/common.json (words both apps use; counter-only words in counter/locales, owner-only in owner/locales)
   tests/       e2e/, visual/
 packages/shared/
   src/types.ts, src/rules/*.ts (+ *.test.ts)

@@ -3,10 +3,31 @@
 The owners want the English/Urdu switch on the counter **and** in the owner portal (Q17). Screen 6 is the reference for the Urdu layout.
 
 ## Setup
-- `react-i18next`, with `src/locales/en.json` and `src/locales/ur.json`. Use namespaces per area: `common`, `board`, `game`, `checkout`, `canteen`, `sheet`, `owner`, `auth`.
+- `react-i18next`. Words live in three places, one JSON file per namespace, with the same file name in `en/` and `ur/`:
+
+  | Words | Folder | Loaded by |
+  |---|---|---|
+  | Both apps use them (buttons, numbers, common labels, "Page not found") | `src/locales/{en,ur}/common.json` | both apps |
+  | Counter only | `src/counter/locales/{en,ur}/` | the counter entry only |
+  | Owner only | `src/owner/locales/{en,ur}/` | the owner entry only |
+
+  - Counter namespaces: `board`, `game`, `checkout`, `canteen`, `sheet`, `auth`. Owner namespaces start with `owner` (`owner`, `ownerAuth`, `ownerSheets`, and so on). Names are unique across the two apps, because they share one TypeScript key type.
+  - To add a namespace: add `<name>.json` to both `en/` and `ur/` of the right folder, then add one `import type` line and one entry in `src/types/i18next.d.ts` so `t()` checks the keys. The folder's `index.ts` picks the file up by itself.
+  - A word both apps need goes in `common`, never copied into an app folder.
+  - Shared components (`src/ui`, `src/tiles`) get their words through props, or from `common`. They never read an app folder.
+  - Dev-only words (the `/dev/kit` page) live in `src/dev/locales` and are loaded only in development.
 - Switching language sets `<html lang="ur" dir="rtl">` (or `lang="en" dir="ltr"`) and swaps the font: `font-urdu` for text. **Numbers, timers and table numbers stay in Barlow Condensed with Western digits.**
 - Each device remembers its language (localStorage is fine for this one preference). The default comes from Settings (counter: English).
 - Urdu text needs more height: line-height 1.6–1.9 for Nastaliq. Do not fix heights on text containers. Let them grow, and let rows wrap (the tile pill moves under the number when narrow, as on screen 6).
+
+## Decision (12 Oct 2026): owner words never go into the counter app
+
+The owners' portal has words the workers must not be able to read: profit, salaries, other people's credit. Both apps are built as separate bundles, so the rule is kept by where the words live (table above), not by hiding them.
+
+- The counter entry registers `common` and `src/counter/locales`. The owner entry registers `common` and `src/owner/locales`. Neither loads the other's folder.
+- `npm run check:bundles` (run after `npm run build`) reads every owner text value **longer than 10 characters**, in English and Urdu, and fails if any of them appears in `dist/counter`. It looks for each text as written, with quotes and backslashes escaped, and with non-ASCII as `\uXXXX`. It prints the file and key.
+- If a counter screen needs an owner word, it is not an owner word any more: move it to `common`, and the check passes. The check also fails when an owner file repeats a word that a counter file has, so that happens by itself.
+- This closes the open question "Owner words inside the shared language files" from P00.
 
 ## Layout rules
 - Use logical utilities only: `ms-/me-/ps-/pe-`, `start-/end-`, `text-start/text-end`, `rounded-s-/rounded-e-`, `border-s/border-e`.
@@ -73,7 +94,7 @@ The owners want the English/Urdu switch on the counter **and** in the owner port
 For every other screen:
 1. Translate the English copy into simple, spoken Urdu: short words a counter worker uses.
 2. Keep the English names of games (snooker, Century, PlayStation) in Urdu script, as above.
-3. Put every new string into `ur.json`.
+3. Put every new string into the matching file in `ur/` (same name and keys as in `en/`).
 4. Mark the strings you are unsure about in `docs/URDU_TO_CHECK.md` so the owners can check them.
 
 ## Checks

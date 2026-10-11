@@ -4,11 +4,14 @@ import '@/lib/fonts';
 import '@/styles/tokens.css';
 import '@/styles/base.css';
 import { clock } from '@/lib/clock';
+import { registerResources } from '@/lib/i18n';
 import { initLanguage } from '@/lib/language';
 import { App } from './app';
+import { ownerResources } from './locales';
 
 async function boot() {
   clock.init({ app: 'owner' });
+  registerResources(ownerResources);
   initLanguage('owner');
 
   if (__MOCKS__) {

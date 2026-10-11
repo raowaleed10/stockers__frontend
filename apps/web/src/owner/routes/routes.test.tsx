@@ -1,9 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
+import { registerResources } from '@/lib/i18n';
 import { routerFuture } from '@/lib/router-future';
 import { readAppBase } from '../app-base';
+import { ownerResources } from '../locales';
 import { OwnerRoutes } from './index';
+
+registerResources(ownerResources);
 
 const renderAt = (path: string) =>
   render(

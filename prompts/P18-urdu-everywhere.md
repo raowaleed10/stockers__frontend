@@ -17,7 +17,7 @@ Open each PNG (it is the approved design) and read its HTML for exact sizes, col
 - Screen 53, Home (390×1715, clock 10:30 PM): `design/screens/53-home.png` and `design/html/53-home.html` → `/owner-dev/`
 
 ## Build
-1. Move every remaining English string into `en.json`, and add `ur.json` entries using the word list. For the rest, use short spoken Urdu.
+1. Move every remaining English string into the language files (`en/` and `ur/`, in `src/locales` for words both apps use, `src/counter/locales` or `src/owner/locales` for the rest; see `docs/09_URDU_RTL.md`), and add the Urdu entries using the word list. For the rest, use short spoken Urdu.
 2. Check each route in Urdu at its design size. Fix:
    - clipped Nastaliq (line-height);
    - wrong alignment (use logical properties);
