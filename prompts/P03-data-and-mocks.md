@@ -36,3 +36,4 @@
 3. Update `PROGRESS.md`: what you built (files, routes, screens), tests added, what is left, questions for the developer.
 4. Tell me the routes to open to check your work.
 5. When everything passes, commit: `git add -A` and `git commit -m "P03 Shared rules, API client and mock server"`.
+6. If anything needs my answer, list the questions at the very end of your report (also in PROGRESS.md). I will answer in this same session; then apply the answers, update PROGRESS.md, run the checks and commit again as "P03 answers". The next step starts in a new session only after that.
