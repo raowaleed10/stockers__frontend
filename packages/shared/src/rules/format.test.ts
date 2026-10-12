@@ -8,6 +8,7 @@ import {
   formatSigned,
   formatSlot,
   formatTimer,
+  maskPhone,
   phoneTail,
 } from './format';
 
@@ -127,5 +128,16 @@ describe('phoneTail', () => {
     expect(phoneTail('0300 7654512')).toBe('•••• 4512');
     expect(phoneTail('03007654512')).toBe('•••• 4512');
     expect(phoneTail('0313-1112276')).toBe('•••• 2276');
+  });
+});
+
+describe('maskPhone', () => {
+  it('keeps the network code and the last four digits', () => {
+    expect(maskPhone('0300 7654512')).toBe('0300 •••• 4512');
+    expect(maskPhone('0313 1452276')).toBe('0313 •••• 2276');
+  });
+
+  it('falls back to the last four digits for a short number', () => {
+    expect(maskPhone('7654512')).toBe('•••• 4512');
   });
 });

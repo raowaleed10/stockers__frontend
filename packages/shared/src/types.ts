@@ -28,6 +28,8 @@ export interface Category {
   pricing: 'frame' | 'hour' | 'game';
   centuryAllowed: boolean;
   order: number;
+  centuryRate?: Rs; // default Century rate per minute (snooker)
+  minMinutes?: number; // room minimum
 }
 export interface Table {
   id: string;
@@ -220,6 +222,7 @@ export type ActivityType =
   | 'pause-all'
   | 'price-change'
   | 'worker-change'
+  | 'settings-change'
   | 'sign-in'
   | 'sign-out';
 export interface ActivityEvent {

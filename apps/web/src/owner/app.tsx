@@ -6,6 +6,7 @@ import { createQueryClient } from '@/lib/query-client';
 import { routerFuture } from '@/lib/router-future';
 import { ErrorBoundary } from '@/ui/ErrorBoundary';
 import { NotFound } from '@/ui/NotFound';
+import { OwnerLiveEvents } from './api';
 import { readAppBase } from './app-base';
 import { OwnerRoutes } from './routes';
 
@@ -17,6 +18,7 @@ export function App({ basename = readAppBase() }: { basename?: string | null }) 
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
+        <OwnerLiveEvents />
         {basename === null ? (
           <NotFound />
         ) : (

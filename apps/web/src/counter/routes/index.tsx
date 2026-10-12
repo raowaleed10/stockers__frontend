@@ -7,6 +7,7 @@ import { Placeholder } from '../screens/Placeholder';
 // dropped and the kit page, with its sample words, is not in the bundle.
 const KitPage = import.meta.env.DEV ? lazy(() => import('@/dev/kit/KitPage')) : null;
 const TilesPage = import.meta.env.DEV ? lazy(() => import('@/dev/tiles/TilesPage')) : null;
+const DataPage = import.meta.env.DEV ? lazy(() => import('../screens/dev/DataPage')) : null;
 
 export function CounterRoutes() {
   return (
@@ -28,6 +29,16 @@ export function CounterRoutes() {
           element={
             <Suspense fallback={null}>
               <TilesPage />
+            </Suspense>
+          }
+        />
+      ) : null}
+      {DataPage ? (
+        <Route
+          path="/dev/data"
+          element={
+            <Suspense fallback={null}>
+              <DataPage />
             </Suspense>
           }
         />

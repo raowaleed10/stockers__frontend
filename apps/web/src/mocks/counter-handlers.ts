@@ -1,6 +1,8 @@
-import { http, HttpResponse } from 'msw';
+import { buildCounterHandlers } from './counter/handlers';
+import { getDb } from './db';
 
-// Counter API only (/api/counter/*). The real handlers come in P03.
-export const counterHandlers = [
-  http.get('/api/counter/health', () => HttpResponse.json({ ok: true })),
-];
+// Making the store here reads `?scenario=`, `?now=` and `?as=` and sets the demo clock, which has to
+// happen before the first render. Handlers use the same store.
+getDb('counter');
+
+export const counterHandlers = buildCounterHandlers(() => getDb('counter'));

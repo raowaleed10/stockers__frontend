@@ -1,3 +1,4 @@
+import type data from '@/dev/locales/en/data.json';
 import type kit from '@/dev/locales/en/kit.json';
 import type tiles from '@/dev/locales/en/tiles.json';
 import type common from '@/locales/en/common.json';
@@ -10,6 +11,7 @@ declare module 'i18next' {
     defaultNS: 'common';
     resources: {
       common: typeof common;
+      data: typeof data; // dev-only: the /dev/data page
       kit: typeof kit; // dev-only: the /dev/kit page
       tiles: typeof tiles; // dev-only: the /dev/tiles page
     };

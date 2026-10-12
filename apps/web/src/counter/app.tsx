@@ -5,6 +5,7 @@ import { useLanguage } from '@/lib/language';
 import { createQueryClient } from '@/lib/query-client';
 import { routerFuture } from '@/lib/router-future';
 import { ErrorBoundary } from '@/ui/ErrorBoundary';
+import { CounterLiveEvents } from './api';
 import { CounterRoutes } from './routes';
 
 export function App() {
@@ -14,6 +15,7 @@ export function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
+        <CounterLiveEvents />
         <BrowserRouter future={routerFuture}>
           <CounterRoutes />
         </BrowserRouter>

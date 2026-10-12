@@ -3,11 +3,11 @@
 // so times are read at that fixed offset and give the same text on any computer.
 
 import type { ISO, Rs } from '../types';
+import { CLUB_UTC_OFFSET_MS } from './club-time';
 
 export type FormatLang = 'en' | 'ur';
 
 const MINUS = '−'; // the true minus sign, not a hyphen
-const CLUB_UTC_OFFSET_MS = 5 * 60 * 60 * 1000;
 
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const MONTHS = [
@@ -105,6 +105,12 @@ export function formatSlot(slot: { start: string; end: string }): string {
     return hhmmToText(Number(match[1]), Number(match[2]));
   };
   return `${text(slot.start)} to ${text(slot.end)}`;
+}
+
+/** `0300 7654512` -> `0300 •••• 4512`: the network code and the last four digits, as on screens 25 and 30. */
+export function maskPhone(phone: string): string {
+  const digits = phone.replace(/\D/g, '');
+  return digits.length < 8 ? phoneTail(phone) : `${digits.slice(0, 4)} •••• ${digits.slice(-4)}`;
 }
 
 /** `0300 7654512` -> `•••• 4512`. Only the last four digits are shown. */

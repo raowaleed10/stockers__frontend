@@ -46,6 +46,34 @@ const forbidAppsInShared = {
   ],
 };
 
+// The mock server's files are named by half (counter/, owner/, counter-handlers.ts, owner-handlers.ts),
+// so a relative import such as '../owner-handlers' has to be caught too.
+const mockHalf = (half, other) => ({
+  patterns: [
+    {
+      group: [`@/${other}`, `@/${other}/**`, `**/${other}`, `**/${other}/**`, `**/${other}-*`],
+      message: `The ${half} half of the mock server must not import the ${other} half (CLAUDE.md, golden rule 2).`,
+    },
+  ],
+});
+const mockShared = {
+  patterns: [
+    {
+      group: [
+        '@/counter',
+        '@/counter/**',
+        '@/owner',
+        '@/owner/**',
+        '**/counter/**',
+        '**/owner/**',
+        '**/counter-*',
+        '**/owner-*',
+      ],
+      message: 'The shared part of the mock server (db, http) must not import either half.',
+    },
+  ],
+};
+
 const noRawClock = [
   {
     selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
@@ -120,9 +148,28 @@ export default tseslint.config(
     rules: { 'no-restricted-imports': ['error', forbidAppsInShared] },
   },
 
-  // Golden rule 7: time comes from the clock (src/lib is where the clock itself lives)
+  // The mock server keeps the apps apart too: its counter half and its owner half never import each
+  // other, and the store they share (mocks/db) and the helpers (mocks/http.ts) import neither.
   {
-    files: ['apps/web/src/{counter,owner,ui,dev}/**/*.{ts,tsx}'],
+    files: ['apps/web/src/mocks/counter/**/*.ts', 'apps/web/src/mocks/counter-handlers.ts'],
+    rules: { 'no-restricted-imports': ['error', mockHalf('counter', 'owner')] },
+  },
+  {
+    files: ['apps/web/src/mocks/owner/**/*.ts', 'apps/web/src/mocks/owner-handlers.ts'],
+    rules: { 'no-restricted-imports': ['error', mockHalf('owner', 'counter')] },
+  },
+  {
+    files: ['apps/web/src/mocks/db/**/*.ts', 'apps/web/src/mocks/http.ts'],
+    rules: { 'no-restricted-imports': ['error', mockShared] },
+  },
+
+  // Golden rule 7: time comes from the clock (src/lib is where the clock itself lives). The mock
+  // server reads the demo clock, and the shared rules take the time as an argument.
+  {
+    files: [
+      'apps/web/src/{counter,owner,ui,dev,mocks}/**/*.{ts,tsx}',
+      'packages/shared/src/rules/**/*.ts',
+    ],
     ignores: ['**/*.test.{ts,tsx}'],
     rules: { 'no-restricted-syntax': ['error', ...noRawClock] },
   },

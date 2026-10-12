@@ -49,6 +49,8 @@ test.describe('/dev/tiles', () => {
     test(`has no serious or critical accessibility issues${query ? ' (page in Urdu)' : ''}`, async ({
       page,
     }) => {
+      // Axe reads all 148 tiles: about 19 s on its own, so it needs room when the whole suite runs at once.
+      test.setTimeout(90_000);
       await openGallery(page, PATH + query);
       const results = await new AxeBuilder({ page }).analyze();
       const serious = results.violations.filter(

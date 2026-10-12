@@ -40,6 +40,11 @@ export const clock = {
     offsetMs = start === null ? 0 : start - Date.now();
   },
 
+  /** Moves the clock so that it reads `startMs` now and ticks on from there (a scenario's moment). */
+  setStart(startMs: number): void {
+    offsetMs = startMs - Date.now();
+  },
+
   /** Current time in epoch milliseconds. Components use this, never `Date.now()`. */
   now(): number {
     return Date.now() + offsetMs;

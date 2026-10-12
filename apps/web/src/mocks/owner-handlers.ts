@@ -1,4 +1,8 @@
-import { http, HttpResponse } from 'msw';
+import { getDb } from './db';
+import { buildOwnerHandlers } from './owner/handlers';
 
-// Owner API only (/api/owner/*). The real handlers come in P03. Only the owner entry imports this.
-export const ownerHandlers = [http.get('/api/owner/health', () => HttpResponse.json({ ok: true }))];
+// Making the store here reads `?scenario=`, `?now=` and `?as=` and sets the demo clock, which has to
+// happen before the first render. Handlers use the same store.
+getDb('owner');
+
+export const ownerHandlers = buildOwnerHandlers(() => getDb('owner'));

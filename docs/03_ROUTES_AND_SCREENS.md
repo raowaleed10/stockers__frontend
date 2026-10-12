@@ -85,4 +85,4 @@ Image: `design/screens/<file>.png` · HTML: `design/html/<file>.html`
 | owner `/live` (desktop) | read-only live board for owners | screen 3 without the action bar and without tap actions |
 | owner `/alerts` (desktop) | notifications | screen 58 content in a desktop card |
 | any unknown path | "Page not found" | plain page, same look for every app; never mentions owners |
-| `/dev/kit`, `/dev/tiles`, `/dev/games-preview` | development only | P01, P02 |
+| `/dev/kit`, `/dev/tiles`, `/dev/games-preview`, `/dev/data` | development only (`/dev/data` is in both apps: the board and workers from the mock API, with a button that starts a game) | P01, P02, P03 |

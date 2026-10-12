@@ -144,6 +144,25 @@ try {
   // no dev language files yet
 }
 
+// The mock server's seed (mock/seed.json) is demo data. A production build has no mock server, so none of
+// its players, phone numbers or its example private address may be in either bundle. (A build made with
+// VITE_MOCKS=on does ship the seed, so it fails this check: it is a demo build, never a release.)
+const SEED_FILE = path.join(root, 'mock/seed.json');
+let seedTexts = [];
+try {
+  const seed = JSON.parse(await readFile(SEED_FILE, 'utf-8'));
+  const own = (text, key) => ({ text, file: 'mock/seed.json', key });
+  seedTexts = [
+    ...seed.players.flatMap((player, i) => [
+      own(player.name, `players[${i}].name`),
+      ...(player.phone ? [own(player.phone, `players[${i}].phone`)] : []),
+    ]),
+    own(seed.meta.ownerPathExample, 'meta.ownerPathExample'),
+  ];
+} catch {
+  // no seed file: nothing to look for
+}
+
 const problems = [];
 for (const file of bundle.files) {
   const relative = path.relative(folder, file);
@@ -159,14 +178,16 @@ for (const [file, text] of bundle.texts) {
 }
 problems.push(...findTexts(bundle, folder, ownerTexts, 'owner text'));
 problems.push(...findTexts(bundle, folder, devTexts, 'dev-only text'));
+problems.push(...findTexts(bundle, folder, seedTexts, 'mock seed data'));
 
-// Dev-only words must not ship in the owner bundle either (checked on a default run when it is built).
+// Dev-only words and seed data must not ship in the owner bundle either (checked on a default run when it is built).
 let ownerBundleChecked = false;
-if (explicitFolder === undefined && devTexts.length > 0) {
+if (explicitFolder === undefined && (devTexts.length > 0 || seedTexts.length > 0)) {
   try {
     const built = await readBundle(ownerFolder);
     ownerBundleChecked = true;
     problems.push(...findTexts(built, ownerFolder, devTexts, 'dev-only text'));
+    problems.push(...findTexts(built, ownerFolder, seedTexts, 'mock seed data'));
   } catch {
     // the owner bundle is not built; nothing to check
   }
@@ -184,5 +205,6 @@ const ownerNote =
     : `${ownerTexts.length} owner strings searched for`;
 console.log(
   `Bundle check passed: ${bundle.files.length} files in ${folder} have no owner code (${ownerNote}` +
-    `${devTexts.length > 0 ? `; ${devTexts.length} dev-only strings${ownerBundleChecked ? ' also checked in the owner bundle' : ''}${devSharedCount > 0 ? `, ${devSharedCount} skipped because they are also real shipped words` : ''}` : ''}).`,
+    `${devTexts.length > 0 ? `; ${devTexts.length} dev-only strings${ownerBundleChecked ? ' also checked in the owner bundle' : ''}${devSharedCount > 0 ? `, ${devSharedCount} skipped because they are also real shipped words` : ''}` : ''}` +
+    `${seedTexts.length > 0 ? `; ${seedTexts.length} mock seed strings searched for` : ''}).`,
 );

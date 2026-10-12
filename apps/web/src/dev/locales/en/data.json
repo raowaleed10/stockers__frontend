@@ -1,0 +1,48 @@
+{
+  "title": "Data check",
+  "intro": "Development only: this page is not in a production build. It reads the mock server and lets you change it, to check that the data layer works. The sample names and PINs are for testing.",
+  "clock": "Demo clock",
+  "loading": "Loading…",
+  "session": {
+    "title": "Who is signed in",
+    "nobody": "Nobody is signed in.",
+    "signedIn": "{{name}} is signed in",
+    "until": "until {{time}}",
+    "signInAs": "Sign in as {{name}} ({{pin}})",
+    "signOut": "Sign out",
+    "owner": "Owner"
+  },
+  "result": {
+    "ok": "Signed in.",
+    "refused": "Refused: {{code}}. {{message}}"
+  },
+  "workers": {
+    "title": "Workers",
+    "yourTimeNow": "Your time now",
+    "notNow": "Not now",
+    "signedInNow": "signed in",
+    "time": "Sign-in time"
+  },
+  "board": {
+    "title": "Board",
+    "table": "Table",
+    "status": "Status",
+    "game": "Game",
+    "free": "Tap to start a game",
+    "startGame": "Start game",
+    "endFrame": "End frame",
+    "pauseAll": "Pause all",
+    "resumeAll": "Resume all",
+    "inUse": "{{used}} of {{total}} tables in use",
+    "versus": "{{a}} vs {{b}}",
+    "under": "Under {{name}}"
+  },
+  "waiting": {
+    "title": "Waiting to pay",
+    "none": "Nobody is waiting to pay.",
+    "total": "Not paid yet today: {{amount}}"
+  },
+  "live": {
+    "title": "Live tables (read only)"
+  }
+}

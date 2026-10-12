@@ -1,0 +1,19 @@
+/** Query keys of the owner app (docs/06 §5). Events invalidate by the first word of a key. */
+export const ownerKeys = {
+  me: ['me'] as const,
+  dashboard: ['dashboard'] as const,
+  reports: (params: object) => ['reports', params] as const,
+  activity: (filters: object) => ['activity', filters] as const,
+  sheetFolders: ['sheetFolders'] as const,
+  sheets: (month: string) => ['sheets', month] as const,
+  sheet: (id: string) => ['sheet', id] as const,
+  players: (filter?: string) => ['players', filter ?? 'all'] as const,
+  player: (id: string) => ['player', id] as const,
+  prices: ['prices'] as const,
+  canteen: ['canteen'] as const,
+  expenses: (month?: string) => ['expenses', month ?? 'now'] as const,
+  workers: ['workers'] as const,
+  settings: ['settings'] as const,
+  notifications: ['notifications'] as const,
+  live: ['live'] as const,
+};
