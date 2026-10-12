@@ -106,6 +106,66 @@ export function defineKitTests(path: string, app: 'counter' | 'owner') {
       }
     });
 
+    test('a counter control drawn under 56 px keeps its drawn size and moves nothing', async ({
+      page,
+    }) => {
+      await openKit(page, path);
+      const found = await page.$$eval('[data-kit-theme="counter"] [data-drawn]', (elements) =>
+        elements.map((element) => {
+          const box = element as HTMLElement;
+          const shape = box.querySelector('[data-visible]') as HTMLElement;
+          const boxRect = box.getBoundingClientRect();
+          const shapeRect = shape.getBoundingClientRect();
+          const style = getComputedStyle(box);
+          return {
+            what: (box.getAttribute('aria-label') ?? box.textContent ?? '').trim().slice(0, 30),
+            drawn: Number(box.dataset.drawn),
+            // an icon button has an aria-label and is square; the others are as wide as their words
+            square: box.hasAttribute('aria-label'),
+            boxHeight: boxRect.height,
+            boxWidth: boxRect.width,
+            shapeHeight: shapeRect.height,
+            shapeWidth: shapeRect.width,
+            // the space the control takes in the layout: its box plus its margins
+            layoutHeight:
+              boxRect.height + parseFloat(style.marginTop) + parseFloat(style.marginBottom),
+            layoutWidth:
+              boxRect.width + parseFloat(style.marginLeft) + parseFloat(style.marginRight),
+            left: boxRect.left,
+            right: boxRect.right,
+            top: boxRect.top,
+            bottom: boxRect.bottom,
+          };
+        }),
+      );
+      // the kit shows each size a screen draws
+      expect([...new Set(found.map((item) => item.drawn))].sort()).toEqual([44, 48, 52, 54]);
+      const wrong: string[] = [];
+      for (const item of found) {
+        const near = (a: number, b: number) => Math.abs(a - b) <= 0.5;
+        if (item.boxHeight < 56 || (item.square && item.boxWidth < 56))
+          wrong.push(`${item.what}: box under 56 px`);
+        if (!near(item.shapeHeight, item.drawn))
+          wrong.push(`${item.what}: shape is ${item.shapeHeight} px, not ${item.drawn}`);
+        if (!near(item.layoutHeight, item.drawn))
+          wrong.push(`${item.what}: takes ${item.layoutHeight} px of layout, not ${item.drawn}`);
+        if (item.square && !near(item.shapeWidth, item.drawn))
+          wrong.push(`${item.what}: shape is ${item.shapeWidth} px wide, not ${item.drawn}`);
+        if (item.square && !near(item.layoutWidth, item.drawn))
+          wrong.push(`${item.what}: takes ${item.layoutWidth} px of width, not ${item.drawn}`);
+      }
+      // two pressable boxes never share a spot: the larger boxes must not steal each other's presses
+      for (const [index, a] of found.entries()) {
+        for (const b of found.slice(index + 1)) {
+          const overlap =
+            Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0.5 &&
+            Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0.5;
+          if (overlap) wrong.push(`${a.what} and ${b.what} overlap`);
+        }
+      }
+      expect(wrong).toEqual([]);
+    });
+
     test('the phone width has no sideways scrolling of the page', async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
       await openKit(page, path);

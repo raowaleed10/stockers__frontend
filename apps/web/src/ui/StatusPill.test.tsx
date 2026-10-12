@@ -53,14 +53,16 @@ describe('StatusPill', () => {
     expect(container.querySelector('.rounded-full.bg-s-play')).toBeInTheDocument();
   });
 
-  it('has a dark pill on the counter and a bordered white pill on a light page', () => {
-    const { rerender } = render(<StatusPill status="free" />);
+  it('has a dark pill with a marker on the counter and a tinted pill with no border on a light page', () => {
+    const { container, rerender } = render(<StatusPill status="free" />);
     expect(screen.getByText('Free').className).toContain('bg-s-pill-bg');
+    expect(container.querySelector('[aria-hidden="true"]')).toBeInTheDocument();
     rerender(<StatusPill status="free" tone="light" />);
     const light = screen.getByText('Free');
-    expect(light.className).toContain('border-2');
-    expect(light.className).toContain('border-sl-free');
-    expect(light.className).toContain('text-o-green-ink'); // darker than --sl-free: contrast on white
+    expect(light.className).toContain('bg-o-green-tint');
+    expect(light.className).toContain('text-sl-free-ink'); // darker than --sl-free: contrast on its own tint
+    expect(light.className).not.toContain('border');
+    expect(container.querySelector('[aria-hidden="true"]')).not.toBeInTheDocument(); // screen 54 has no dot
   });
 
   it('hides the marker from screen readers', () => {

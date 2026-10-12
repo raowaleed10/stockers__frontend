@@ -42,9 +42,13 @@ const preset: Partial<Config> = {
           red: v('o-red'), 'red-tint': v('o-red-tint'), chart: v('o-chart'),
           // added in P01 (see tokens.css)
           'red-line': v('o-red-line'), track: v('o-track'), stripe: v('o-stripe'), divider: v('o-divider'),
-          'on-green': v('o-on-green'),
+          'on-green': v('o-on-green'), 'grey-tint': v('o-grey-tint'),
         },
-        sl: { free: v('sl-free'), play: v('sl-play'), pause: v('sl-pause'), ooo: v('sl-ooo') },
+        sl: {
+          free: v('sl-free'), play: v('sl-play'), pause: v('sl-pause'), ooo: v('sl-ooo'),
+          // the same hues darkened for text on a tint (P01 answers)
+          'free-ink': v('sl-free-ink'), 'pause-ink': v('sl-pause-ink'), 'ooo-ink': v('sl-ooo-ink'),
+        },
       },
       borderRadius: {
         tile: v('r-tile'), dialog: v('r-dialog'), card: v('r-card'),

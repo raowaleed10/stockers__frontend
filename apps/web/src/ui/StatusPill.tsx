@@ -20,25 +20,40 @@ const DOT: Record<TableStatus, string> = {
   noPrice: 'bg-s-noprice',
 };
 
-// On a light page the pill is white with a 2 px border in the status colour (docs/04 §5). The text is the
-// status colour too, except green and yellow: --sl-free and --sl-pause are under 4.5:1 on white, so those
-// two use the darker green and amber ink (axe, color-contrast).
+// On a light page the pill is the words on a tinted fill, with no border and no dot (screen 54). The text is
+// the status colour, darkened for green, yellow and grey until it reaches 4.5:1 on its own fill
+// (StatusPill.contrast.test.ts checks every pair).
 const LIGHT: Record<TableStatus, string> = {
-  free: 'border-sl-free text-o-green-ink',
-  playing: 'border-sl-play text-sl-play',
-  over30: 'border-sl-play text-sl-play',
-  paused: 'border-sl-pause text-o-amber-ink',
-  outOfOrder: 'border-sl-ooo text-sl-ooo',
-  noPrice: 'border-o-amber-line text-o-amber-ink',
+  free: 'bg-o-green-tint text-sl-free-ink',
+  playing: 'bg-o-red-tint text-sl-play',
+  over30: 'bg-o-red-tint text-sl-play',
+  paused: 'bg-o-amber-tint text-sl-pause-ink',
+  outOfOrder: 'bg-o-grey-tint text-sl-ooo-ink',
+  noPrice: 'bg-o-amber-tint text-o-amber-ink',
 };
 
 /**
- * The status of a table: a marker plus words, so colour is never the only signal (golden rule 11).
- * Over 30 minutes shows a small red card instead of a round dot.
+ * The status of a table, always in words so colour is never the only signal (golden rule 11). The dark pill
+ * adds a marker: a round dot, or a small red card for over 30 minutes. The light pill is words on a tint.
  */
 export function StatusPill({ status, label, tone = 'dark', className }: StatusPillProps) {
   const { t } = useTranslation();
   const text = label ?? t(`status.${status}`);
+
+  if (tone === 'light') {
+    return (
+      <span
+        className={cx(
+          'inline-flex items-center whitespace-nowrap rounded-full px-2 py-0.5 text-[13px] font-bold',
+          LIGHT[status],
+          className,
+        )}
+      >
+        {text}
+      </span>
+    );
+  }
+
   const marker =
     status === 'over30' ? (
       <span
@@ -54,8 +69,7 @@ export function StatusPill({ status, label, tone = 'dark', className }: StatusPi
   return (
     <span
       className={cx(
-        'inline-flex items-center gap-[7px] whitespace-nowrap rounded-full py-[5px] ps-[7px] pe-[11px] text-[14px] font-semibold',
-        tone === 'dark' ? 'bg-s-pill-bg text-c-text' : cx('border-2 bg-o-card', LIGHT[status]),
+        'inline-flex items-center gap-[7px] whitespace-nowrap rounded-full bg-s-pill-bg py-[5px] ps-[7px] pe-[11px] text-[14px] font-semibold text-c-text',
         className,
       )}
     >

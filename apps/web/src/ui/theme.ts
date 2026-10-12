@@ -9,6 +9,10 @@ export const focusRing: Record<Theme, string> = {
     'focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-o-blue',
 };
 
+/** The counter ring for a shape inside a 56 px button box (`touch-box.ts`): it hugs the drawn shape. */
+export const groupFocusRing =
+  'group-focus-visible:outline group-focus-visible:outline-[3px] group-focus-visible:outline-offset-[3px] group-focus-visible:outline-c-text';
+
 /** Same ring, for a control that is hidden and shows its state on a label (radio inputs). */
 export const focusWithinRing: Record<Theme, string> = {
   counter:

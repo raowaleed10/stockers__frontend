@@ -20,6 +20,7 @@ export function LanguageSwitch({ value, onChange, theme, className }: LanguageSw
       label={t('language.label')}
       value={value}
       onChange={onChange}
+      drawn={44}
       className={className}
       options={[
         { value: 'en', label: t('language.en'), lang: 'en' },

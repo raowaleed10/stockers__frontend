@@ -48,7 +48,16 @@ export function ButtonDemo({ theme }: { theme: Theme }) {
           {t('btn.ghost')}
         </Button>
       </div>
-      {!counter ? (
+      {counter ? (
+        <div className="flex flex-wrap items-center gap-3">
+          <Button theme={theme} variant="secondary" drawn={52}>
+            {t('btn.secondary')}
+          </Button>
+          <Button theme={theme} variant="outline" drawn={48}>
+            {t('btn.outline')}
+          </Button>
+        </div>
+      ) : (
         <div className="flex flex-wrap items-center gap-3">
           <Button theme={theme} variant="secondary" size="ownerSm">
             {t('btn.small')}
@@ -57,7 +66,7 @@ export function ButtonDemo({ theme }: { theme: Theme }) {
             {t('btn.danger')}
           </Button>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
@@ -76,6 +85,23 @@ export function IconButtonDemo({ theme }: { theme: Theme }) {
         icon={<X size={24} strokeWidth={2.2} />}
       />
       <IconButton theme={theme} label={tc('close')} icon={<X size={24} />} disabled />
+      {theme === 'counter' ? (
+        <>
+          <IconButton
+            theme={theme}
+            label={tc('close')}
+            icon={<X size={20} strokeWidth={2.2} />}
+            drawn={48}
+          />
+          <IconButton
+            theme={theme}
+            label={t('bell')}
+            icon={<Bell size={24} />}
+            badge={3}
+            drawn={52}
+          />
+        </>
+      ) : null}
     </div>
   );
 }
@@ -111,6 +137,7 @@ export function ChipDemo({ theme }: { theme: Theme }) {
           <Chip
             key={item.id}
             theme={theme}
+            drawn={theme === 'counter' ? 48 : undefined}
             selected={selected === item.id}
             onClick={() => setSelected(item.id)}
           >
@@ -325,7 +352,8 @@ export function SegmentedDemo({ theme }: { theme: Theme }) {
       <Segmented
         theme={theme}
         label={t('seg.from')}
-        size={theme === 'owner' ? 'lg' : 'md'}
+        size="lg"
+        drawn={theme === 'counter' ? 52 : undefined}
         value={half}
         onChange={setHalf}
         options={[
@@ -333,6 +361,20 @@ export function SegmentedDemo({ theme }: { theme: Theme }) {
           { value: 'pm', label: t('seg.pm') },
         ]}
       />
+      {theme === 'counter' ? (
+        <Segmented
+          theme={theme}
+          label={t('seg.from')}
+          size="lg"
+          drawn={54}
+          value={half}
+          onChange={setHalf}
+          options={[
+            { value: 'am', label: t('seg.am') },
+            { value: 'pm', label: t('seg.pm') },
+          ]}
+        />
+      ) : null}
       <LanguageSwitch theme={theme} value={lang} onChange={setLang} />
     </div>
   );

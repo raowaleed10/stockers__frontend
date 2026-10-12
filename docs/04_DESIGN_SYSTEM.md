@@ -37,6 +37,22 @@ Numbers use tabular figures (`font-variant-numeric: tabular-nums`) wherever they
 
 ## 4. Touch and states
 - Counter: every target is at least **56 px**. Main buttons are 60–80 px. PIN and number keys are **76 px**.
+- **A counter control that a PNG draws smaller than 56 px** keeps the drawn size on screen, but its pressable area is still 56 px. *(Answered by the developer after P01.)* The `<button>` is the 56 px box (transparent, no border), the visible shape is drawn inside it at the PNG size, and a negative margin of (56 − drawn) / 2 gives the space back, so nothing else on the screen moves. The focus ring is drawn around the visible shape. The touch-size test measures the button's own box. In code this is the counter-only prop `drawn` on `Button`, `IconButton`, `Chip` and `Segmented` (`src/ui/touch-box.ts`); `LanguageSwitch` always uses it. What the screens draw:
+
+  | Control | Drawn | `drawn` | Screens |
+  |---|---|---|---|
+  | Language switch buttons | 44 | `LanguageSwitch` (built in) | 1–6 |
+  | Filter chips | 48 | `Chip drawn={48}` | 30 |
+  | Remove ✕ and the − / + steppers | 48 (52 on the part-payment lines) | `IconButton drawn={48}` (`52`) | 8, 9, 26, 28 |
+  | Bell | 52 × 52 | `IconButton drawn={52}` | 3–6 |
+  | Lock and the worker chip in the top bar | 52 | `Button drawn={52}` | 3–6, 16 |
+  | "Change" (the game on screen 22, the item on screen 28) | 52 on screen 22, 48 on screen 28 | `Button drawn={52}` (`48`) | 22, 28 |
+  | The link "Check out first" | 52 | the same rule, as a link | 32 |
+  | Choices in a row: "Half each / One pays all / Custom", "Since last zero / This month / All" | 52 | `Segmented size="lg" drawn={52}` | 20, 30 |
+  | "Waiting to pay / Owes from before" | 54 | `Segmented size="lg" drawn={54}` | 24 |
+  | Resume on a paused tile | 50 | `TileActionButton` | 16 |
+
+  Two drawn controls less than 8 px apart would share a few pixels of pressable area; the later one in the page wins. Keep at least 8 px between them (the kit page checks this).
 - Owner: at least **44 px**. Primary buttons are 48 px.
 - Selected item on the counter: brass border on background `#33271C` (token `--c-selected`), plus a brass tick circle on option cards. The big option cards of screens 7 and 19 use a **3 px** border (the padding gets 2 px smaller so the card does not grow); smaller selected items such as chips and payment methods use 2 px. *(Corrected in P01 to match the approved screens 7, 25 and 26; this page said 2 px for all.)*
 - Selected item in the owner portal: 2 px green border with tint `#E3F0E8`.
@@ -55,7 +71,19 @@ Numbers use tabular figures (`font-variant-numeric: tabular-nums`) wherever they
 | Out of order | 3 px dashed grey `#9AA0A6`, offset 3 | grey dot, "Out of order" | striped grey cover | note, for example "Cloth change, marked by Adil at 4:15 PM" |
 | Price not set | none | brass dot, "Price not set" | faded | disabled, "Locked until an owner sets the price" |
 
-The ring is `box-shadow: 0 0 0 3px <page>, 0 0 0 6px <status>` (a page-coloured gap, then the colour). The pill is `rgba(10,8,6,.55)` with ivory text. On light backgrounds (owner phone) use a 2 px border in the `--sl-*` status colour and the same colour for the text, **except** green and yellow: `--sl-free` and `--sl-pause` are under 4.5:1 on white (axe, color-contrast), so their text is the darker `--o-green-ink` and `--o-amber-ink`. *(Added in P01.)*
+The ring is `box-shadow: 0 0 0 3px <page>, 0 0 0 6px <status>` (a page-coloured gap, then the colour). The pill is `rgba(10,8,6,.55)` with ivory text.
+
+**On light backgrounds (the whole owner portal, screen 54)** the pill is the words on a tinted fill: no border and no dot, 13 px bold, padding `2px 8px`. *(Replaced after P01: the first version used a white pill with a 2 px border.)*
+
+| Status | Text | Fill |
+|---|---|---|
+| Playing, Over 30 min | `#B42318` (`--sl-play`) | `#FBE7E5` (`--o-red-tint`) |
+| Free | `--sl-free-ink` `#147B42` | `#E3F0E8` (`--o-green-tint`) |
+| Paused | `--sl-pause-ink` `#966319` | `#FBF1DC` (`--o-amber-tint`) |
+| Out of order | `--sl-ooo-ink` `#666D7A` | `#EEF0F2` (`--o-grey-tint`) |
+| Price not set | `--o-amber-ink` | `#FBF1DC` |
+
+`--sl-free`, `--sl-pause` and `--sl-ooo` are under 4.5:1 on their own tints (3.75, 3.24 and 4.23), so the text uses the same hues darkened in small steps until each reaches 4.5:1 (4.54, 4.57, 4.56). Red already passes (5.53). `StatusPill.contrast.test.tsx` reads `tokens.css` and checks every pair, so a changed colour fails the test.
 
 ## 6. Table tiles (`src/tiles`)
 

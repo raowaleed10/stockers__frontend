@@ -107,6 +107,12 @@
   --o-stripe: #FAFBFA;        /* every second table row (49) */
   --o-divider: #EEF2EF;       /* thin line between rows (43, 49) */
   --o-on-green: #CFE5D7;      /* small text on a solid green card (36) */
+  --o-grey-tint: #EEF0F2;     /* fill of the grey "Out of order" pill (54) */
+  /* Status pill text on its own tint (54). The three --sl-* colours above are under 4.5:1 there, so these are
+     the same hues, darkened until each reaches 4.5:1 (checked by StatusPill.contrast.test.ts). */
+  --sl-free-ink: #147B42;
+  --sl-pause-ink: #966319;
+  --sl-ooo-ink: #666D7A;
 
   /* ---------- shape ---------- */
   --r-tile: 18px;
