@@ -34,7 +34,7 @@ export interface Game {
   sessionId?: string; frameNo?: number;
   result?: { loserIds: string[]; amount: Rs; chargedDouble?: boolean; split?: Record<string, Rs>; minutes?: number };
 }
-export interface Session { id: string; tableId: string; playerIds: string[]; frames: { no: number; loserIds: string[]; amount: Rs; endedAt: ISO }[] }
+export interface Session { id: string; tableId: string; playerIds: string[]; frames: { no: number; loserIds: string[]; amount: Rs; startedAt: ISO; endedAt: ISO }[] }
 
 export interface Player { id: string; name: string; phone?: string; nick?: string; note?: string; since: ISO;
   balance: Rs;                           // > 0 owes the club, < 0 advance held
@@ -83,6 +83,7 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `GET /workers/public` | → `[{id,name,slot,canSignInNow}]` (names and times only) | 1, 2 |
 | `POST /auth/sign-in` | `{workerId, pin}` → `{worker, until}` · **403 `NOT_YOUR_TIME`** `{slot, now}` · 401 wrong PIN · 429 too many tries | 1, 2 |
 | `POST /auth/unlock` · `POST /auth/sign-out` · `GET /auth/me` | | 34 |
+| `GET /alerts` · `POST /alerts/read-all` | → `{alerts, unread}`. The counter's own alerts (the bell); separate from the owners' notifications. A table put out of order, a game cancelled or undone, and an item running low add one. (Added with the P03 answers; no screen draws the list yet.) | 3–6 |
 | `GET /board?category=` | → `{sheet, categories, tables(with game), players, waiting, unread, backedUpAt, pausedAll}`. No category is the `snooker` tab (snooker tables and rooms); `all` is the whole club. `players` names everyone on a table. | 3–6, 16 |
 | `GET /games/:id` | → `{game, table, session?, players}` (added in P03: the `['game', id]` query needs it) | 11, 13–15, 17–23 |
 | `POST /games` | `{tableId, type, playerIds|sides|underPlayerId, price?}` | 7–10 |
@@ -115,7 +116,7 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `GET /prices` · `PATCH /tables/:id` `{price, alsoTableIds?, outOfOrder?}` · `PATCH /categories/:id` `{price}` · `POST /tables` | 45–47, 57 |
 | `GET /canteen` · `POST /canteen/items` · `POST /canteen/stock` | 48 |
 | `GET /expenses?month=` · `POST /expenses` · `PATCH /expenses/:id` · `DELETE /expenses/:id` | 49 |
-| `GET /workers` · `POST /workers` · `PATCH /workers/:id` `{slot?, enabled?}` · `POST /workers/:id/pin` | 50 |
+| `GET /workers` · `POST /workers` · `PATCH /workers/:id` `{slot?, enabled?}` · `POST /workers/:id/pin` | → each worker with `lastSignIn`, `signedIn`, `signsOutAt` and `sessionEvents` (sign-in, sign-out, automatic sign-out, "Not your time", PIN lockout; newest first). A change of time, a PIN or turning sign-in off is saved in Activity; sign-ins are not. | 50 |
 | `GET /settings` · `PATCH /settings` · `POST /settings/owner-address` (new address, signs out owners) · `POST /auth/sign-out-all` | 51 |
 | `GET /live` (read-only board) · `GET /notifications` · `POST /notifications/read-all` | 54, 58 |
 
@@ -139,7 +140,7 @@ Every write returns the saved record including `doneBy`. Errors use `{code, mess
 |---|---|---|---|
 | `paused` | 10:01 PM | Zain pressed Pause all at 9:58 PM; every running game is paused | 16 |
 | `checkout` | 10:20 PM | 8 players waiting to pay, Rs 6,880 in all (Tariq has paid) | 24–27 |
-| `closing` | 3:40 AM Sun | Shabir is signed in; one Century on Table 2; Waqas and Shoaib not checked out; close numbers from `sheets[s48].final` | 32 |
+| `closing` | 3:40 AM Sun | Shabir is signed in (since 2:04 AM); one Century on Table 2; Waqas (old credit 950) and Shoaib (250) not checked out, Rs 450 and Rs 250 tonight; close numbers from `sheets[s48].final` | 32 |
 | `closed` | 3:45 AM Sun | Sheet 48 closed, sheet 49 open, the Century moved, Waqas and Shoaib moved to credit | 33, 38–44, 55, 56 |
 | `empty` | any | No games, no bills, no activity | empty states |
 
@@ -159,6 +160,12 @@ Code: `apps/web/src/mocks` (`db/` is the store, `counter/` and `owner/` are the 
 | `?as=none\|zain\|shabir\|aqil\|adil` | Who is signed in when the page opens. Without it the counter starts as the worker the seed says is signed in (Zain; Shabir in `closing` and `closed`) and the owner app as Aqil. `none` starts signed out. |
 
 **Sessions.** One session per browser tab: a worker or an owner. A counter call without a worker session is a **401** (`UNAUTHENTICATED`); a worker whose time is over is signed out on his next call (**401** `SESSION_ENDED`) and his games keep running. An owner call from a worker session is a plain **404**; without any session it is a **401**. Signing in checks, in this order: the wait after too many tries (429), the time of day (**403** `NOT_YOUR_TIME` with `{slot, now}`), then the PIN. Five wrong PINs mean 5 minutes of waiting; five wrong owner passwords, 15 minutes. In the mock any non-empty owner password works.
+
+**The seed holds the numbers** (nothing is written into the loader): screen 31's counts and the discounts so far (`aggregates.today`: `doubles`, `centuryGames`, `playersPutOnCredit`, `playersPaidOldCredit`, `discounts`), every session frame's `startedAt` and `endedAt`, the non-frame charges of tonight (`tonightCharges`: Bilal's teas), the dispute of activity a2 (`disputes`), the counter's alerts (`counterAlerts`), and when the worker of a night scenario signed in (`signedInSince`). A bill's lines come from the sessions and from `tonightCharges`; the `checkout` scenario has no copy of them.
+
+**Statements show when a frame started** (screen 25), although it is charged when it ends; a statement is kept in time order, and the balance after each line is worked out again when a line goes in earlier than the last. Frame 3 of Table 1 is the game running at 9:42 PM (it started at 9:23 PM and the seed ends it at 9:51 PM), so a session shows only the frames already charged.
+
+**The two bells.** The counter's bell counts its own unread alerts (`counterAlerts`: 3 at 9:42 PM, screen 3). The owners' bell counts unread notifications: an unread one can carry `readAt`, the time the owners read it, so n1 to n4 are all unread at 10:30 PM (4, screen 36) and only n4, n5 and n6 at 3:45 AM (3, screens 55 and 56).
 
 **Money model.** The seed's `balance` is the credit from before tonight. Each waiting bill is tonight's charges, posted at load as statement lines and added to the balance (Kamran 1,100 + 250 = 1,350, as on screen 30), so `balance` equals the sum of the statement lines for every player. A charge stays "tonight" until checkout; at close, bills not paid get a "Left without checkout" line. Payments clear the oldest money first (old credit), so what stays on credit after a checkout is new from tonight. Players the seed gives only a balance get one opening-balance line from an owner (D28).
 
@@ -180,7 +187,7 @@ Code: `apps/web/src/mocks` (`db/` is the store, `counter/` and `owner/` are the 
 **Known differences from the real server** (so nobody is surprised):
 - The counter tab and the owner tab each hold their own store, so a write in one does not show in the other until the backend exists.
 - Words the mock writes (activity titles, statement lines) are English only.
-- The seed has no source for the screen 29 drawer figure (Rs 12,300) or for the counts on screen 31 (6 doubles, 5 Century games, 7 and 3 players). The counts start from the values read off screen 31 (written as such in `db/load.ts`); the drawer starts from `aggregates.today`.
+- The seed has no source for the screen 29 drawer figure (Rs 12,300); the drawer starts from `aggregates.today`. Screens 53, 54 and 57 draw 3 on the owner bell where the story gives 4 (10:30 PM) and 2 (9:44 PM): a slip in the designs, listed in `PROGRESS.md`.
 - `GET /reports` always answers with the September against August report; the answer says which months it is for.
 - The seed lists individual sheets only for 46 to 48 (and 49 after close). Other months have a folder and no sheets. Sheets 46 and 47 have only `earned`.
 - The owner PDF and Excel downloads are stand-in text files until P13.

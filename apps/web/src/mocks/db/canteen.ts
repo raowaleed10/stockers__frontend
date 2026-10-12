@@ -56,6 +56,11 @@ export function canteenSale(db: MockDb, by: PersonRef, request: CanteenSaleReque
         `${item.name} running low`,
         item.stock === 0 ? `${item.name} is sold out.` : `${item.stock} left.`,
       );
+      db.counterAlert(
+        'low-stock',
+        `${item.name} running low`,
+        item.stock === 0 ? `${item.name} is sold out.` : `${item.stock} left.`,
+      );
     }
     if (player) {
       db.postLine(player.id, {

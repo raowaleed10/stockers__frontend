@@ -1,11 +1,29 @@
 import type { BoardTable } from '@stockers/shared';
-import { elapsed, formatClock, formatRs, formatSlot, isOver30, toClubIso } from '@stockers/shared';
+import {
+  clubDayNumber,
+  elapsed,
+  formatClock,
+  formatDate,
+  formatRs,
+  formatSlot,
+  isOver30,
+  toClubIso,
+} from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
 import '@/dev/data/data-i18n';
 import { isApiError } from '@/lib/api-client';
 import { useNow } from '@/lib/clock';
 import { Button } from '@/ui/Button';
 import { useLive, useMe, useSignIn, useSignOut, useWorkers } from '../../api';
+
+/** The key of each kind of sign-in event in the page's words. */
+const EVENT_WORD = {
+  'sign-in': 'signIn',
+  'sign-out': 'signOut',
+  'auto-sign-out': 'autoSignOut',
+  'not-your-time': 'notYourTime',
+  'pin-lockout': 'pinLockout',
+} as const;
 
 type RowStatus = 'free' | 'playing' | 'over30' | 'paused' | 'outOfOrder' | 'noPrice';
 
@@ -82,21 +100,61 @@ export default function DataPage() {
             {t('workers.title', { ns: 'data' })}
           </h2>
           <ul className="flex flex-col gap-2" data-testid="workers">
-            {(workers.data ?? []).map((worker) => (
-              <li
-                key={worker.id}
-                className="flex flex-wrap items-center gap-x-6 gap-y-1 rounded-card border border-o-line bg-o-card px-4 py-3"
-              >
-                <span className="min-w-[120px] text-[18px] font-bold">{worker.name}</span>
-                <span>
-                  {t('workers.time', { ns: 'data' })}:{' '}
-                  <bdi dir="ltr">{formatSlot(worker.slot)}</bdi>
-                </span>
-                {worker.signedIn ? (
-                  <span className="font-semibold">{t('workers.signedInNow', { ns: 'data' })}</span>
-                ) : null}
-              </li>
-            ))}
+            {(workers.data ?? []).map((worker) => {
+              const { signedIn, lastSignIn } = worker;
+              const today = (at: string) =>
+                clubDayNumber(at) === clubDayNumber(toClubIso(now))
+                  ? t('workers.today', { ns: 'data' })
+                  : formatDate(at);
+              return (
+                <li
+                  key={worker.id}
+                  data-worker={worker.id}
+                  className="flex flex-col gap-2 rounded-card border border-o-line bg-o-card px-4 py-3"
+                >
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
+                    <span className="min-w-[120px] text-[18px] font-bold">{worker.name}</span>
+                    <span>
+                      {t('workers.time', { ns: 'data' })}:{' '}
+                      <bdi dir="ltr">{formatSlot(worker.slot)}</bdi>
+                    </span>
+                  </div>
+                  <p className="font-semibold" data-testid={`status-${worker.id}`}>
+                    {signedIn
+                      ? t('workers.signedInSince', { ns: 'data', time: formatClock(signedIn.at) })
+                      : lastSignIn
+                        ? t('workers.lastSignedIn', {
+                            ns: 'data',
+                            day: today(lastSignIn.at),
+                            from: formatClock(lastSignIn.at),
+                            until: lastSignIn.until ? formatClock(lastSignIn.until) : '',
+                          })
+                        : t('workers.neverSignedIn', { ns: 'data' })}
+                  </p>
+                  {worker.signsOutAt ? (
+                    <p data-testid={`signs-out-${worker.id}`}>
+                      {t('workers.signsOutAt', {
+                        ns: 'data',
+                        time: formatClock(worker.signsOutAt),
+                      })}
+                    </p>
+                  ) : null}
+                  <ol
+                    className="flex list-none flex-col gap-1 p-0"
+                    data-testid={`events-${worker.id}`}
+                  >
+                    {worker.sessionEvents.map((event) => (
+                      <li key={event.id} data-kind={event.kind} className="text-o-ink-2">
+                        <bdi dir="ltr">
+                          {today(event.at)} {formatClock(event.at)}
+                        </bdi>{' '}
+                        {t(`workers.events.${EVENT_WORD[event.kind]}`, { ns: 'data' })}
+                      </li>
+                    ))}
+                  </ol>
+                </li>
+              );
+            })}
           </ul>
         </section>
 

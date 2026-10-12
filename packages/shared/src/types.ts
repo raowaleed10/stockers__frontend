@@ -76,7 +76,7 @@ export interface Session {
   id: string;
   tableId: string;
   playerIds: string[];
-  frames: { no: number; loserIds: string[]; amount: Rs; endedAt: ISO }[];
+  frames: { no: number; loserIds: string[]; amount: Rs; startedAt: ISO; endedAt: ISO }[];
 }
 
 export interface Player {

@@ -8,6 +8,7 @@ import type {
   WaitingBill,
 } from '@stockers/shared';
 import { billBreakdown, phoneTail, toClubIso } from '@stockers/shared';
+import { counterUnread } from './alerts';
 import type { MockDb } from './db';
 import { fail } from './errors';
 
@@ -63,12 +64,6 @@ export function waitingBills(db: MockDb): WaitingBill[] {
     const ib = order.indexOf(b.playerId);
     return (ia === -1 ? order.length : ia) - (ib === -1 ? order.length : ib);
   });
-}
-
-/** Notifications not read yet that already happened on the demo clock (the bell badge). */
-export function unreadCount(db: MockDb): number {
-  const now = db.now();
-  return db.s.notifications.filter((n) => !n.read && Date.parse(n.at) <= now).length;
 }
 
 /** The last backup: on the hour, or when a sheet was closed since. */
@@ -133,7 +128,7 @@ export function board(db: MockDb, requested?: string): BoardResponse {
     tables,
     players,
     waiting: waitingBills(db),
-    unread: unreadCount(db),
+    unread: counterUnread(db),
     backedUpAt: backedUpAt(db),
     pausedAll: db.s.pauseAll !== null,
   };

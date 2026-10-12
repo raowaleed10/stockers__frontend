@@ -20,7 +20,7 @@ The backend owns the final numbers. The frontend still needs the same rules to s
 |---|---|---|
 | Single frame: the table price, the loser pays (D8) | `frameCharge(price)` | Table 1 → 250; Table 4 → 200 |
 | Double frame: 2 × price, split between the losing side (D9) | `doubleCharge(price, losers, split?)` | Table 5 (200) → 400, Imran 200 + Naveed 200; one player alone on a side pays all 400; custom split must add up to the total |
-| Over 30 minutes (Q2): red card at ≥ 30:00; at the end, ask | `isOver30(elapsedMs)` · `overtimeOptions(price)` | 34:10 → true; options Rs 200 or Rs 400 |
+| Over 30 minutes (Q2): red card at ≥ 30:00; at the end, ask. It applies to a single frame **and to a double frame** | `isOver30(elapsedMs)` · `overtimeOptions(price)` | 34:10 → true; options Rs 200 or Rs 400. Double frame on Table 5 (Rs 400) at 31 min: Rs 400 or Rs 800, and the losing side splits it (Imran 400 + Naveed 400, or custom) |
 | Century: whole minutes × rate, under one player, no minimum (D11) | `centuryCharge(elapsedMs, rate)` | 42 min 35 s at Rs 15 → **42 × 15 = Rs 630**; 37:05 on the tile → Rs 555 |
 | Room: 1 hour minimum, then hourly ÷ 60 × minutes, rounded to the nearest rupee (D12, Q9) | `roomCharge(elapsedMs, hourly)` | 1 h 40 min at 1,500 → **Rs 2,500**; 1 h 12 min at 1,500 → Rs 1,800; 6 min → Rs 1,500 (minimum); 1 h 40 min at 700 → Rs 1,167 |
 | Other games: per game, loser pays; locked while the price is null (D13, Q3) | `gameCharge(price)` | price null → cannot start |
@@ -33,7 +33,7 @@ The backend owns the final numbers. The frontend still needs the same rules to s
 
 - **Bill total** = old credit + tonight's charges − advance held (D23, D26).
 - **Payment:** the parts in several methods + credit = the bill. When paid > bill, the extra becomes **advance**.
-- **Discount** (Q6): an amount plus a required reason; the new total = total − discount.
+- **Discount** (Q6): whole rupees, more than 0, **not more than the bill total** (old credit plus tonight's charges, less any advance used), with a required reason and an optional note. The new total = total − discount. It is saved with the worker's name, on the statement and in Activity (screen 38).
 - **Rounding:** paisa rounds to the nearest rupee, only where division happens (rooms, custom splits).
 
 Worked examples (from the screens):

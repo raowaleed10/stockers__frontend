@@ -20,8 +20,19 @@
     "title": "ورکرز",
     "yourTimeNow": "آپ کا وقت ابھی",
     "notNow": "ابھی نہیں",
-    "signedInNow": "سائن اِن",
-    "time": "سائن اِن کا وقت"
+    "time": "سائن اِن کا وقت",
+    "today": "آج",
+    "signedInSince": "ابھی سائن اِن ہے، {{time}} سے",
+    "lastSignedIn": "آخری بار سائن اِن {{day}} {{from}} سے {{until}} تک",
+    "neverSignedIn": "ابھی تک سائن اِن نہیں ہوا",
+    "signsOutAt": "{{time}} پر خود بخود سائن آؤٹ",
+    "events": {
+      "signIn": "سائن اِن ہوا",
+      "signOut": "سائن آؤٹ ہوا",
+      "autoSignOut": "وقت ختم ہونے پر خود بخود سائن آؤٹ",
+      "notYourTime": "اپنے وقت کے باہر سائن اِن کی کوشش",
+      "pinLockout": "5 غلط پن کے بعد 5 منٹ کے لیے بند"
+    }
   },
   "board": {
     "title": "بورڈ",

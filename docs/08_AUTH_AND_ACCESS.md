@@ -60,6 +60,7 @@ Note: the private address hides the door; the **owner password** is the lock. Th
   - "Zain, enter your PIN" unlocks it, if he is still inside his time.
   - "Switch worker" lets the other worker sign in, if it is his time.
 - **Wrong PIN:** the dots shake once and "Wrong PIN. Try again." appears. After 5 wrong tries, "Wait 5 minutes".
+- **Record of sign-ins (screen 50):** every sign-in, sign-out, **automatic sign-out at the end of his time** (dated when the time ended, not when somebody noticed), **"Not your time" attempt** and **PIN lockout** is saved as a worker session event with its time. The Workers page shows them: "Last signed in Today 2:04 AM to 10:00 AM", "Signed in now, since 2:06 PM", "Signed out automatically at 11:00 PM" (`GET /api/owner/workers`: `lastSignIn`, `signedIn`, `signsOutAt`, `sessionEvents`). They are **not** in Activity: screen 38 is only for what changed money outside a normal game. An owner changing a sign-in time, a PIN or turning sign-in off **is** in Activity with his name ("Saved in Activity with your name", screen 50).
 - **Gaps:** in the times between slots nobody can sign in (example 10 AM–2 PM and 11 PM–2 AM). The sign-in screen shows each worker as "Not now". This is an open question for the owners; build it as described.
 
 ## 4. Who did what (D52)

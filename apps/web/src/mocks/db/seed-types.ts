@@ -2,6 +2,7 @@ import type {
   ActivityEvent,
   AppNotification,
   CanteenItem,
+  CounterAlert,
   Category,
   Expense,
   Game,
@@ -112,6 +113,12 @@ export interface SeedAggregates {
     over30: number;
     drawerExpenses: Rs;
     drawerExpected: Rs;
+    // Screen 31's counts and the discounts so far.
+    doubles: number;
+    centuryGames: number;
+    playersPutOnCredit: number;
+    playersPaidOldCredit: number;
+    discounts: { count: number; total: Rs };
   };
   october: {
     days: number;
@@ -156,15 +163,37 @@ export interface SeedScenario {
   note: string;
   pauseAll?: { at: ISO; doneBy: PersonRef };
   signedIn?: PersonRef;
+  /** When the worker who is signed in in this scenario signed in. */
+  signedInSince?: ISO;
   games?: (Omit<Game, 'price'> & { price?: Rs; rate?: Rs })[];
   waiting?: SeedWaiting[];
   waitingTotal?: Rs;
+  movesToCreditTotal?: Rs;
   activity?: ActivityEvent[];
   closeSheet?: string;
   openSheet?: { id: string; number: number; openedAt: ISO; openedBy: PersonRef };
   moved?: { gameId: string; toSheetId: string }[];
   leftWithoutCheckout?: { playerId: string; amount: Rs }[];
 }
+
+/** A charge tonight that is not a frame: it joins the player's bill when its time has come. */
+export interface SeedTonightCharge {
+  playerId: string;
+  at: ISO;
+  kind: StatementLine['kind'];
+  text: string;
+  charge: Rs;
+}
+
+export interface SeedDispute {
+  activityId: string;
+  tableId: string;
+  playerIds: [string, string];
+  amount: Rs;
+}
+
+/** An owner notification. `readAt`: it was unread until then. */
+export type SeedNotification = AppNotification & { readAt?: ISO };
 
 export interface SeedFile {
   meta: { demoNow: { counter: ISO; owner: ISO; afterClose: ISO }; currentSheetId: string };
@@ -182,7 +211,10 @@ export interface SeedFile {
   canteenItems: CanteenItem[];
   expenses: Expense[];
   activity: ActivityEvent[];
-  notifications: AppNotification[];
+  notifications: SeedNotification[];
+  counterAlerts: CounterAlert[];
+  tonightCharges: SeedTonightCharge[];
+  disputes: SeedDispute[];
   settings: Omit<Settings, 'email'> & {
     email: { aqil: string | null; adil: string | null };
     backups: { last?: ISO; thisComputer: boolean; usb: boolean; keep: number };

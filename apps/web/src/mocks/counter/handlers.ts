@@ -27,6 +27,7 @@ import {
   workerSignOut,
   workerUnlock,
 } from '../db/auth';
+import { counterAlerts, readAllCounterAlerts } from '../db/alerts';
 import { board } from '../db/board';
 import { canteenSale, counterCanteenItems } from '../db/canteen';
 import { checkout, checkoutBill, checkoutList } from '../db/checkout';
@@ -104,6 +105,16 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
     http.get(
       `${B}/board`,
       asWorker((db, _by, { query }) => board(db, query.get('category') ?? undefined)),
+    ),
+
+    // The bell
+    http.get(
+      `${B}/alerts`,
+      asWorker((db) => counterAlerts(db)),
+    ),
+    http.post(
+      `${B}/alerts/read-all`,
+      asWorker((db) => readAllCounterAlerts(db)),
     ),
 
     // Games

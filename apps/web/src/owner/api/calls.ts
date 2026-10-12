@@ -23,6 +23,7 @@ import type {
   OwnerSession,
   OwnerSettings,
   OwnerSignInRequest,
+  OwnerWorker,
   PaymentRequest,
   PinRequest,
   PlayerChange,
@@ -42,7 +43,6 @@ import type {
   StockRequest,
   Table,
   TablePatch,
-  Worker,
   WorkerPatch,
 } from '@stockers/shared';
 import { createApiClient } from '@/lib/api-client';
@@ -109,12 +109,12 @@ export const patchExpense = (id: string, patch: Partial<ExpenseRequest>) =>
 export const deleteExpense = (id: string) => api.delete<Expense>(`/expenses/${id}`);
 
 // Workers
-export const getWorkers = () => api.get<Worker[]>('/workers');
-export const addWorker = (request: NewWorkerRequest) => api.post<Worker>('/workers', request);
+export const getWorkers = () => api.get<OwnerWorker[]>('/workers');
+export const addWorker = (request: NewWorkerRequest) => api.post<OwnerWorker>('/workers', request);
 export const patchWorker = (id: string, patch: WorkerPatch) =>
-  api.patch<Worker>(`/workers/${id}`, patch);
+  api.patch<OwnerWorker>(`/workers/${id}`, patch);
 export const setWorkerPin = (id: string, request: PinRequest) =>
-  api.post<Worker>(`/workers/${id}/pin`, request);
+  api.post<OwnerWorker>(`/workers/${id}/pin`, request);
 
 // Settings
 export const getSettings = () => api.get<OwnerSettings>('/settings');

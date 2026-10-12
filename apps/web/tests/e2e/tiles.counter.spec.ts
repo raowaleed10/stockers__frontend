@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { settle } from './settle';
 
 /**
  * The checks on `/dev/tiles` (prompts/P02): every tile is there, nothing logs an error, axe finds no serious
@@ -19,7 +20,7 @@ async function openGallery(page: Page, path: string) {
   });
   await page.goto(path);
   await page.waitForSelector('[data-section="s03"]');
-  await page.evaluate(() => document.fonts.ready);
+  await settle(page);
   return problems;
 }
 
@@ -49,8 +50,8 @@ test.describe('/dev/tiles', () => {
     test(`has no serious or critical accessibility issues${query ? ' (page in Urdu)' : ''}`, async ({
       page,
     }) => {
-      // Axe reads all 148 tiles: about 19 s on its own, so it needs room when the whole suite runs at once.
-      test.setTimeout(90_000);
+      // Axe reads all 148 tiles: about 19 s alone, three times that when several run at once.
+      test.slow();
       await openGallery(page, PATH + query);
       const results = await new AxeBuilder({ page }).analyze();
       const serious = results.violations.filter(

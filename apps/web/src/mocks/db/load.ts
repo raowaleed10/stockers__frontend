@@ -1,5 +1,14 @@
-import type { Game, ISO, Owner, Player, Sheet, StatementLine, Worker } from '@stockers/shared';
-import { MINUTE_MS, toClubIso, toMs } from '@stockers/shared';
+import type {
+  Game,
+  ISO,
+  Owner,
+  Player,
+  Session,
+  Sheet,
+  StatementLine,
+  Worker,
+} from '@stockers/shared';
+import { MINUTE_MS, slotEndAfter, toClubIso, toMs } from '@stockers/shared';
 import type { AppId } from '@/lib/app-id';
 import { MockDb } from './db';
 import { closeSheet } from './sheet';
@@ -26,21 +35,8 @@ export interface CreateDbOptions {
 
 const json = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
-/**
- * Values read off screen 31 that the seed has no source for. They only start the counts; every write
- * in the session moves them. Written here so nobody mistakes them for seed data.
- */
-const TODAY_COUNTS_FROM_SCREEN_31 = {
-  doubles: 6,
-  centuryGames: 5,
-  newCreditPlayers: 7,
-  oldCreditPlayers: 3,
-};
-
-/** The Table 3 dispute of the seed's activity (a2) names the players only in words; it needs them to be decided. */
-const SEED_DISPUTES = {
-  a2: { tableId: 't3', playerIds: ['faisal', 'naveed'] as [string, string], amount: 250 },
-};
+/** A bill with no lines of its own in the seed gets one line, dated a little before the moment of the story. */
+const GENERIC_BILL_MINUTES_AGO = 15;
 
 function toGame(raw: SeedFile['games'][number]): Game {
   const { rate, price, ...rest } = raw;
@@ -79,23 +75,41 @@ function todayFrom(seed: SeedFile, scenario: ScenarioName | null): TodayState {
   return {
     earned: closingNight && final ? final.earned : base.earned,
     frames: closingNight && final ? final.frames : base.frames,
-    doubles: TODAY_COUNTS_FROM_SCREEN_31.doubles,
+    doubles: base.doubles,
     centuryMinutes: closingNight && final ? final.centuryMinutes : base.centuryMinutes,
-    centuryGames: TODAY_COUNTS_FROM_SCREEN_31.centuryGames,
+    centuryGames: base.centuryGames,
     rooms: base.rooms,
     roomMinutes: closingNight && final ? final.roomMinutes : 0,
     cashReceived: cash ? cash.received : base.cashReceived,
     online,
     newCredit: closingNight && final ? final.newCredit : base.newCredit,
-    newCreditPlayers: TODAY_COUNTS_FROM_SCREEN_31.newCreditPlayers,
+    newCreditPlayers: base.playersPutOnCredit,
     oldCreditPaid: closingNight && final ? final.oldCreditPaid : base.oldCreditPaid,
-    oldCreditPlayers: TODAY_COUNTS_FROM_SCREEN_31.oldCreditPlayers,
+    oldCreditPlayers: base.playersPaidOldCredit,
     expensesPaidToday: base.expensesPaidToday,
     moneyInHand: base.moneyInHand,
     drawerExpenses: cash ? cash.drawerExpenses : base.drawerExpenses,
-    discounts: closingNight && final ? { ...final.discounts } : { count: 2, total: 150 },
+    discounts: closingNight && final ? { ...final.discounts } : { ...base.discounts },
     canteenSales: closingNight && final ? final.canteen.sales : 0,
   };
+}
+
+/**
+ * A session shows the frames already charged. A frame the seed dates in the future of a running game
+ * (frame 3 of Table 1 ends at 9:51 PM, but at 9:42 PM it is the game on the table) is not shown yet.
+ */
+function sessionsWithoutRunningFrames(sessions: Session[], games: Game[]): Session[] {
+  return sessions.map((session) => {
+    const running = games.find(
+      (g) => g.sessionId === session.id && (g.status === 'running' || g.status === 'paused'),
+    );
+    return {
+      ...session,
+      frames: session.frames.filter(
+        (f) => running?.frameNo === undefined || f.no < running.frameNo,
+      ),
+    };
+  });
 }
 
 function plainPlayer(raw: SeedPlayer): Player {
@@ -152,18 +166,6 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
       pin: demoPin,
     }),
   );
-  // Who is working in a scenario: Shabir at 3:40 AM, not Zain.
-  if (own?.signedIn) {
-    for (const worker of workers) {
-      delete worker.signedIn;
-      if (worker.id === own.signedIn.id) {
-        worker.signedIn = {
-          at: toClubIso(toMs(own.now ?? raw.meta.demoNow.counter) - 98 * MINUTE_MS),
-        };
-      }
-    }
-  }
-
   const sheets = raw.sheets.map(toSheet);
   const sheetExtras: DbState['sheetExtras'] = {};
   for (const sheet of raw.sheets) {
@@ -191,13 +193,20 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
     sheetEntryEdits: {},
     today: todayFrom(raw, scenarioName),
     games,
-    sessions: night?.games ? [] : raw.sessions,
+    sessions: night?.games ? [] : sessionsWithoutRunningFrames(raw.sessions, games),
     canteenItems: raw.canteenItems,
     canteenSales: [],
     expenses: raw.expenses,
     activity: own?.activity ?? raw.activity,
     notifications: own?.activity?.length === 0 ? [] : raw.notifications,
-    disputes: json(SEED_DISPUTES),
+    counterAlerts: own?.activity?.length === 0 ? [] : raw.counterAlerts,
+    workerEvents: [],
+    disputes: Object.fromEntries(
+      raw.disputes.map((d) => [
+        d.activityId,
+        { tableId: d.tableId, playerIds: d.playerIds, amount: d.amount },
+      ]),
+    ),
     settings: {
       ...raw.settings,
       // The seed lists the payment methods at its top level; Settings shows the same list.
@@ -230,8 +239,11 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
 
   const db = new MockDb(state, nowMs);
 
+  seedWorkerEvents(db, raw, own);
+
   // Who is signed in when the page opens.
   state.auth.session = initialSession(raw, options, own, workers, owners, db.nowIso());
+  openWorkerSession(db);
 
   // Power cut: every game running was paused together (screen 16).
   if (own?.pauseAll) {
@@ -280,6 +292,105 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
 }
 
 /**
+ * The sign-in history the seed implies (screen 50): Shabir signed in at 2:04 AM and was signed out when
+ * his time ended at 10:00 AM; Zain has been signed in since 2:06 PM. In a scenario at 3:40 AM Zain was
+ * signed out automatically at 11:00 PM and Shabir signed in at the scenario's `signedInSince`.
+ */
+function seedWorkerEvents(db: MockDb, raw: SeedFile, own: SeedScenario | undefined): void {
+  const { s } = db;
+  const events: { at: ISO; workerId: string; kind: 'sign-in' | 'auto-sign-out' }[] = [];
+  for (const seeded of raw.workers) {
+    if (seeded.lastSignIn) {
+      events.push({ at: seeded.lastSignIn.at, workerId: seeded.id, kind: 'sign-in' });
+      if (seeded.lastSignIn.until) {
+        events.push({ at: seeded.lastSignIn.until, workerId: seeded.id, kind: 'auto-sign-out' });
+      }
+    }
+    if (seeded.signedIn)
+      events.push({ at: seeded.signedIn.at, workerId: seeded.id, kind: 'sign-in' });
+  }
+  for (const worker of s.workers) {
+    if (worker.signedIn && !worker.lastSignIn) worker.lastSignIn = { at: worker.signedIn.at };
+  }
+  if (own?.signedIn && own.signedInSince) {
+    for (const worker of s.workers) {
+      if (worker.id === own.signedIn.id || !worker.signedIn) continue;
+      const end = toClubIso(slotEndAfter(worker.signedIn.at, worker.slot).getTime());
+      events.push({ at: end, workerId: worker.id, kind: 'auto-sign-out' });
+      worker.lastSignIn = { at: worker.signedIn.at, until: end };
+      delete worker.signedIn;
+    }
+    const worker = s.workers.find((w) => w.id === own.signedIn?.id);
+    if (worker) {
+      worker.signedIn = { at: own.signedInSince };
+      worker.lastSignIn = { at: own.signedInSince };
+      events.push({ at: own.signedInSince, workerId: worker.id, kind: 'sign-in' });
+    }
+  }
+  events
+    .sort((a, b) => a.at.localeCompare(b.at))
+    .forEach((event) => db.workerEvent(event.workerId, event.kind, event.at));
+}
+
+/** A session opened with `?as=` is a real sign-in too: the worker is marked signed in, and the other signed out. */
+function openWorkerSession(db: MockDb): void {
+  const session = db.s.auth.session;
+  if (session?.kind !== 'worker') return;
+  const worker = db.s.workers.find((w) => w.id === session.workerId);
+  if (!worker || worker.signedIn) return;
+  for (const other of db.s.workers) {
+    if (!other.signedIn) continue;
+    if (other.lastSignIn) other.lastSignIn.until = db.nowIso();
+    delete other.signedIn;
+    db.workerEvent(other.id, 'sign-out');
+  }
+  worker.signedIn = { at: db.nowIso() };
+  worker.lastSignIn = { at: db.nowIso() };
+  db.workerEvent(worker.id, 'sign-in');
+}
+
+/**
+ * The lines of one waiting bill: the frames the player lost in the sessions, dated when each frame
+ * started (screen 25), and the charges the seed lists for tonight (Bilal's teas). The lines are the
+ * ones that add up to the bill; if none do, the bill is one line with the seed's own words.
+ */
+function billLines(
+  db: MockDb,
+  raw: SeedFile,
+  row: SeedWaiting,
+): { at: ISO; kind: StatementLine['kind']; text: string; charge: number }[] {
+  const name = (id: string) => db.player(id).name;
+  const frames = raw.sessions
+    .flatMap((session) =>
+      session.frames
+        .filter((f) => f.loserIds.includes(row.playerId))
+        .map((f) => {
+          const winners = session.playerIds.filter((id) => !f.loserIds.includes(id));
+          return {
+            at: f.startedAt,
+            kind: 'frame' as const,
+            text: `Frame ${f.no}, ${db.table(session.tableId).name}, lost to ${winners.map(name).join(' and ')}`,
+            charge: f.amount,
+            no: f.no,
+          };
+        }),
+    )
+    .sort((a, b) => a.no - b.no);
+  const extras = raw.tonightCharges
+    .filter((c) => c.playerId === row.playerId)
+    .map(({ at, kind, text, charge }) => ({ at, kind, text, charge }));
+  const sum = (items: { charge: number }[]) =>
+    items.reduce((total, item) => total + item.charge, 0);
+
+  // The first frames that, with the listed charges, make the bill.
+  for (let count = frames.length; count >= 0; count -= 1) {
+    const lines = [...frames.slice(0, count), ...extras];
+    if (lines.length > 0 && sum(lines) === row.tonight) return lines;
+  }
+  return [];
+}
+
+/**
  * Builds every player's statement and posts tonight's bills (decision 3 of the P03 plan).
  * The seed's `balance` is the credit from before tonight; the waiting bills are tonight's charges.
  * Posting them as statement lines makes balance equal the sum of the lines for every player.
@@ -296,7 +407,7 @@ function seedLedger(
   const waiting: SeedWaiting[] = night?.waiting ?? raw.waiting;
   const onNow = own?.now ?? raw.meta.demoNow.counter;
   const actor = own?.signedIn ?? db.workerPerson(s.workers.find((w) => w.signedIn) ?? s.workers[0]);
-  const tonightAt = toClubIso(toMs(onNow) - 15 * MINUTE_MS);
+  const tonightAt = toClubIso(toMs(onNow) - GENERIC_BILL_MINUTES_AGO * MINUTE_MS);
   const waitingIds = new Set(waiting.map((row) => row.playerId));
 
   for (const player of s.players) {
@@ -346,35 +457,12 @@ function seedLedger(
   for (const row of waiting) {
     if (s.statements[row.playerId].some((line) => s.unsettled.has(line.id))) continue;
 
-    if (row.playerId === 'bilal') {
-      // Screen 25 shows Bilal's frames and tea. At 9:42 PM it is the two frames of session 1.
-      const teaPart = 100;
-      const frames = Math.round((row.tonight - teaPart) / 250);
-      const times =
-        frames >= 3
-          ? ['2026-10-03T20:31:00+05:00', '2026-10-03T20:56:00+05:00', '2026-10-03T21:23:00+05:00']
-          : ['2026-10-03T20:55:00+05:00', '2026-10-03T21:23:00+05:00'];
-      if (frames >= 1 && frames <= times.length && frames * 250 + teaPart === row.tonight) {
-        times.slice(times.length - frames).forEach((at, i) => {
-          db.postLine('bilal', {
-            kind: 'frame',
-            text: `Frame ${times.length - frames + i + 1}, Table 1, lost to Ali Raza`,
-            charge: 250,
-            by: actor,
-            at,
-            tonight: true,
-          });
-        });
-        db.postLine('bilal', {
-          kind: 'canteen',
-          text: 'Tea × 2, canteen',
-          charge: teaPart,
-          by: actor,
-          at: '2026-10-03T21:30:00+05:00',
-          tonight: true,
-        });
-        continue;
+    const lines = billLines(db, raw, row);
+    if (lines.length > 0) {
+      for (const line of lines) {
+        db.postLine(row.playerId, { ...line, by: actor, tonight: true });
       }
+      continue;
     }
     // Any other bill: one line with the seed's own words.
     db.postLine(row.playerId, {

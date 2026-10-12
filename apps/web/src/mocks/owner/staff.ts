@@ -5,13 +5,15 @@ import type {
   OwnerAddressResult,
   OwnerExpenses,
   OwnerSettings,
+  OwnerWorker,
   PersonRef,
   PinRequest,
   SettingsPatch,
   Worker,
   WorkerPatch,
 } from '@stockers/shared';
-import { formatRs, formatSlot } from '@stockers/shared';
+import { formatRs, formatSlot, slotEndAfter, toClubIso } from '@stockers/shared';
+import { sweepWorkers } from '../db/auth';
 import type { MockDb } from '../db/db';
 import { fail } from '../db/errors';
 import type { StoredWorker } from '../db/state';
@@ -133,8 +135,23 @@ function publicWorker(stored: StoredWorker): Worker {
   return worker;
 }
 
-export function listWorkers(db: MockDb): Worker[] {
-  return db.s.workers.map(publicWorker);
+/**
+ * A worker as the owners see him (screen 50): his times, whether he is signed in and when he will be
+ * signed out automatically, and what happened at sign-in (kept apart from Activity).
+ */
+function ownerWorker(db: MockDb, stored: StoredWorker): OwnerWorker {
+  return {
+    ...publicWorker(stored),
+    ...(stored.signedIn
+      ? { signsOutAt: toClubIso(slotEndAfter(stored.signedIn.at, stored.slot).getTime()) }
+      : {}),
+    sessionEvents: db.s.workerEvents.filter((e) => e.workerId === stored.id).reverse(),
+  };
+}
+
+export function listWorkers(db: MockDb): OwnerWorker[] {
+  sweepWorkers(db);
+  return db.s.workers.map((worker) => ownerWorker(db, worker));
 }
 
 function checkPin(pin: string | undefined): string {
@@ -150,7 +167,7 @@ function checkSlot(slot: { start: string; end: string } | undefined) {
   return slot;
 }
 
-export function addWorker(db: MockDb, by: PersonRef, request: NewWorkerRequest): Worker {
+export function addWorker(db: MockDb, by: PersonRef, request: NewWorkerRequest): OwnerWorker {
   const name = request.name?.trim();
   if (!name) fail('VALIDATION', 'Type the worker’s name.');
   const pin = checkPin(request.pin);
@@ -168,10 +185,15 @@ export function addWorker(db: MockDb, by: PersonRef, request: NewWorkerRequest):
     sheetId: null,
   });
   db.emit('settings.changed');
-  return publicWorker(worker);
+  return ownerWorker(db, worker);
 }
 
-export function patchWorker(db: MockDb, by: PersonRef, id: string, patch: WorkerPatch): Worker {
+export function patchWorker(
+  db: MockDb,
+  by: PersonRef,
+  id: string,
+  patch: WorkerPatch,
+): OwnerWorker {
   const worker =
     db.s.workers.find((w) => w.id === id) ?? fail('NOT_FOUND', 'That worker was not found.');
   if (patch.slot !== undefined) {
@@ -194,18 +216,23 @@ export function patchWorker(db: MockDb, by: PersonRef, id: string, patch: Worker
     );
   }
   db.emit('settings.changed');
-  return publicWorker(worker);
+  return ownerWorker(db, worker);
 }
 
 /** Sets a new PIN. The PIN is never written to Activity or sent back. */
-export function setWorkerPin(db: MockDb, by: PersonRef, id: string, request: PinRequest): Worker {
+export function setWorkerPin(
+  db: MockDb,
+  by: PersonRef,
+  id: string,
+  request: PinRequest,
+): OwnerWorker {
   const worker =
     db.s.workers.find((w) => w.id === id) ?? fail('NOT_FOUND', 'That worker was not found.');
   worker.pin = checkPin(request.pin);
   worker.pinSet = true;
   delete db.s.auth.pinTries[worker.id];
   db.logActivity(by, 'worker-change', `PIN changed for ${worker.name}`, { sheetId: null });
-  return publicWorker(worker);
+  return ownerWorker(db, worker);
 }
 
 // Settings (screen 51) ---------------------------------------------------------------------------

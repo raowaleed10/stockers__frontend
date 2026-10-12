@@ -424,6 +424,7 @@ export function cancelGame(db: MockDb, by: PersonRef, id: string, request: Cance
   finish(db, by, game, 'cancelled');
   db.logActivity(by, 'cancel', `Game cancelled on ${table.name}`, { detail: `“${reason}”` });
   db.notify('cancelled-or-discarded', `Game cancelled on ${table.name}`, `“${reason}”`);
+  db.counterAlert('game-cancelled', `Game cancelled on ${table.name}`, `“${reason}”`);
   db.history(by, `Cancelled ${table.name}: ${reason}`);
   changed(db, game);
   return game;
@@ -447,6 +448,11 @@ export function undoGame(db: MockDb, by: PersonRef, id: string): Game {
   });
   db.notify(
     'cancelled-or-discarded',
+    `Game cancelled on ${table.name}`,
+    `Started by mistake and undone after ${seconds} seconds.`,
+  );
+  db.counterAlert(
+    'game-cancelled',
     `Game cancelled on ${table.name}`,
     `Started by mistake and undone after ${seconds} seconds.`,
   );
@@ -501,15 +507,18 @@ function postFrameLines(
   const table = db.table(game.tableId);
   const winners = playersOf(game).filter((id) => !loserIds.includes(id));
   const winnerText = winners.map((id) => playerName(db, id)).join(' and ');
+  const label = game.type === 'game' ? 'Game' : game.frameNo ? `Frame ${game.frameNo}` : 'Frame';
+  // A statement shows when a frame started (screen 25), although it is charged when it ends.
   return loserIds.map((loserId) =>
     db.postLine(loserId, {
       kind: game.type === 'double' ? 'double' : game.type === 'game' ? 'game' : 'frame',
       text:
         game.type === 'double'
           ? `Half of a double, ${table.name}`
-          : `${game.type === 'game' ? 'Game' : 'Frame'}, ${table.name}, lost to ${winnerText}`,
+          : `${label}, ${table.name}, lost to ${winnerText}`,
       charge: amounts[loserId],
       by,
+      at: game.startedAt,
       tonight: true,
     }),
   );
@@ -534,25 +543,32 @@ export function endGame(
   }
   const elapsedMs = elapsed(game.startedAt, db.now(), game.pausedMs, game.pausedAt);
 
+  // Over 30 minutes the worker chooses (Q2): the normal price, or double. It is the same for a single
+  // frame and a double frame; a double frame's price is doubled, then the losing side splits it.
+  const chargedDouble = request.chargeDouble === true;
+  if (
+    chargedDouble &&
+    !((game.type === 'single' || game.type === 'double') && isOver30(elapsedMs))
+  ) {
+    fail('VALIDATION', 'A frame is charged double only after 30 minutes.');
+  }
+  const normalAmount: Rs = game.price;
   let amount: Rs;
   let amounts: Record<string, Rs>;
-  let chargedDouble = false;
   if (game.type === 'double') {
     const side = game.sides?.find((s) => loserIds.every((l) => s.includes(l)));
     if (!side) fail('VALIDATION', 'The losers must be on the same side.');
-    const result = rule(() => doubleCharge(game.price / 2, loserIds, request.split));
+    // game.price is the whole double price. doubleCharge takes the price of one frame and doubles it, so
+    // half of game.price gives the normal total and game.price gives the double charge.
+    const result = rule(() =>
+      doubleCharge(chargedDouble ? game.price : game.price / 2, loserIds, request.split),
+    );
     amount = result.total;
     amounts = result.split;
   } else {
     if (loserIds.length !== 1) fail('VALIDATION', 'Choose one player who lost.');
     amount = rule(() => frameCharge(game.price));
-    if (request.chargeDouble) {
-      if (game.type !== 'single' || !isOver30(elapsedMs)) {
-        fail('VALIDATION', 'A frame is charged double only after 30 minutes.');
-      }
-      amount = overtimeOptions(game.price).double;
-      chargedDouble = true;
-    }
+    if (chargedDouble) amount = overtimeOptions(game.price).double;
     amounts = { [loserIds[0]]: amount };
   }
 
@@ -579,6 +595,7 @@ export function endGame(
     no: game.frameNo ?? session.frames.length + 1,
     loserIds,
     amount,
+    startedAt: game.startedAt,
     endedAt: game.endedAt ?? db.nowIso(),
   });
   db.s.today.frames += 1;
@@ -587,10 +604,10 @@ export function endGame(
   db.s.deltas.earned += amount;
 
   if (chargedDouble) {
-    const loser = db.player(loserIds[0]);
+    const payers = loserIds.map((l) => playerName(db, l)).join(' and ');
     db.logActivity(by, 'double-charge', `Charged double on ${table.name}`, {
-      detail: `Frame ran ${Math.floor(elapsedMs / MINUTE_MS)} minutes. ${loser.name} paid ${formatRs(amount)} instead of ${formatRs(game.price)}.`,
-      amount: amount - game.price,
+      detail: `Frame ran ${Math.floor(elapsedMs / MINUTE_MS)} minutes. ${payers} paid ${formatRs(amount)} instead of ${formatRs(normalAmount)}.`,
+      amount: amount - normalAmount,
     });
   }
   db.history(
@@ -645,6 +662,7 @@ export function endCentury(db: MockDb, by: PersonRef, id: string): EndGameResult
     text: `Century, ${table.name}, ${minutes} min at ${formatRs(game.price)}`,
     charge: amount,
     by,
+    at: game.startedAt,
     tonight: true,
   });
   finish(db, by, game, 'ended');
@@ -700,6 +718,7 @@ export function endRoom(db: MockDb, by: PersonRef, id: string): EndGameResult {
     text: `${table.name}, ${formatHoursMinutes(minutes)}`,
     charge: amount,
     by,
+    at: game.startedAt,
     tonight: true,
   });
   finish(db, by, game, 'ended');

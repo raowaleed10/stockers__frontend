@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { settle } from './settle';
 
 /**
  * The checks on `/dev/data` (prompts/P03): the board and the workers come from the mock API, starting
@@ -15,6 +16,9 @@ async function open(page: Page, query = '') {
     }
   });
   await page.goto(`/dev/data${query}`);
+  // The page starts the mock server before it draws; wait for it, then for the layout to be quiet.
+  await page.waitForSelector('main', { timeout: 30_000 });
+  await settle(page);
   await expect(page.getByRole('heading', { level: 1, name: 'Data check' })).toBeVisible();
   return problems;
 }

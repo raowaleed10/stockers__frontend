@@ -1,4 +1,5 @@
 import type {
+  AlertList,
   BoardResponse,
   CancelRequest,
   CanteenSale,
@@ -47,6 +48,10 @@ export const signIn = (request: SignInRequest) => api.post<WorkerSession>('/auth
 export const unlock = (request: UnlockRequest) => api.post<WorkerSession>('/auth/unlock', request);
 export const signOut = () => api.post<{ ok: true }>('/auth/sign-out');
 export const getMe = () => api.get<WorkerSession>('/auth/me');
+
+// The bell
+export const getAlerts = () => api.get<AlertList>('/alerts');
+export const readAllAlerts = () => api.post<AlertList>('/alerts/read-all');
 
 // Board and games
 export const getBoard = (category?: string) => api.get<BoardResponse>('/board', { category });

@@ -1,12 +1,7 @@
-import type {
-  BoardResponse,
-  Dashboard,
-  NotificationList,
-  Reports,
-  ReportsQuery,
-} from '@stockers/shared';
+import type { BoardResponse, Dashboard, Reports, ReportsQuery } from '@stockers/shared';
 import { isOver30, elapsed, sheetProfit, sheetReceived, toClubIso } from '@stockers/shared';
-import { board, unreadCount } from '../db/board';
+import { ownerNotifications, ownerUnread, readAllOwnerNotifications } from '../db/alerts';
+import { board } from '../db/board';
 import type { MockDb } from '../db/db';
 
 const sum = (values: number[]) => values.reduce((total, value) => total + value, 0);
@@ -87,7 +82,7 @@ export function dashboard(db: MockDb): Dashboard {
         balance: p.balance,
         ...(p.oldestUnpaidAt ? { oldestUnpaidAt: p.oldestUnpaidAt } : {}),
       })),
-    unread: unreadCount(db),
+    unread: ownerUnread(db),
   };
 }
 
@@ -118,17 +113,5 @@ export function live(db: MockDb): BoardResponse {
   return board(db, 'all');
 }
 
-export function notifications(db: MockDb): NotificationList {
-  const now = db.now();
-  return {
-    notifications: db.s.notifications.filter((n) => Date.parse(n.at) <= now),
-    unread: unreadCount(db),
-  };
-}
-
-export function readAllNotifications(db: MockDb): NotificationList {
-  db.s.notifications.forEach((n) => {
-    n.read = true;
-  });
-  return notifications(db);
-}
+export const notifications = ownerNotifications;
+export const readAllNotifications = readAllOwnerNotifications;

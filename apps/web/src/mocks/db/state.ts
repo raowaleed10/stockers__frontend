@@ -2,6 +2,7 @@ import type {
   ActivityEvent,
   AppNotification,
   CanteenItem,
+  CounterAlert,
   CanteenSale,
   Category,
   Expense,
@@ -19,10 +20,14 @@ import type {
   StatementLine,
   Table,
   Worker,
+  WorkerSessionEvent,
 } from '@stockers/shared';
 import type { ScenarioName, SeedAggregates } from './seed-types';
 
 export type StoredWorker = Worker & { pin: string };
+
+/** An owner notification as kept: `readAt` says it was unread until then (the answer's `read` follows the clock). */
+export type StoredNotification = AppNotification & { readAt?: ISO };
 
 /** Who the browser is signed in as. A counter session and an owner session are different kinds. */
 export type AuthSession =
@@ -95,7 +100,11 @@ export interface DbState {
   expenses: Expense[];
   /** Newest first, like the seed. */
   activity: ActivityEvent[];
-  notifications: AppNotification[];
+  notifications: StoredNotification[];
+  /** The counter's own alerts (the bell), newest first. */
+  counterAlerts: CounterAlert[];
+  /** Sign-ins, sign-outs, automatic sign-outs, refusals and lockouts, oldest first. */
+  workerEvents: WorkerSessionEvent[];
   disputes: Record<string, DisputeInfo>;
   settings: OwnerSettings;
   pauseAll: { at: ISO; by: PersonRef; activityId?: string } | null;

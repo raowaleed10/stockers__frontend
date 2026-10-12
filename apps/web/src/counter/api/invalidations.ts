@@ -26,7 +26,7 @@ export const counterInvalidations: InvalidationMap = {
     ['statement'],
     ['canteen'],
   ],
-  'notification.created': [['board']],
+  'notification.created': [['board'], ['alerts']],
   'worker.signedIn': [['me'], ['workers'], ['board']],
   'worker.signedOut': [['me'], ['workers'], ['board']],
   'price.changed': [['board']],

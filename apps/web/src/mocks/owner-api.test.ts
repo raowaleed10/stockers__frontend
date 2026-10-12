@@ -909,12 +909,26 @@ describe('notifications (screen 58)', () => {
     api.load({ app: 'owner' });
     const first = await owner.getNotifications();
     expect(first.notifications.map((n) => n.id)).toEqual(['n2', 'n1']);
-    expect(first.unread).toBe(0);
+    expect(first.unread).toBe(2); // both are unread until the owners read them
+
+    // Screen 36 at 10:30 PM: n1 to n4 are all unread.
+    api.setTime('2026-10-03T22:30:00+05:00');
+    const night = await owner.getNotifications();
+    expect(night.notifications.map((n) => [n.id, n.read])).toEqual([
+      ['n4', false],
+      ['n3', false],
+      ['n2', false],
+      ['n1', false],
+    ]);
+    expect(night.unread).toBe(4);
+    expect((await owner.getDashboard()).unread).toBe(4);
 
     api.load({ app: 'owner', scenario: 'closed' });
     const closed = await owner.getNotifications();
     expect(closed.notifications).toHaveLength(6);
-    expect(closed.unread).toBe(2);
+    // Aqil read n1 to n3 at 11:00 PM; n4, n5 and n6 are still unread (screens 55 and 56 show 3).
+    expect(closed.unread).toBe(3);
+    expect(closed.notifications.filter((n) => n.read).map((n) => n.id)).toEqual(['n3', 'n2', 'n1']);
     const after = await owner.readAllNotifications();
     expect(after.unread).toBe(0);
     expect((await owner.getDashboard()).unread).toBe(0);
@@ -991,5 +1005,110 @@ describe('every action has a name (D52)', () => {
     for (const expense of db.s.expenses) expect(people).toContain(expense.doneBy.name);
     for (const game of db.s.games) expect(people).toContain(game.startedBy.name);
     expect(db.s.sheetHistory.s48.length).toBeGreaterThanOrEqual(8);
+  });
+});
+
+describe('the workers page (screen 50)', () => {
+  it('shows last signed in, signed in now since, and when he is signed out automatically', async () => {
+    api.load({ app: 'owner' });
+    const [shabir, zain] = await owner.getWorkers();
+    expect(shabir.signedIn).toBeUndefined();
+    expect(shabir.lastSignIn).toEqual({
+      at: '2026-10-03T02:04:00+05:00',
+      until: '2026-10-03T10:00:00+05:00',
+    });
+    expect(shabir.sessionEvents.map((e) => e.kind)).toEqual(['auto-sign-out', 'sign-in']);
+    expect(zain.signedIn).toEqual({ at: '2026-10-03T14:06:00+05:00' });
+    expect(zain.signsOutAt).toBe('2026-10-03T23:00:00+05:00');
+    expect(zain.sessionEvents.map((e) => [e.kind, e.at])).toEqual([
+      ['sign-in', '2026-10-03T14:06:00+05:00'],
+    ]);
+  });
+
+  it('lists the refusals and lockouts the counter had, newest first, and puts none of it in Activity', async () => {
+    api.load({ app: 'owner' });
+    const before = (await owner.getActivity()).events.length;
+    await refused(counter.signIn({ workerId: 'shabir', pin: '1111' }));
+    for (let i = 0; i < 5; i += 1) await refused(counter.signIn({ workerId: 'zain', pin: '0000' }));
+    const [shabir, zain] = await owner.getWorkers();
+    expect(shabir.sessionEvents.map((e) => e.kind)).toEqual([
+      'not-your-time',
+      'auto-sign-out',
+      'sign-in',
+    ]);
+    expect(zain.sessionEvents.map((e) => e.kind)).toEqual(['pin-lockout', 'sign-in']);
+    expect(shabir.sessionEvents[0].at).toBe('2026-10-03T21:42:00+05:00');
+    expect((await owner.getActivity()).events).toHaveLength(before);
+  });
+
+  it('records the automatic sign-out at the end of his time, even if the owners look later', async () => {
+    api.load({ app: 'owner' });
+    api.setTime('2026-10-03T23:20:00+05:00');
+    const zain = (await owner.getWorkers())[1];
+    expect(zain.signedIn).toBeUndefined();
+    expect(zain.signsOutAt).toBeUndefined();
+    expect(zain.lastSignIn).toEqual({
+      at: '2026-10-03T14:06:00+05:00',
+      until: '2026-10-03T23:00:00+05:00',
+    });
+    expect(zain.sessionEvents[0]).toMatchObject({
+      kind: 'auto-sign-out',
+      at: '2026-10-03T23:00:00+05:00',
+    });
+  });
+
+  it('shows a sign-in and a sign-out made at the counter', async () => {
+    api.load({ app: 'owner' });
+    await counter.signIn({ workerId: 'zain', pin: '2222' });
+    api.advance(60_000);
+    await counter.signOut();
+    await asAqil();
+    const zain = (await owner.getWorkers())[1];
+    expect(zain.sessionEvents.slice(0, 2).map((e) => [e.kind, e.at])).toEqual([
+      ['sign-out', '2026-10-03T21:43:00+05:00'],
+      ['sign-in', '2026-10-03T21:42:00+05:00'],
+    ]);
+    expect(zain.signedIn).toBeUndefined();
+  });
+
+  it('still saves a change of sign-in time in Activity with the owner’s name', async () => {
+    api.load({ app: 'owner' });
+    await owner.patchWorker('shabir', { slot: { start: '03:00', end: '11:00' } });
+    expect((await owner.getActivity()).events[0]).toMatchObject({
+      type: 'worker-change',
+      title: 'Sign-in time changed for Shabir',
+      by: { name: 'Aqil Farooq' },
+    });
+  });
+});
+
+describe('the counter’s bell and the owners (screens 3, 36)', () => {
+  it('lists three unread alerts at 9:42 PM, and reading them all clears the bell', async () => {
+    api.load();
+    expect((await counter.getBoard()).unread).toBe(3);
+    const list = await counter.getAlerts();
+    expect([list.unread, list.alerts.map((a) => a.id)]).toEqual([3, ['c3', 'c2', 'c1']]);
+    expect((await counter.readAllAlerts()).unread).toBe(0);
+    expect((await counter.getBoard()).unread).toBe(0);
+  });
+
+  it('an owner putting a table out of order rings the counter’s bell, by name', async () => {
+    api.load({ app: 'owner' });
+    await owner.patchTable('t2', { outOfOrder: { note: 'Cloth change' } });
+    await asZain();
+    const list = await counter.getAlerts();
+    expect(list.unread).toBe(4);
+    expect(list.alerts[0]).toMatchObject({
+      kind: 'out-of-order',
+      title: 'Table 2 marked out of order by Aqil',
+      text: 'Cloth change',
+    });
+  });
+
+  it('the counter’s alerts and the owners’ notifications are separate lists', async () => {
+    api.load({ app: 'owner' });
+    await owner.readAllNotifications();
+    await asZain();
+    expect((await counter.getAlerts()).unread).toBe(3);
   });
 });

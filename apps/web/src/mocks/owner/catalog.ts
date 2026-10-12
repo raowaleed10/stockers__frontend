@@ -90,6 +90,11 @@ export function patchTable(db: MockDb, by: PersonRef, id: string, patch: TablePa
       if (db.activeGameOn(table.id))
         fail('TABLE_BUSY', `${table.name} has a game running. End it first.`);
       table.outOfOrder = { note: patch.outOfOrder.note.trim(), by, at: db.nowIso() };
+      db.counterAlert(
+        'out-of-order',
+        `${table.name} marked out of order by ${by.name.split(' ')[0]}`,
+        table.outOfOrder.note,
+      );
     }
     db.emit('board.changed', { tableId: table.id });
   }

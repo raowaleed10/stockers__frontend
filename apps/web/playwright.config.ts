@@ -7,6 +7,8 @@ const PREVIEW_PREFIX = '/owner-preview-x7/';
 
 export default defineConfig({
   testDir: './tests',
+  // Loads every dev page once, so the first tests do not meet a cold dev server (see the file).
+  globalSetup: './tests/e2e/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

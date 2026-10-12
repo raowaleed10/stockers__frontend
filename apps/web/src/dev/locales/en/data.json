@@ -20,8 +20,19 @@
     "title": "Workers",
     "yourTimeNow": "Your time now",
     "notNow": "Not now",
-    "signedInNow": "signed in",
-    "time": "Sign-in time"
+    "time": "Sign-in time",
+    "today": "Today",
+    "signedInSince": "Signed in now, since {{time}}",
+    "lastSignedIn": "Last signed in {{day}} {{from}} to {{until}}",
+    "neverSignedIn": "Not signed in yet",
+    "signsOutAt": "Signed out automatically at {{time}}",
+    "events": {
+      "signIn": "Signed in",
+      "signOut": "Signed out",
+      "autoSignOut": "Signed out automatically at the end of his time",
+      "notYourTime": "Tried to sign in outside his time",
+      "pinLockout": "Locked for 5 minutes after 5 wrong PINs"
+    }
   },
   "board": {
     "title": "Board",

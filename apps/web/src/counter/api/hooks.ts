@@ -11,6 +11,8 @@ export const usePublicWorkers = () =>
 /** Who is signed in. A 401 means nobody is, or the worker's time is over. */
 export const useMe = () => useQuery({ queryKey: keys.me, queryFn: calls.getMe, retry: false });
 
+export const useAlerts = () => useQuery({ queryKey: keys.alerts, queryFn: calls.getAlerts });
+
 export const useBoard = (category?: string) =>
   useQuery({ queryKey: keys.board(category), queryFn: () => calls.getBoard(category) });
 
@@ -41,6 +43,8 @@ export const useClosePreview = () =>
   useQuery({ queryKey: keys.closePreview, queryFn: calls.getClosePreview });
 
 // Writes. Each one is a mutation; its `error` is an `ApiError` with `{code, message}`.
+
+export const useReadAllAlerts = () => useAction(calls.readAllAlerts, [['alerts'], ['board']]);
 
 export const useSignIn = () => useAction(calls.signIn);
 export const useUnlock = () => useAction(calls.unlock);

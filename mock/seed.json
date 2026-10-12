@@ -885,6 +885,7 @@
             "bilal"
           ],
           "amount": 250,
+          "startedAt": "2026-10-03T20:31:00+05:00",
           "endedAt": "2026-10-03T20:55:00+05:00"
         },
         {
@@ -893,7 +894,17 @@
             "bilal"
           ],
           "amount": 250,
+          "startedAt": "2026-10-03T20:56:00+05:00",
           "endedAt": "2026-10-03T21:23:00+05:00"
+        },
+        {
+          "no": 3,
+          "loserIds": [
+            "bilal"
+          ],
+          "amount": 250,
+          "startedAt": "2026-10-03T21:23:00+05:00",
+          "endedAt": "2026-10-03T21:51:00+05:00"
         }
       ]
     }
@@ -1449,7 +1460,7 @@
       "title": "Adil edited sheet 47",
       "text": "Table 3 Century 55 to 45 minutes.",
       "amount": -150,
-      "read": true
+      "read": false
     },
     {
       "id": "n3",
@@ -1458,7 +1469,8 @@
       "title": "Frame discarded on Table 6",
       "text": "“Tariq got a call and left after 12 minutes”",
       "amount": 250,
-      "read": true
+      "read": true,
+      "readAt": "2026-10-03T23:00:00+05:00"
     },
     {
       "id": "n2",
@@ -1466,7 +1478,8 @@
       "kind": "low-stock",
       "title": "Chips running low",
       "text": "3 left. Cigarette packs are sold out.",
-      "read": true
+      "read": true,
+      "readAt": "2026-10-03T23:00:00+05:00"
     },
     {
       "id": "n1",
@@ -1474,7 +1487,8 @@
       "kind": "cancelled-or-discarded",
       "title": "Game cancelled on Table 5",
       "text": "Started by mistake and undone after 40 seconds.",
-      "read": true
+      "read": true,
+      "readAt": "2026-10-03T23:00:00+05:00"
     }
   ],
   "settings": {
@@ -1538,7 +1552,15 @@
       "tablesTotal": 9,
       "over30": 1,
       "drawerExpenses": 500,
-      "drawerExpected": 17950
+      "drawerExpected": 17950,
+      "doubles": 6,
+      "centuryGames": 5,
+      "playersPutOnCredit": 7,
+      "playersPaidOldCredit": 3,
+      "discounts": {
+        "count": 2,
+        "total": 150
+      }
     },
     "october": {
       "days": 3,
@@ -1859,19 +1881,21 @@
         {
           "playerId": "waqas",
           "summary": "1 frame, 2 teas",
-          "oldCredit": 0,
+          "oldCredit": 950,
           "tonight": 450,
-          "total": 450
+          "total": 1400
         },
         {
           "playerId": "shoaib",
           "summary": "1 frame lost",
-          "oldCredit": 0,
+          "oldCredit": 250,
           "tonight": 250,
-          "total": 250
+          "total": 500
         }
       ],
-      "waitingTotal": 700
+      "waitingTotal": 1900,
+      "movesToCreditTotal": 700,
+      "signedInSince": "2026-10-04T02:04:00+05:00"
     },
     "closed": {
       "now": "2026-10-04T03:45:00+05:00",
@@ -1907,7 +1931,8 @@
           "playerId": "shoaib",
           "amount": 250
         }
-      ]
+      ],
+      "signedInSince": "2026-10-04T02:04:00+05:00"
     },
     "empty": {
       "note": "No games, no waiting bills, no activity yet. Use it to build and check the empty states.",
@@ -1915,5 +1940,51 @@
       "waiting": [],
       "activity": []
     }
-  }
+  },
+  "tonightCharges": [
+    {
+      "playerId": "bilal",
+      "at": "2026-10-03T21:30:00+05:00",
+      "kind": "canteen",
+      "text": "Tea × 2, canteen",
+      "charge": 100
+    }
+  ],
+  "disputes": [
+    {
+      "activityId": "a2",
+      "tableId": "t3",
+      "playerIds": [
+        "faisal",
+        "naveed"
+      ],
+      "amount": 250
+    }
+  ],
+  "counterAlerts": [
+    {
+      "id": "c3",
+      "at": "2026-10-03T21:12:00+05:00",
+      "kind": "low-stock",
+      "title": "Chips running low",
+      "text": "3 left. Cigarette packs are sold out.",
+      "read": false
+    },
+    {
+      "id": "c2",
+      "at": "2026-10-03T20:12:00+05:00",
+      "kind": "game-cancelled",
+      "title": "Game cancelled on Table 5",
+      "text": "Started by mistake and undone after 40 seconds.",
+      "read": false
+    },
+    {
+      "id": "c1",
+      "at": "2026-10-03T16:15:00+05:00",
+      "kind": "out-of-order",
+      "title": "Table 7 marked out of order by Adil",
+      "text": "Cloth change",
+      "read": false
+    }
+  ]
 }

@@ -1,5 +1,6 @@
 import type {
   ActivityEvent,
+  CounterAlert,
   ActivityType,
   AppNotification,
   Game,
@@ -10,8 +11,10 @@ import type {
   Sheet,
   StatementLine,
   Table,
+  WorkerSessionEvent,
+  WorkerSessionEventKind,
 } from '@stockers/shared';
-import { toClubIso } from '@stockers/shared';
+import { runningBalances, toClubIso } from '@stockers/shared';
 import { eventBus, type LiveEventName, type LiveEventPayload } from '@/lib/events';
 import { fail } from './errors';
 import type { DbState, StoredWorker } from './state';
@@ -169,6 +172,33 @@ export class MockDb {
     });
   }
 
+  /** A sign-in, sign-out, automatic sign-out, refusal or lockout of a worker. Not part of Activity. */
+  workerEvent(workerId: string, kind: WorkerSessionEventKind, at?: ISO): WorkerSessionEvent {
+    const event: WorkerSessionEvent = {
+      id: this.nextId('w'),
+      at: at ?? this.nowIso(),
+      workerId,
+      kind,
+    };
+    this.s.workerEvents.push(event);
+    return event;
+  }
+
+  /** An alert on the counter's bell. Counter alerts are separate from the owners' notifications. */
+  counterAlert(kind: CounterAlert['kind'], title: string, text: string): CounterAlert {
+    const alert: CounterAlert = {
+      id: this.nextId('c'),
+      at: this.nowIso(),
+      kind,
+      title,
+      text,
+      read: false,
+    };
+    this.s.counterAlerts.unshift(alert);
+    this.emit('notification.created', { id: alert.id });
+    return alert;
+  }
+
   // Statements ---------------------------------------------------------------------------------
 
   statement(playerId: string): StatementLine[] {
@@ -214,7 +244,17 @@ export class MockDb {
       ...(input.method !== undefined ? { method: input.method } : {}),
       sheetId: input.sheetId ?? this.s.currentSheetId,
     };
-    this.statement(playerId).push(line);
+    // A statement is in time order. A frame is posted when it ends but dated when it started, so it can
+    // belong before lines posted since; the balance after each line is then worked out again.
+    const lines = this.statement(playerId);
+    let index = lines.length;
+    while (index > 0 && lines[index - 1].at > line.at) index -= 1;
+    lines.splice(index, 0, line);
+    if (index < lines.length - 1) {
+      runningBalances(lines).forEach((balance, i) => {
+        lines[i].balance = balance;
+      });
+    }
     if (input.tonight) {
       this.s.unsettled.add(line.id);
       delete this.s.billSummaries[playerId];

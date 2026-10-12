@@ -1,8 +1,9 @@
-import { statementBalance } from '@stockers/shared';
+import { runningBalances, statementBalance } from '@stockers/shared';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { eventBus, type LiveEventName } from '@/lib/events';
-import { publicWorkers, requireWorker, workerSignIn, workerUnlock } from './auth';
-import { board, unreadCount, waitingBills } from './board';
+import { publicWorkers, requireWorker, workerSignIn, workerSignOut, workerUnlock } from './auth';
+import { counterAlerts, counterUnread, ownerUnread, readAllCounterAlerts } from './alerts';
+import { board, waitingBills } from './board';
 import { canteenSale, counterCanteenItems } from './canteen';
 import { checkout, checkoutBill, checkoutList } from './checkout';
 import type { MockDb } from './db';
@@ -324,10 +325,9 @@ describe('the board', () => {
     expect(board(make()).backedUpAt).toBe('2026-10-03T21:00:00+05:00');
   });
 
-  it('counts the unread notifications that have already happened', () => {
-    expect(unreadCount(make())).toBe(0);
-    clock = at('2026-10-04T03:45:00+05:00');
-    expect(unreadCount(make({ scenario: 'closed' }))).toBe(2);
+  it('shows 3 on the counter’s bell at 9:42 PM (screen 3)', () => {
+    expect(board(make()).unread).toBe(3);
+    expect(counterUnread(make())).toBe(3);
   });
 });
 
@@ -536,7 +536,7 @@ describe('ending a frame', () => {
     expect(result.amount).toBe(250);
     expect(result.lines[0]).toMatchObject({
       kind: 'frame',
-      text: 'Frame, Table 1, lost to Ali Raza',
+      text: 'Frame 3, Table 1, lost to Ali Raza',
       charge: 250,
       doneBy: { name: 'Zain' },
     });
@@ -1151,5 +1151,436 @@ describe('closing the sheet', () => {
     const result = closeSheet(db, actor(db), { counted: 21750 });
     expect(result.cash.difference).toBe(0);
     expect(differences()).toBe(before);
+  });
+});
+
+describe('statements show when a frame started (screens 11, 17, 18, 25)', () => {
+  it('Bilal at 9:42 PM: frames 1 and 2 at the times they started, then the teas', () => {
+    const db = make();
+    expect(db.tonightLines('bilal').map((l) => [l.text, l.at, l.charge])).toEqual([
+      ['Frame 1, Table 1, lost to Ali Raza', '2026-10-03T20:31:00+05:00', 250],
+      ['Frame 2, Table 1, lost to Ali Raza', '2026-10-03T20:56:00+05:00', 250],
+      ['Tea × 2, canteen', '2026-10-03T21:30:00+05:00', 100],
+    ]);
+  });
+
+  it('Bilal at 10:20 PM comes from the same session: a third frame, the same teas', () => {
+    const db = make({ scenario: 'checkout' });
+    expect(db.tonightLines('bilal').map((l) => [l.text, l.at, l.charge])).toEqual([
+      ['Frame 1, Table 1, lost to Ali Raza', '2026-10-03T20:31:00+05:00', 250],
+      ['Frame 2, Table 1, lost to Ali Raza', '2026-10-03T20:56:00+05:00', 250],
+      ['Frame 3, Table 1, lost to Ali Raza', '2026-10-03T21:23:00+05:00', 250],
+      ['Tea × 2, canteen', '2026-10-03T21:30:00+05:00', 100],
+    ]);
+  });
+
+  it('gives every session frame a start and an end; frame 3 is the game running on Table 1', () => {
+    const db = make();
+    expect(db.s.sessions.find((s) => s.id === 'sess-t1')?.frames).toEqual([
+      {
+        no: 1,
+        loserIds: ['bilal'],
+        amount: 250,
+        startedAt: '2026-10-03T20:31:00+05:00',
+        endedAt: '2026-10-03T20:55:00+05:00',
+      },
+      {
+        no: 2,
+        loserIds: ['bilal'],
+        amount: 250,
+        startedAt: '2026-10-03T20:56:00+05:00',
+        endedAt: '2026-10-03T21:23:00+05:00',
+      },
+    ]);
+    expect(db.game('g-t1-3')).toMatchObject({ frameNo: 3, startedAt: '2026-10-03T21:23:18+05:00' });
+  });
+
+  it('ending frame 3 dates its line from its start and keeps the statement in time order', () => {
+    const db = make();
+    clock = at('2026-10-03T21:51:00+05:00');
+    const result = endGame(db, actor(db), 'g-t1-3', { loserIds: ['bilal'] });
+    expect(result.lines[0]).toMatchObject({
+      text: 'Frame 3, Table 1, lost to Ali Raza',
+      at: '2026-10-03T21:23:18+05:00',
+      charge: 250,
+    });
+    const lines = db.statement('bilal');
+    expect(lines.map((l) => l.at)).toEqual([...lines.map((l) => l.at)].sort());
+    // Frame 3 started at 9:23 PM, before the teas at 9:30 PM, although it was charged at 9:51 PM.
+    expect(lines.map((l) => l.text).slice(-4)).toEqual([
+      'Frame 1, Table 1, lost to Ali Raza',
+      'Frame 2, Table 1, lost to Ali Raza',
+      'Frame 3, Table 1, lost to Ali Raza',
+      'Tea × 2, canteen',
+    ]);
+    expect(lines.map((l) => l.balance)).toEqual(runningBalances(lines));
+    expect(statementBalance(lines)).toBe(db.player('bilal').balance);
+    expect(db.s.sessions.find((s) => s.id === 'sess-t1')?.frames.at(-1)).toEqual({
+      no: 3,
+      loserIds: ['bilal'],
+      amount: 250,
+      startedAt: '2026-10-03T21:23:18+05:00',
+      endedAt: '2026-10-03T21:51:00+05:00',
+    });
+  });
+});
+
+describe('over 30 minutes also applies to a double frame (Q2, screens 19 and 20)', () => {
+  const T5_MIN_31 = '2026-10-03T21:51:00+05:00'; // Table 5 started 9:19:50 PM
+
+  it('charge double doubles the double-frame price, and the losing side splits it', () => {
+    const db = make();
+    clock = at(T5_MIN_31);
+    const result = endGame(db, actor(db), 'g-t5-d', {
+      loserIds: ['imran', 'naveed'],
+      chargeDouble: true,
+    });
+    expect(result.amount).toBe(800);
+    expect(result.game.result).toMatchObject({
+      chargedDouble: true,
+      split: { imran: 400, naveed: 400 },
+    });
+    expect(result.lines.map((l) => [l.playerId, l.charge])).toEqual([
+      ['imran', 400],
+      ['naveed', 400],
+    ]);
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'double-charge',
+      title: 'Charged double on Table 5',
+      detail: 'Frame ran 31 minutes. Imran Shah and Naveed Akhtar paid Rs 800 instead of Rs 400.',
+      amount: 400,
+      by: { name: 'Zain' },
+    });
+  });
+
+  it('the worker always chooses: the normal price is still Rs 400, half each', () => {
+    const db = make();
+    clock = at(T5_MIN_31);
+    const result = endGame(db, actor(db), 'g-t5-d', {
+      loserIds: ['imran', 'naveed'],
+      chargeDouble: false,
+    });
+    expect(result.amount).toBe(400);
+    expect(result.game.result?.chargedDouble).toBeUndefined();
+    expect(
+      db.s.activity.some((a) => a.type === 'double-charge' && a.title.endsWith('Table 5')),
+    ).toBe(false);
+  });
+
+  it('a custom split has to add up to the doubled amount', () => {
+    const db = make();
+    clock = at(T5_MIN_31);
+    const by = actor(db);
+    expect(
+      refusal(() =>
+        endGame(db, by, 'g-t5-d', {
+          loserIds: ['imran', 'naveed'],
+          chargeDouble: true,
+          split: { imran: 300, naveed: 100 },
+        }),
+      ).body.message,
+    ).toBe('The split adds up to 400, not 800');
+    const ok = endGame(db, by, 'g-t5-d', {
+      loserIds: ['imran', 'naveed'],
+      chargeDouble: true,
+      split: { imran: 500, naveed: 300 },
+    });
+    expect(ok.game.result?.split).toEqual({ imran: 500, naveed: 300 });
+  });
+
+  it('one player alone on the losing side pays all of it', () => {
+    const db = make();
+    clock = at(T5_MIN_31);
+    const result = endGame(db, actor(db), 'g-t5-d', { loserIds: ['imran'], chargeDouble: true });
+    expect(result.game.result?.split).toEqual({ imran: 800 });
+  });
+
+  it('is refused before 30 minutes, for a double frame as for a single frame', () => {
+    const db = make();
+    clock = at('2026-10-03T21:42:00+05:00'); // 22 minutes in
+    expect(
+      refusal(() =>
+        endGame(db, actor(db), 'g-t5-d', { loserIds: ['imran', 'naveed'], chargeDouble: true }),
+      ).body.message,
+    ).toBe('A frame is charged double only after 30 minutes.');
+  });
+
+  it('is not for a per-game table: only a frame can be charged double', () => {
+    const db = make();
+    const by = actor(db);
+    db.table('po1').price = 300;
+    const game = startGame(db, by, {
+      tableId: 'po1',
+      type: 'game',
+      playerIds: ['imran', 'naveed'],
+    });
+    clock += 31 * 60_000;
+    expect(
+      refusal(() => endGame(db, by, game.id, { loserIds: ['naveed'], chargeDouble: true })).status,
+    ).toBe(400);
+  });
+});
+
+describe('worker session events (screen 50), kept apart from Activity', () => {
+  const events = (db: MockDb, workerId: string) =>
+    db.s.workerEvents.filter((e) => e.workerId === workerId).map((e) => [e.kind, e.at]);
+  const worker = (db: MockDb, id: string) => db.s.workers.find((w) => w.id === id);
+
+  it('starts from the seed: Shabir signed in at 2:04 AM and was signed out at 10:00 AM; Zain since 2:06 PM', () => {
+    const db = make();
+    expect(events(db, 'shabir')).toEqual([
+      ['sign-in', '2026-10-03T02:04:00+05:00'],
+      ['auto-sign-out', '2026-10-03T10:00:00+05:00'],
+    ]);
+    expect(events(db, 'zain')).toEqual([['sign-in', '2026-10-03T14:06:00+05:00']]);
+    expect(worker(db, 'shabir')?.signedIn).toBeUndefined();
+    expect(worker(db, 'shabir')?.lastSignIn).toEqual({
+      at: '2026-10-03T02:04:00+05:00',
+      until: '2026-10-03T10:00:00+05:00',
+    });
+    expect(worker(db, 'zain')?.signedIn).toEqual({ at: '2026-10-03T14:06:00+05:00' });
+  });
+
+  it('writes down a sign-in, and a sign-out when he switches worker', () => {
+    const db = make({ as: 'none' });
+    workerSignIn(db, { workerId: 'zain', pin: '2222' });
+    expect(events(db, 'zain').at(-1)).toEqual(['sign-in', '2026-10-03T21:42:00+05:00']);
+    expect(worker(db, 'zain')?.signedIn?.at).toBe('2026-10-03T21:42:00+05:00');
+    clock += 90_000;
+    workerSignOut(db);
+    expect(events(db, 'zain').at(-1)).toEqual(['sign-out', '2026-10-03T21:43:30+05:00']);
+    expect(worker(db, 'zain')?.signedIn).toBeUndefined();
+    expect(worker(db, 'zain')?.lastSignIn).toEqual({
+      at: '2026-10-03T21:42:00+05:00',
+      until: '2026-10-03T21:43:30+05:00',
+    });
+  });
+
+  it('writes down a "Not your time" attempt with its time, and the PIN lockout once', () => {
+    const db = make({ as: 'none' });
+    expect(refusal(() => workerSignIn(db, { workerId: 'shabir', pin: '1111' })).body.code).toBe(
+      'NOT_YOUR_TIME',
+    );
+    expect(events(db, 'shabir').at(-1)).toEqual(['not-your-time', '2026-10-03T21:42:00+05:00']);
+    for (let i = 0; i < 5; i += 1)
+      refusal(() => workerSignIn(db, { workerId: 'zain', pin: '0000' }));
+    expect(events(db, 'zain').filter(([kind]) => kind === 'pin-lockout')).toEqual([
+      ['pin-lockout', '2026-10-03T21:42:00+05:00'],
+    ]);
+    expect(events(db, 'zain').map(([kind]) => kind)).toEqual(['sign-in', 'pin-lockout']); // wrong PINs 1 to 4 are not events
+  });
+
+  it('signs Zain out automatically at 11:00 PM, dated 11:00 PM even when noticed later', () => {
+    const db = make();
+    clock = at('2026-10-03T23:05:00+05:00');
+    expect(refusal(() => requireWorker(db)).body.code).toBe('SESSION_ENDED');
+    expect(events(db, 'zain').at(-1)).toEqual(['auto-sign-out', '2026-10-03T23:00:00+05:00']);
+    expect(worker(db, 'zain')?.signedIn).toBeUndefined();
+    expect(worker(db, 'zain')?.lastSignIn).toEqual({
+      at: '2026-10-03T14:06:00+05:00',
+      until: '2026-10-03T23:00:00+05:00',
+    });
+    expect(db.s.auth.session).toBeNull();
+    // Noticed again: nothing is written twice.
+    refusal(() => requireWorker(db));
+    expect(events(db, 'zain').filter(([kind]) => kind === 'auto-sign-out')).toHaveLength(1);
+  });
+
+  it('closing night: Zain was signed out at 11:00 PM and Shabir has been in since 2:04 AM', () => {
+    const db = make({ scenario: 'closing' });
+    expect(events(db, 'zain')).toEqual([
+      ['sign-in', '2026-10-03T14:06:00+05:00'],
+      ['auto-sign-out', '2026-10-03T23:00:00+05:00'],
+    ]);
+    expect(events(db, 'shabir').at(-1)).toEqual(['sign-in', '2026-10-04T02:04:00+05:00']);
+    expect(worker(db, 'shabir')?.signedIn).toEqual({ at: '2026-10-04T02:04:00+05:00' });
+    expect(worker(db, 'zain')?.signedIn).toBeUndefined();
+  });
+
+  it('opening the page as another worker with ?as= is a real sign-in too', () => {
+    const db = make({ as: 'shabir' });
+    expect(worker(db, 'shabir')?.signedIn).toBeDefined();
+    expect(worker(db, 'zain')?.signedIn).toBeUndefined();
+    expect(events(db, 'zain').at(-1)?.[0]).toBe('sign-out');
+  });
+
+  it('never writes a sign-in, sign-out, refusal or lockout to Activity', () => {
+    const db = make({ as: 'none' });
+    const before = db.s.activity.length;
+    refusal(() => workerSignIn(db, { workerId: 'shabir', pin: '1111' }));
+    for (let i = 0; i < 5; i += 1)
+      refusal(() => workerSignIn(db, { workerId: 'zain', pin: '0000' }));
+    clock += 6 * 60_000;
+    workerSignIn(db, { workerId: 'zain', pin: '2222' });
+    workerSignOut(db);
+    expect(db.s.activity).toHaveLength(before);
+    expect(db.s.activity.some((a) => a.type === 'sign-in' || a.type === 'sign-out')).toBe(false);
+  });
+});
+
+describe('the counter’s bell (screen 3) and the owners’ bell (screen 36)', () => {
+  it('has 3 unread alerts at 9:42 PM, newest first, apart from the owners’ notifications', () => {
+    const db = make();
+    expect(counterUnread(db)).toBe(3);
+    expect(counterAlerts(db).alerts.map((a) => [a.id, a.title, a.at])).toEqual([
+      ['c3', 'Chips running low', '2026-10-03T21:12:00+05:00'],
+      ['c2', 'Game cancelled on Table 5', '2026-10-03T20:12:00+05:00'],
+      ['c1', 'Table 7 marked out of order by Adil', '2026-10-03T16:15:00+05:00'],
+    ]);
+    expect(ownerUnread(db)).toBe(2); // n1 and n2 have happened by 9:42 PM
+  });
+
+  it('a game undone, an item running low and a game cancelled each add an alert', () => {
+    const db = make();
+    const by = actor(db);
+    const game = startGame(db, by, {
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['ahmed-nawaz', 'ali-akbar'],
+    });
+    clock += 30_000;
+    undoGame(db, by, game.id);
+    expect(counterAlerts(db).alerts[0]).toMatchObject({
+      kind: 'game-cancelled',
+      title: 'Game cancelled on Table 2',
+      read: false,
+    });
+    canteenSale(db, by, {
+      playerId: null,
+      payNow: 'cash',
+      items: [{ itemId: 'cold-drink', qty: 19 }],
+    });
+    expect(counterAlerts(db).alerts[0]).toMatchObject({
+      kind: 'low-stock',
+      title: 'Cold drink running low',
+      text: '5 left.',
+    });
+    const second = startGame(db, by, {
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['ahmed-nawaz', 'ali-akbar'],
+    });
+    clock += 3 * 60_000;
+    cancelGame(db, by, second.id, { reason: 'Players never came' });
+    expect(counterUnread(db)).toBe(6);
+  });
+
+  it('reading them all clears the bell, and the board follows', () => {
+    const db = make();
+    expect(readAllCounterAlerts(db).unread).toBe(0);
+    expect(board(db).unread).toBe(0);
+    expect(counterAlerts(db).alerts).toHaveLength(3);
+  });
+
+  it('has nothing in the empty scenario', () => {
+    expect(counterUnread(make({ scenario: 'empty' }))).toBe(0);
+  });
+
+  it('the owners have 4 unread at 10:30 PM (screen 36) and 3 at 3:45 AM (screens 55 and 56)', () => {
+    const db = make({ app: 'owner' });
+    clock = at('2026-10-03T22:30:00+05:00');
+    expect(ownerUnread(db)).toBe(4); // n1 to n4
+    const night = make({ scenario: 'closed', app: 'owner' });
+    expect(ownerUnread(night)).toBe(3); // Aqil read n1 to n3 at 11 PM; n4, n5 and n6 are unread
+  });
+});
+
+describe('the seed fixes (screens 31, 32, 33, 43)', () => {
+  it('Waqas and Shoaib bring 950 and 250 of old credit; tonight is 450 and 250', () => {
+    const db = make({ scenario: 'closing' });
+    expect(waitingBills(db).map((b) => [b.playerId, b.oldCredit, b.tonight, b.total])).toEqual([
+      ['waqas', 950, 450, 1400],
+      ['shoaib', 250, 250, 500],
+    ]);
+  });
+
+  it('after the close they owe 1,400 and 500, and Rs 700 moved to credit (screens 33 and 43)', () => {
+    const db = make({ scenario: 'closed' });
+    expect(db.player('waqas').balance).toBe(1400);
+    expect(db.player('shoaib').balance).toBe(500);
+    expect(statementBalance(db.statement('waqas'))).toBe(1400);
+    expect(statementBalance(db.statement('shoaib'))).toBe(500);
+    expect(seed.scenarios.closing.movesToCreditTotal).toBe(700);
+    expect(seed.scenarios.closing.waitingTotal).toBe(1900);
+  });
+
+  it('starts screen 31’s counts from the seed, not from the loader', () => {
+    expect(seed.aggregates.today).toMatchObject({
+      doubles: 6,
+      centuryGames: 5,
+      playersPutOnCredit: 7,
+      playersPaidOldCredit: 3,
+      discounts: { count: 2, total: 150 },
+    });
+    const db = make();
+    expect(todayTotals(db)).toMatchObject({
+      doubles: 6,
+      centuryGames: 5,
+      newCreditPlayers: 7,
+      oldCreditPlayers: 3,
+    });
+    expect(db.s.today.discounts).toEqual({ count: 2, total: 150 });
+  });
+});
+
+describe('a discount (Q6)', () => {
+  const checkoutOf = (
+    db: MockDb,
+    id: string,
+    discount: { amount: number; reason: string; note?: string },
+  ) => checkout(db, actor(db), id, { playerId: id, parts: [], toCredit: 0, discount }, true);
+
+  it('can be the whole bill, but not more: Bilal’s total is old credit plus tonight, Rs 1,350', () => {
+    const db = make({ scenario: 'checkout' });
+    expect(refusal(() => checkoutOf(db, 'bilal', { amount: 1351, reason: 'x' })).body.code).toBe(
+      'VALIDATION',
+    );
+    expect(db.player('bilal').balance).toBe(1350); // nothing changed
+    const result = checkout(
+      db,
+      actor(db),
+      'bilal',
+      {
+        playerId: 'bilal',
+        parts: [],
+        toCredit: 0,
+        discount: { amount: 1350, reason: 'Table problem' },
+      },
+      true,
+    );
+    expect(result.settlement).toMatchObject({ total: 1350, discount: 1350, due: 0, newBalance: 0 });
+  });
+
+  it('is whole rupees above 0 and needs a reason; the note is optional', () => {
+    const db = make({ scenario: 'checkout' });
+    for (const discount of [
+      { amount: 0, reason: 'x' },
+      { amount: -5, reason: 'x' },
+      { amount: 10.5, reason: 'x' },
+      { amount: 50, reason: '  ' },
+    ]) {
+      expect(refusal(() => checkoutOf(db, 'zubair', discount)).status).toBe(400);
+    }
+    expect(db.player('zubair').balance).toBe(600);
+    // The rest of the bill (600 less 50) is put on credit.
+    checkout(
+      db,
+      actor(db),
+      'zubair',
+      {
+        playerId: 'zubair',
+        parts: [],
+        toCredit: 550,
+        discount: { amount: 50, reason: 'Rounded the bill' },
+      },
+      true,
+    );
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'discount',
+      title: 'Discount for Zubair Khan',
+      detail: 'Rounded the bill', // no note
+      amount: -50,
+      by: { name: 'Zain' },
+    });
   });
 });

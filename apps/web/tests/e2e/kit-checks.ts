@@ -1,7 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { settle } from './settle';
 
-/** Opens the kit page and waits for fonts, so measurements and axe see the real layout. */
+/** Opens the kit page and waits until it is quiet (fonts, animations, layout), so measurements and axe see the real layout. */
 async function openKit(page: Page, path: string) {
   const problems: string[] = [];
   page.on('pageerror', (error) => problems.push(error.message));
@@ -10,7 +11,7 @@ async function openKit(page: Page, path: string) {
   });
   await page.goto(path);
   await page.waitForSelector('main section');
-  await page.evaluate(() => document.fonts.ready);
+  await settle(page);
   return problems;
 }
 
@@ -61,6 +62,8 @@ export function defineKitTests(path: string, app: 'counter' | 'owner') {
       test(`has no serious or critical accessibility issues${query ? ' (page in Urdu)' : ''}`, async ({
         page,
       }) => {
+        // Axe reads the whole kit page: about 15 s alone, three times that when several run at once.
+        test.slow();
         await openKit(page, path + query);
         const results = await new AxeBuilder({ page }).analyze();
         const serious = results.violations.filter(

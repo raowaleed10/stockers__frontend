@@ -88,6 +88,26 @@ describe('overtimeOptions', () => {
   });
 });
 
+describe('a double frame over 30 minutes (Q2)', () => {
+  it('offers the normal double price or double that: Table 5 is Rs 400 or Rs 800', () => {
+    expect(overtimeOptions(400)).toEqual({ normal: 400, double: 800 });
+  });
+
+  it('charge double doubles the double-frame price, then the losing side splits it', () => {
+    expect(doubleCharge(400, ['imran', 'naveed'])).toEqual({
+      total: 800,
+      split: { imran: 400, naveed: 400 },
+    });
+    expect(doubleCharge(400, ['imran', 'naveed'], { imran: 500, naveed: 300 }).split).toEqual({
+      imran: 500,
+      naveed: 300,
+    });
+    expect(() => doubleCharge(400, ['imran', 'naveed'], { imran: 300, naveed: 100 })).toThrow(
+      /adds up to 400, not 800/,
+    );
+  });
+});
+
 describe('centuryCharge', () => {
   it('counts whole minutes: 42 min 35 s at Rs 15 is 42 x 15 = 630', () => {
     expect(centuryCharge(42 * MIN + 35 * SEC, 15)).toBe(630);

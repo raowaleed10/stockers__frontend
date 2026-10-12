@@ -108,6 +108,20 @@ export interface GameView {
   players: Record<string, PlayerName>;
 }
 
+/** An alert on the counter's bell. Counter alerts are separate from the owners' notifications. */
+export interface CounterAlert {
+  id: string;
+  at: ISO;
+  kind: 'out-of-order' | 'game-cancelled' | 'low-stock';
+  title: string;
+  text: string;
+  read: boolean;
+}
+export interface AlertList {
+  alerts: CounterAlert[];
+  unread: number;
+}
+
 export interface BoardCategory extends Category {
   inUse: number;
   total: number;
@@ -121,6 +135,7 @@ export interface BoardResponse {
   /** Everyone named on a table, so a tile can show names. */
   players: Record<string, PlayerName>;
   waiting: WaitingBill[];
+  /** Unread counter alerts (the bell). */
   unread: number;
   backedUpAt: ISO;
   pausedAll: boolean;
@@ -542,6 +557,30 @@ export interface ExpenseRequest {
   amount: Rs;
   paidFrom: Expense['paidFrom'];
   staffName?: string;
+}
+
+/**
+ * What happened at the counter's sign-in (screen 50). These are kept apart from Activity, which is only
+ * for what changed money outside a normal game.
+ */
+export type WorkerSessionEventKind =
+  | 'sign-in'
+  | 'sign-out'
+  | 'auto-sign-out' // his sign-in time ended
+  | 'not-your-time' // he tried to sign in outside his time
+  | 'pin-lockout'; // five wrong PINs
+export interface WorkerSessionEvent {
+  id: string;
+  at: ISO;
+  workerId: string;
+  kind: WorkerSessionEventKind;
+}
+/** A worker as the owners see him: his times, who is signed in now, and what happened at sign-in. */
+export interface OwnerWorker extends Worker {
+  /** While he is signed in: when he will be signed out automatically ("Automatically at 11:00 PM"). */
+  signsOutAt?: ISO;
+  /** Newest first. */
+  sessionEvents: WorkerSessionEvent[];
 }
 
 export interface NewWorkerRequest {
