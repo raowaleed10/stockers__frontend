@@ -107,7 +107,7 @@ Each tile **is** the object seen from above, with the details laid on top. Exact
 - **Middle:** game type in bold, with a detail such as "Frame 3, Ali leads 2–0"; then the players ("Ali Raza vs Bilal Ahmed" or "Under Saad Hussain").
 - **Bottom:** the timer at the start and the amount at the end; or the call to action for free tables; or the note for out of order.
 
-Text on cloth gets `text-shadow: 0 1px 2px rgba(0,0,0,.55)`. Text on the carrom board is dark `#2A1A0C` with a light halo.
+Text on cloth gets `text-shadow: 0 1px 2px rgba(0,0,0,.55)`. Text on the carrom board is dark `#2A1A0C` with a light halo. Every word on a tile has its shadow (a test measures it on all of them); the status pill and the Resume button have none, as in the design. The contrast numbers for text on the lit cloth ignore the shadow, and the owners approved the look. If the text is hard to read on the real counter screen, the stronger shadow of the foosball pitch (`.ff .ct`: `0 1px 2px rgba(0,0,0,.7), 0 0 6px rgba(0,0,0,.45)`) is the fallback (`11_OPEN_QUESTIONS.md`, question 14).
 
 **How the tiles are built (P02):**
 - A tile is a real `<button>` (or a `<div role="group">` when it holds its own buttons). Inside it, `.tile-surface` is the object and carries the status ring; the words (`TileContent`) sit on top. Foosball and PlayStation have a wrapper for the handles and the stand.

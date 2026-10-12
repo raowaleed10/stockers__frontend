@@ -120,6 +120,41 @@ test.describe('/dev/tiles', () => {
     await expect(locked).toHaveAccessibleDescription('Locked until an owner sets the price');
   });
 
+  test('every word on every tile has the text shadow of the design', async ({ page }) => {
+    // The approved look relies on this shadow for the text on the cloth (the contrast numbers ignore it):
+    // `.ct` in design/tiles.reference.css is 0 1px 2px rgba(0,0,0,.55). The carrom board swaps it for a light
+    // halo behind its dark text and the foosball pitch has a stronger one (`.ff .ct`). The status pill and the
+    // Resume button have none, as in the design.
+    await openGallery(page, PATH);
+    const tiles = await page.$$eval('.tile', (elements) =>
+      elements.map((tile) => {
+        const shadow = getComputedStyle(tile.querySelector('.tile-ct') as HTMLElement).textShadow;
+        const holdsWords = (element: Element) =>
+          [...element.childNodes].some((node) => node.nodeType === 3 && node.textContent?.trim());
+        const without = [...tile.querySelectorAll('*')]
+          .filter((element) => holdsWords(element) && !element.closest('.tile-pill, .tile-btn'))
+          .filter((element) => getComputedStyle(element).textShadow !== shadow)
+          .map((element) => element.textContent?.trim().slice(0, 30));
+        const exempt = [...tile.querySelectorAll('.tile-pill, .tile-btn')].map(
+          (element) => getComputedStyle(element).textShadow,
+        );
+        return { kind: tile.getAttribute('data-kind'), shadow, without, exempt };
+      }),
+    );
+    expect(tiles).toHaveLength(TILES);
+    for (const tile of tiles) {
+      expect(tile.without, `${tile.kind}: words without the tile shadow`).toEqual([]);
+      for (const none of tile.exempt) expect(none).toBe('none');
+      if (tile.kind === 'carrom') {
+        expect(tile.shadow).toBe('rgb(243, 226, 188) 0px 0px 3px, rgb(243, 226, 188) 0px 0px 6px');
+      } else if (tile.kind === 'foosball') {
+        expect(tile.shadow).toBe('rgba(0, 0, 0, 0.7) 0px 1px 2px, rgba(0, 0, 0, 0.45) 0px 0px 6px');
+      } else {
+        expect(tile.shadow).toBe('rgba(0, 0, 0, 0.55) 0px 1px 2px');
+      }
+    }
+  });
+
   test('the keyboard focus ring shows on a tile', async ({ page }) => {
     await openGallery(page, PATH);
     const tile = page.locator('[data-section="s03"] .tile').first();

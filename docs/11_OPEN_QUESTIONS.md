@@ -17,3 +17,4 @@ None of these block the frontend. Build with the default shown, and change it wh
 | 11 | Staff names and salaries for Expenses | Shabir, Zain, Sajid (example) |
 | 12 | Cost of a cup of tea, green tea, coffee | 18, 15, 45 (estimates) |
 | 13 | Old credit list from the register | Entered by owners from the player page |
+| 14 | Check tile text on the real counter screen. If it is hard to read, use the stronger shadow from `.ff .ct`. | The shadow of `.ct` on every tile: `0 1px 2px rgba(0,0,0,.55)` |
