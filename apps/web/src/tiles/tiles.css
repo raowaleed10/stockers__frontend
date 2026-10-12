@@ -1,0 +1,925 @@
+/*
+  Table tiles. Rebuilt from design/tiles.reference.css (the CSS of the approved screens 3, 4, 5, 6 and 16).
+  Every measurement is the same; every colour is a token from tokens.css (golden rule 4).
+
+  Drawing and text direction (screen 6): the text mirrors, the table drawing does not. Pockets, the baulk
+  line, the D, balls, coins and rods are placed with physical `left` / `right` on purpose, so a table looks
+  the same in Urdu. The text uses logical properties.
+
+  Anatomy:  .tile (button or div: focus, reset)
+              .tile-surface (the object: rail, ring, shape)
+                .tile-cl (the cloth) or another board, then .tile-ct (the words on top)
+*/
+
+/* ---------------- shared ---------------- */
+.tile {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: var(--c-text);
+  font: inherit;
+  /* the screens were drawn with the browser default, not the page's looser line height */
+  line-height: normal;
+  cursor: pointer;
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+.tile[role='group'] {
+  cursor: default;
+}
+.tile:disabled {
+  cursor: not-allowed;
+}
+.tile:focus-visible {
+  outline: 3px solid var(--c-text);
+  outline-offset: 6px;
+}
+/* a carrom board is a square: the surface fills it */
+.tile[data-kind='carrom'] {
+  aspect-ratio: 1 / 1;
+}
+
+.tile-surface {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  --sub: var(--tile-sub);
+}
+
+/* the words on top of a table */
+.tile-ct {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 5px;
+  box-sizing: border-box;
+  text-shadow: 0 1px 2px var(--ov-k55);
+}
+.tile-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px 10px;
+}
+.tile-idn {
+  display: flex;
+  align-items: flex-end;
+  gap: 9px;
+}
+.tile-num {
+  font-family: var(--font-num);
+  font-weight: 700;
+  font-size: 58px;
+  line-height: 0.8;
+}
+.tile-lab {
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--sub);
+  white-space: nowrap;
+}
+.tile-pill {
+  text-shadow: none;
+}
+.tile-gt {
+  font-size: 16px;
+  font-weight: 700;
+}
+.tile-gt span {
+  font-weight: 500;
+  color: var(--sub);
+}
+.tile-pl {
+  font-size: 17px;
+}
+.tile-pl span {
+  color: var(--sub);
+}
+.tile-bot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: auto;
+}
+.tile-end {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tile-amt {
+  font-size: 19px;
+  font-weight: 700;
+}
+/* In Urdu the amount is "250 روپے": the word is as big as the digits on the screens (MoneyText makes it smaller) */
+.tile-amt .font-urdu {
+  font-size: 1em;
+  font-weight: 700;
+}
+.tile-cta-box,
+.tile-note {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.tile-cta {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--tile-cta);
+}
+.tile-hint {
+  font-size: 14px;
+  color: var(--sub);
+}
+.tile-hint-lg {
+  font-size: 16px;
+}
+.tile-note-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.tile-note .tile-hint {
+  --sub: var(--tile-sub-note);
+}
+
+/* right to left: Nastaliq needs more height (docs/09) */
+[dir='rtl'] .tile-ct {
+  line-height: 1.55;
+}
+[dir='rtl'] .tile-lab {
+  line-height: 1.5;
+}
+[dir='rtl'] .tile-gt,
+[dir='rtl'] .tile-pl {
+  line-height: 1.7;
+}
+[dir='rtl'] .tile-cta,
+[dir='rtl'] .tile-note-title {
+  font-size: 19px;
+}
+
+/* ---------------- balls and coins ---------------- */
+.tile-ball {
+  position: absolute;
+  z-index: 1;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: 0 1px 1.5px var(--ov-k55);
+  background: radial-gradient(
+    circle at 35% 30%,
+    var(--ov-w75) 0 12%,
+    var(--ball) 38%,
+    var(--ball) 70%,
+    var(--ov-k45) 100%
+  );
+}
+.tile-ball-stripe {
+  background:
+    radial-gradient(circle at 35% 30%, var(--ov-w70) 0 12%, transparent 30%),
+    linear-gradient(180deg, var(--ball-cue) 0 26%, var(--ball) 26% 74%, var(--ball-cue) 74%);
+}
+
+/* ---------------- snooker table ---------------- */
+.tile-snk {
+  --tile-radius: 18px;
+  padding: 13px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, var(--wood-1) 0%, var(--wood-2) 48%, var(--wood-3) 100%);
+}
+.tile-snk::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  box-shadow:
+    inset 0 1px 0 var(--ov-w22),
+    inset 0 -2px 0 var(--ov-k40),
+    inset 0 0 0 1px var(--ov-k35);
+  pointer-events: none;
+}
+.tile-cl {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 176px;
+  box-sizing: border-box;
+  border-radius: 7px;
+  padding: 13px 18px 11px;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse 72% 85% at 50% 42%,
+    var(--cloth-1) 0%,
+    var(--cloth-2) 58%,
+    var(--cloth-3) 100%
+  );
+  box-shadow:
+    inset 0 0 0 4px var(--cushion),
+    inset 0 0 0 5px var(--ov-k25),
+    inset 0 0 26px var(--ov-k45);
+}
+.tile-lit .tile-cl {
+  background: radial-gradient(
+    ellipse 58% 78% at 50% 44%,
+    var(--cloth-lit-1) 0%,
+    var(--cloth-lit-2) 42%,
+    var(--cloth-lit-3) 100%
+  );
+}
+.tile-dim .tile-cl {
+  background: radial-gradient(
+    ellipse 72% 85% at 50% 42%,
+    var(--cloth-dim-1) 0%,
+    var(--cloth-dim-2) 58%,
+    var(--cloth-dim-3) 100%
+  );
+}
+.tile-pk {
+  position: absolute;
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, var(--pocket) 0 56%, var(--pocket-rim) 100%);
+  box-shadow: 0 0 0 2px var(--ov-k35);
+}
+.tile-pk-a {
+  top: 3px;
+  left: 3px;
+}
+.tile-pk-b {
+  top: 3px;
+  right: 3px;
+}
+.tile-pk-c {
+  bottom: 3px;
+  left: 3px;
+}
+.tile-pk-d {
+  bottom: 3px;
+  right: 3px;
+}
+.tile-pk-e {
+  top: 1px;
+  left: calc(50% - 11px);
+}
+.tile-pk-f {
+  bottom: 1px;
+  left: calc(50% - 11px);
+}
+.tile-bk {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 21%;
+  width: 1.5px;
+  background: var(--ov-w20);
+}
+.tile-dd {
+  position: absolute;
+  z-index: 0;
+  left: calc(21% - 32px);
+  top: calc(50% - 32px);
+  width: 33px;
+  height: 64px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--ov-w20);
+  border-right: 0;
+  border-radius: 32px 0 0 32px;
+}
+.tile-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 7px;
+  background: repeating-linear-gradient(135deg, var(--cover-1) 0 14px, var(--cover-2) 14px 28px);
+}
+
+/* ---------------- pool table ---------------- */
+.tile-pool {
+  --tile-radius: 16px;
+  --sub: var(--tile-sub-pool);
+  padding: 14px;
+  border-radius: 16px;
+  background: linear-gradient(
+    160deg,
+    var(--pool-rail-1) 0%,
+    var(--pool-rail-2) 50%,
+    var(--pool-rail-3) 100%
+  );
+}
+.tile-pool::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px 0 var(--ov-w16),
+    inset 0 0 0 1px var(--ov-k50);
+  pointer-events: none;
+}
+.tile-pool .tile-cl {
+  background: radial-gradient(
+    ellipse 72% 85% at 50% 42%,
+    var(--pool-cloth-1) 0%,
+    var(--pool-cloth-2) 58%,
+    var(--pool-cloth-3) 100%
+  );
+  box-shadow:
+    inset 0 0 0 4px var(--pool-cushion),
+    inset 0 0 0 5px var(--ov-k25),
+    inset 0 0 26px var(--ov-k45);
+}
+.tile-pool.tile-dim .tile-cl {
+  background: radial-gradient(
+    ellipse 72% 85% at 50% 42%,
+    var(--pool-dim-1) 0%,
+    var(--pool-dim-2) 58%,
+    var(--pool-dim-3) 100%
+  );
+  box-shadow:
+    inset 0 0 0 4px var(--pool-cushion-dim),
+    inset 0 0 0 5px var(--ov-k25),
+    inset 0 0 26px var(--ov-k45);
+}
+.tile-pool .tile-pk {
+  width: 24px;
+  height: 24px;
+}
+.tile-pool .tile-pk-e,
+.tile-pool .tile-pk-f {
+  left: calc(50% - 12px);
+}
+.tile-dm {
+  position: absolute;
+  z-index: 3;
+  width: 6px;
+  height: 6px;
+  background: var(--pool-diamond);
+  transform: rotate(45deg);
+  opacity: 0.85;
+}
+.tile-hs {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 25%;
+  width: 1.5px;
+  background: var(--ov-w16);
+}
+
+/* ---------------- room: a snooker table and a sofa ---------------- */
+.tile-room {
+  --tile-radius: 18px;
+  flex-direction: row;
+  gap: 8px;
+  padding: 9px;
+  border-radius: 18px;
+  background: var(--room-floor);
+  border: 3px solid var(--room-wall);
+}
+.tile-room .tile-snk {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 11px;
+  border-radius: 14px;
+}
+.tile-room .tile-snk::before {
+  border-radius: 14px;
+}
+.tile-room .tile-cl {
+  min-height: 150px;
+  padding: 11px 14px 9px;
+}
+.tile-room .tile-num {
+  font-size: 46px;
+}
+.tile-room .tile-lab {
+  font-size: 13px;
+}
+.tile-room .tile-pk {
+  width: 19px;
+  height: 19px;
+}
+.tile-room .tile-pk-e,
+.tile-room .tile-pk-f {
+  left: calc(50% - 9.5px);
+}
+/* the sofa is a flex item: in Urdu it moves to the other side, as on screen 6 */
+.tile-sofa {
+  position: relative;
+  display: flex;
+  flex: 0 0 28px;
+  flex-direction: column;
+  gap: 5px;
+  box-sizing: border-box;
+  padding: 10px 4px 10px 9px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--sofa-1), var(--sofa-2) 60%, var(--sofa-3));
+  box-shadow:
+    inset 0 0 0 1px var(--ov-k35),
+    inset 5px 0 0 var(--ov-k22);
+}
+.tile-sofa i {
+  flex: 1 1 0;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--sofa-seat-1), var(--sofa-seat-2));
+  box-shadow: inset 0 1px 0 var(--ov-w12);
+}
+
+/* ---------------- carrom board ---------------- */
+.tile-crm {
+  --tile-radius: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(
+    150deg,
+    var(--carrom-frame-1) 0%,
+    var(--carrom-frame-2) 55%,
+    var(--carrom-frame-3) 100%
+  );
+}
+.tile-crm::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 1px 0 var(--ov-w20),
+    inset 0 0 0 1px var(--ov-k40);
+  pointer-events: none;
+}
+.tile-cb {
+  --sub: var(--tile-sub-carrom);
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 40px 40px 36px;
+  overflow: hidden;
+  color: var(--carrom-ink);
+  background: radial-gradient(
+    ellipse at 45% 40%,
+    var(--carrom-board-1) 0%,
+    var(--carrom-board-mid) 60%,
+    var(--carrom-board-2) 100%
+  );
+  box-shadow:
+    inset 0 0 0 2px var(--carrom-edge),
+    inset 0 0 18px var(--carrom-glow);
+}
+.tile-crm.tile-dim .tile-cb {
+  background: radial-gradient(
+    ellipse at 45% 40%,
+    var(--carrom-dim-1) 0%,
+    var(--carrom-dim-2) 60%,
+    var(--carrom-dim-3) 100%
+  );
+}
+.tile-cb .tile-ln {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.tile-cb .tile-ct {
+  text-shadow:
+    0 0 3px var(--carrom-halo),
+    0 0 6px var(--carrom-halo);
+}
+.tile-cb .tile-num {
+  font-size: 52px;
+}
+/* The approved board always shows the pill under the number. The row has room for only 188 px, and the
+   number and price take 112 of them, so a wider gap makes the pill wrap in every font. */
+.tile-cb .tile-top {
+  column-gap: 16px;
+}
+.tile-cb .tile-cta {
+  color: var(--c-felt);
+}
+.tile-cb .tile-pill {
+  background: var(--tile-pill-carrom);
+}
+.tile-cpk {
+  position: absolute;
+  z-index: 3;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 45%,
+    var(--pocket) 0 58%,
+    var(--carrom-pocket-rim) 100%
+  );
+  box-shadow: 0 0 0 2px var(--carrom-pocket-ring);
+}
+.tile-cn {
+  position: absolute;
+  z-index: 1;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--coin);
+  box-shadow: 0 1px 1px var(--ov-k45);
+}
+.tile-cn-queen {
+  background: radial-gradient(circle at 40% 35%, var(--coin-queen-1), var(--coin-queen-2));
+}
+
+/* ---------------- foosball table ---------------- */
+.tile-fsw {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 12px 0;
+}
+.tile-fsb {
+  --tile-radius: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--foos-cabinet-1) 0%, var(--foos-cabinet-2) 100%);
+}
+.tile-fsb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 1px 0 var(--ov-w15),
+    inset 0 0 0 1px var(--ov-k60);
+  pointer-events: none;
+}
+.tile-ff {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 168px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  padding: 12px 26px 10px;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--foos-pitch-1) 0 9%,
+    var(--foos-pitch-2) 9% 18%
+  );
+  box-shadow:
+    inset 0 0 0 2px var(--ov-w55),
+    inset 0 0 22px var(--ov-k40);
+}
+.tile-fsb.tile-dim .tile-ff {
+  filter: saturate(0.3) brightness(0.85);
+}
+.tile-ff .tile-ct {
+  text-shadow:
+    0 1px 2px var(--ov-k70),
+    0 0 6px var(--ov-k45);
+}
+.tile-ml {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 1px);
+  width: 2px;
+  background: var(--ov-w45);
+}
+.tile-mc {
+  position: absolute;
+  z-index: 0;
+  left: calc(50% - 26px);
+  top: calc(50% - 26px);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--ov-w45);
+  box-sizing: border-box;
+}
+.tile-gb {
+  position: absolute;
+  z-index: 0;
+  top: calc(50% - 30px);
+  width: 22px;
+  height: 60px;
+  border: 2px solid var(--ov-w45);
+  box-sizing: border-box;
+}
+.tile-gb-l {
+  left: -2px;
+}
+.tile-gb-r {
+  right: -2px;
+}
+.tile-goal {
+  position: absolute;
+  z-index: 3;
+  top: calc(50% - 20px);
+  width: 9px;
+  height: 40px;
+  background: var(--foos-goal);
+  border-radius: 2px;
+}
+.tile-goal-l {
+  left: 8px;
+}
+.tile-goal-r {
+  right: 8px;
+}
+.tile-rod {
+  position: absolute;
+  z-index: 1;
+  top: -12px;
+  bottom: -12px;
+  width: 3px;
+  background: linear-gradient(90deg, var(--foos-rod-1), var(--foos-rod-2), var(--foos-rod-1));
+  opacity: 0.32;
+}
+.tile-hd {
+  position: absolute;
+  z-index: 0;
+  width: 10px;
+  height: 13px;
+  border-radius: 5px;
+  background: linear-gradient(
+    90deg,
+    var(--foos-handle-1),
+    var(--foos-handle-2),
+    var(--foos-handle-1)
+  );
+  box-shadow: 0 0 0 1px var(--foos-handle-ring);
+}
+.tile-man {
+  position: absolute;
+  z-index: 1;
+  width: 8px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--man);
+  opacity: 0.5;
+  box-shadow: 0 1px 1px var(--ov-k40);
+}
+
+/* ---------------- ludo ---------------- */
+.tile-ldw {
+  --tile-radius: 14px;
+  --sub: var(--c-text-3);
+  flex-direction: row;
+  align-items: stretch;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(
+    150deg,
+    var(--carrom-frame-1),
+    var(--carrom-frame-2) 55%,
+    var(--carrom-frame-3)
+  );
+}
+.tile-ldw::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  box-shadow:
+    inset 0 1px 0 var(--ov-w20),
+    inset 0 0 0 1px var(--ov-k40);
+  pointer-events: none;
+}
+.tile-ldb {
+  flex: 0 0 auto;
+  width: 128px;
+  height: 128px;
+  align-self: center;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px var(--ov-k50);
+  background: var(--ludo-paper);
+}
+.tile-ldw .tile-ct {
+  min-width: 0;
+  padding-block: 4px 2px;
+  padding-inline: 0 4px;
+}
+.tile-ldw .tile-num {
+  font-size: 50px;
+}
+.tile-ldw.tile-dim .tile-ldb {
+  filter: saturate(0.25) brightness(0.8);
+}
+
+/* ---------------- PlayStation: a TV ---------------- */
+.tile-tvw {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+}
+.tile-tv {
+  --tile-radius: 12px;
+  --sub: var(--tile-sub-tv);
+  width: 100%;
+  flex: 0 0 auto;
+  padding: 9px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--tv-bezel-1), var(--tv-bezel-2));
+  box-shadow: inset 0 0 0 1px var(--tv-bezel-ring);
+}
+.tile-scr {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 156px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 12px 14px 10px;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse 80% 90% at 25% 15%,
+    var(--tv-screen-1) 0%,
+    var(--tv-screen-2) 45%,
+    var(--tv-screen-3) 100%
+  );
+  box-shadow: inset 0 0 0 1px var(--ov-w08);
+}
+.tile-scr::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, var(--ov-w10) 0 30%, transparent 30%);
+  pointer-events: none;
+}
+.tile-tv-off .tile-scr {
+  background: radial-gradient(
+    ellipse 80% 90% at 25% 15%,
+    var(--tv-off-1) 0%,
+    var(--tv-off-2) 60%,
+    var(--tv-off-3) 100%
+  );
+}
+.tile-tv .tile-num {
+  font-size: 50px;
+}
+.tile-tv .tile-lab {
+  font-size: 13px;
+}
+.tile-neck {
+  width: 34px;
+  height: 12px;
+  background: linear-gradient(90deg, var(--tv-stand-1), var(--tv-stand-2), var(--tv-stand-1));
+}
+.tile-foot {
+  width: 120px;
+  height: 8px;
+  border-radius: 4px 4px 6px 6px;
+  background: linear-gradient(180deg, var(--tv-stand-2), var(--tv-foot));
+}
+.tile-pad {
+  position: absolute;
+  z-index: 1;
+  right: 12px;
+  bottom: 12px;
+  opacity: 0.28;
+}
+
+/* On a foosball pitch and a TV screen the words sit at the top; the extra height of the pitch or the screen
+   stays empty below them, as in the approved screens (their content box has no fixed height). */
+.tile-ff .tile-ct,
+.tile-scr .tile-ct {
+  flex: 0 0 auto;
+}
+
+/* ---------------- status rings (last, so they win over each shape's own shadow) ---------------- */
+.tile-ring-play {
+  box-shadow:
+    0 0 0 3px var(--c-page),
+    0 0 0 6px var(--s-play),
+    var(--shadow-tile);
+}
+.tile-ring-over {
+  box-shadow:
+    0 0 0 3px var(--c-page),
+    0 0 0 8px var(--s-play),
+    0 0 30px var(--tile-glow),
+    var(--shadow-tile);
+}
+.tile-ring-pause {
+  box-shadow:
+    0 0 0 3px var(--c-page),
+    0 0 0 6px var(--s-pause),
+    var(--shadow-tile);
+}
+.tile-ring-free {
+  box-shadow:
+    0 0 0 3px var(--c-page),
+    0 0 0 6px var(--s-free),
+    var(--shadow-tile);
+}
+.tile-ring-sel {
+  box-shadow:
+    0 0 0 3px var(--c-deep),
+    0 0 0 7px var(--c-brass),
+    var(--shadow-tile);
+}
+.tile-ring-none {
+  box-shadow: var(--shadow-tile-soft);
+}
+/* out of order: a dashed ring drawn on ::after, so the real outline stays free for the focus ring */
+.tile-ring-ooo {
+  box-shadow: var(--shadow-tile-soft);
+}
+.tile-ring-ooo::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  z-index: 4;
+  border: 3px dashed var(--s-ooo);
+  border-radius: calc(var(--tile-radius, 18px) + 6px);
+  pointer-events: none;
+}
+
+/* Resume and other buttons on a tile: the words sit on the cloth, the button has its own plain text */
+.tile-btn {
+  text-shadow: none;
+}
+
+/* ---------------- the small table of the phone list (screen 54) ---------------- */
+.tile-mini {
+  position: relative;
+  flex: 0 0 auto;
+  width: 58px;
+  height: 36px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  padding: 4px;
+  background: linear-gradient(160deg, var(--wood-1), var(--wood-2) 55%, var(--wood-3));
+}
+.tile-mini-room {
+  margin-right: 10px;
+}
+.tile-mini-cloth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  color: var(--mini-ink);
+  font-family: var(--font-num);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1;
+}
+.tile-mini-room .tile-mini-cloth {
+  font-size: 16px;
+}
+.tile-mini-free {
+  background: var(--mini-cloth-free);
+}
+.tile-mini-lit {
+  background: var(--mini-cloth-lit);
+}
+.tile-mini-dim {
+  background: var(--cloth-dim-1);
+}
+.tile-mini-cover {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--mini-cover-1) 0 5px,
+    var(--mini-cover-2) 5px 10px
+  );
+}
+.tile-mini-pk {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mini-pocket);
+}
+.tile-mini-sofa {
+  position: absolute;
+  right: -9px;
+  top: 4px;
+  bottom: 4px;
+  width: 6px;
+  border-radius: 3px;
+  background: var(--sofa-2);
+}

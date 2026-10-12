@@ -68,10 +68,12 @@ Numbers use tabular figures (`font-variant-numeric: tabular-nums`) wherever they
 | Playing | 6 px red `#F0574F` | red dot, "Playing" | cloth lit (brighter centre) | timer and amount so far |
 | Over 30 min | 8 px red with a red glow | small red card, "Over 30 min" | cloth lit | **timer on a solid red card** `#D92D20`, white text, 2 px darker bottom edge |
 | Paused | 6 px yellow `#F2C14E` | yellow dot, "Paused" | cloth faded | timer stays; Resume button on the power-cut board |
-| Out of order | 3 px dashed grey `#9AA0A6`, offset 3 | grey dot, "Out of order" | striped grey cover | note, for example "Cloth change, marked by Adil at 4:15 PM" |
+| Out of order | 3 px dashed grey `#9AA0A6`, offset 3 | grey dot, "Out of order" | striped grey cover over the cloth of a snooker, room or pool table; a ludo board (and so the other games) keeps its picture, with only the dashed ring and the note *(corrected in P02 from screen 5)* | note, for example "Cloth change, marked by Adil at 4:15 PM" |
 | Price not set | none | brass dot, "Price not set" | faded | disabled, "Locked until an owner sets the price" |
 
 The ring is `box-shadow: 0 0 0 3px <page>, 0 0 0 6px <status>` (a page-coloured gap, then the colour). The pill is `rgba(10,8,6,.55)` with ivory text.
+
+A **selected** table (`status="selected"` in `05_COMPONENTS.md`: a free table that has been picked) has a 7 px brass `#E0AE52` ring with a `#0D0A07` gap, and the same pill as a free table. *(From the reference CSS, class `r-sel`. No approved screen draws it yet, so check it when a screen needs it.)*
 
 **On light backgrounds (the whole owner portal, screen 54)** the pill is the words on a tinted fill: no border and no dot, 13 px bold, padding `2px 8px`. *(Replaced after P01: the first version used a white pill with a 2 px border.)*
 
@@ -91,8 +93,8 @@ Each tile **is** the object seen from above, with the details laid on top. Exact
 
 | Tile | Shape | Key measurements | Free shows | Seen on screens |
 |---|---|---|---|---|
-| `SnookerTile` | walnut rail (13 px) around green cloth; 6 pockets 22 px; baulk line at 21 % with the D (r 32 px) | min-height of cloth 176 px; cloth padding 13/18/11 px; tile flex-basis 300 px | 15 reds triangle at 68 %, pink, black, blue, and brown/green/yellow on the baulk line, cue ball | 3, 6, 16 |
-| `RoomTile` | room wall 3 px `#8A7660`, padding 9 px; snooker table plus a 28 px maroon sofa along one side | number 46 px; label "Room / Rs 1,500/hr" | reds and the black only | 3, 6, 16 |
+| `SnookerTile` | walnut rail (13 px) around green cloth; 6 pockets 22 px; baulk line at 21 % with the D (r 32 px) | min-height of cloth 176 px; cloth padding 13/18/11 px; tile flex-basis 300 px | 10 reds in a four-row triangle at 68 %, pink, black, blue, and brown/green/yellow on the baulk line, cue ball *(10 reds, not 15: corrected in P02 from screen 3)* | 3, 6, 16 |
+| `RoomTile` | room wall 3 px `#8A7660`, padding 9 px; snooker table plus a 28 px maroon sofa along one side | number 46 px; label "Room / Rs 1,500/hr" | 10 reds, the blue, pink and black; no baulk colours and no cue ball *(corrected in P02 from screen 3)* | 3, 6, 16 |
 | `PoolTile` | dark rail 14 px, blue cloth, 6 pockets 24 px, diamond sights (6 per long rail, 3 per short), head string at 25 % | same as snooker | 15 balls rack (stripes and solids), cue ball at 25 % | 4, 5 |
 | `CarromTile` | square (`aspect-ratio: 1`), wood frame 16 px, plywood board, 4 corner pockets 26 px, baselines at 9 %/12.5 % with red ends, centre circle, corner arrows; dark text | content padding 40 px | 19 coins (queen red, white and black rings) in the centre | 5 |
 | `FoosballTile` | black cabinet with handles sticking out top and bottom; striped pitch, white lines, goals, 8 rods with red and blue players (faint) | pitch min-height 168 px | – | 5 |
@@ -106,6 +108,15 @@ Each tile **is** the object seen from above, with the details laid on top. Exact
 - **Bottom:** the timer at the start and the amount at the end; or the call to action for free tables; or the note for out of order.
 
 Text on cloth gets `text-shadow: 0 1px 2px rgba(0,0,0,.55)`. Text on the carrom board is dark `#2A1A0C` with a light halo.
+
+**How the tiles are built (P02):**
+- A tile is a real `<button>` (or a `<div role="group">` when it holds its own buttons). Inside it, `.tile-surface` is the object and carries the status ring; the words (`TileContent`) sit on top. Foosball and PlayStation have a wrapper for the handles and the stand.
+- The words on a foosball pitch and on a TV screen sit at the top; the extra height stays empty below them (the approved screens do this). On a snooker, pool or carrom table and on a ludo board the timer and amount sit at the bottom.
+- The carrom board is a square. Its status pill always wraps under the number (screen 5).
+- The out-of-order dashed ring is drawn on `::after`, so the keyboard focus ring (3 px ivory, offset 6) can still show.
+- The timer is a red card only on a frame past 30 minutes. A Century and a room run longer and stay plain (screen 3, tables 3 and R1).
+- In Urdu the sofa of a room moves to the other side because it is a flex item (screen 6); the cloth, pockets, baulk line, D, balls, coins and rods do not move.
+- Colours are tokens. P02 added the `--tile-*`, `--ov-*` (white and black at a given opacity), ball, coin, foosball, TV, sofa and `--mini-*` tokens at the end of `tokens.css`.
 
 ## 7. Shared components (visual)
 - **Counter top bar:**

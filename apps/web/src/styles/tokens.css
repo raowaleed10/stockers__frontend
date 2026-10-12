@@ -114,6 +114,64 @@
   --sl-pause-ink: #966319;
   --sl-ooo-ink: #666D7A;
 
+  /* ---------- table tiles (added in P02; screens 3, 4, 5, 6 and 16, read from design/tiles.reference.css) ---------- */
+  --tile-sub: #D3E6D7;        /* second line of text on green cloth */
+  --tile-sub-pool: #D2E2F2;
+  --tile-sub-carrom: #6A4E30;
+  --tile-sub-tv: #C9D8F0;
+  --tile-sub-note: #E2D4C0;   /* detail under an out-of-order note */
+  --tile-cta: #BFF0CF;        /* "Tap to start a game" */
+  --tile-frozen: #F5D488;     /* a paused timer on the power-cut board (16) */
+  --tile-btn-bg: rgba(20, 15, 10, 0.82);      /* the Resume button on a paused tile (16) */
+  --tile-pill-carrom: rgba(42, 26, 12, 0.82); /* status pill on the carrom board */
+  --tile-glow: rgba(240, 87, 79, 0.55);       /* red glow of an over-30 tile */
+  --shadow-tile-soft: 0 12px 26px rgba(0, 0, 0, 0.4); /* a tile with no status ring */
+  /* White and black at a given opacity, for rails, cushions and shadows: wNN is white NN %, kNN is black NN % */
+  --ov-w08: rgba(255, 255, 255, 0.08); --ov-w10: rgba(255, 255, 255, 0.1); --ov-w12: rgba(255, 255, 255, 0.12);
+  --ov-w15: rgba(255, 255, 255, 0.15); --ov-w16: rgba(255, 255, 255, 0.16); --ov-w20: rgba(255, 255, 255, 0.2);
+  --ov-w22: rgba(255, 255, 255, 0.22); --ov-w45: rgba(255, 255, 255, 0.45); --ov-w55: rgba(255, 255, 255, 0.55);
+  --ov-w70: rgba(255, 255, 255, 0.7); --ov-w75: rgba(255, 255, 255, 0.75);
+  --ov-k22: rgba(0, 0, 0, 0.22); --ov-k25: rgba(0, 0, 0, 0.25); --ov-k35: rgba(0, 0, 0, 0.35);
+  --ov-k40: rgba(0, 0, 0, 0.4); --ov-k45: rgba(0, 0, 0, 0.45); --ov-k50: rgba(0, 0, 0, 0.5);
+  --ov-k55: rgba(0, 0, 0, 0.55); --ov-k60: rgba(0, 0, 0, 0.6); --ov-k70: rgba(0, 0, 0, 0.7);
+  /* snooker, pool and room */
+  --pocket-rim: #24170D;
+  --cover-1: #55595F; --cover-2: #474A4F;            /* grey stripes over a table that is out of order */
+  --pool-rail-3: #2E2A27;
+  --pool-cushion: #1A5288; --pool-cushion-dim: #34485B;
+  --pool-dim-1: #4B6278; --pool-dim-2: #3B4D60; --pool-dim-3: #2E3C4B;
+  --pool-diamond: #EDE6D6;
+  --sofa-1: #5E241C; --sofa-2: #86372B; --sofa-3: #6E2B22; --sofa-seat-1: #9A4434; --sofa-seat-2: #7E3428;
+  /* carrom */
+  --carrom-frame-3: #59381C; --carrom-board-mid: #ECD29F;
+  --carrom-dim-1: #D9CDB5; --carrom-dim-2: #C9B999; --carrom-dim-3: #B7A684;
+  --carrom-edge: rgba(80, 45, 15, 0.35); --carrom-glow: rgba(90, 50, 10, 0.25);
+  --carrom-halo: #F3E2BC;                             /* light halo behind dark text on the board */
+  --carrom-pocket-rim: #3A2410; --carrom-pocket-ring: rgba(60, 35, 15, 0.6);
+  --carrom-line: #5A3416; --carrom-red: #B8312A;
+  --coin-white: #F3E9D2; --coin-black: #2B2B2B; --coin-queen-1: #F06A5E; --coin-queen-2: #B3201B;
+  /* foosball */
+  --foos-goal: #050506; --foos-rod-1: #8E959F; --foos-rod-2: #E3E7EC;
+  --foos-handle-1: #1B1B1F; --foos-handle-2: #4A4A52; --foos-handle-ring: #5C5C66;
+  --foos-red: #D0302B; --foos-blue: #2357C9;
+  /* ludo and PlayStation */
+  --ludo-paper: #FBF7EE;
+  --ludo-grid: rgba(40, 30, 20, 0.45);
+  --tv-bezel-ring: #3A3A40;
+  --tv-off-1: #26282E; --tv-off-2: #141519; --tv-off-3: #08090B;
+  --tv-stand-1: #1A1A1D; --tv-stand-2: #2E2E33; --tv-foot: #121214;
+  --tv-pad: #FFFFFF;
+  /* the small table in the phone list (54) */
+  --mini-cloth-free: #1F7A45; --mini-ink: #FFFFFF; --mini-pocket: #0B0806;
+  --mini-cover-1: #6B7078; --mini-cover-2: #5A5E64;
+  /* screen 54 draws the playing cloth #239052, which is 4.05:1 under the white "R1"; this is the same green
+     darkened until it reaches 4.5:1 (axe, color-contrast) */
+  --mini-cloth-lit: #21864C;
+  /* balls: snooker, then the pool balls that differ */
+  --ball-cue: #F4F1EA; --ball-red: #C8232C; --ball-yellow: #F2C230; --ball-green: #1E8A3E;
+  --ball-brown: #7A4A22; --ball-blue: #2357C9; --ball-pink: #F08BB0; --ball-black: #151515;
+  --ball-pool-red: #D0302B; --ball-purple: #6A3BA8; --ball-orange: #F07A1E; --ball-maroon: #7A2420;
+
   /* ---------- shape ---------- */
   --r-tile: 18px;
   --r-dialog: 26px;

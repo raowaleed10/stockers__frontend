@@ -79,6 +79,19 @@ type TileProps = {
 
 Export: `SnookerTile`, `RoomTile`, `PoolTile`, `CarromTile`, `FoosballTile`, `LudoTile`, `PlayStationTile`, `MiniTable`, and `GameTile` (picks the right one from `game.kind`). Build a **tile gallery** route (`/dev/tiles`, dev only) that shows every tile in every state, in English and Urdu.
 
+### As built in P02 (read this before using the tiles)
+
+Built: `SnookerTile`, `RoomTile`, `PoolTile`, `CarromTile`, `FoosballTile`, `LudoTile`, `PlayStationTile`, `GameTile` (`kind: TableKind` plus the tile props), `MiniTable`, `TileContent`, and `TileActionButton`. Import from `@/tiles`. The gallery is at `/dev/tiles` (counter app, development only). What differs from the table above:
+
+- **More props:** `lockReason` (why a table is locked; the tile is then disabled and the reason is its accessible description), `className` (the flex or grid size from the page, for example `flex-[1_1_300px] min-w-0`), `cta.title` is optional (the power-cut board shows only the hint), and `note.title` is optional (without it the detail is drawn larger, as for "Dice missing").
+- **`as="div"`** makes the tile `<div role="group">` with the same name and no press. Put `TileActionButton` (the Resume button of screen 16, drawn 50 px inside a 56 px box) in `trailing`.
+- **Words:** `label`, `gameLine`, `cta`, `note`, `lockReason` and `pillLabel` are written by the caller, already translated. "vs" and "Under" come from the `tile.versus` and `tile.under` words in `common` (in Urdu "Under" goes after the name: "سعد حسین کے نام").
+- **Timer:** pass a `<TimerText/>`. Use `variant="redCard"` or `"auto"` only for a frame; a Century and a room use `variant="plain"`, because the red card means "a frame has run over 30 minutes" (screen 3). On the power-cut board the timer is yellow: add `className="text-tile-frozen"`.
+- **Amount:** pass whole rupees in `amount`; the tile writes it with `MoneyText`, so Urdu reads "250 روپے".
+- **`status`:** `STATUS_LOOK` in `status.ts` is the one table of what each status looks like (ring, cloth, pill, locked, striped). A selected table looks like a free one with a brass ring.
+- **`MiniTable`** (`number`, `status`, `room`): the 58 × 36 glyph of screen 54. It is hidden from screen readers; the row names the table in words. It is not in the counter bundle unless a counter screen imports it.
+- **Tokens:** all colours are tokens (`--tile-*`, `--ov-*`, balls, coins, foosball, TV, sofa, `--mini-*`); the drawings are in `src/tiles/tiles.css` and `layout.ts` (where the balls, coins and rods go).
+
 ## Rules for components
 - `ui` and `tiles` never fetch data and never read the clock directly (`TimerText` uses `useNow()`, which is allowed).
 - All text comes in through props or `t()`; no English hard-coded inside shared components.

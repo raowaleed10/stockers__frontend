@@ -1,4 +1,5 @@
 import type kit from '@/dev/locales/en/kit.json';
+import type tiles from '@/dev/locales/en/tiles.json';
 import type common from '@/locales/en/common.json';
 
 // Makes t('...') check its keys against the English files. Type-only, so nothing here reaches a bundle.
@@ -10,6 +11,7 @@ declare module 'i18next' {
     resources: {
       common: typeof common;
       kit: typeof kit; // dev-only: the /dev/kit page
+      tiles: typeof tiles; // dev-only: the /dev/tiles page
     };
   }
 }

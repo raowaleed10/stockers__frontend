@@ -1,0 +1,30 @@
+{
+  "chrome": {
+    "title": "Table tiles",
+    "intro": "Every table tile in every state, at the sizes of the approved screens. Development only: this page is not in a production build. Timers are frozen so the page looks the same every time. The sample words fill the tiles; they are not product copy.",
+    "s3": "Screen 3: snooker tables and rooms",
+    "s4": "Screen 4: pool tables before a price is set",
+    "s5": "Screen 5: pool, carrom, foosball, ludo and PlayStation",
+    "s5pool": "Pool",
+    "s5carrom": "Carrom",
+    "s5foosball": "Foosball",
+    "s5ludo": "Ludo",
+    "s5playstation": "PlayStation",
+    "s6": "Screen 6: the live board in Urdu",
+    "s16": "Screen 16: power cut, with a Resume button on each tile",
+    "matrix": "Every kind of table in every state",
+    "english": "English",
+    "urdu": "Urdu",
+    "phone": "Screen 54: the small table in the phone list",
+    "kinds": {
+      "snooker": "Snooker table",
+      "room": "Room",
+      "pool": "Pool table",
+      "carrom": "Carrom board",
+      "foosball": "Foosball table",
+      "ludo": "Ludo board",
+      "playstation": "PlayStation"
+    },
+    "resume": "Resume"
+  }
+}

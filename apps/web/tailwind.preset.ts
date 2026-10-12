@@ -44,6 +44,8 @@ const preset: Partial<Config> = {
           'red-line': v('o-red-line'), track: v('o-track'), stripe: v('o-stripe'), divider: v('o-divider'),
           'on-green': v('o-on-green'), 'grey-tint': v('o-grey-tint'),
         },
+        // tile text and buttons that components write with a class (the drawings themselves are in tiles.css)
+        tile: { frozen: v('tile-frozen'), btn: v('tile-btn-bg') },
         sl: {
           free: v('sl-free'), play: v('sl-play'), pause: v('sl-pause'), ooo: v('sl-ooo'),
           // the same hues darkened for text on a tint (P01 answers)

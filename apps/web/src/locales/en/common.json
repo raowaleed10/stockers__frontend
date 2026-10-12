@@ -37,5 +37,9 @@
     "owed": "owed",
     "advance": "advance",
     "edit": "Edit"
+  },
+  "tile": {
+    "versus": "{{a}} <w>vs</w> {{b}}",
+    "under": "<w>Under</w> {{name}}"
   }
 }
