@@ -8,6 +8,10 @@ import { counterKeys as keys } from './keys';
 export const usePublicWorkers = () =>
   useQuery({ queryKey: keys.workers, queryFn: calls.getPublicWorkers });
 
+/** The sign-in page's line about the sheet and the tables. Needs no session. */
+export const useClubStatus = () =>
+  useQuery({ queryKey: keys.clubStatus, queryFn: calls.getClubStatus });
+
 /** Who is signed in. A 401 means nobody is, or the worker's time is over. */
 export const useMe = () => useQuery({ queryKey: keys.me, queryFn: calls.getMe, retry: false });
 

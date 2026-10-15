@@ -1,5 +1,5 @@
-import type { BoardTable, PublicWorker } from '@stockers/shared';
-import { elapsed, formatClock, formatRs, formatSlot, isOver30, toClubIso } from '@stockers/shared';
+import type { PublicWorker } from '@stockers/shared';
+import { formatClock, formatRs, formatSlot, tableStatus, toClubIso } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
 import { useNow } from '@/lib/clock';
 import { isApiError } from '@/lib/api-client';
@@ -20,19 +20,6 @@ import {
 /** Two sample players for the "Start game" button. They are in the mock data. */
 const SAMPLE_PLAYERS: [string, string] = ['ahmed-nawaz', 'ali-akbar'];
 const PINS: Record<string, string> = { shabir: '1111', zain: '2222' };
-
-type RowStatus = 'free' | 'playing' | 'over30' | 'paused' | 'outOfOrder' | 'noPrice';
-
-function statusOf(table: BoardTable, now: number): RowStatus {
-  if (table.outOfOrder) return 'outOfOrder';
-  if (table.price === null) return 'noPrice';
-  const game = table.game;
-  if (!game) return 'free';
-  if (game.status === 'paused') return 'paused';
-  const framePlayed = game.type === 'single' || game.type === 'double';
-  const ms = elapsed(game.startedAt, now, game.pausedMs, game.pausedAt);
-  return framePlayed && isOver30(ms) ? 'over30' : 'playing';
-}
 
 function Message({ error }: { error: unknown }) {
   const { t } = useTranslation('data');
@@ -171,7 +158,7 @@ export default function DataPage() {
             </thead>
             <tbody>
               {(board.data?.tables ?? []).map((table) => {
-                const status = statusOf(table, now);
+                const status = tableStatus(table, now);
                 const game = table.game;
                 const players = game?.playerIds ?? [];
                 return (

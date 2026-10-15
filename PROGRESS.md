@@ -10,7 +10,7 @@ Claude Code updates this file at the end of every step. The developer reads it b
 | P01 | Design system and shared UI | ☑ | Done 12 Oct 2026, after the language-file split (see Decisions). 26 components in `src/ui`, `format.ts` and `time.ts` in shared, and `/dev/kit` in both apps. Open questions and differences are below. |
 | P02 | Table tiles | ☑ | Done 12 Oct 2026, straight after "P01 answers". Eight tiles, `GameTile`, `/dev/tiles`, and a crop test against the PNGs. Questions and differences are below. |
 | P03 | Data, rules and mock API | ☑ | Done 13 Oct 2026, answers applied the same day ("P03 answers"). Six rule files and the shared API types, a typed client with hooks for both apps, the mock server, the live events, and `/dev/data` in both apps. Differences are below. |
-| P04 | Counter shell, worker sign-in, lock | ☐ |  |
+| P04 | Counter shell, worker sign-in, lock | ☑ | Done 15 Oct 2026. Sign-in (screens 1, 2), the counter frame (top bar, action bar, banner), the route guard, the end-of-time sign-out, and the lock (screen 34). Screen 3's frame is built and compared; its board is P05. Questions and differences are below. |
 | P05 | Live board | ☐ |  |
 | P06 | Start a game | ☐ |  |
 | P07 | Running game | ☐ |  |
@@ -34,8 +34,8 @@ Tick a screen when it matches its PNG at the design size and its visual test pas
 
 | # | Screen | App | Route | Built | Visual test | Urdu checked |
 |---|---|---|---|---|---|---|
-| 1 | Worker sign-in | counter | `/sign-in` | ☐ | ☐ | ☐ |
-| 2 | Not your time to sign in | counter | `/sign-in?worker=shabir` | ☐ | ☐ | ☐ |
+| 1 | Worker sign-in | counter | `/sign-in` | ☑ | ☑ | ☑ |
+| 2 | Not your time to sign in | counter | `/sign-in?worker=shabir` | ☑ | ☑ | ☑ |
 | 3 | Live board | counter | `/` | ☐ | ☐ | ☐ |
 | 4 | Pool tables before a price is set | counter | `/board/pool` | ☐ | ☐ | ☐ |
 | 5 | Pool, carrom, foosball, ludo and PlayStation | counter | `/dev/games-preview` | ☐ | ☐ | ☐ |
@@ -67,7 +67,7 @@ Tick a screen when it matches its PNG at the design size and its visual test pas
 | 31 | Today’s totals | counter | `/today` | ☐ | ☐ | ☐ |
 | 32 | Close the sheet | counter | `/close-sheet` | ☐ | ☐ | ☐ |
 | 33 | New sheet opened | counter | `/sheet-closed` | ☐ | ☐ | ☐ |
-| 34 | Screen locked | counter | `/?locked=1` | ☐ | ☐ | ☐ |
+| 34 | Screen locked | counter | `/?locked=1` | ☑ | ☑ | ☑ |
 | 35 | Owner sign-in at the private address | owner | `/owner-dev/sign-in` | ☐ | ☐ | ☐ |
 | 36 | Dashboard | owner | `/owner-dev/` | ☐ | ☐ | ☐ |
 | 37 | Reports and comparisons | owner | `/owner-dev/reports` | ☐ | ☐ | ☐ |
@@ -189,6 +189,37 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 - **Dev page words:** the Urdu on `/dev/data` is my own sample for checking layout (`src/dev/locales/ur/data.json`), never shown to users, so it is not in `docs/URDU_TO_CHECK.md`.
 - **Not mine:** running ESLint directly on `scripts/check-bundles.mjs` reports a control character in an older regular expression. `npm run lint` does not cover `scripts/`, so it never showed.
 
+**From P04: your answers during the plan (15 Oct 2026)**
+
+| # | Question | Answer | Result |
+|---|---|---|---|
+| 1 | When does screen 2 appear? | After the 4th PIN digit, when the server answers `NOT_YOUR_TIME`. `/sign-in?worker=shabir` is a test link. | Done. The deep link shows the alert from the public slot and the clock, with no sign-in call and no event, and does not move focus. A real answer from the server writes the attempt down and puts focus on OK. Written in `docs/08` §3. |
+| 2 | Where does "Sheet 48 is open since 11:10 AM. 6 of 9 tables in use." come from before anybody is signed in? | A new public endpoint. | `GET /api/counter/club-status` → `{sheetNumber, openedAt, inUse, total}` (the Snooker and rooms tab). Type in `packages/shared/src/api.ts`, mock handler, hook `useClubStatus`, `docs/06` §2, three tests. **The backend must implement it**, like `GET /games/:id` in P03. |
+| 3 | The lock pills and the clock | Paused counts as playing; the big clock follows the app clock. | `summarizeTables` in shared gives 5 playing, 1 over 30 min, 2 free, 1 out of order at 9:42 PM (tested). The PNG's 11:06 PM is treated as a design slip (see question 3 below); the visual test leaves the big-clock block out. |
+
+**From P04: questions for the developer**
+
+| # | Question | What I did meanwhile |
+|---|---|---|
+| 1 | **What does the counter's bell open?** Screen 3 draws it with the count (3), but no approved screen draws the list behind it. (`docs/11` question 16) | It shows the count (`useBoard().unread`) and opens nothing. `useAlerts()` and `useReadAllAlerts()` are ready for when the list is designed. |
+| 2 | **Two things have no PNG:** the banner "Your sign-in time ends at 11:00 PM. Finish what you are doing." and the small offer under the worker chip ("Switch worker"). Do you want them drawn? | Banner: a full-width strip above the top bar in the amber warning tokens (`--c-warn-*`), no close button, `role="status"`. Offer: a one-button popover under the chip, 56 px tall, closes on Escape or a tap outside. The words are ones already approved. |
+| 3 | **Screen 34's PNG shows 11:06 PM.** At that moment Zain's time is over (it ends at 11:00), so he could not be at the lock screen. Please confirm it is a slip, or tell me which moment it should show. | The app shows its own clock (9:42 PM at the demo start). The visual test leaves the clock block out of the comparison. |
+| 4 | **Urdu clock words.** To write `رات 11:00 تک` and `کھلی: صبح 11:10` the app needs the hours for صبح، دوپہر، شام and رات. | Times inside Urdu text stay as `11:10 AM`, kept in their own order. The 21 new Urdu rows are in `docs/URDU_TO_CHECK.md` (marked P04). P18 needs the answer. |
+
+**From P04: for information (no answer needed)**
+
+- **Placeholder routes:** `/checkout`, `/canteen`, `/players`, `/today`, `/expense`, `/close-sheet` and `/pause-all` show the button's name inside the real frame. `/pause-all` is temporary: Pause all is an action (screen 16), so P05 or P07 replaces the route with the real action.
+- **The lock survives a reload.** The flag is in `sessionStorage`, so refreshing the page cannot get around the PIN. `?lockAfter=<seconds>` (for tests) works only in development; I searched `dist/counter` and the text is not in the production bundle.
+- **The device clock never signs a worker out.** The banner is only a display. When the clock passes the end, the app asks `GET /auth/me` every 2 seconds, and the server's 401 `SESSION_ENDED` sends the worker to `/sign-in`.
+- **Dev words reworded.** `check:bundles` found three `/dev/data` sample words inside real counter words ("until {{time}}", its Urdu twin and "سائن اِن کا وقت"). The dev sentence is now "Zain is signed in (ends 11:00 PM)", and the three expectations in `data.counter.spec.ts` follow it.
+- **Language switch:** the Urdu word is now 15 px on the counter (it was 18 in `Segmented`); the screens draw 15. The owner portal keeps 18.
+- **Lock keypad:** screen 34 draws 80 px keys (screen 1 draws 76). The design wins; `docs/04` is corrected.
+- **New tokens** (end of `tokens.css`, additions only): `--c-on-felt`, `--c-pill-free-bg`, `--c-pill-ooo-bg`, `--shadow-ball-ivory`, `--shadow-ball-sm`, `--shadow-ball-md`, `--shadow-ball-alert`, `--touch-key-lock`.
+- **`tableStatus` moved to shared.** The `statusOf` function that lived in the dev data page is now `tableStatus` in `packages/shared/src/rules/board.ts`, with `summarizeTables`. P05 should use them, not write them again.
+- **A different plan detail:** I did not move the compare code out of the tile test (it passes and is tuned for tiles). `tests/visual/compare.ts` is a new, general helper with masks; the tile test is untouched.
+- **A slip of mine:** a shell quoting mistake garbled the "As built in P04" section of `docs/05` when I first wrote it. I saw it in the diff and rewrote the section; the other docs were fine.
+- **Not in P04:** the board and the category tabs (P05), the bell's list, the real Pause all, and the Urdu clock words (P18).
+
 **From P00: for information (no answer needed)**
 
 3. **Demo clock is on unless `VITE_DEMO_CLOCK=off`**, as P00 specifies. Production builds must set it to `off` (written in `apps/web/.env.example`). P20 should check this.
@@ -205,6 +236,7 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 - **12 Oct 2026, owner deep links:** the server injects `<base href>` and the app-base tag for every address under the secret prefix. The rule is in `docs/08_AUTH_AND_ACCESS.md` §1 and the backend copies it.
 
 - **13 Oct 2026, the mock (P03):** one store per tab, and no "who" from the client: the session decides `doneBy`. A counter session gets 404 from the owner API; no session gets 401. The seed's `balance` is credit from before tonight, tonight's bills are statement lines, and `balance` always equals the sum of the lines. The rules live in `packages/shared/src/rules` and the mock uses them, so the backend later gives the same numbers. Details in `docs/06` §6.
+- **15 Oct 2026, the counter frame and sign-in (P04):** screen 2 appears after the 4th digit, when the server answers; the sign-in page reads its sheet line from the public `GET /club-status`; the lock counts a paused table as playing; the device clock never signs a worker out (the server decides, the app asks again every 2 seconds once its own clock says the time is over); the lock survives a reload. Details in `docs/08` §3.
 
 ## Carried to P20
 
@@ -219,7 +251,7 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 
 ## Differences from the designs that could not be fixed
 
-(Screen number, what is different, why.) `test:visual` has no routes to compare until P05, so these come from comparing `/dev/kit` crops with the PNGs by eye at the design size (kit opened at 2400 px so the dialogs reach their real width).
+(Screen number, what is different, why.) Since P04, `test:visual` compares screens 1, 2 and 34 and the two bars of screen 3 with their PNGs; the rows for screens 7, 19, 25 and others come from comparing `/dev/kit` crops with the PNGs by eye at the design size (kit opened at 2400 px so the dialogs reach their real width).
 
 | Screen | Difference | Why |
 |---|---|---|
@@ -235,6 +267,11 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 | 54 | The playing cloth of the phone glyph is `#21864C`, the PNG has `#239052` | Contrast (question 3) |
 | 53, 57 | The owner bell shows 4 where the PNG draws 3 (10:30 PM, n1 to n4 unread) | Screen 36 draws 4 at the same moment; the developer called the 3 a slip in the design (13 Oct answer 6) |
 | 54 | The owner bell shows 2 where the PNG draws 3 (9:44 PM: only n1 and n2 have happened) | The same kind of slip; the mock follows the story, not the number |
+| 1, 2, 34 | 1.1 %, 1.5 % and 0.8 % of the pixels differ from the PNG (budget 6 %). Sizes and positions agree with the design HTML to the pixel | Text edges only: the PNGs were drawn on another computer, and a browser draws the same font a little differently |
+| 3 (top bar and action bar only) | 3.4 % and 4.4 % differ. The boxes of the header, bell, chip, Lock and all seven action buttons are the design HTML's boxes to the pixel. The board between the bars is P05 | More text and icons in a thin strip. The lucide icons are the same family as the designs but not always the same drawing (wallet, chart) |
+| 34 | The PNG shows 11:06 PM; ours shows the app clock (9:42 PM at the demo start). The pills read "5 playing" because the paused Table 6 counts as playing | The PNG's moment is after Zain's time ends, so it is a design slip (question 3 from P04). The visual test masks the clock block |
+| 1 to 6 | The Urdu word of the language switch is 15 px on the counter (P01 had 18) | The screens draw 15 |
+| 1, 2, 34 in Urdu | No approved Urdu PNG for these; the big clock, the date and the month names stay English | The Urdu clock words are P18's job (question 4 from P04). Checked by eye at 1440 × 900: mirrored, nothing clipped, the keypad still 1-2-3 from the left |
 
 Urdu, checked in the kit: nothing is clipped, dates and times keep their order (`<bdi dir="ltr">`), the keypad keeps 1-2-3 from the left, amounts keep Western digits. Digits inside running Urdu text are Barlow, not Barlow Condensed; P18 decides if that needs changing.
 
@@ -291,6 +328,15 @@ Urdu, checked in the kit: nothing is clipped, dates and times keep their order (
 - **Heads-up for P05 (board):** `useBoard(category)` returns `players` (names of everyone on a table), `waiting`, `unread`, `backedUpAt` and `pausedAll`. No category is the `snooker` tab (snooker tables and rooms), as `/` is. The waiting panel's "Not paid yet today" is the sum of each bill's `tonight` (Rs 1,550); the checkout list's total is the sum of `total` (Rs 6,880). Use `chargeForGame(game, now)` for the amount on a tile and `TimerText` for the clock; a Century and a room get `variant="plain"`.
 - **Heads-up for every screen:** the demo clock, the sign-in times, the undo window and the type-change window all read `clock.now()`, so a screen needs no clock of its own. Write calls return the saved record; the screen refreshes from the live events, not from the call's result.
 
+## What P04 left in place (read before P05)
+
+- **Routes to open (`npm run dev`):** `http://localhost:5173/sign-in` (screen 1), `/sign-in?worker=shabir` (screen 2), `/` (the frame with a placeholder board), `/?locked=1` (screen 34), `/?now=2026-10-03T22:51:00%2B05:00` (the banner), `/?now=2026-10-03T22:59:48%2B05:00` (signed out at 23:00 a few seconds later), `/?lockAfter=10` (locks after 10 seconds, development only), `/sign-in?lang=ur` (Urdu). Every screen of the counter except `/sign-in`, Page not found and the `/dev/*` pages needs a worker session; `?as=none` opens signed out.
+- **Where things are:** `src/counter/screens/SignIn.tsx`, `src/counter/components/` (frame, top bar, action bar, banner, lock, sign-in parts), `src/counter/session/` (guard, lock store, idle time, switch worker), `src/counter/locales/{en,ur}/{signin,frame,lock}.json`, `packages/shared/src/rules/board.ts`. The list with props is in `docs/05` "As built in P04".
+- **Tests:** Vitest 480 in web (77 new: sign-in, frame, lock and idle, session timing with a fake clock, the guard, `Keypad` lock, `PinDots` shake, `GET /club-status`) and 134 in shared (10 new in `board.test.ts`). Playwright e2e 102 (38 new in `signin.counter.spec.ts`: Zain at 21:42, Shabir refused, wrong PIN, five tries, the banner at 22:51, signed out at 23:00, idle lock, unlock, reload, Switch worker, Escape and Tab on the lock, and axe, 56 px controls and sideways scroll on five screens in English and in Urdu). Visual 46 (5 new: screens 1, 2, 34 in `screens.counter.spec.ts`, and the two bars of screen 3 in `frame.counter.spec.ts`; the pictures are in `test-results/screens` and `test-results/frame`).
+- **Proved on purpose, then undone:** the app no longer asking the server after the end of the time (3 tests failed), the green taken off the sign-in panel (48.3 % differ, the visual test failed), and the board taken out from behind the guard (the guard tests failed).
+- **Heads-up for P05 (the board):** replace `BoardPlaceholder` in `src/counter/routes/index.tsx`; the frame already draws the top bar, the action bar and the banner around an `<Outlet/>`, and fills the screen height, so the board's `main` should be `flex-1`. `CategoryTabs` are not built. The frame reads `useBoard()` (the snooker tab) for the sheet, the bell count and the backup time, so the board uses the same query key and costs no second call. Use `tableStatus` from shared for the tiles. The lock screen uses `useBoard('all')`. When the board is built, add screen 3 to `BUILT` in `tests/visual/screens.counter.spec.ts` (the PNG is 1440 × 952) and add `/pause-all`'s real action.
+- **Heads-up for every counter screen:** put `screen-text` on its root so it gets the design's line height; use `RichText` for any word that holds a time or a name; use `TopBarButton`'s approach (a 56 px box around a drawn shape) for any control a PNG draws under 56 px.
+
 ## Log
 
 | Date | Step | What was done | Tests |
@@ -304,3 +350,4 @@ Urdu, checked in the kit: nothing is clipped, dates and times keep their order (
 | 2026-10-12 | P02 answers | Applied the developer's answers to the P02 questions: nothing changed in the look; added a check that every word of every tile has the design's text shadow; wrote question 14 in `docs/11_OPEN_QUESTIONS.md` and the fallback in `docs/04` §6; closed the question in this file; noted the Urdu-by-eye rule for P05. | Playwright: 44 e2e (1 new: text shadow on all 148 tiles, shown to fail with the shadow removed) and 41 visual. Vitest 223 in web, 29 in shared. typecheck, lint, build and check:bundles pass. |
 | 2026-10-13 | P03 | Built the six rule files and `api.ts` in shared; the typed API client, the event bus and `useAction` in `lib`; the counter and owner API calls and hooks; the mock server (store, seed loader, five scenarios, counter and owner handlers over one store); `/dev/data` in both apps; lint rules for the mocks and the shared rules; the seed check in `check:bundles`; docs 03 and 06. Fixed along the way: `GET /settings` had no payment methods, owner sign-in did not refresh what had failed with 401, the board with no category returned the whole club, a lint pattern let the shared `db` import an owner file. | Vitest: 368 in web, 122 in shared. Playwright: 62 e2e (18 new) and 41 visual. typecheck, lint, build and check:bundles pass. Each kind of test was shown to fail on a deliberate break (see "What P03 left in place"). |
 | 2026-10-13 | P03 answers | Applied the developer's seven answers: the over-30 choice on double frames; worker session events and the Workers data (not in Activity); the seed fixed (closing rows, session frames with start and end, screen 31's counts, disputes, counter alerts, owner notification times) and the loader's own numbers removed; frame lines dated from their start; the counter's alerts and bell; the discount limits tested; docs 06, 07, 08, 11. Found and fixed along the way: a worker who is signed in at the start had no `lastSignIn` to close, and the e2e specs now start from a warm dev server (`global-setup.ts`) and wait for fonts, animations and layout with one `settle` helper. | Vitest: 403 in web, 124 in shared. Playwright: 64 e2e (2 new: the owner's sign-in record) and 41 visual; three full runs from a cold cache all passed 64 of 64 (answer 7). typecheck, lint, build and check:bundles pass. Nine new deliberate breaks each failed tests. |
+| 2026-10-15 | P04 | Built the sign-in page (screens 1 and 2, with the deep link), the counter frame (top bar, worker chip with Switch worker, action bar, sign-in time banner), the route guard, the end-of-time check, the idle lock and the lock screen (screen 34); `GET /club-status` (type, mock, hook, doc); `tableStatus` and `summarizeTables` in shared; `Keypad keys="lock"`, `PinDots shake`; the counter language files in English and Urdu; new tokens; a general image compare with masks, `screens.counter.spec.ts` and `frame.counter.spec.ts`. Docs 03, 04, 05, 06, 08, 11 and `URDU_TO_CHECK.md`. Fixed along the way: the focus ring that showed on a deep link and on the lock's first key, the Urdu word of the language switch (15 px), three dev sample words that collided with real counter words in `check:bundles`, Urdu pills that put two numbers side by side. | Vitest: 480 in web, 134 in shared. Playwright: 102 e2e (38 new) and 46 visual (5 new). typecheck, lint, build and check:bundles pass. Three deliberate breaks each failed tests. |

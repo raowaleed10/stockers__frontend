@@ -1,0 +1,18 @@
+{
+  "title": "Who is working?",
+  "yourTimeNow": "Your time now",
+  "notNow": "Not now",
+  "enterPin": "<name>{{name}}</name>, enter your 4-digit PIN",
+  "footer": "Your PIN works only in your sign-in time. Everything you do is saved with your name.",
+  "place": "Snooker club, Mian Plaza",
+  "clubStatus": "Sheet {{number}} is open since <ltr>{{time}}</ltr>. {{inUse}} of {{total}} tables in use.",
+  "loadFailed": "Could not load the workers.",
+  "retry": "Try again",
+  "notYourTime": {
+    "title": "Not your time to sign in",
+    "line": "<name>{{name}}</name> can sign in from <b><ltr>{{slot}}</ltr></b>.",
+    "now": "It is <ltr>{{time}}</ltr> now.",
+    "owner": "Only an owner can change sign-in times.",
+    "ok": "OK"
+  }
+}

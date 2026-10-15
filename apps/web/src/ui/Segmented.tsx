@@ -91,7 +91,9 @@ export function Segmented<V extends string = string>({
         const selected = option.value === value;
         const words = cx(
           'text-[16px]',
-          option.lang === 'ur' && 'font-urdu text-[18px] leading-none',
+          // Screens 1 to 6 draw the Urdu word of the language switch at 15 px; the owner portal keeps 18.
+          option.lang === 'ur' &&
+            cx('font-urdu leading-none', theme === 'counter' ? 'text-[15px]' : 'text-[18px]'),
         );
         const common = {
           type: 'button' as const,

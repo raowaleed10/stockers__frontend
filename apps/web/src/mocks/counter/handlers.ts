@@ -28,7 +28,7 @@ import {
   workerUnlock,
 } from '../db/auth';
 import { counterAlerts, readAllCounterAlerts } from '../db/alerts';
-import { board } from '../db/board';
+import { board, clubStatus } from '../db/board';
 import { canteenSale, counterCanteenItems } from '../db/canteen';
 import { checkout, checkoutBill, checkoutList } from '../db/checkout';
 import type { MockDb } from '../db/db';
@@ -83,6 +83,10 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
     http.get(
       `${B}/workers/public`,
       endpoint(() => publicWorkers(getDb())),
+    ),
+    http.get(
+      `${B}/club-status`,
+      endpoint(() => clubStatus(getDb())),
     ),
     http.post(
       `${B}/auth/sign-in`,

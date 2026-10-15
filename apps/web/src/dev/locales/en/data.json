@@ -7,7 +7,7 @@
     "title": "Who is signed in",
     "nobody": "Nobody is signed in.",
     "signedIn": "{{name}} is signed in",
-    "until": "until {{time}}",
+    "until": "(ends {{time}})",
     "signInAs": "Sign in as {{name}} ({{pin}})",
     "signOut": "Sign out",
     "owner": "Owner"

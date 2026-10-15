@@ -88,6 +88,31 @@ describe('worker sign-in over HTTP', () => {
   });
 });
 
+describe('the club status for the sign-in page (GET /club-status)', () => {
+  it('needs no session and gives screen 1 its line: sheet 48, open since 11:10 AM, 6 of 9 in use', async () => {
+    api.load({ as: 'none' });
+    expect(await counter.getClubStatus()).toEqual({
+      sheetNumber: 48,
+      openedAt: '2026-10-03T11:10:00+05:00',
+      inUse: 6,
+      total: 9,
+    });
+  });
+
+  it('counts the Snooker and rooms tab only, as screen 3 does, and follows the board', async () => {
+    api.load({ as: 'zain' });
+    expect((await counter.getClubStatus()).total).toBe(9);
+    await counter.startGame({ tableId: 't2', type: 'single', playerIds: ['imran', 'naveed'] });
+    expect((await counter.getClubStatus()).inUse).toBe(7);
+  });
+
+  it('says nothing about people or money', async () => {
+    api.load({ as: 'none' });
+    const status = await counter.getClubStatus();
+    expect(Object.keys(status).sort()).toEqual(['inUse', 'openedAt', 'sheetNumber', 'total']);
+  });
+});
+
 describe('who may call what', () => {
   it('answers 401 to a counter call with no worker session', async () => {
     api.load({ as: 'none' });

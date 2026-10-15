@@ -50,7 +50,7 @@ test.describe('/dev/data (counter)', () => {
 
     await expect(page.locator('[data-testid="waiting"] li')).toHaveCount(5);
     await expect(page.getByText('Not paid yet today: Rs 1,550')).toBeVisible();
-    await expect(page.getByTestId('session')).toContainText('Zain is signed in until 11:00 PM');
+    await expect(page.getByTestId('session')).toContainText('Zain is signed in (ends 11:00 PM)');
     expect(problems).toEqual([]);
   });
 
@@ -93,7 +93,7 @@ test.describe('/dev/data (counter)', () => {
     await expect(page.getByTestId('session')).toContainText('Nobody is signed in.');
 
     await page.getByRole('button', { name: 'Sign in as Zain (2222)' }).click();
-    await expect(page.getByTestId('session')).toContainText('Zain is signed in until 11:00 PM');
+    await expect(page.getByTestId('session')).toContainText('Zain is signed in (ends 11:00 PM)');
     await expect(page.getByTestId('sign-in-error')).not.toContainText('NOT_YOUR_TIME');
     // Now the board loads, because there is a worker session.
     await expect(page.locator('[data-testid="board"] tbody tr')).toHaveCount(28);
@@ -116,7 +116,7 @@ test.describe('/dev/data (counter)', () => {
 
   test('?scenario=closing signs Shabir in, with one Century and two bills', async ({ page }) => {
     await open(page, '?scenario=closing');
-    await expect(page.getByTestId('session')).toContainText('Shabir is signed in until 10:00 AM');
+    await expect(page.getByTestId('session')).toContainText('Shabir is signed in (ends 10:00 AM)');
     await expect(row(page, 't2')).toContainText('Under Ahmed Nawaz');
     await expect(page.locator('[data-testid="waiting"] li')).toHaveCount(2);
     await expect(page.getByText(/3:4[0-9] AM/).first()).toBeVisible();

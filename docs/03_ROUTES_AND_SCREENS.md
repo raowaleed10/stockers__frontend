@@ -84,5 +84,8 @@ Image: `design/screens/<file>.png` · HTML: `design/html/<file>.html`
 | counter `/board/carrom`, `/board/foosball`, `/board/ludo`, `/board/playstation` | the other game tabs | screen 3 layout + tiles from screen 5 (locked until priced, like screen 4) |
 | owner `/live` (desktop) | read-only live board for owners | screen 3 without the action bar and without tap actions |
 | owner `/alerts` (desktop) | notifications | screen 58 content in a desktop card |
+| counter `/checkout`, `/canteen`, `/players`, `/today`, `/expense`, `/close-sheet` | the action bar's screens, until their steps are built | placeholder with the button's name, inside the real frame (P04) |
+| counter `/pause-all` | **temporary.** Pause all is an action (screen 16), not a screen | placeholder, so the button goes somewhere; P05 or P07 replaces it with the action and removes the route |
+| counter `/sign-in?worker=<id>` | picks that worker; for a worker who is "Not now" it opens on screen 2 | P04 (test and demo link) |
 | any unknown path | "Page not found" | plain page, same look for every app; never mentions owners |
 | `/dev/kit`, `/dev/tiles`, `/dev/games-preview`, `/dev/data` | development only (`/dev/data` is in both apps: the board and workers from the mock API, with a button that starts a game) | P01, P02, P03 |

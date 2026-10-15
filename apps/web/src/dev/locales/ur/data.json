@@ -7,7 +7,7 @@
     "title": "کون سائن اِن ہے",
     "nobody": "کوئی سائن اِن نہیں ہے۔",
     "signedIn": "{{name}} سائن اِن ہے",
-    "until": "{{time}} تک",
+    "until": "(ختم {{time}})",
     "signInAs": "{{name}} کے طور پر سائن اِن ({{pin}})",
     "signOut": "سائن آؤٹ",
     "owner": "مالک"
@@ -20,7 +20,7 @@
     "title": "ورکرز",
     "yourTimeNow": "آپ کا وقت ابھی",
     "notNow": "ابھی نہیں",
-    "time": "سائن اِن کا وقت",
+    "time": "وقتِ سائن اِن",
     "today": "آج",
     "signedInSince": "ابھی سائن اِن ہے، {{time}} سے",
     "lastSignedIn": "آخری بار سائن اِن {{day}} {{from}} سے {{until}} تک",

@@ -36,7 +36,7 @@ Numbers use tabular figures (`font-variant-numeric: tabular-nums`) wherever they
 - Dimmed background behind counter dialogs: page `#0D0A07` with the header at 55 % opacity (see screens 7, 17, 19, 29).
 
 ## 4. Touch and states
-- Counter: every target is at least **56 px**. Main buttons are 60–80 px. PIN and number keys are **76 px**.
+- Counter: every target is at least **56 px**. Main buttons are 60–80 px. PIN and number keys are **76 px** (80 px on the lock screen, screen 34).
 - **A counter control that a PNG draws smaller than 56 px** keeps the drawn size on screen, but its pressable area is still 56 px. *(Answered by the developer after P01.)* The `<button>` is the 56 px box (transparent, no border), the visible shape is drawn inside it at the PNG size, and a negative margin of (56 − drawn) / 2 gives the space back, so nothing else on the screen moves. The focus ring is drawn around the visible shape. The touch-size test measures the button's own box. In code this is the counter-only prop `drawn` on `Button`, `IconButton`, `Chip` and `Segmented` (`src/ui/touch-box.ts`); `LanguageSwitch` always uses it. What the screens draw:
 
   | Control | Drawn | `drawn` | Screens |
@@ -128,7 +128,7 @@ Text on cloth gets `text-shadow: 0 1px 2px rgba(0,0,0,.55)`. Text on the carrom 
   - Then a spacer, "Backed up 9:00 PM", and Close sheet (outlined).
 - **Waiting to pay panel:** rows of 64 px showing name, phone tail and what for, with the amount at the end. The total is at the bottom.
 - **Counter dialog:** centred, max-width 1000–1060 px, panel colour, border 1 px `#4A3B2E` normally and 2 px red `#A8403A` for warnings, icon ball 64 px on the start side. *(Corrected in P01 to match screens 7 and 19; this page said a 2 px brass border for a normal dialog.)* Width: 1046 px for the standard dialog (screen 7), 1240 px for the two-column ones (screen 8). Cancel is outlined; the main action is brass.
-- **Keypad:** 3×4 grid of 76 px keys in Barlow Condensed 36 px, with Clear and Delete. The PIN shows as 4 dots. The amount keypad (screens 10, 26, 29) has 72 px keys and a "00" key instead of Clear. The pad keeps 1-2-3 from the left in Urdu.
+- **Keypad:** 3×4 grid of 76 px keys in Barlow Condensed 36 px, with Clear and Delete. The PIN shows as 4 dots. The amount keypad (screens 10, 26, 29) has 72 px keys and a "00" key instead of Clear. The lock screen (34) draws 80 px keys on the panel colour `#211913` with 38 px digits and "Switch worker" where Clear is (token `--touch-key-lock`; *the design wins over the 76 px written here before P04*). The pad keeps 1-2-3 from the left in Urdu.
 - **Owner sidebar:**
   - 240 px wide: brand at the top, then 11 items of 48 px. The active item has a `#3A2D21` background and bold text.
   - Order: Dashboard, Live tables, Sheets, Players and credit, Reports, Games and prices, Canteen, Expenses, Activity, **Workers**, Settings.

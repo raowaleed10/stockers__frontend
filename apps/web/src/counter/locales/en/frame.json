@@ -1,0 +1,20 @@
+{
+  "sheet": "Sheet {{number}}",
+  "openSince": "Open since <ltr>{{time}}, {{day}}</ltr>",
+  "notifications": "Notifications",
+  "notificationsNew": "Notifications, {{n}} new",
+  "signedIn": "Signed in: {{name}}, until {{time}}. Tap to switch worker",
+  "until": "Until <ltr>{{time}}</ltr>",
+  "lock": "Lock",
+  "banner": "Your sign-in time ends at <ltr>{{time}}</ltr>. Finish what you are doing.",
+  "backedUp": "Backed up <ltr>{{time}}</ltr>",
+  "actions": {
+    "checkout": "Checkout",
+    "canteen": "Canteen",
+    "players": "Players",
+    "today": "Today’s totals",
+    "expense": "Expense",
+    "pauseAll": "Pause all",
+    "closeSheet": "Close sheet"
+  }
+}

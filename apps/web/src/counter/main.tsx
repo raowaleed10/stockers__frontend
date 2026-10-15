@@ -8,11 +8,13 @@ import { registerResources } from '@/lib/i18n';
 import { initLanguage } from '@/lib/language';
 import { App } from './app';
 import { counterResources } from './locales';
+import { initLock } from './session/lock-store';
 
 async function boot() {
   clock.init({ app: 'counter' });
   registerResources(counterResources);
   initLanguage('counter');
+  initLock();
 
   if (__MOCKS__) {
     const [{ startMocks }, { counterHandlers }] = await Promise.all([

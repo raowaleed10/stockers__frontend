@@ -26,6 +26,8 @@ const preset: Partial<Config> = {
           'danger-bg': v('c-danger-bg'), 'danger-line': v('c-danger-line'), 'danger-ink': v('c-danger-ink'),
           'info-bg': v('c-info-bg'), 'info-line': v('c-info-line'), 'info-ink': v('c-info-ink'),
           'ok-bg': v('c-ok-bg'), 'ok-line': v('c-ok-line'), 'ok-ink': v('c-ok-ink'),
+          // added in P04 (see tokens.css)
+          'on-felt': v('c-on-felt'), 'pill-free-bg': v('c-pill-free-bg'), 'pill-ooo-bg': v('c-pill-ooo-bg'),
         },
         s: {
           free: v('s-free'), play: v('s-play'), over: v('s-over'), card: v('s-card'),
@@ -61,10 +63,14 @@ const preset: Partial<Config> = {
         'dialog-light': v('shadow-dialog-light'),
         tile: v('shadow-tile'),
         dot: v('shadow-dot'), redcard: v('shadow-redcard'), thumb: v('shadow-thumb'),
+        // added in P04 (see tokens.css)
+        'ball-ivory': v('shadow-ball-ivory'), 'ball-sm': v('shadow-ball-sm'),
+        'ball-md': v('shadow-ball-md'), 'ball-alert': v('shadow-ball-alert'),
       },
       minHeight: {
         touch: v('touch-counter'), 'touch-main': v('touch-counter-main'),
         key: v('touch-key'), 'touch-owner': v('touch-owner'),
+        'key-lock': v('touch-key-lock'),
       },
       minWidth: { touch: v('touch-counter'), 'touch-owner': v('touch-owner') },
       // added in P01: square icon buttons need an exact height and width from the same tokens

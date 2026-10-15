@@ -81,6 +81,7 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | Call | Body → result | Screens |
 |---|---|---|
 | `GET /workers/public` | → `[{id,name,slot,canSignInNow}]` (names and times only) | 1, 2 |
+| `GET /club-status` | **No session needed.** → `{sheetNumber, openedAt, inUse, total}`: the line "Sheet 48 is open since 11:10 AM. 6 of 9 tables in use." on the sign-in page. `inUse` and `total` count the Snooker and rooms tab (as on screen 3). No names, no money. *(Added in P04: the sign-in page has no session, and every board call needs one.)* | 1, 2 |
 | `POST /auth/sign-in` | `{workerId, pin}` → `{worker, until}` · **403 `NOT_YOUR_TIME`** `{slot, now}` · 401 wrong PIN · 429 too many tries | 1, 2 |
 | `POST /auth/unlock` · `POST /auth/sign-out` · `GET /auth/me` | | 34 |
 | `GET /alerts` · `POST /alerts/read-all` | → `{alerts, unread}`. The counter's own alerts (the bell); separate from the owners' notifications. A table put out of order, a game cancelled or undone, and an item running low add one. (Added with the P03 answers; no screen draws the list yet.) | 3–6 |

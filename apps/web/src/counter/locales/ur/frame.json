@@ -1,0 +1,20 @@
+{
+  "sheet": "شیٹ {{number}}",
+  "openSince": "کھلی: <ltr>{{time}}، {{day}}</ltr>",
+  "notifications": "اطلاعات",
+  "notificationsNew": "اطلاعات، {{n}} نئی",
+  "signedIn": "سائن اِن: {{name}}، {{time}} تک۔ کارکن بدلنے کے لیے ٹیپ کریں",
+  "until": "<ltr>{{time}}</ltr> تک",
+  "lock": "لاک",
+  "banner": "آپ کے سائن اِن کا وقت <ltr>{{time}}</ltr> پر ختم ہو رہا ہے۔ جو کام کر رہے ہیں وہ ختم کر لیں۔",
+  "backedUp": "بیک اپ: <ltr>{{time}}</ltr>",
+  "actions": {
+    "checkout": "چیک آؤٹ",
+    "canteen": "کینٹین",
+    "players": "کھلاڑی",
+    "today": "آج کا حساب",
+    "expense": "خرچہ",
+    "pauseAll": "سب روکیں",
+    "closeSheet": "شیٹ بند کریں"
+  }
+}

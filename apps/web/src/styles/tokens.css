@@ -172,6 +172,15 @@
   --ball-brown: #7A4A22; --ball-blue: #2357C9; --ball-pink: #F08BB0; --ball-black: #151515;
   --ball-pool-red: #D0302B; --ball-purple: #6A3BA8; --ball-orange: #F07A1E; --ball-maroon: #7A2420;
 
+  /* ---------- sign-in, lock and top bar (added in P04; screens 1, 2, 3 and 34) ---------- */
+  --c-on-felt: #CFE5D7;       /* small text on the green sign-in panel (1, 2) */
+  --c-pill-free-bg: #172419;  /* "2 free" pill on the lock screen (34) */
+  --c-pill-ooo-bg: #25272A;   /* "1 out of order" pill on the lock screen (34) */
+  --shadow-ball-ivory: inset -7px -7px 0 rgba(0, 0, 0, 0.18); /* ivory brand ball, 44 px (1, 2) */
+  --shadow-ball-sm: inset -5px -5px 0 rgba(0, 0, 0, 0.28);    /* brand ball, 34 px (3) */
+  --shadow-ball-md: inset -6px -6px 0 rgba(0, 0, 0, 0.28);    /* brand ball, 40 px (34) */
+  --shadow-ball-alert: inset -8px -8px 0 rgba(0, 0, 0, 0.25); /* red clock ball, 72 px (2) */
+
   /* ---------- shape ---------- */
   --r-tile: 18px;
   --r-dialog: 26px;
@@ -190,5 +199,6 @@
   --touch-counter: 56px;      /* minimum on the counter */
   --touch-counter-main: 64px; /* footer actions, dialog main buttons */
   --touch-key: 76px;          /* PIN and number keys */
+  --touch-key-lock: 80px;     /* the keys on the lock screen (34) */
   --touch-owner: 44px;        /* minimum in the owner portal */
 }

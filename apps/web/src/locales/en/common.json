@@ -9,10 +9,13 @@
   "closePanel": "Close panel",
   "keypad": {
     "clear": "Clear",
-    "delete": "Delete last digit"
+    "delete": "Delete last digit",
+    "switchWorker": "Switch worker"
   },
   "pin": {
-    "progress": "{{filled}} of 4 digits entered"
+    "progress": "{{filled}} of 4 digits entered",
+    "wrong": "Wrong PIN. Try again.",
+    "tooMany": "Wait 5 minutes"
   },
   "status": {
     "free": "Free",

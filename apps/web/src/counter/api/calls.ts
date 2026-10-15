@@ -10,6 +10,7 @@ import type {
   CheckoutRequest,
   CheckoutResult,
   ClosePreview,
+  ClubStatus,
   CloseSheetRequest,
   CloseSheetResult,
   CounterCanteenItem,
@@ -44,6 +45,7 @@ const api = createApiClient('/api/counter');
 
 // Sign-in
 export const getPublicWorkers = () => api.get<PublicWorker[]>('/workers/public');
+export const getClubStatus = () => api.get<ClubStatus>('/club-status');
 export const signIn = (request: SignInRequest) => api.post<WorkerSession>('/auth/sign-in', request);
 export const unlock = (request: UnlockRequest) => api.post<WorkerSession>('/auth/unlock', request);
 export const signOut = () => api.post<{ ok: true }>('/auth/sign-out');

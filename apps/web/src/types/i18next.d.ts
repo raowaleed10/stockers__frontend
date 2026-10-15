@@ -1,3 +1,6 @@
+import type frame from '@/counter/locales/en/frame.json';
+import type lock from '@/counter/locales/en/lock.json';
+import type signin from '@/counter/locales/en/signin.json';
 import type data from '@/dev/locales/en/data.json';
 import type kit from '@/dev/locales/en/kit.json';
 import type tiles from '@/dev/locales/en/tiles.json';
@@ -11,6 +14,9 @@ declare module 'i18next' {
     defaultNS: 'common';
     resources: {
       common: typeof common;
+      frame: typeof frame; // counter: the top bar, the action bar and the sign-in time banner
+      lock: typeof lock; // counter: the lock screen
+      signin: typeof signin; // counter: the sign-in page
       data: typeof data; // dev-only: the /dev/data page
       kit: typeof kit; // dev-only: the /dev/kit page
       tiles: typeof tiles; // dev-only: the /dev/tiles page

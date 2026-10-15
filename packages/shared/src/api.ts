@@ -152,6 +152,18 @@ export interface PublicWorker {
   canSignInNow: boolean;
 }
 
+/**
+ * What the sign-in page says about the club before anybody is signed in (screens 1 and 2):
+ * "Sheet 48 is open since 11:10 AM. 6 of 9 tables in use." No names and no money. The count is the
+ * Snooker and rooms tab, as on the live board.
+ */
+export interface ClubStatus {
+  sheetNumber: number;
+  openedAt: ISO;
+  inUse: number;
+  total: number;
+}
+
 export interface SignInRequest {
   workerId: string;
   pin: string;

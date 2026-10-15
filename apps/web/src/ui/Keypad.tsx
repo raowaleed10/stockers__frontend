@@ -22,6 +22,15 @@ export type KeypadProps = KeypadBase &
         keys: 'amount';
         onClear?: undefined;
       }
+    | {
+        /**
+         * The lock screen (34): 80 px keys on the panel colour, and "Switch worker" where Clear is.
+         * Screen 34 draws 80 px, not the 76 of screen 1 (docs/04 §7).
+         */
+        keys: 'lock';
+        onSwitch: () => void;
+        onClear?: undefined;
+      }
   );
 
 const DIGITS = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -33,13 +42,21 @@ const SIDE_KEY =
   'flex items-center justify-center text-c-text-2 active:bg-c-raised ' + focusRing.counter;
 
 /** A 3-by-4 number pad. Digits are Western and never change with the language. */
-export function Keypad({ onDigit, onClear, onDelete, keys = 'pin', className }: KeypadProps) {
+export function Keypad(props: KeypadProps) {
+  const { onDigit, onDelete, keys = 'pin', className } = props;
   const { t } = useTranslation();
   const amount = keys === 'amount';
+  const lock = keys === 'lock';
   const keyLook = amount
     ? 'min-h-[72px] rounded-[14px] border-c-line-2 bg-c-raised text-[34px]'
-    : 'min-h-key rounded-[16px] border-c-line bg-c-raised text-[36px]';
-  const sideLook = amount ? 'min-h-[72px] rounded-[14px]' : 'min-h-key rounded-[16px]';
+    : lock
+      ? 'min-h-key-lock rounded-[16px] border-c-line bg-c-panel text-[38px]'
+      : 'min-h-key rounded-[16px] border-c-line bg-c-raised text-[36px]';
+  const sideLook = amount
+    ? 'min-h-[72px] rounded-[14px]'
+    : lock
+      ? 'min-h-key-lock rounded-[16px]'
+      : 'min-h-key rounded-[16px]';
 
   return (
     // dir="ltr": like a phone, the pad keeps 1-2-3 from the left in Urdu too, so a worker's hand does not relearn it.
@@ -62,11 +79,19 @@ export function Keypad({ onDigit, onClear, onDelete, keys = 'pin', className }: 
         >
           00
         </button>
+      ) : props.keys === 'lock' ? (
+        <button
+          type="button"
+          className={cx(SIDE_KEY, sideLook, 'px-1 text-center text-[16px] font-semibold')}
+          onClick={props.onSwitch}
+        >
+          {t('keypad.switchWorker')}
+        </button>
       ) : (
         <button
           type="button"
           className={cx(SIDE_KEY, sideLook, 'text-[17px] font-semibold')}
-          onClick={onClear}
+          onClick={props.onClear}
         >
           {t('keypad.clear')}
         </button>

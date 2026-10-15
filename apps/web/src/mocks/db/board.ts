@@ -1,5 +1,6 @@
 import type {
   BoardCategory,
+  ClubStatus,
   BoardResponse,
   BoardTable,
   PlayerName,
@@ -85,6 +86,20 @@ function categoryCounts(db: MockDb): BoardCategory[] {
     });
 }
 
+/** The tables of the Snooker and rooms tab (screen 3): snooker tables and rooms together. */
+const inSnookerTab = (categoryId: string) => categoryId === 'snooker' || categoryId === 'room';
+
+/** `GET /club-status`: the sign-in page's line about the sheet and the tables. Needs no session. */
+export function clubStatus(db: MockDb): ClubStatus {
+  const tables = db.s.tables.filter((t) => inSnookerTab(t.categoryId));
+  return {
+    sheetNumber: db.currentSheet.number,
+    openedAt: db.currentSheet.openedAt,
+    inUse: tables.filter((t) => db.activeGameOn(t.id)).length,
+    total: tables.length,
+  };
+}
+
 /**
  * `GET /board?category=`. The `snooker` tab (the default, like `/` on the counter) holds snooker tables
  * and rooms (screen 3); every other id is its own tab; `all` is the whole club, for the owners'
@@ -99,7 +114,7 @@ export function board(db: MockDb, requested?: string): BoardResponse {
   const inTab = (categoryId: string) =>
     category === 'all' ||
     categoryId === category ||
-    (category === 'snooker' && categoryId === 'room');
+    (category === 'snooker' && inSnookerTab(categoryId));
 
   const tables: BoardTable[] = db.s.tables
     .filter((t) => inTab(t.categoryId))

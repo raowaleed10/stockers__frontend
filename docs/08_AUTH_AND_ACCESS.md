@@ -62,6 +62,12 @@ Note: the private address hides the door; the **owner password** is the lock. Th
 - **Wrong PIN:** the dots shake once and "Wrong PIN. Try again." appears. After 5 wrong tries, "Wait 5 minutes".
 - **Record of sign-ins (screen 50):** every sign-in, sign-out, **automatic sign-out at the end of his time** (dated when the time ended, not when somebody noticed), **"Not your time" attempt** and **PIN lockout** is saved as a worker session event with its time. The Workers page shows them: "Last signed in Today 2:04 AM to 10:00 AM", "Signed in now, since 2:06 PM", "Signed out automatically at 11:00 PM" (`GET /api/owner/workers`: `lastSignIn`, `signedIn`, `signsOutAt`, `sessionEvents`). They are **not** in Activity: screen 38 is only for what changed money outside a normal game. An owner changing a sign-in time, a PIN or turning sign-in off **is** in Activity with his name ("Saved in Activity with your name", screen 50).
 - **Gaps:** in the times between slots nobody can sign in (example 10 AM–2 PM and 11 PM–2 AM). The sign-in screen shows each worker as "Not now". This is an open question for the owners; build it as described.
+- **As built in P04:**
+  - **The sign-in page needs no session**, so its line "Sheet 48 is open since 11:10 AM. 6 of 9 tables in use." comes from `GET /club-status` (docs/06 §2), not from the board.
+  - **Screen 2 appears after the 4th digit,** when the server answers `NOT_YOUR_TIME` (every attempt is a worker session event). `/sign-in?worker=shabir` is a test and demo link: it picks that worker and, if it is not his time, shows the same screen from the public slot and the clock, with no sign-in call and no event.
+  - **The device clock never signs anybody out.** The banner (10 minutes before) is only a display. When the clock passes the end, the app asks `GET /auth/me` every 2 seconds; the server answers 401 `SESSION_ENDED` and that sends the worker to `/sign-in`.
+  - **The lock survives a reload** (the flag is in `sessionStorage`, so a refresh cannot skip the PIN). Escape does not close it. `?locked=1` opens locked; `?lockAfter=<seconds>` shortens the 5 minutes in development only (it is not in a production build).
+  - **Switch worker** (chip or lock screen) signs out and goes to `/sign-in`; games keep running under the worker who started them.
 
 ## 4. Who did what (D52)
 - The client never sends "who". The server takes it from the session and saves `doneBy` on every write.

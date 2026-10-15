@@ -19,6 +19,22 @@
   .dialog-in {
     animation: dialog-in 150ms ease-out;
   }
+
+  /*
+   * The approved screens are drawn with the browser's own line height. Tailwind's page default is taller and
+   * would move every line, so a counter screen opts in to the design's. Urdu keeps its tall lines (docs/09).
+   */
+  .screen-text {
+    line-height: normal;
+  }
+  html[lang='ur'] .screen-text {
+    line-height: 1.8;
+  }
+
+  /* docs/08 §3: after a wrong PIN the dots shake once. */
+  .pin-shake {
+    animation: pin-shake 360ms ease-in-out;
+  }
 }
 
 @keyframes dialog-in {
@@ -32,8 +48,24 @@
   }
 }
 
+@keyframes pin-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-10px);
+  }
+  40%,
+  80% {
+    transform: translateX(10px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .dialog-in {
+  .dialog-in,
+  .pin-shake {
     animation: none;
   }
 }

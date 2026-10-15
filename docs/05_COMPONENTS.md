@@ -92,6 +92,18 @@ Built: `SnookerTile`, `RoomTile`, `PoolTile`, `CarromTile`, `FoosballTile`, `Lud
 - **`MiniTable`** (`number`, `status`, `room`): the 58 × 36 glyph of screen 54. It is hidden from screen readers; the row names the table in words. It is not in the counter bundle unless a counter screen imports it.
 - **Tokens:** all colours are tokens (`--tile-*`, `--ov-*`, balls, coins, foosball, TV, sofa, `--mini-*`); the drawings are in `src/tiles/tiles.css` and `layout.ts` (where the balls, coins and rods go).
 
+### As built in P04 (the counter frame, sign-in and lock)
+
+These are counter screens, so they are in `src/counter`, not `src/ui`.
+
+- **`components/`:** `CounterFrame` (banner, top bar, `<Outlet/>`, action bar, idle lock, lock screen), `CounterTopBar` (`sheet`, `notifications`, `worker`, `until`, `onLock`, `onSwitchWorker`, `onNotifications?`), `WorkerChip` (`worker`, `until`, `onSwitch`), `CounterActionBar` (the seven `on…` callbacks of the table above, and `backedUpAt`), `SessionTiming` (the 10-minute banner and the end-of-time check), `IdleLock`, `LockScreen`, `ClockPanel`, `WorkerCards`, `NotYourTimeAlert`, `BigClock`, `Brand`, `WorkerAvatar`, `CounterLanguageSwitch`, `TopBarButton`, `RichText`.
+- **`session/`:** `RequireWorker` (the route guard), `lock-store` (Zustand, kept in `sessionStorage`), `idle` (the 5 minutes and the dev-only `?lockAfter`), `use-leave-session` (`useSwitchWorker`).
+- **The bell, the worker chip and Lock are not `IconButton` or `Button`.** The top bar draws them with 12 px corners, a 16 px Lock label and a badge inside the corner, so `TopBarButton` builds the same 56 px box with a 52 px shape (the `drawn` rules, docs/04 §4) with the top bar's own look. The action bar buttons are plain buttons for the same reason (64 px, 22 px side padding, 18 px text).
+- **`Keypad keys="lock"`** (80 px keys, `onSwitch`) and **`PinDots shake`** are new in `src/ui`. Give `PinDots` a new `key` to shake again.
+- **`RichText`** renders a counter word that has a time, a name or bold text in it (`<ltr>`, `<name>`, `<b>`), so times and names keep their order inside Urdu. Plain words use `t()`.
+- **`.screen-text`** (in `base.css`) gives a screen the design's own line height; put it on the root of a counter screen. Urdu keeps its tall lines.
+- **Shared rules for the board (P05 reuses them):** `tableStatus(table, now)` and `summarizeTables(tables, now)` in `packages/shared/src/rules/board.ts`. A paused table counts with "playing"; a table with no price is left out.
+
 ## Rules for components
 - `ui` and `tiles` never fetch data and never read the clock directly (`TimerText` uses `useNow()`, which is allowed).
 - All text comes in through props or `t()`; no English hard-coded inside shared components.
