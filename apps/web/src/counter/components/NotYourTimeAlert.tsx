@@ -1,7 +1,8 @@
-import { formatClock, formatSlot, type Slot } from '@stockers/shared';
+import type { Slot } from '@stockers/shared';
 import { Clock } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormat } from '@/lib/use-format';
 import { focusRing } from '@/ui/theme';
 import { RichText } from './RichText';
 
@@ -25,6 +26,7 @@ export function NotYourTimeAlert({
   onOk: () => void;
 }) {
   const { t } = useTranslation('signin');
+  const format = useFormat();
   const ok = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (focusOk) ok.current?.focus();
@@ -46,10 +48,10 @@ export function NotYourTimeAlert({
         <RichText
           ns="signin"
           i18nKey="notYourTime.line"
-          values={{ name, slot: formatSlot(slot) }}
+          values={{ name, slot: format.slot(slot) }}
         />
         <br />
-        <RichText ns="signin" i18nKey="notYourTime.now" values={{ time: formatClock(now) }} />
+        <RichText ns="signin" i18nKey="notYourTime.now" values={{ time: format.clock(now) }} />
       </p>
       <p className="m-0 text-[16px] text-c-danger-ink">{t('notYourTime.owner')}</p>
       <button

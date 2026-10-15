@@ -1,4 +1,3 @@
-import { formatClock } from '@stockers/shared';
 import {
   Banknote,
   ChartColumn,
@@ -11,6 +10,7 @@ import {
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormat } from '@/lib/use-format';
 import { cx } from '@/ui/cx';
 import { focusRing } from '@/ui/theme';
 import { RichText } from './RichText';
@@ -72,6 +72,7 @@ export function CounterActionBar({
   backedUpAt,
 }: CounterActionBarProps) {
   const { t } = useTranslation('frame');
+  const { clock } = useFormat();
   return (
     <footer className="flex flex-wrap items-center gap-3 border-t border-c-line bg-c-header px-6 pb-[18px] pt-3.5">
       <Action look="main" icon={Wallet} iconSize={24} strokeWidth={2.2} onClick={onCheckout}>
@@ -95,7 +96,7 @@ export function CounterActionBar({
       <div className="flex-1" />
       {backedUpAt ? (
         <span className="text-[14px] text-c-text-2">
-          <RichText ns="frame" i18nKey="backedUp" values={{ time: formatClock(backedUpAt) }} />
+          <RichText ns="frame" i18nKey="backedUp" values={{ time: clock(backedUpAt) }} />
         </span>
       ) : null}
       <Action look="outline" icon={FileCheck} onClick={onCloseSheet}>

@@ -1,6 +1,6 @@
-import { formatClock } from '@stockers/shared';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormat } from '@/lib/use-format';
 import { focusRing } from '@/ui/theme';
 import { RichText } from './RichText';
 import { TopBarButton } from './TopBarButton';
@@ -27,7 +27,7 @@ export function WorkerChip({
   const chip = useRef<HTMLButtonElement>(null);
   const switchButton = useRef<HTMLButtonElement>(null);
   const menuId = useId();
-  const time = formatClock(until);
+  const time = useFormat().clock(until);
 
   useEffect(() => {
     if (!open) return;

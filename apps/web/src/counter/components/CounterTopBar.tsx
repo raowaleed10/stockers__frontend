@@ -1,7 +1,8 @@
-import { formatClock, formatDay, toClubIso, type SheetSummary } from '@stockers/shared';
+import { toClubIso, type SheetSummary } from '@stockers/shared';
 import { Bell, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNow } from '@/lib/clock';
+import { useFormat } from '@/lib/use-format';
 import { Brand } from './Brand';
 import { CounterLanguageSwitch } from './CounterLanguageSwitch';
 import { RichText } from './RichText';
@@ -11,14 +12,18 @@ import { WorkerChip } from './WorkerChip';
 /** The clock of the top bar. It has its own `useNow`, so only these two words redraw each second. */
 function TopBarClock() {
   const now = useNow();
+  const { lang, clock, day, parts } = useFormat();
   const iso = toClubIso(now);
+  // English: "9:42 PM" and "Sat 3 Oct". Urdu (screen 6): "9:42" and "رات، ہفتہ 3 اکتوبر".
+  const big = lang === 'ur' ? parts(iso).time : clock(iso);
+  const small = lang === 'ur' ? `${parts(iso).period}، ${day(iso)}` : day(iso);
   return (
     <div className="flex items-baseline gap-2.5">
       <span className="font-num text-clock font-semibold tabular-nums">
-        <bdi dir="ltr">{formatClock(iso)}</bdi>
+        <bdi dir="ltr">{big}</bdi>
       </span>
       <span className="text-[15px] text-c-text-2">
-        <bdi dir="ltr">{formatDay(iso)}</bdi>
+        <bdi>{small}</bdi>
       </span>
     </div>
   );
@@ -48,6 +53,7 @@ export function CounterTopBar({
   onNotifications,
 }: CounterTopBarProps) {
   const { t } = useTranslation('frame');
+  const { clock, day } = useFormat();
   return (
     <header className="relative z-10 flex flex-wrap items-center gap-5 border-b border-c-line bg-c-header px-6 py-3.5">
       <Brand look="top" />
@@ -59,8 +65,8 @@ export function CounterTopBar({
               ns="frame"
               i18nKey="openSince"
               values={{
-                time: formatClock(sheet.openedAt),
-                day: formatDay(sheet.openedAt),
+                time: clock(sheet.openedAt),
+                day: day(sheet.openedAt),
               }}
             />
           </span>

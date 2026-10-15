@@ -178,9 +178,10 @@ test.describe('the lock (screen 34)', () => {
     await open(page, `/?lockAfter=4&now=${NIGHT}`);
     for (let tap = 0; tap < 4; tap += 1) {
       await page.waitForTimeout(2000);
-      await page.getByRole('button', { name: 'Notifications, 3 new' }).click();
+      // Any tap on the page counts as a touch. (The bell would do too, but it now opens a panel.)
+      await page.mouse.click(700, 400);
     }
-    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.getByRole('dialog', { name: 'Zain, enter your PIN' })).toHaveCount(0);
   });
 
   test('the Lock button locks at once, and a reload does not get around it', async ({ page }) => {

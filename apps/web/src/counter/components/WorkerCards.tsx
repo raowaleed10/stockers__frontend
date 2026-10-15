@@ -1,5 +1,6 @@
-import { formatSlot, type PublicWorker } from '@stockers/shared';
+import type { PublicWorker } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
+import { useFormat } from '@/lib/use-format';
 import { cx } from '@/ui/cx';
 import { focusRing } from '@/ui/theme';
 import { WorkerAvatar } from './WorkerAvatar';
@@ -15,6 +16,7 @@ export function WorkerCards({
   onSelect: (workerId: string) => void;
 }) {
   const { t } = useTranslation('signin');
+  const { slot } = useFormat();
   return (
     <div className="flex flex-wrap gap-3">
       {workers.map((worker) => {
@@ -39,7 +41,7 @@ export function WorkerCards({
             <span className="flex min-w-0 flex-col gap-[3px]">
               <span className="text-[22px] font-bold">{worker.name}</span>
               <span className="text-[15px] text-c-text-2">
-                <bdi dir="ltr">{formatSlot(worker.slot)}</bdi>
+                <bdi>{slot(worker.slot)}</bdi>
               </span>
               <span
                 className={cx(

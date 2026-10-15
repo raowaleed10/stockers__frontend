@@ -30,23 +30,34 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Sign-in page, above the keypad | {{name}}, enter your 4-digit PIN | {{name}}، اپنا 4 ہندسوں کا پن درج کریں | P04 |
 | Sign-in page, last line | Your PIN works only in your sign-in time. Everything you do is saved with your name. | آپ کا پن صرف آپ کے سائن اِن کے وقت میں چلتا ہے۔ آپ جو بھی کریں وہ آپ کے نام سے محفوظ ہوتا ہے۔ | P04 |
 | Sign-in page, green panel | Snooker club, Mian Plaza | اسنوکر کلب، میاں پلازہ | P04 |
-| Sign-in page, green panel | Sheet 48 is open since 11:10 AM. 6 of 9 tables in use. | شیٹ 48 11:10 AM سے کھلی ہے۔ 9 میں سے 6 ٹیبل مصروف ہیں۔ | P04 |
+| Sign-in page, green panel | Sheet 48 is open since 11:10 AM. 6 of 9 tables in use. | شیٹ 48 صبح 11:10 سے کھلی ہے۔ 9 میں سے 6 ٹیبل مصروف ہیں۔ | P04 |
 | Wrong PIN (sign-in and lock) | Wrong PIN. Try again. | پن غلط ہے۔ دوبارہ کوشش کریں۔ | P04 |
 | Too many wrong PINs | Wait 5 minutes | 5 منٹ انتظار کریں | P04 |
 | Sign-in page, workers cannot be loaded | Could not load the workers. · Try again | کارکنوں کی فہرست نہیں کھل سکی۔ · دوبارہ کوشش کریں | P04 |
 | Screen 2, title | Not your time to sign in | یہ آپ کے سائن اِن کا وقت نہیں | P04 |
-| Screen 2, lines | {{name}} can sign in from 2:00 AM to 10:00 AM. It is 9:42 PM now. | {{name}} 2:00 AM to 10:00 AM کے درمیان سائن اِن کر سکتا ہے۔ ابھی 9:42 PM ہو رہے ہیں۔ | P04 |
+| Screen 2, lines | {{name}} can sign in from 2:00 AM to 10:00 AM. It is 9:42 PM now. | {{name}} رات 2:00 سے صبح 10:00 تک سائن اِن کر سکتا ہے۔ ابھی رات 9:42 بجے ہیں۔ | P04 |
 | Screen 2, red line | Only an owner can change sign-in times. | سائن اِن کا وقت صرف مالک بدل سکتا ہے۔ | P04 |
 | Screen 2, button | OK | ٹھیک ہے | P04 |
 | Top bar, bell (screen reader name) | Notifications · Notifications, 3 new | اطلاعات · اطلاعات، 3 نئی | P04 |
-| Top bar, worker chip (screen reader name) | Signed in: Zain, until 11:00 PM. Tap to switch worker | سائن اِن: Zain، 11:00 PM تک۔ کارکن بدلنے کے لیے ٹیپ کریں | P04 |
+| Top bar, worker chip (screen reader name) | Signed in: Zain, until 11:00 PM. Tap to switch worker | سائن اِن: Zain، رات 11:00 تک۔ کارکن بدلنے کے لیے ٹیپ کریں | P04 |
 | Worker chip menu, lock keypad | Switch worker | کارکن بدلیں | P04 |
-| Banner 10 minutes before the end | Your sign-in time ends at 11:00 PM. Finish what you are doing. | آپ کے سائن اِن کا وقت 11:00 PM پر ختم ہو رہا ہے۔ جو کام کر رہے ہیں وہ ختم کر لیں۔ | P04 |
+| Banner 10 minutes before the end | Your sign-in time ends at 11:00 PM. Finish what you are doing. | آپ کے سائن اِن کا وقت رات 11:00 پر ختم ہو رہا ہے۔ جو کام کر رہے ہیں وہ ختم کر لیں۔ | P04 |
 | Lock screen, title | {{name}}, enter your PIN | {{name}}، اپنا پن درج کریں | P04 |
 | Lock screen, label | Tables right now | ٹیبل اس وقت | P04 |
 | Lock screen, pills | 5 playing · 1 over 30 min · 2 free · 1 out of order | کھیل جاری: 5 · 30 منٹ سے زیادہ: 1 · خالی: 2 · خراب: 1 | P04 |
 | Lock screen, note | Locked after 5 minutes without a tap. Games keep running while the screen is locked. | 5 منٹ تک ٹچ نہ ہونے پر اسکرین لاک ہو جاتی ہے۔ لاک کے دوران گیمز چلتی رہتی ہیں۔ | P04 |
-
-Times in Urdu text are still written as `11:10 AM`, kept in their own order, because `docs/09` does not say which hours are صبح، دوپہر، شام and رات. The Urdu clock words are P18's job; the approved forms (`رات 11:00 تک`, `کھلی: صبح 11:10`) need them. The big clock, the date and the month names are English in Urdu for the same reason.
+| Time of day, morning (4:00 AM to 11:59 AM) | in the morning | صبح | P04 answers |
+| Time of day, afternoon (12:00 PM to 3:59 PM) | in the afternoon | دوپہر | P04 answers |
+| Time of day, evening (4:00 PM to 6:59 PM) | in the evening | شام | P04 answers |
+| Time of day, night (7:00 PM to 3:59 AM) | at night | رات | P04 answers |
+| A time with its time-of-day word | 9:42 PM · 11:10 AM · 4:15 PM | رات 9:42 · صبح 11:10 · شام 4:15 | P04 answers |
+| A sign-in time | 2:00 PM to 11:00 PM | دوپہر 2:00 سے رات 11:00 تک | P04 answers |
+| Clock line under the big clock (screens 1, 34) and in the top bar | PM, Saturday 3 October · Sat 3 Oct | رات، ہفتہ 3 اکتوبر | P04 answers |
+| An alert from an earlier day | Fri 2 Oct, 6:00 PM | جمعہ 2 اکتوبر، شام 6:00 | P04 answers |
+| Alerts panel, title | Alerts | اطلاعات | P04 answers |
+| Alerts panel, button | Mark all read | سب پڑھی ہوئی کریں | P04 answers |
+| Alerts panel, empty | No alerts yet | ابھی کوئی اطلاع نہیں | P04 answers |
+| Alerts panel, loading and error | Loading… · Could not load the alerts. · Try again | کھل رہا ہے… · اطلاعات نہیں کھل سکیں۔ · دوبارہ کوشش کریں | P04 answers |
+| Alerts panel, unread row (screen reader) | Unread | نہ پڑھی ہوئی | P04 answers |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

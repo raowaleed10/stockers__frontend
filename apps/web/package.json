@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:e2e": "playwright test tests/e2e",
-    "test:visual": "playwright test tests/visual --pass-with-no-tests"
+    "test:visual": "playwright test tests/visual --pass-with-no-tests",
+    "shots:no-design": "playwright test tests/no-design"
   },
   "dependencies": {
     "@fontsource/barlow": "^5.3.0",

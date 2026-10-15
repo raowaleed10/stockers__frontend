@@ -43,7 +43,17 @@ The owners' portal has words the workers must not be able to read: profit, salar
 ## Money and numbers
 - English: `Rs 1,350`. Urdu: `1,350 روپے` (number first, then روپے).
 - Signs: `− 500` / `+ 200` in both languages.
-- Times: English `9:42 PM`; Urdu `رات 9:42` / `صبح 11:10` (morning صبح, afternoon دوپہر, evening شام, night رات).
+- Times: English `9:42 PM`; Urdu `رات 9:42`, `صبح 11:10`, `شام 4:15`: the word for the time of day first, then the numbers, with no AM or PM. The hours were given by the owners on 15 Oct 2026 (D55). They are built into `formatClock` in `packages/shared/src/rules/format.ts`, with a unit test at every boundary:
+
+  | Word | Club time |
+  |---|---|
+  | صبح | 4:00 AM to 11:59 AM |
+  | دوپہر | 12:00 PM to 3:59 PM |
+  | شام | 4:00 PM to 6:59 PM |
+  | رات | 7:00 PM to 3:59 AM |
+
+- Days and months: weekdays اتوار، پیر، منگل، بدھ، جمعرات، جمعہ، ہفتہ (Sunday to Saturday); months جنوری، فروری، مارچ، اپریل، مئی، جون، جولائی، اگست، ستمبر، اکتوبر، نومبر، دسمبر. A day is written `ہفتہ 3 اکتوبر` (Urdu has one form, short or long), with the time of day `رات، ہفتہ 3 اکتوبر` (screen 6), and a sign-in time `دوپہر 2:00 سے رات 11:00 تک`.
+- In code: `formatClock`, `formatDay`, `formatDate` and `formatSlot` take `lang` (default `en`), and `clockParts` gives the numbers and the word apart for the big clock. A counter component reads the page language with `useFormat()` (`src/lib/use-format.ts`) and never writes a time by hand. In a sentence a time sits in `<when>` (see `RichText`), a `<bdi>`, so `رات 9:42` runs right to left and `9:42 PM` left to right.
 
 ## Word list (from the approved Urdu board)
 

@@ -15,7 +15,7 @@ stockers/                     ← your project folder (unzip the kit here)
 ├── PROGRESS.md               ← Claude Code fills this in after each step
 ├── docs/
 │   ├── 01_PRODUCT.md         ← what the app is, who uses it, the main flows
-│   ├── 02_DECISIONS.md       ← every owner decision (D1–D53) and answer (Q1–Q19)
+│   ├── 02_DECISIONS.md       ← every owner decision (D1–D55) and answer (Q1–Q19)
 │   ├── 03_ROUTES_AND_SCREENS.md ← every screen: number, route, image, HTML, parts
 │   ├── 04_DESIGN_SYSTEM.md   ← colours, fonts, sizes, table tiles, status colours
 │   ├── 05_COMPONENTS.md      ← the shared React components and their props

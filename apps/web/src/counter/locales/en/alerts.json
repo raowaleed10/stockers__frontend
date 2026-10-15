@@ -1,0 +1,9 @@
+{
+  "title": "Alerts",
+  "markAllRead": "Mark all read",
+  "empty": "No alerts yet",
+  "loading": "Loading…",
+  "loadFailed": "Could not load the alerts.",
+  "retry": "Try again",
+  "unread": "Unread"
+}

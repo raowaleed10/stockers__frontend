@@ -1,13 +1,13 @@
 {
   "sheet": "Sheet {{number}}",
-  "openSince": "Open since <ltr>{{time}}, {{day}}</ltr>",
+  "openSince": "Open since <when>{{time}}, {{day}}</when>",
   "notifications": "Notifications",
   "notificationsNew": "Notifications, {{n}} new",
   "signedIn": "Signed in: {{name}}, until {{time}}. Tap to switch worker",
-  "until": "Until <ltr>{{time}}</ltr>",
+  "until": "Until <when>{{time}}</when>",
   "lock": "Lock",
-  "banner": "Your sign-in time ends at <ltr>{{time}}</ltr>. Finish what you are doing.",
-  "backedUp": "Backed up <ltr>{{time}}</ltr>",
+  "banner": "Your sign-in time ends at <when>{{time}}</when>. Finish what you are doing.",
+  "backedUp": "Backed up <when>{{time}}</when>",
   "actions": {
     "checkout": "Checkout",
     "canteen": "Canteen",

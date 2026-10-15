@@ -1,7 +1,8 @@
-import { formatClock, isSlotEndingSoon, isWithinSlot, type WorkerSession } from '@stockers/shared';
+import { isSlotEndingSoon, isWithinSlot, type WorkerSession } from '@stockers/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNow } from '@/lib/clock';
+import { useFormat } from '@/lib/use-format';
 import { counterKeys } from '../api/keys';
 import { RichText } from './RichText';
 
@@ -18,6 +19,7 @@ const RECHECK_MS = 2000;
  */
 export function SessionTiming({ session }: { session: WorkerSession }) {
   const now = useNow();
+  const { clock } = useFormat();
   const queryClient = useQueryClient();
   const ended = !isWithinSlot(now, session.worker.slot);
 
@@ -36,7 +38,7 @@ export function SessionTiming({ session }: { session: WorkerSession }) {
       role="status"
       className="border-b border-c-warn-line bg-c-warn-bg px-6 py-3 text-[18px] font-semibold text-c-warn-ink"
     >
-      <RichText ns="frame" i18nKey="banner" values={{ time: formatClock(session.until) }} />
+      <RichText ns="frame" i18nKey="banner" values={{ time: clock(session.until) }} />
     </div>
   );
 }

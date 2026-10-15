@@ -115,6 +115,8 @@ export interface CounterAlert {
   kind: 'out-of-order' | 'game-cancelled' | 'low-stock';
   title: string;
   text: string;
+  /** Whole rupees, when the alert is about money (shown at the end of the row). */
+  amount?: Rs;
   read: boolean;
 }
 export interface AlertList {

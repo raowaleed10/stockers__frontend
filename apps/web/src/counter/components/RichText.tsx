@@ -1,9 +1,10 @@
 import type { ParseKeys } from 'i18next';
 import { Trans } from 'react-i18next';
 
-// `<ltr>` keeps a time or a date in its own order inside Urdu text (it is invisible in English); `<name>` does
-// the same for a worker's name, whatever script it is in; `<b>` is bold.
-const COMPONENTS = { ltr: <bdi dir="ltr" />, name: <bdi />, b: <b /> };
+// `<when>` keeps a time or a date together inside Urdu text (it is invisible in English); `<name>` does the same
+// for a worker's name, whatever script it is in; `<b>` is bold. Both are `<bdi>`: the direction follows the first
+// letter, so `رات 9:42` runs right to left and `9:42 PM` left to right.
+const COMPONENTS = { when: <bdi />, name: <bdi />, b: <b /> };
 
 type Namespace = 'signin' | 'frame' | 'lock';
 

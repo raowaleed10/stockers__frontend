@@ -1,5 +1,5 @@
-import { formatClock } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
+import { useFormat } from '@/lib/use-format';
 import { useClubStatus } from '../api';
 import { BigClock } from './BigClock';
 import { Brand } from './Brand';
@@ -9,6 +9,7 @@ import { RichText } from './RichText';
 export function ClockPanel() {
   const { t } = useTranslation('signin');
   const club = useClubStatus();
+  const { clock } = useFormat();
   return (
     <section className="flex min-h-[420px] min-w-0 flex-[1_1_520px] flex-col justify-between bg-c-felt px-14 py-12">
       <Brand look="signIn" />
@@ -23,7 +24,7 @@ export function ClockPanel() {
               i18nKey="clubStatus"
               values={{
                 number: club.data.sheetNumber,
-                time: formatClock(club.data.openedAt),
+                time: clock(club.data.openedAt),
                 inUse: club.data.inUse,
                 total: club.data.total,
               }}

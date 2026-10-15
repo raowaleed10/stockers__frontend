@@ -102,6 +102,8 @@ These are counter screens, so they are in `src/counter`, not `src/ui`.
 - **`Keypad keys="lock"`** (80 px keys, `onSwitch`) and **`PinDots shake`** are new in `src/ui`. Give `PinDots` a new `key` to shake again.
 - **`RichText`** renders a counter word that has a time, a name or bold text in it (`<ltr>`, `<name>`, `<b>`), so times and names keep their order inside Urdu. Plain words use `t()`.
 - **`.screen-text`** (in `base.css`) gives a screen the design's own line height; put it on the root of a counter screen. Urdu keeps its tall lines.
+- **`AlertsPanel`** (the bell, `/alerts`): `SidePanel` with its new `actions` slot ("Mark all read" before the close button), 560 px on the end side, the board dimmed behind it, one row for each counter alert. `CounterAlert` has an optional `amount`. A row of alert data has `dir="auto"`, so English text inside an Urdu page keeps its full stops. Details and the other pieces without a PNG: `docs/NO_DESIGN.md`.
+- **`useFormat()`** (`src/lib/use-format.ts`) gives `clock`, `day`, `slot` and `parts` in the page language. Use it, not `formatClock` directly, in a component.
 - **Shared rules for the board (P05 reuses them):** `tableStatus(table, now)` and `summarizeTables(tables, now)` in `packages/shared/src/rules/board.ts`. A paused table counts with "playing"; a table with no price is left out.
 
 ## Rules for components

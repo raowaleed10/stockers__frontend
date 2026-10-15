@@ -3,10 +3,16 @@ import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { createTestApi } from '@/mocks/test-server';
-import { renderCounter, resetCounterState, textIs, wherePath } from '../test/harness';
+import {
+  renderCounter,
+  resetCounterState,
+  startCounterTests,
+  textIs,
+  wherePath,
+} from '../test/harness';
 
 const api = createTestApi();
-beforeAll(() => api.server.listen({ onUnhandledRequest: 'error' }));
+beforeAll(() => startCounterTests(api), 30_000);
 afterAll(() => api.server.close());
 beforeEach(() => {
   api.load({ as: 'none' });
@@ -14,7 +20,7 @@ beforeEach(() => {
 });
 afterEach(() => resetCounterState());
 
-const user = () => userEvent.setup();
+const user = () => userEvent.setup({ delay: null });
 const card = (name: RegExp) => screen.findByRole('button', { name });
 const key = (digit: string) => screen.getByRole('button', { name: digit });
 

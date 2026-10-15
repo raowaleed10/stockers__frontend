@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
 import { NotFound } from '@/ui/NotFound';
+import { AlertsPanel } from '../components/AlertsPanel';
 import { PagePlaceholder } from '../screens/PagePlaceholder';
 import { SignIn } from '../screens/SignIn';
 import { RequireWorker } from '../session/RequireWorker';
@@ -29,9 +30,18 @@ function LaterScreen({ title }: { title: (typeof LATER_SCREENS)[number]['title']
   return <PagePlaceholder title={t(title)} />;
 }
 
+/**
+ * The board (P05 builds it). The panels that open over it, such as the bell's alerts at /alerts, are its child
+ * routes: they draw into the `<Outlet/>` on top of the board, so the board stays behind them as on screen 11.
+ */
 function BoardPlaceholder() {
   const { t } = useTranslation();
-  return <PagePlaceholder title={t('brand')} />;
+  return (
+    <div className="relative flex flex-1 flex-col">
+      <PagePlaceholder title={t('brand')} />
+      <Outlet />
+    </div>
+  );
 }
 
 export function CounterRoutes() {
@@ -40,7 +50,9 @@ export function CounterRoutes() {
       <Route path="/sign-in" element={<SignIn />} />
       {/* Every other counter screen needs a worker session. */}
       <Route element={<RequireWorker />}>
-        <Route path="/" element={<BoardPlaceholder />} />
+        <Route path="/" element={<BoardPlaceholder />}>
+          <Route path="alerts" element={<AlertsPanel />} />
+        </Route>
         {LATER_SCREENS.map(({ path, title }) => (
           <Route key={path} path={path} element={<LaterScreen title={title} />} />
         ))}

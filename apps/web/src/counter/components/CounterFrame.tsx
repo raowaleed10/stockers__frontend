@@ -46,6 +46,7 @@ export function CounterFrame({ session }: { session: WorkerSession }) {
           until={session.until}
           onLock={lock}
           onSwitchWorker={() => void switchWorker()}
+          onNotifications={go('/alerts')}
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <Outlet />

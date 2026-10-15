@@ -2,10 +2,16 @@ import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { createTestApi } from '@/mocks/test-server';
-import { renderCounter, resetCounterState, textIs, wherePath } from '../test/harness';
+import {
+  renderCounter,
+  resetCounterState,
+  startCounterTests,
+  textIs,
+  wherePath,
+} from '../test/harness';
 
 const api = createTestApi();
-beforeAll(() => api.server.listen({ onUnhandledRequest: 'error' }));
+beforeAll(() => startCounterTests(api), 30_000);
 afterAll(() => api.server.close());
 beforeEach(() => {
   api.load();

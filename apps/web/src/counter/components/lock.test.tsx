@@ -4,12 +4,12 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import { clock } from '@/lib/clock';
 import { createTestApi } from '@/mocks/test-server';
 import { initLock, useLockStore } from '../session/lock-store';
-import { renderCounter, resetCounterState, wherePath } from '../test/harness';
+import { renderCounter, resetCounterState, startCounterTests, wherePath } from '../test/harness';
 import { IDLE_LOCK_MS, idleLockMs } from '../session/idle';
 import { IdleLock } from './IdleLock';
 
 const api = createTestApi();
-beforeAll(() => api.server.listen({ onUnhandledRequest: 'error' }));
+beforeAll(() => startCounterTests(api), 30_000);
 afterAll(() => api.server.close());
 beforeEach(() => {
   api.load();
@@ -24,7 +24,7 @@ const lockDialog = () => screen.findByRole('dialog', { name: 'Zain, enter your P
 const key = (digit: string) => screen.getByRole('button', { name: digit });
 
 async function type(digits: string) {
-  const u = userEvent.setup();
+  const u = userEvent.setup({ delay: null });
   for (const digit of digits) await u.click(key(digit));
 }
 

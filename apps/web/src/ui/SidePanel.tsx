@@ -12,6 +12,8 @@ export interface SidePanelProps {
   /** A line under the title, for example "Playing since 9:23 PM". */
   subtitle?: ReactNode;
   onClose: () => void;
+  /** Buttons at the end of the header, before the close button (the bell's panel: "Mark all read"). */
+  actions?: ReactNode;
   /** Draw the panel in place, with no focus handling or Escape. For the kit page. */
   static?: boolean;
   className?: string;
@@ -24,6 +26,7 @@ export function SidePanel({
   lead,
   subtitle,
   onClose,
+  actions,
   static: inPlace = false,
   className,
   children,
@@ -57,12 +60,15 @@ export function SidePanel({
             ) : null}
           </div>
         </div>
-        <IconButton
-          theme="counter"
-          label={t('closePanel')}
-          icon={<X size={24} strokeWidth={2.2} />}
-          onClick={onClose}
-        />
+        <div className="flex shrink-0 items-start gap-3">
+          {actions}
+          <IconButton
+            theme="counter"
+            label={t('closePanel')}
+            icon={<X size={24} strokeWidth={2.2} />}
+            onClick={onClose}
+          />
+        </div>
       </header>
       {children}
     </aside>

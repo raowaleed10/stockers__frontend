@@ -21,7 +21,7 @@ The backend is built later. Until then all data comes from a mock API (MSW) load
 | Owner address, worker PINs, sign-in times, locking | `docs/08_AUTH_AND_ACCESS.md` |
 | Urdu and right-to-left | `docs/09_URDU_RTL.md` |
 | How to test against the images | `docs/10_TESTING_AND_QA.md` |
-| Why a rule exists | `docs/02_DECISIONS.md` (D1–D53, Q1–Q19) |
+| Why a rule exists | `docs/02_DECISIONS.md` (D1–D55, Q1–Q19) |
 
 Always read the PNG **and** the HTML of every screen you build or change. Match layout, sizes, colours and the exact words. If a design and a doc disagree, stop and ask.
 
@@ -49,11 +49,12 @@ npm run lint
 npm test               # vitest
 npm run test:e2e       # playwright flows
 npm run test:visual    # playwright screenshots vs design/screens
+npm run shots:no-design  # screenshots for docs/NO_DESIGN.md (needs npm run dev)
 ```
 
 ## Golden rules
 
-1. **Match the designs.** The PNGs are approved by the owners. Do not invent layouts, colours, words or extra features. Copy is sentence case, plain words, and the same action name through a flow ("Close sheet" → "Sheet closed").
+1. **Match the designs.** The PNGs are approved by the owners. Do not invent layouts, colours, words or extra features. Copy is sentence case, plain words, and the same action name through a flow ("Close sheet" → "Sheet closed"). If something truly has no approved PNG (a state, banner, panel or message), build it only from approved parts and words already in the docs, then add it to `docs/NO_DESIGN.md` with its route, its words and a screenshot in `docs/no-design/` (`npm run shots:no-design`). The owners get that file in one batch.
 2. **Keep the two apps apart.**
    - Never import anything from `src/owner` into `src/counter`.
    - The counter bundle must not contain the owner path, owner screens or owner API calls.

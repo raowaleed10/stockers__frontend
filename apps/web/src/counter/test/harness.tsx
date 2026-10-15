@@ -1,12 +1,14 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { eventBus } from '@/lib/events';
+import i18n from '@/lib/i18n';
+import { useLanguageStore, type Lang } from '@/lib/language';
 import { clock } from '@/lib/clock';
 import { registerResources } from '@/lib/i18n';
 import { createQueryClient } from '@/lib/query-client';
 import { routerFuture } from '@/lib/router-future';
-import { NIGHT } from '@/mocks/test-server';
+import { NIGHT, type createTestApi } from '@/mocks/test-server';
 import { CounterLiveEvents } from '../api';
 import { counterResources } from '../locales';
 import { useLockStore } from '../session/lock-store';
@@ -33,8 +35,31 @@ export function renderCounter(path: string) {
 /** The path the router is on now. */
 export const wherePath = (view: ReturnType<typeof render>) => view.getByTestId('where').textContent;
 
-/** Puts the demo clock, the lock and the live events back to the start of the night. */
+/**
+ * Starts the mock server for a test file and draws the signed-in page once before the first test. The first draw of a
+ * file pays for everything that is cold (the first calls through the mock server, i18next, the router), and under a
+ * full run that can take longer than the one second a `findBy` waits. Paying for it here keeps every test at the
+ * normal limits, with no retries (the same reason as `tests/e2e/global-setup.ts`).
+ */
+export async function startCounterTests(api: ReturnType<typeof createTestApi>) {
+  api.server.listen({ onUnhandledRequest: 'error' });
+  api.load();
+  resetCounterState();
+  const view = renderCounter('/');
+  await screen.findByRole('button', { name: /Signed in: Zain/ }, { timeout: 20_000 });
+  await screen.findByRole('button', { name: 'Notifications, 3 new' }, { timeout: 20_000 });
+  view.unmount();
+}
+
+/** Switches the page language the way the language switch does: the store and i18next together. */
+export function setLanguage(lang: Lang) {
+  useLanguageStore.setState({ lang });
+  void i18n.changeLanguage(lang);
+}
+
+/** Puts the demo clock, the language, the lock and the live events back to the start of the night. */
 export function resetCounterState(at = NIGHT) {
+  setLanguage('en');
   clock.setStart(at);
   useLockStore.setState({ locked: false });
   window.sessionStorage.clear();
