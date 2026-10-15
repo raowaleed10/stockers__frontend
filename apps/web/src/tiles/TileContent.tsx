@@ -22,7 +22,7 @@ export function TileContent() {
     );
   } else if (note) {
     bottom = (
-      <span className="tile-note">
+      <span id={lockId} className="tile-note">
         {note.title ? <span className="tile-note-title">{note.title}</span> : null}
         {note.detail ? (
           <span className={cx('tile-hint', !note.title && 'tile-hint-lg')}>{note.detail}</span>

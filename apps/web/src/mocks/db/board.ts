@@ -5,10 +5,9 @@ import type {
   BoardTable,
   PlayerName,
   SheetSummary,
-  StatementLine,
   WaitingBill,
 } from '@stockers/shared';
-import { billBreakdown, phoneTail, toClubIso } from '@stockers/shared';
+import { billBreakdown, billParts, phoneTail, toClubIso } from '@stockers/shared';
 import { counterUnread } from './alerts';
 import type { MockDb } from './db';
 import { fail } from './errors';
@@ -20,26 +19,7 @@ export function sheetSummary(db: MockDb): SheetSummary {
   return { id, number, openedAt, openedBy };
 }
 
-/** A few plain words for what is on a bill, when the seed did not write them. */
-function summarize(lines: StatementLine[]): string {
-  const count = (...kinds: StatementLine['kind'][]) =>
-    lines.filter((l) => kinds.includes(l.kind)).length;
-  const frames = count('frame', 'game');
-  const doubles = count('double');
-  const canteen = count('canteen');
-  const parts = [
-    frames > 0 ? `${frames} ${frames === 1 ? 'frame' : 'frames'} lost` : '',
-    doubles > 0 ? (doubles === 1 ? 'half of a double' : `${doubles} halves of a double`) : '',
-    count('century') > 0 ? 'Century' : '',
-    count('room') > 0 ? 'Room' : '',
-    canteen > 0 ? `${canteen} canteen ${canteen === 1 ? 'item' : 'items'}` : '',
-    count('damage') > 0 ? 'damage charge' : '',
-  ].filter(Boolean);
-  const text = parts.join(', ');
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-/** Players who still have to pay for tonight, oldest bill first. */
+/** Players who still have to pay for tonight, in the order the seed lists them; new bills follow. */
 export function waitingBills(db: MockDb): WaitingBill[] {
   const bills: WaitingBill[] = [];
   for (const player of db.s.players) {
@@ -51,7 +31,7 @@ export function waitingBills(db: MockDb): WaitingBill[] {
       playerId: player.id,
       name: player.name,
       ...(player.phone ? { phoneTail: phoneTail(player.phone) } : {}),
-      summary: db.s.billSummaries[player.id] ?? summarize(lines),
+      parts: billParts(lines),
       tonight,
       oldCredit: bill.oldCredit,
       advance: bill.advance,
@@ -59,7 +39,7 @@ export function waitingBills(db: MockDb): WaitingBill[] {
     });
   }
   // The seed lists them in the order the screens show; new bills follow.
-  const order = Object.keys(db.s.billSummaries);
+  const order = db.s.billOrder;
   return bills.sort((a, b) => {
     const ia = order.indexOf(a.playerId);
     const ib = order.indexOf(b.playerId);

@@ -74,12 +74,26 @@ export interface SeedFinal {
   canteen: { sales: Rs; items: number; profit: Rs };
 }
 
+/** One charge of a waiting bill that the sessions do not already explain (a frame, half of a double, a Century). */
+export interface SeedBillLine {
+  kind: Extract<
+    StatementLine['kind'],
+    'frame' | 'game' | 'double' | 'century' | 'room' | 'canteen'
+  >;
+  charge: Rs;
+  item?: { name: string; qty: number };
+}
+
 export interface SeedWaiting {
   playerId: string;
-  summary: string;
   tonight: Rs;
   oldCredit?: Rs;
   total?: Rs;
+  /**
+   * What the bill is made of, as lines that add up to `tonight`. A bill the sessions and `tonightCharges` explain
+   * (Bilal's) has none. The screens build their words from these lines, never from a sentence in the seed.
+   */
+  lines?: SeedBillLine[];
 }
 
 export interface SeedStatementLine {
@@ -183,6 +197,7 @@ export interface SeedTonightCharge {
   kind: StatementLine['kind'];
   text: string;
   charge: Rs;
+  item?: { name: string; qty: number };
 }
 
 export interface SeedDispute {

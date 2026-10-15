@@ -34,6 +34,10 @@ const ALL: ScreenEntry[] = JSON.parse(
  * - Screen 1 is drawn with Zain picked and two digits typed.
  * - Screen 34's PNG shows 11:06 PM, a moment when Zain's time is already over (it ends at 11:00 PM), so the
  *   design's clock is a slip. Our big clock follows the app's clock (9:42 PM); that block is left out.
+ * - Screens 4 and 5 draw an older action bar (no Expense, no Pause all, no "Backed up"). The developer chose the
+ *   full bar everywhere (P05 plan), so the action bar is left out of those two comparisons.
+ * - Screen 6 is Urdu: the names (players, the worker) and the "what for" lines of the waiting list are stored in English
+ *   script, and the PNG draws them in Urdu script (P05 answer 2), so that text is left out of the comparison.
  */
 const BUILT: Record<
   number,
@@ -42,6 +46,25 @@ const BUILT: Record<
     masks?: (page: Page) => Promise<Rect[]>;
   }
 > = {
+  3: {},
+  4: { masks: actionBar },
+  5: { masks: actionBar },
+  6: {
+    // The names and the "what for" lines of the waiting list, and the worker's name, are stored in English script, and
+    // the PNG draws them in Urdu script (P05 answer 2): that text is left out, so the amounts, the header, the total
+    // and the rows are compared.
+    masks: async (page) => {
+      const boxes = await page.locator('aside li button > span:first-child').evaluateAll((nodes) =>
+        nodes.map((node) => {
+          const { x, y, width, height } = node.getBoundingClientRect();
+          return { x, y: y + window.scrollY, width, height };
+        }),
+      );
+      // The worker's name in the top bar is stored the same way (Zain, not زین).
+      const chip = await page.getByRole('button', { name: /^سائن اِن/ }).boundingBox();
+      return chip ? [...boxes, chip] : boxes;
+    },
+  },
   1: {
     prepare: async (page) => {
       await page.getByRole('button', { name: /Zain/ }).click();
@@ -59,6 +82,12 @@ const BUILT: Record<
     },
   },
 };
+
+/** The action bar's box, to leave it out of a comparison. */
+async function actionBar(page: Page): Promise<Rect[]> {
+  const box = await page.locator('footer').last().boundingBox();
+  return box ? [box] : [];
+}
 
 /** The route of the design with the demo clock added. Some routes show more than the path ("/  (= /board/snooker)"). */
 function urlOf(screen: ScreenEntry): string {
@@ -101,9 +130,11 @@ test.describe('counter screens against their PNGs', () => {
       const png = readFileSync(path.join(REPO, 'design/screens', `${screen.file}.png`));
       const shot = await page.screenshot({ fullPage: true });
       const result = await comparePngs(scratch, shot, png, { masks });
-      saveComparison('screens', `${String(screen.n).padStart(2, '0')}-${screen.file}`, result);
+      const picture = `${String(screen.n).padStart(2, '0')}-${screen.file}`;
+      saveComparison('screens', picture, result);
 
       expect(problems, 'the page logged errors').toEqual([]);
+
       // The page must be the size the design draws; a different size means the layout moved.
       expect(result.ours, 'size of the page').toEqual(result.design);
       expect(

@@ -1,8 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { NotFound } from '@/ui/NotFound';
 import { AlertsPanel } from '../components/AlertsPanel';
+import { Board } from '../screens/Board';
 import { PagePlaceholder } from '../screens/PagePlaceholder';
 import { SignIn } from '../screens/SignIn';
 import { RequireWorker } from '../session/RequireWorker';
@@ -12,6 +13,7 @@ import { RequireWorker } from '../session/RequireWorker';
 const KitPage = import.meta.env.DEV ? lazy(() => import('@/dev/kit/KitPage')) : null;
 const TilesPage = import.meta.env.DEV ? lazy(() => import('@/dev/tiles/TilesPage')) : null;
 const DataPage = import.meta.env.DEV ? lazy(() => import('../screens/dev/DataPage')) : null;
+const GamesPreview = import.meta.env.DEV ? lazy(() => import('../screens/dev/GamesPreview')) : null;
 
 /** The screens that later steps build. Each shows its name inside the real frame until then. */
 const LATER_SCREENS = [
@@ -31,17 +33,20 @@ function LaterScreen({ title }: { title: (typeof LATER_SCREENS)[number]['title']
 }
 
 /**
- * The board (P05 builds it). The panels that open over it, such as the bell's alerts at /alerts, are its child
- * routes: they draw into the `<Outlet/>` on top of the board, so the board stays behind them as on screen 11.
+ * What a tap on a table opens: P06 builds starting a game and a room, P07 builds the running game. Each shows its
+ * name inside the real frame until then, like the screens above. (They become child routes of the board, so the
+ * panel draws over it, as the alerts do.)
  */
-function BoardPlaceholder() {
-  const { t } = useTranslation();
-  return (
-    <div className="relative flex flex-1 flex-col">
-      <PagePlaceholder title={t('brand')} />
-      <Outlet />
-    </div>
-  );
+function TableScreen({ what }: { what: 'start' | 'room' | 'running' }) {
+  const { t } = useTranslation('board');
+  const { id } = useParams<{ id: string }>();
+  const title =
+    what === 'start'
+      ? t('cta.startGame')
+      : what === 'room'
+        ? t('cta.startRoom')
+        : t('state.playing');
+  return <PagePlaceholder title={`${title} (${id ?? ''})`} />;
 }
 
 export function CounterRoutes() {
@@ -50,9 +55,28 @@ export function CounterRoutes() {
       <Route path="/sign-in" element={<SignIn />} />
       {/* Every other counter screen needs a worker session. */}
       <Route element={<RequireWorker />}>
-        <Route path="/" element={<BoardPlaceholder />}>
+        {/* The board is a layout route: panels such as the bell's alerts are its children and draw over it. */}
+        <Route path="/" element={<Board />}>
           <Route path="alerts" element={<AlertsPanel />} />
         </Route>
+        {/* `/` is the snooker and rooms tab (docs/03). */}
+        <Route path="/board/snooker" element={<Navigate to="/" replace />} />
+        <Route path="/board/room" element={<Navigate to="/" replace />} />
+        <Route path="/board/:category" element={<Board />} />
+        <Route path="/table/:id/start" element={<TableScreen what="start" />} />
+        <Route path="/table/:id" element={<TableScreen what="running" />} />
+        <Route path="/room/:id/start" element={<TableScreen what="room" />} />
+        <Route path="/checkout/:playerId" element={<LaterScreen title="actions.checkout" />} />
+        {GamesPreview ? (
+          <Route
+            path="/dev/games-preview"
+            element={
+              <Suspense fallback={null}>
+                <GamesPreview />
+              </Suspense>
+            }
+          />
+        ) : null}
         {LATER_SCREENS.map(({ path, title }) => (
           <Route key={path} path={path} element={<LaterScreen title={title} />} />
         ))}

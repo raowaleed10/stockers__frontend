@@ -28,6 +28,8 @@ const preset: Partial<Config> = {
           'ok-bg': v('c-ok-bg'), 'ok-line': v('c-ok-line'), 'ok-ink': v('c-ok-ink'),
           // added in P04 (see tokens.css)
           'on-felt': v('c-on-felt'), 'pill-free-bg': v('c-pill-free-bg'), 'pill-ooo-bg': v('c-pill-ooo-bg'),
+          // added in P05 (see tokens.css)
+          'note-line': v('c-note-line'),
         },
         s: {
           free: v('s-free'), play: v('s-play'), over: v('s-over'), card: v('s-card'),

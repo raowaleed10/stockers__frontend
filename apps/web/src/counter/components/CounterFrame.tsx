@@ -1,6 +1,7 @@
 import type { WorkerSession } from '@stockers/shared';
 import { useEffect, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { cx } from '@/ui/cx';
 import { useBoard } from '../api';
 import { useLockStore } from '../session/lock-store';
 import { useSwitchWorker } from '../session/use-leave-session';
@@ -36,7 +37,11 @@ export function CounterFrame({ session }: { session: WorkerSession }) {
         ref={frame}
         data-app="counter"
         aria-hidden={locked || undefined}
-        className="screen-text flex min-h-screen flex-col bg-c-page font-body text-c-text"
+        // A board taller than the screen scrolls; while locked it must not, so the lock covers exactly the screen.
+        className={cx(
+          'screen-text flex flex-col bg-c-page font-body text-c-text',
+          locked ? 'h-screen overflow-hidden' : 'min-h-screen',
+        )}
       >
         <SessionTiming session={session} />
         <CounterTopBar

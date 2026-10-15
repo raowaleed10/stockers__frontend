@@ -106,6 +106,19 @@ These are counter screens, so they are in `src/counter`, not `src/ui`.
 - **`useFormat()`** (`src/lib/use-format.ts`) gives `clock`, `day`, `slot` and `parts` in the page language. Use it, not `formatClock` directly, in a component.
 - **Shared rules for the board (P05 reuses them):** `tableStatus(table, now)` and `summarizeTables(tables, now)` in `packages/shared/src/rules/board.ts`. A paused table counts with "playing"; a table with no price is left out.
 
+### As built in P05 (the live board)
+
+All counter-only, so in `src/counter`, not `src/ui`.
+
+- **`screens/Board.tsx`** is the layout route of `/` and `/board/:category`. It draws `CategoryTabs`, the page, and an `<Outlet/>` **last, inside a `relative` box that fills the area between the two bars**, so the bell's panel (`/alerts`) and later the table panels draw over the finished board. While a panel is open the board behind it is `inert` and `aria-hidden`. `/` calls `useBoard()` and shares its query with the frame, so the board is asked for once. `/board/snooker` and `/board/room` redirect to `/`; an unknown game type shows "Page not found".
+- **`components/`:** `CategoryTabs` (`tabs`, `selectedId`, `onSelect`), `BoardTile` (one `BoardTable` → `GameTile`; reads the clock itself), `WaitingPanel` (`bills`, `onOpen`), `BillWords` and `bill-words.ts` (the "what for" line from `BillPart`s; `canteenWords`, `partWords`), `PriceBanner`, `LookBanner` and `InfoCard` (`InfoBanner.tsx`), `TileRow`, `TileGrid` and `TILE_FLEX` (`TileGrid.tsx`: the board's wrapping row with 22 px gaps and the 26 px grids of screen 5).
+- **`BoardTile`** does not take the words from the caller: it writes the label, price, game line, detail, hint, note and aria name from the table, the players and the page language (`locales/{en,ur}/board.json`). Press: free → `/table/:id/start` (`/room/:id/start` for a room), running or paused → `/table/:id`. A table out of order or with no price has no press, and the tile itself ignores a tap on it (`TileFrame`: `aria-disabled`, its note or lock reason as description; the out-of-order tile stays focusable, the no-price tile is `disabled`).
+- **The widths are the design's.** The design HTML has no CSS reset, so its 640 px section and 320 px aside are content-box widths (652 and 358 px wide). `Board` and `WaitingPanel` use `box-content` on those two flex items to get the same 319 px tiles and 358 px panel.
+- **Urdu:** `rtl:` utilities carry screen 6's own spacing (tabs 12/4 px, panel 14/18 px, text 17/16/13 px, line height 1.7). The top bar (10 px) and the action bar (12/16 px, 19 and 17 px text) got the same `rtl:` overrides. Only the selected tab shows its count in Urdu.
+- **`/dev/games-preview`** (`screens/dev/GamesPreview.tsx`, development only) is screen 5: the tabs with none selected, `LookBanner`, and five sections, using the gallery's `SCREEN_5` samples and `Sample` (`src/dev/tiles/Sample.tsx`, moved out of `TilesPage`). Its three dev words are in `src/dev/locales/{en,ur}/preview.json`.
+- **`CounterFrame`** now gives a locked screen exactly the height of the screen (`h-screen overflow-hidden`), because a board taller than the screen scrolls and the lock must not.
+- **Shared rules added:** `boardTabs`, `SNOOKER_TAB`, `sessionStanding` (`rules/board.ts`); `billParts`, `waitingTotal` (`rules/checkout.ts`); `BillPart`, `WaitingBill.parts` and `StatementLine.item` (types).
+
 ## Rules for components
 - `ui` and `tiles` never fetch data and never read the clock directly (`TimerText` uses `useNow()`, which is allowed).
 - All text comes in through props or `t()`; no English hard-coded inside shared components.

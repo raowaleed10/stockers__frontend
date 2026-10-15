@@ -55,7 +55,7 @@ export function CounterTopBar({
   const { t } = useTranslation('frame');
   const { clock, day } = useFormat();
   return (
-    <header className="relative z-10 flex flex-wrap items-center gap-5 border-b border-c-line bg-c-header px-6 py-3.5">
+    <header className="relative z-10 flex flex-wrap items-center gap-5 border-b border-c-line bg-c-header px-6 py-3.5 rtl:py-2.5">
       <Brand look="top" />
       {sheet ? (
         <div className="flex flex-col border-s border-c-line ps-4 leading-[1.15]">

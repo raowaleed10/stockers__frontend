@@ -1,7 +1,54 @@
 // Money at checkout (docs/07 §3, decisions D23, D25, D26, Q6).
 // A player's balance is signed: more than 0 he owes the club, less than 0 the club holds his advance.
 
-import type { Rs } from '../types';
+import type { BillPart, Rs, StatementLine, WaitingBill } from '../types';
+
+/**
+ * What tonight's lines are made of: frames lost, games lost, halves of a double, Centuries, rooms, damage
+ * charges, and canteen items with their quantity (summed for each item). Lines that are not a charge
+ * (payments, discounts, old credit) are not part of the bill's words. The order is fixed, so the same bill
+ * always reads the same: "2 frames lost, 2 teas".
+ */
+export function billParts(lines: readonly StatementLine[]): BillPart[] {
+  const counts = new Map<Exclude<BillPart['kind'], 'canteen'>, number>();
+  const items = new Map<string, number>();
+  for (const line of lines) {
+    switch (line.kind) {
+      case 'frame':
+      case 'game':
+      case 'double':
+      case 'century':
+      case 'room':
+      case 'damage':
+        counts.set(line.kind, (counts.get(line.kind) ?? 0) + 1);
+        break;
+      case 'canteen': {
+        // A line from before items were stored has no name: it is still one sale.
+        const name = line.item?.name ?? '';
+        items.set(name, (items.get(name) ?? 0) + (line.item?.qty ?? 1));
+        break;
+      }
+      default:
+        break;
+    }
+  }
+  const parts: BillPart[] = [];
+  for (const kind of ['frame', 'game', 'double', 'century', 'room'] as const) {
+    const count = counts.get(kind);
+    if (count) parts.push({ kind, count });
+  }
+  for (const [item, count] of items) {
+    parts.push({ kind: 'canteen', count, ...(item ? { item } : {}) });
+  }
+  const damage = counts.get('damage');
+  if (damage) parts.push({ kind: 'damage', count: damage });
+  return parts;
+}
+
+/** "Not paid yet today" on the live board: the sum of what each waiting player owes from tonight. */
+export function waitingTotal(waiting: readonly Pick<WaitingBill, 'tonight'>[]): Rs {
+  return waiting.reduce((sum, bill) => sum + bill.tonight, 0);
+}
 
 export interface Bill {
   /** Credit he owes from before tonight. */

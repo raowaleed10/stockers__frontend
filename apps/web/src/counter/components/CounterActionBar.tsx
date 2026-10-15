@@ -20,9 +20,10 @@ const BASE =
   'flex min-h-touch-main items-center rounded-btn transition-colors duration-150 ' +
   focusRing.counter;
 const LOOK = {
-  main: `${BASE} gap-3 border-0 bg-c-brass px-7 text-[20px] font-bold text-c-brass-ink active:bg-c-brass-press`,
-  plain: `${BASE} gap-2.5 border border-c-line bg-c-panel px-[22px] text-[18px] font-semibold text-c-text active:bg-c-raised-2`,
-  outline: `${BASE} gap-2.5 border border-c-line-3 bg-transparent px-[22px] text-[18px] font-semibold text-c-text active:bg-c-raised`,
+  // Urdu is a size smaller (screen 6: 19 and 17 px).
+  main: `${BASE} gap-3 border-0 bg-c-brass px-7 text-[20px] font-bold text-c-brass-ink active:bg-c-brass-press rtl:text-[19px]`,
+  plain: `${BASE} gap-2.5 border border-c-line bg-c-panel px-[22px] text-[18px] font-semibold text-c-text active:bg-c-raised-2 rtl:text-[17px]`,
+  outline: `${BASE} gap-2.5 border border-c-line-3 bg-transparent px-[22px] text-[18px] font-semibold text-c-text active:bg-c-raised rtl:text-[17px]`,
 } as const;
 
 function Action({
@@ -74,7 +75,7 @@ export function CounterActionBar({
   const { t } = useTranslation('frame');
   const { clock } = useFormat();
   return (
-    <footer className="flex flex-wrap items-center gap-3 border-t border-c-line bg-c-header px-6 pb-[18px] pt-3.5">
+    <footer className="flex flex-wrap items-center gap-3 border-t border-c-line bg-c-header px-6 pb-[18px] pt-3.5 rtl:pb-4 rtl:pt-3">
       <Action look="main" icon={Wallet} iconSize={24} strokeWidth={2.2} onClick={onCheckout}>
         {t('actions.checkout')}
       </Action>

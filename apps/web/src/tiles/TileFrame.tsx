@@ -18,6 +18,9 @@ export interface TileFrameProps extends TileProps {
 export function TileFrame({ kind, children, ...props }: TileFrameProps) {
   const lockId = useId();
   const look = STATUS_LOOK[props.status];
+  // A tile with no price is disabled. A tile that is out of order stays focusable (so a screen reader can read
+  // its note) but does nothing when pressed. Both say why through their description.
+  const blocked = look.locked || props.status === 'outOfOrder';
   const state = useMemo<TileState>(() => ({ props, look, lockId }), [props, look, lockId]);
   const common = {
     'aria-label': props.ariaLabel,
@@ -36,9 +39,9 @@ export function TileFrame({ kind, children, ...props }: TileFrameProps) {
         <button
           type="button"
           disabled={look.locked}
-          aria-disabled={look.locked || undefined}
-          aria-describedby={look.locked && props.lockReason ? lockId : undefined}
-          onClick={props.onPress}
+          aria-disabled={blocked || undefined}
+          aria-describedby={blocked && (props.lockReason || props.note) ? lockId : undefined}
+          onClick={blocked ? undefined : props.onPress}
           {...common}
         >
           {children}

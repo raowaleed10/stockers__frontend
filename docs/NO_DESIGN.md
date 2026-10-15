@@ -23,6 +23,9 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 6 | ["Wait 5 minutes" on the sign-in page](#6-wait-5-minutes-on-the-sign-in-page) | counter | P04 |
 | 7 | [The sign-in page when the workers cannot be loaded](#7-the-sign-in-page-when-the-workers-cannot-be-loaded) | counter | P04 |
 | 8 | [Wrong PIN on the lock screen](#8-wrong-pin-on-the-lock-screen) | counter | P04 |
+| 9 | [Foosball, carrom, ludo and PlayStation before a price is set](#9-foosball-carrom-ludo-and-playstation-before-a-price-is-set) | counter | P05 |
+| 10 | [The board when the tables cannot be loaded](#10-the-board-when-the-tables-cannot-be-loaded) | counter | P05 |
+| 11 | [Waiting to pay with nobody waiting](#11-waiting-to-pay-with-nobody-waiting) | counter | P05 |
 
 ## 1. Sign-in time banner
 
@@ -99,3 +102,40 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 - **Words:** "Wrong PIN. Try again." Urdu: "پن غلط ہے۔ دوبارہ کوشش کریں۔"
 
 ![Wrong PIN on the lock screen](no-design/lock-wrong-pin.png)
+
+## 9. Foosball, carrom, ludo and PlayStation before a price is set
+
+- **What:** screen 4 draws this only for pool. The other four games get the same page while their price is not set: the
+  amber box, the locked tiles (the picture of each game, "Price not set", and "Locked until an owner sets the price"), and
+  the two cards under them. Tapping a locked tile does nothing. Once an owner sets the prices the page shows the
+  tiles as screen 5 draws them (a grid for each game, with no banner and no cards).
+- **Where:** `/board/foosball`, `/board/carrom`, `/board/ludo`, `/board/playstation` (the picture shows foosball).
+- **Words:** the title is "{games} have no price yet": "Foosball tables have no price yet", "Carrom boards have no price
+  yet", "Ludo boards have no price yet", "PlayStation screens have no price yet". The line under it is the one on screen 4
+  with "tables", "boards" or "screens" in it: "An owner sets the price in Games and prices. Until then these boards cannot
+  be started." The two cards are word for word the ones on screen 4. Urdu: see `docs/URDU_TO_CHECK.md`.
+- **Built from:** screen 4 (the banner, the locked tile, the two cards) and the tiles of screen 5.
+
+![Foosball before a price is set](no-design/board-foosball-no-price.png)
+
+## 10. The board when the tables cannot be loaded
+
+- **What:** if the club's computer cannot reach the server, the board area says so and has a button to try again. While
+  the tables are loading it says "Loading the tables…" in the same place. The top bar and the action bar stay.
+- **Where:** `/` when the board call fails. (The picture is made with that call failing.)
+- **Words:** "Could not load the tables.", "Try again", "Loading the tables…". Urdu: "ٹیبلز نہیں کھل سکے۔",
+  "دوبارہ کوشش کریں", "ٹیبلز کھل رہے ہیں…".
+- **Built from:** the same message and button as the sign-in page that cannot load the workers (section 7).
+
+![The board when the tables cannot be loaded](no-design/board-error.png)
+
+## 11. Waiting to pay with nobody waiting
+
+- **What:** the "Waiting to pay" panel keeps its title, says "0 players", and says that nobody is waiting. The total
+  line is not shown, because there is nothing to add up.
+- **Where:** `/` when every bill is paid, for example `/?scenario=closed` (3:45 AM, after the sheet was closed).
+- **Words:** "Nobody is waiting to pay". Urdu: "کسی کی ادائیگی باقی نہیں".
+- **Built from:** the panel of screen 3.
+
+![Waiting to pay with nobody waiting](no-design/waiting-panel-empty.png)
+

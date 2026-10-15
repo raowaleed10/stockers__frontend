@@ -41,8 +41,14 @@ describe('the bell opens the alerts panel', () => {
       'Game cancelled on Table 5',
       'Table 7 marked out of order by Adil',
     ]);
-    // The board is still there behind it, and so are the top bar and the action bar.
-    expect(screen.getByRole('heading', { name: 'Stockers' })).toBeInTheDocument();
+    // The finished board is still there behind it (dimmed, and out of reach: it is `inert`), and so are the top
+    // bar and the action bar.
+    expect(
+      screen.getByRole('button', { name: 'Table 1, playing', hidden: true }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Waiting to pay', hidden: true }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Signed in: Zain/ })).toBeInTheDocument();
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });

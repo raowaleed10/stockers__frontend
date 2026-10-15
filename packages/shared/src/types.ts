@@ -120,12 +120,26 @@ export interface StatementLine {
   doneBy: PersonRef;
   method?: string;
   sheetId?: string;
+  /** A canteen line: what was sold and how many. The name is stored as typed. */
+  item?: { name: string; qty: number };
 }
+
+/** What a bill is made of, one part for each kind of charge (the "2 frames lost, 2 teas" of screen 3). */
+export type BillPartKind = 'frame' | 'game' | 'double' | 'century' | 'room' | 'damage' | 'canteen';
+export interface BillPart {
+  kind: BillPartKind;
+  /** Frames lost, halves of a double, games, or the quantity of a canteen item. */
+  count: number;
+  /** The canteen item, as stored. Only on `canteen`. */
+  item?: string;
+}
+
 export interface WaitingBill {
   playerId: string;
   name: string;
   phoneTail?: string;
-  summary: string;
+  /** What tonight's bill is made of. The screen writes it in the page language. */
+  parts: BillPart[];
   tonight: Rs;
   oldCredit: Rs;
   advance: Rs;

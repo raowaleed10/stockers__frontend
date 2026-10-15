@@ -9,7 +9,14 @@ import { chromium, type FullConfig } from '@playwright/test';
  * test's time limit, and a test then fails for a reason that has nothing to do with what it checks. Once
  * the pages are warm every test sees the server as it is in normal use, so no test needs a longer limit or a retry.
  */
-const PAGES = ['/dev/kit', '/dev/tiles', '/dev/data', '/owner-dev/dev/kit', '/owner-dev/dev/data'];
+const PAGES = [
+  '/dev/kit',
+  '/dev/tiles',
+  '/dev/data',
+  '/dev/games-preview',
+  '/owner-dev/dev/kit',
+  '/owner-dev/dev/data',
+];
 
 export default async function globalSetup(config: FullConfig): Promise<void> {
   const baseURL = config.projects.find((project) => project.name === 'counter')?.use.baseURL;

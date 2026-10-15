@@ -31,6 +31,15 @@
     line-height: 1.8;
   }
 
+  /*
+   * `font-body` is Barlow, then the system font. On an Urdu page the Arabic-script letters would fall to that system
+   * font instead of Noto Nastaliq as the designs draw them (screen 6), so in Urdu the screen takes the Urdu stack.
+   * Latin letters and digits still come from Barlow (the Nastaliq files hold only Arabic script, docs/09).
+   */
+  html[lang='ur'] .font-body {
+    font-family: var(--font-urdu);
+  }
+
   /* docs/08 §3: after a wrong PIN the dots shake once. */
   .pin-shake {
     animation: pin-shake 360ms ease-in-out;

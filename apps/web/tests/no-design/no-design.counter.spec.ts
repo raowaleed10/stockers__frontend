@@ -120,6 +120,34 @@ const SHOTS: Shot[] = [
     },
     clip: { x: 760, y: 150, width: 680, height: 700 },
   },
+  {
+    id: 'board-foosball-no-price',
+    url: `/board/foosball?now=${encodeURIComponent('2026-10-03T21:44:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByText('Foosball tables have no price yet')).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'board-error',
+    url: `/?now=${NIGHT}`,
+    fetchOverride: { match: '/api/counter/board', status: 500 },
+    prepare: async (page) => {
+      // The page asks once more before it gives up.
+      await expect(page.getByText('Could not load the tables.')).toBeVisible({ timeout: 15_000 });
+    },
+    clip: { x: 0, y: 83, width: 1440, height: 260 },
+  },
+  {
+    id: 'waiting-panel-empty',
+    // 3:45 AM after the sheet was closed: nobody is waiting to pay.
+    url: `/?scenario=closed&now=${encodeURIComponent('2026-10-04T03:45:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByText('Nobody is waiting to pay')).toBeVisible();
+      await blur(page);
+    },
+    clip: { x: 1040, y: 150, width: 400, height: 260 },
+  },
 ];
 
 test.describe('screenshots for docs/NO_DESIGN.md', () => {

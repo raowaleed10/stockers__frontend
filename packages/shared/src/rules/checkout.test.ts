@@ -1,5 +1,92 @@
 import { describe, expect, it } from 'vitest';
-import { applyDiscount, billBreakdown, settleCheckout } from './checkout';
+import type { StatementLine } from '../types';
+import { applyDiscount, billBreakdown, billParts, settleCheckout, waitingTotal } from './checkout';
+
+const worker = { id: 'zain', name: 'Zain', role: 'worker' as const };
+let lineNo = 0;
+function line(kind: StatementLine['kind'], extra: Partial<StatementLine> = {}): StatementLine {
+  lineNo += 1;
+  return {
+    id: `l${lineNo}`,
+    playerId: 'bilal',
+    at: '2026-10-03T21:00:00+05:00',
+    kind,
+    text: kind,
+    balance: 0,
+    doneBy: worker,
+    ...extra,
+  };
+}
+
+describe('billParts', () => {
+  it('Bilal at 9:42 PM: 2 frames lost and 2 teas', () => {
+    expect(
+      billParts([line('frame'), line('frame'), line('canteen', { item: { name: 'Tea', qty: 2 } })]),
+    ).toEqual([
+      { kind: 'frame', count: 2 },
+      { kind: 'canteen', count: 2, item: 'Tea' },
+    ]);
+  });
+
+  it('counts a half of a double, a Century, a room, a game and a damage charge', () => {
+    expect(
+      billParts([line('double'), line('century'), line('room'), line('game'), line('damage')]),
+    ).toEqual([
+      { kind: 'game', count: 1 },
+      { kind: 'double', count: 1 },
+      { kind: 'century', count: 1 },
+      { kind: 'room', count: 1 },
+      { kind: 'damage', count: 1 },
+    ]);
+  });
+
+  it('adds the quantity of the same canteen item and keeps different items apart', () => {
+    expect(
+      billParts([
+        line('canteen', { item: { name: 'Tea', qty: 2 } }),
+        line('canteen', { item: { name: 'Chips', qty: 1 } }),
+        line('canteen', { item: { name: 'Tea', qty: 1 } }),
+      ]),
+    ).toEqual([
+      { kind: 'canteen', count: 3, item: 'Tea' },
+      { kind: 'canteen', count: 1, item: 'Chips' },
+    ]);
+  });
+
+  it('reads the same whatever order the lines came in', () => {
+    const lines = [
+      line('canteen', { item: { name: 'Tea', qty: 2 } }),
+      line('frame'),
+      line('frame'),
+    ];
+    expect(billParts([...lines].reverse())).toEqual(billParts(lines));
+  });
+
+  it('leaves out what is not a charge: payments, discounts and old credit', () => {
+    expect(
+      billParts([line('payment'), line('discount'), line('opening'), line('advance')]),
+    ).toEqual([]);
+  });
+
+  it('keeps a canteen line that has no item name as one sale with no name', () => {
+    expect(billParts([line('canteen')])).toEqual([{ kind: 'canteen', count: 1 }]);
+  });
+
+  it('is empty for no lines', () => {
+    expect(billParts([])).toEqual([]);
+  });
+});
+
+describe('waitingTotal', () => {
+  it('screen 3 at 9:42 PM: 600 + 200 + 250 + 250 + 250 = Rs 1,550', () => {
+    const bills = [600, 200, 250, 250, 250].map((tonight) => ({ tonight }));
+    expect(waitingTotal(bills)).toBe(1550);
+  });
+
+  it('is 0 when nobody is waiting', () => {
+    expect(waitingTotal([])).toBe(0);
+  });
+});
 
 describe('billBreakdown', () => {
   it('Bilal at 10:20 PM: old credit 500 + frames 750 + tea x2 100 = 1,350', () => {

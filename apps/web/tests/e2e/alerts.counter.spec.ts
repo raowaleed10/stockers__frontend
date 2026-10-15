@@ -33,8 +33,8 @@ test.describe('the alerts panel', () => {
     await expect(panel.getByRole('listitem')).toHaveCount(3);
     await expect(panel.getByText('Chips running low')).toBeVisible();
     await expect(panel.getByText('Table 7 marked out of order by Adil')).toBeVisible();
-    // The board's place is still on the page behind it, with the bars around it.
-    await expect(page.getByRole('heading', { name: 'Stockers' })).toBeAttached();
+    // The finished board is still on the page behind it, with the bars around it.
+    await expect(page.locator('[aria-label="Table 1, playing"]')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Checkout' })).toBeVisible();
     await panel.getByRole('button', { name: 'Close panel' }).click();
     await expect(panel).toHaveCount(0);

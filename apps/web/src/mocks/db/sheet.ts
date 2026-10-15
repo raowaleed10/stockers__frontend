@@ -252,7 +252,7 @@ export function closeSheet(
       sheetId: closed.id,
     });
     db.tonightLines(player.id).forEach((line) => db.s.unsettled.delete(line.id));
-    delete db.s.billSummaries[player.id];
+    db.s.billOrder = db.s.billOrder.filter((id) => id !== player.id);
     return { playerId: player.id, name: player.name, amount: bill.tonight };
   });
 

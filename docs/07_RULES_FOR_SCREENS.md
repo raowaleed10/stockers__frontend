@@ -93,3 +93,6 @@ The server decides with its own clock. The frontend uses these functions only to
 - Show `elapsed()` with `useNow()` (once per second).
 - Only the clock text updates each second; do not re-render the whole board. Keep a ticking `<TimerText>` per tile.
 - The amount so far on the tile uses the same rules: `frameCharge`, `centuryCharge` or `roomCharge`.
+- *As built in P05:* the board itself does not tick. Each `BoardTile` reads the clock (`useNow(1000)`), so only its own tile re-renders: the timer ticks, the amount of a Century or a room grows, and a frame turns into the red card at 30:00. The red card follows `tableStatus` (a frame past 30 minutes), and the timer takes its variant from the status, so the pill, the ring and the timer always agree.
+- *Where the words on a tile come from:* the "Frame 3, Ali leads 2–0" detail is `sessionStanding(game, session, now)` (only frames that have ended count; no leader gives just "Frame 3"); the tab counts are `boardTabs(categories)` (snooker tables and rooms are one tab); the waiting list's total is `waitingTotal(bills)` and its "what for" line is built from `billParts(lines)`. All four are pure functions in `packages/shared/src/rules`.
+

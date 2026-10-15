@@ -42,8 +42,13 @@ export interface Player { id: string; name: string; phone?: string; nick?: strin
 export type LineKind = 'frame' | 'double' | 'century' | 'room' | 'game' | 'canteen' | 'damage' | 'payment' | 'discount'
   | 'opening' | 'left-without-checkout' | 'correction' | 'advance';
 export interface StatementLine { id: string; playerId: string; at: ISO; kind: LineKind; text: string;
-  charge?: Rs; paid?: Rs; balance: Rs; doneBy: PersonRef; method?: string; sheetId?: string }
-export interface WaitingBill { playerId: string; name: string; phoneTail?: string; summary: string; tonight: Rs; oldCredit: Rs; advance: Rs; total: Rs }
+  charge?: Rs; paid?: Rs; balance: Rs; doneBy: PersonRef; method?: string; sheetId?: string;
+  item?: { name: string; qty: number } }   // a canteen line: what was sold (the name as typed) and how many
+export type BillPartKind = 'frame' | 'game' | 'double' | 'century' | 'room' | 'damage' | 'canteen';
+export interface BillPart { kind: BillPartKind; count: number; item?: string }   // item only on 'canteen'
+// `parts` is what tonight's bill is made of ("2 frames lost, 2 teas"). It is data, not a sentence: the screen writes
+// the words in the page language, and a canteen item keeps the name it was stored with. `billParts(lines)` in shared.
+export interface WaitingBill { playerId: string; name: string; phoneTail?: string; parts: BillPart[]; tonight: Rs; oldCredit: Rs; advance: Rs; total: Rs }
 
 export interface PaymentMethod { id: 'cash' | 'bank' | 'easypaisa' | 'jazzcash' | string; name: string; enabled: boolean; alwaysOn?: boolean }
 export interface CheckoutRequest { playerId: string; parts: { method: string; amount: Rs }[]; toCredit: Rs; discount?: { amount: Rs; reason: string; note?: string } }
@@ -162,7 +167,7 @@ Code: `apps/web/src/mocks` (`db/` is the store, `counter/` and `owner/` are the 
 
 **Sessions.** One session per browser tab: a worker or an owner. A counter call without a worker session is a **401** (`UNAUTHENTICATED`); a worker whose time is over is signed out on his next call (**401** `SESSION_ENDED`) and his games keep running. An owner call from a worker session is a plain **404**; without any session it is a **401**. Signing in checks, in this order: the wait after too many tries (429), the time of day (**403** `NOT_YOUR_TIME` with `{slot, now}`), then the PIN. Five wrong PINs mean 5 minutes of waiting; five wrong owner passwords, 15 minutes. In the mock any non-empty owner password works.
 
-**The seed holds the numbers** (nothing is written into the loader): screen 31's counts and the discounts so far (`aggregates.today`: `doubles`, `centuryGames`, `playersPutOnCredit`, `playersPaidOldCredit`, `discounts`), every session frame's `startedAt` and `endedAt`, the non-frame charges of tonight (`tonightCharges`: Bilal's teas), the dispute of activity a2 (`disputes`), the counter's alerts (`counterAlerts`), and when the worker of a night scenario signed in (`signedInSince`). A bill's lines come from the sessions and from `tonightCharges`; the `checkout` scenario has no copy of them.
+**The seed holds the numbers** (nothing is written into the loader): screen 31's counts and the discounts so far (`aggregates.today`: `doubles`, `centuryGames`, `playersPutOnCredit`, `playersPaidOldCredit`, `discounts`), every session frame's `startedAt` and `endedAt`, the non-frame charges of tonight (`tonightCharges`: Bilal's teas), the dispute of activity a2 (`disputes`), the counter's alerts (`counterAlerts`), and when the worker of a night scenario signed in (`signedInSince`). A bill's lines come from the sessions and from `tonightCharges`; the `checkout` scenario has no copy of them. A waiting row that no session explains has its own `lines` (kind and charge, and the item for a canteen line), which must add up to `tonight` (the loader refuses a seed where they do not). **The seed holds no English sentence about a bill**: what a waiting bill is for is built from its lines (`billParts`).
 
 **Statements show when a frame started** (screen 25), although it is charged when it ends; a statement is kept in time order, and the balance after each line is worked out again when a line goes in earlier than the last. Frame 3 of Table 1 is the game running at 9:42 PM (it started at 9:23 PM and the seed ends it at 9:51 PM), so a session shows only the frames already charged.
 

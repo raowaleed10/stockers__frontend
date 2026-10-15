@@ -10,10 +10,11 @@ beforeEach(() => resetCounterState());
 afterEach(() => resetCounterState());
 
 describe('counter routes', () => {
-  it('shows the placeholder board at / for a signed-in worker', async () => {
+  it('shows the live board at / for a signed-in worker', async () => {
     api.load();
     renderCounter('/');
-    expect(await screen.findByRole('heading', { name: 'Stockers' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Table 1, playing' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Waiting to pay' })).toBeInTheDocument();
   });
 
   it('sends / to the sign-in page when nobody is signed in', async () => {

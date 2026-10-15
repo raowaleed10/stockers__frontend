@@ -1,0 +1,128 @@
+{
+  "loading": "Loading the tables…",
+  "loadFailed": "Could not load the tables.",
+  "retry": "Try again",
+  "tables": "Tables",
+  "tabs": {
+    "label": "Game categories",
+    "snooker": "Snooker and rooms",
+    "pool": "Pool",
+    "foosball": "Foosball",
+    "carrom": "Carrom",
+    "ludo": "Ludo",
+    "playstation": "PlayStation",
+    "inUse": "{{inUse}} of {{total}} in use",
+    "count": "{{inUse}} of {{total}}"
+  },
+  "kind": {
+    "snooker": "Table",
+    "room": "Room",
+    "pool": "Pool table",
+    "carrom": "Carrom",
+    "foosball": "Foosball",
+    "ludo": "Ludo",
+    "playstation": "PlayStation"
+  },
+  "nameOf": {
+    "snooker": "Table {{number}}",
+    "room": "Room {{number}}",
+    "pool": "Pool table {{number}}",
+    "carrom": "Carrom board {{number}}",
+    "foosball": "Foosball table {{number}}",
+    "ludo": "Ludo board {{number}}",
+    "playstation": "PlayStation {{number}}"
+  },
+  "state": {
+    "free": "free",
+    "playing": "playing",
+    "over30": "over 30 minutes",
+    "paused": "paused",
+    "outOfOrder": "out of order",
+    "noPrice": "price not set"
+  },
+  "named": "{{name}}, {{state}}",
+  "price": {
+    "frame": "{{price}} a frame",
+    "hour": "{{price}}/hr",
+    "game": "{{price}} a game",
+    "none": "Rs —"
+  },
+  "game": {
+    "single": "Single frame",
+    "double": "Double frame",
+    "century": "Century",
+    "room": "Hourly",
+    "gameSingle": "Single game",
+    "gameDoubles": "Doubles"
+  },
+  "detail": {
+    "centuryRate": "{{price}} a minute",
+    "frame": "Frame {{n}}",
+    "leads": "Frame {{n}}, {{name}} leads {{a}}–{{b}}",
+    "paused": "paused",
+    "pausedAgo": "paused {{n}} min ago"
+  },
+  "cta": {
+    "startGame": "Tap to start a game",
+    "start": "Tap to start",
+    "startRoom": "Tap to start a room",
+    "snookerHint": "Double {{double}}. Century {{rate}} a minute.",
+    "roomHint": "{{n}} hour minimum",
+    "poolHint": "The loser pays, like a single frame",
+    "gameHint": "The loser pays the game"
+  },
+  "outOfOrder": {
+    "marked": "Marked by {{name}} at {{time}}"
+  },
+  "locked": "Locked until an owner sets the price",
+  "noPrice": {
+    "title": "{{games}} have no price yet",
+    "text": "An owner sets the price in Games and prices. Until then these {{things}} cannot be started.",
+    "games": {
+      "pool": "Pool tables",
+      "foosball": "Foosball tables",
+      "carrom": "Carrom boards",
+      "ludo": "Ludo boards",
+      "playstation": "PlayStation screens"
+    },
+    "things": {
+      "pool": "tables",
+      "foosball": "tables",
+      "carrom": "boards",
+      "ludo": "boards",
+      "playstation": "screens"
+    }
+  },
+  "cards": {
+    "label": "How other games will look",
+    "priceTitle": "Once a price is set",
+    "priceText": "Pool, foosball, carrom, ludo and PlayStation work like a single frame: tap a free table, pick the players, and when the game ends tap who lost. The loser pays the game price.",
+    "centuryTitle": "Century stays on snooker",
+    "centuryText": "Century by the minute is only offered on snooker tables 1 to {{last}}. Rooms are always by the hour."
+  },
+  "waiting": {
+    "title": "Waiting to pay",
+    "players_one": "{{count}} player",
+    "players_other": "{{count}} players",
+    "total": "Not paid yet today",
+    "empty": "Nobody is waiting to pay",
+    "separator": ", "
+  },
+  "parts": {
+    "frame_one": "{{count}} frame lost",
+    "frame_other": "{{count}} frames lost",
+    "game_one": "{{count}} game lost",
+    "game_other": "{{count}} games lost",
+    "double_one": "half of a double",
+    "double_other": "{{count}} halves of a double",
+    "century_one": "Century",
+    "century_other": "{{count}} Centuries",
+    "room_one": "room",
+    "room_other": "{{count}} rooms",
+    "damage_one": "damage charge",
+    "damage_other": "{{count}} damage charges",
+    "canteen": "{{count}} {{item}}",
+    "canteenAny_one": "{{count}} canteen item",
+    "canteenAny_other": "{{count}} canteen items"
+  }
+}

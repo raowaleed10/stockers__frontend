@@ -15,6 +15,7 @@ import { closeSheet } from './sheet';
 import type { DbState, StoredWorker, TodayState } from './state';
 import type {
   ScenarioName,
+  SeedBillLine,
   SeedFile,
   SeedPlayer,
   SeedScenario,
@@ -121,12 +122,24 @@ function plainPlayer(raw: SeedPlayer): Player {
   };
 }
 
-/** A short word for what a waiting bill is made of, when the seed does not give one. */
-function kindFromSummary(summary: string): StatementLine['kind'] {
-  if (/double/i.test(summary)) return 'double';
-  if (/century/i.test(summary)) return 'century';
-  if (/room/i.test(summary)) return 'room';
-  return 'frame';
+/** The statement text of a charge the seed describes only by its kind (a bill that no session explains). */
+function textOf(line: SeedBillLine): string {
+  switch (line.kind) {
+    case 'frame':
+      return 'Frame lost';
+    case 'game':
+      return 'Game lost';
+    case 'double':
+      return 'Half of a double';
+    case 'century':
+      return 'Century';
+    case 'room':
+      return 'Room';
+    case 'canteen':
+      return line.item
+        ? `${line.item.name}${line.item.qty > 1 ? ` × ${line.item.qty}` : ''}, canteen`
+        : 'Canteen';
+  }
 }
 
 function initialSession(
@@ -184,7 +197,7 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
     players: raw.players.map(plainPlayer),
     statements: {},
     unsettled: new Set(),
-    billSummaries: {},
+    billOrder: [],
     sheets,
     baseSheetCount: sheets.length,
     currentSheetId: raw.meta.currentSheetId,
@@ -352,13 +365,19 @@ function openWorkerSession(db: MockDb): void {
 /**
  * The lines of one waiting bill: the frames the player lost in the sessions, dated when each frame
  * started (screen 25), and the charges the seed lists for tonight (Bilal's teas). The lines are the
- * ones that add up to the bill; if none do, the bill is one line with the seed's own words.
+ * ones that add up to the bill; if none do, the seed's own `lines` for the bill are used.
  */
 function billLines(
   db: MockDb,
   raw: SeedFile,
   row: SeedWaiting,
-): { at: ISO; kind: StatementLine['kind']; text: string; charge: number }[] {
+): {
+  at: ISO;
+  kind: StatementLine['kind'];
+  text: string;
+  charge: number;
+  item?: StatementLine['item'];
+}[] {
   const name = (id: string) => db.player(id).name;
   const frames = raw.sessions
     .flatMap((session) =>
@@ -378,7 +397,13 @@ function billLines(
     .sort((a, b) => a.no - b.no);
   const extras = raw.tonightCharges
     .filter((c) => c.playerId === row.playerId)
-    .map(({ at, kind, text, charge }) => ({ at, kind, text, charge }));
+    .map(({ at, kind, text, charge, item }) => ({
+      at,
+      kind,
+      text,
+      charge,
+      ...(item ? { item } : {}),
+    }));
   const sum = (items: { charge: number }[]) =>
     items.reduce((total, item) => total + item.charge, 0);
 
@@ -464,19 +489,30 @@ function seedLedger(
       }
       continue;
     }
-    // Any other bill: one line with the seed's own words.
-    db.postLine(row.playerId, {
-      kind: kindFromSummary(row.summary),
-      text: row.summary,
-      charge: row.tonight,
-      by: actor,
-      at: tonightAt,
-      tonight: true,
+    // Any other bill: the lines the seed lists for it, which must add up to the bill.
+    const listed = row.lines ?? [];
+    const total = listed.reduce((sum, line) => sum + line.charge, 0);
+    if (listed.length === 0 || total !== row.tonight) {
+      throw new Error(
+        `The seed's waiting bill for ${row.playerId} is Rs ${row.tonight} but its lines add up to Rs ${total}`,
+      );
+    }
+    listed.forEach((line, index) => {
+      db.postLine(row.playerId, {
+        kind: line.kind,
+        text: textOf(line),
+        charge: line.charge,
+        ...(line.item ? { item: line.item } : {}),
+        by: actor,
+        // One minute apart, so the lines keep the order the seed lists them in.
+        at: toClubIso(toMs(tonightAt) + index * MINUTE_MS),
+        tonight: true,
+      });
     });
   }
 
-  // The seed's own words for each bill, until something new is added to it.
-  for (const row of waiting) s.billSummaries[row.playerId] = row.summary;
+  // The waiting list is in the order the seed lists it.
+  s.billOrder = waiting.map((row) => row.playerId);
 
   // Somebody owing from tonight owes "since tonight" when nothing older is unpaid.
   for (const player of s.players) {

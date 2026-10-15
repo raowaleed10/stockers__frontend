@@ -67,6 +67,7 @@ export function canteenSale(db: MockDb, by: PersonRef, request: CanteenSaleReque
         kind: 'canteen',
         text: `${item.name}${qty > 1 ? ` × ${qty}` : ''}, canteen`,
         charge: item.sell * qty,
+        item: { name: item.name, qty },
         by,
         tonight: request.payNow === undefined,
       });

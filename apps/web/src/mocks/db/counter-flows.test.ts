@@ -96,12 +96,70 @@ describe('loading the seed', () => {
     const db = make();
     const bill = waitingBills(db).find((b) => b.playerId === 'bilal');
     expect(bill).toMatchObject({
-      summary: '2 frames lost, 2 teas',
       tonight: 600,
       oldCredit: 500,
       total: 1100,
     });
+    expect(bill?.parts).toEqual([
+      { kind: 'frame', count: 2 },
+      { kind: 'canteen', count: 2, item: 'Tea' },
+    ]);
     expect(db.tonightLines('bilal').map((l) => l.charge)).toEqual([250, 250, 100]);
+  });
+
+  it('builds what each waiting bill is for from its lines, not from a sentence in the seed', () => {
+    const parts = Object.fromEntries(waitingBills(make()).map((b) => [b.playerId, b.parts]));
+    expect(parts).toEqual({
+      bilal: [
+        { kind: 'frame', count: 2 },
+        { kind: 'canteen', count: 2, item: 'Tea' },
+      ],
+      zubair: [{ kind: 'frame', count: 1 }],
+      kamran: [{ kind: 'double', count: 1 }],
+      faisal: [{ kind: 'double', count: 1 }],
+      tariq: [{ kind: 'frame', count: 1 }],
+    });
+    // The seed's waiting rows have `lines`, not a ready-made English sentence.
+    const rows = [
+      seed.waiting,
+      ...Object.values(seed.scenarios).map((s) => s.waiting ?? []),
+    ].flat();
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) expect(row).not.toHaveProperty('summary');
+  });
+
+  it('adds a canteen sale to the bill with its item and quantity', () => {
+    const db = make();
+    db.postLine('zubair', {
+      kind: 'canteen',
+      text: 'Chips × 3, canteen',
+      charge: 150,
+      item: { name: 'Chips', qty: 3 },
+      by: db.workerPerson(db.s.workers[1]),
+      tonight: true,
+    });
+    const bill = waitingBills(db).find((b) => b.playerId === 'zubair');
+    expect(bill?.parts).toEqual([
+      { kind: 'frame', count: 1 },
+      { kind: 'canteen', count: 3, item: 'Chips' },
+    ]);
+    // The player keeps his place in the list.
+    expect(waitingBills(db).map((b) => b.playerId)).toEqual([
+      'bilal',
+      'zubair',
+      'kamran',
+      'faisal',
+      'tariq',
+    ]);
+  });
+
+  it('puts the lines of every scenario’s bills together: each bill’s parts match its total', () => {
+    for (const scenario of ['checkout', 'closing'] as const) {
+      const db = make({ scenario });
+      for (const bill of waitingBills(db)) {
+        expect(bill.parts.length, `${scenario}: ${bill.playerId}`).toBeGreaterThan(0);
+      }
+    }
   });
 
   it('lists the five waiting players of screen 3 in order, Rs 1,550 in all', () => {

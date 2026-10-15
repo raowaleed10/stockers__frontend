@@ -165,6 +165,27 @@ describe('a table with no price', () => {
     await userEvent.click(screen.getByRole('button'));
     expect(onPress).toHaveBeenCalledTimes(1);
   });
+
+  it('a table that is out of order does nothing when pressed, and its note is its description', async () => {
+    const onPress = vi.fn();
+    render(
+      <GameTile
+        kind="snooker"
+        {...base('outOfOrder', {
+          note: { title: 'Cloth change', detail: 'Marked by Adil at 4:15 PM' },
+          onPress,
+          ariaLabel: 'Table 7, out of order',
+        })}
+      />,
+    );
+    const tile = screen.getByRole('button', { name: 'Table 7, out of order' });
+    // Still focusable, so a screen reader can read why; it is not `disabled`.
+    expect(tile).not.toBeDisabled();
+    expect(tile).toHaveAttribute('aria-disabled', 'true');
+    expect(tile).toHaveAccessibleDescription(/^Cloth change\s*Marked by Adil at 4:15 PM$/);
+    await userEvent.click(tile);
+    expect(onPress).not.toHaveBeenCalled();
+  });
 });
 
 describe('a tile with its own buttons', () => {

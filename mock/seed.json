@@ -912,28 +912,27 @@
   "waiting": [
     {
       "playerId": "bilal",
-      "summary": "2 frames lost, 2 teas",
       "tonight": 600
     },
     {
       "playerId": "zubair",
-      "summary": "1 frame lost",
-      "tonight": 200
+      "tonight": 200,
+      "lines": [{ "kind": "frame", "charge": 200 }]
     },
     {
       "playerId": "kamran",
-      "summary": "Half of a double",
-      "tonight": 250
+      "tonight": 250,
+      "lines": [{ "kind": "double", "charge": 250 }]
     },
     {
       "playerId": "faisal",
-      "summary": "Half of a double",
-      "tonight": 250
+      "tonight": 250,
+      "lines": [{ "kind": "double", "charge": 250 }]
     },
     {
       "playerId": "tariq",
-      "summary": "1 frame lost",
-      "tonight": 250
+      "tonight": 250,
+      "lines": [{ "kind": "frame", "charge": 250 }]
     }
   ],
   "statementExamples": {
@@ -1794,59 +1793,61 @@
       "waiting": [
         {
           "playerId": "bilal",
-          "summary": "3 frames, 2 teas tonight. Old credit Rs 500.",
           "oldCredit": 500,
           "tonight": 850,
           "total": 1350
         },
         {
           "playerId": "ali-hassan",
-          "summary": "Room 1, 1 h 40 min",
           "oldCredit": 0,
           "tonight": 2500,
-          "total": 2500
+          "total": 2500,
+          "lines": [{ "kind": "room", "charge": 2500 }]
         },
         {
           "playerId": "kamran",
-          "summary": "Half a double tonight. Old credit Rs 1,100, 18 days.",
           "oldCredit": 1100,
           "tonight": 250,
-          "total": 1350
+          "total": 1350,
+          "lines": [{ "kind": "double", "charge": 250 }]
         },
         {
           "playerId": "saad",
-          "summary": "Century Rs 630. Advance Rs 200 used.",
           "oldCredit": -200,
           "tonight": 630,
-          "total": 430
+          "total": 430,
+          "lines": [{ "kind": "century", "charge": 630 }]
         },
         {
           "playerId": "zubair",
-          "summary": "2 frames, one charged double",
           "oldCredit": 0,
           "tonight": 600,
-          "total": 600
+          "total": 600,
+          "lines": [
+            { "kind": "frame", "charge": 200 },
+            { "kind": "frame", "charge": 400 }
+          ]
         },
         {
           "playerId": "faisal",
-          "summary": "Half a double",
           "oldCredit": 0,
           "tonight": 250,
-          "total": 250
+          "total": 250,
+          "lines": [{ "kind": "double", "charge": 250 }]
         },
         {
           "playerId": "imran",
-          "summary": "Half a double on Table 5",
           "oldCredit": 0,
           "tonight": 200,
-          "total": 200
+          "total": 200,
+          "lines": [{ "kind": "double", "charge": 200 }]
         },
         {
           "playerId": "naveed",
-          "summary": "Half a double on Table 5",
           "oldCredit": 0,
           "tonight": 200,
-          "total": 200
+          "total": 200,
+          "lines": [{ "kind": "double", "charge": 200 }]
         }
       ],
       "waitingTotal": 6880
@@ -1880,17 +1881,20 @@
       "waiting": [
         {
           "playerId": "waqas",
-          "summary": "1 frame, 2 teas",
           "oldCredit": 950,
           "tonight": 450,
-          "total": 1400
+          "total": 1400,
+          "lines": [
+            { "kind": "frame", "charge": 250 },
+            { "kind": "canteen", "charge": 200, "item": { "name": "Tea", "qty": 4 } }
+          ]
         },
         {
           "playerId": "shoaib",
-          "summary": "1 frame lost",
           "oldCredit": 250,
           "tonight": 250,
-          "total": 500
+          "total": 500,
+          "lines": [{ "kind": "frame", "charge": 250 }]
         }
       ],
       "waitingTotal": 1900,
@@ -1947,7 +1951,8 @@
       "at": "2026-10-03T21:30:00+05:00",
       "kind": "canteen",
       "text": "Tea × 2, canteen",
-      "charge": 100
+      "charge": 100,
+      "item": { "name": "Tea", "qty": 2 }
     }
   ],
   "disputes": [

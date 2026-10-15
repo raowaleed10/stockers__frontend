@@ -59,5 +59,31 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Alerts panel, empty | No alerts yet | ابھی کوئی اطلاع نہیں | P04 answers |
 | Alerts panel, loading and error | Loading… · Could not load the alerts. · Try again | کھل رہا ہے… · اطلاعات نہیں کھل سکیں۔ · دوبارہ کوشش کریں | P04 answers |
 | Alerts panel, unread row (screen reader) | Unread | نہ پڑھی ہوئی | P04 answers |
+| Tab count of a game that is not snooker (shown on the selected tab only) | 0 of 4 | 4 میں سے 0 | P05 |
+| Screen reader name of a table | Carrom board 1 · Foosball table 1 · Ludo board 1 · PlayStation 1 | کیرم بورڈ 1 · فوس بال ٹیبل 1 · لڈو بورڈ 1 · پلے اسٹیشن 1 | P05 |
+| Name of the list of tables (screen reader) | Tables | ٹیبلز | P05 |
+| Game line of foosball and carrom doubles | Doubles | ڈبلز | P05 |
+| Detail on a table with a game that has no frame number, when it has just been paused | paused | رکا ہوا | P05 |
+| Hint on a free pool table | The loser pays, like a single frame | ہارنے والا ادا کرتا ہے، سنگل فریم کی طرح | P05 |
+| Call to action on a free carrom, foosball, ludo or PlayStation table | Tap to start | گیم شروع کریں | P05 |
+| Banner on a game with no price yet (pool) | Pool tables have no price yet | پول ٹیبلز کی ابھی قیمت نہیں لگی | P05 |
+| Banner (foosball) | Foosball tables have no price yet | فوس بال ٹیبلز کی ابھی قیمت نہیں لگی | P05 |
+| Banner (carrom) | Carrom boards have no price yet | کیرم بورڈز کی ابھی قیمت نہیں لگی | P05 |
+| Banner (ludo) | Ludo boards have no price yet | لڈو بورڈز کی ابھی قیمت نہیں لگی | P05 |
+| Banner (PlayStation) | PlayStation screens have no price yet | پلے اسٹیشن اسکرینز کی ابھی قیمت نہیں لگی | P05 |
+| Line under that banner (screen 4) | An owner sets the price in Games and prices. Until then these tables cannot be started. | قیمت مالک گیمز اور قیمتیں میں لگاتا ہے۔ تب تک ان ٹیبلز پر گیم شروع نہیں ہو سکتا۔ | P05 |
+| Card under the locked boards (screen 4), title | Once a price is set | قیمت لگنے کے بعد | P05 |
+| Card, text | Pool, foosball, carrom, ludo and PlayStation work like a single frame: tap a free table, pick the players, and when the game ends tap who lost. The loser pays the game price. | پول، فوس بال، کیرم، لڈو اور پلے اسٹیشن سنگل فریم کی طرح چلتے ہیں: خالی ٹیبل پر ٹیپ کریں، کھلاڑی چنیں، اور گیم ختم ہونے پر ہارنے والے پر ٹیپ کریں۔ ہارنے والا گیم کی قیمت دیتا ہے۔ | P05 |
+| Second card, title | Century stays on snooker | سنچری صرف اسنوکر پر | P05 |
+| Second card, text | Century by the minute is only offered on snooker tables 1 to 7. Rooms are always by the hour. | منٹ کے حساب سے سنچری صرف اسنوکر ٹیبل 1 سے 7 پر ملتی ہے۔ روم ہمیشہ گھنٹے کے حساب سے ہوتے ہیں۔ | P05 |
+| Name of the cards (screen reader) | How other games will look | دوسرے کھیل کیسے ہوں گے | P05 |
+| Waiting to pay, nobody waiting | Nobody is waiting to pay | کسی کی ادائیگی باقی نہیں | P05 |
+| Waiting to pay, what a bill is for: games lost | 2 games lost · 1 game lost | 2 گیم ہارے · 1 گیم ہارا | P05 |
+| Waiting to pay: more than one half of a double | 2 halves of a double | 2 ڈبل کے آدھے | P05 |
+| Waiting to pay: Centuries and rooms (more than one) | 2 Centuries · 2 rooms · room | 2 سنچریاں · 2 روم · روم | P05 |
+| Waiting to pay: damage charges | damage charge · 2 damage charges | نقصان کا چارج · 2 نقصان کے چارج | P05 |
+| Waiting to pay: a canteen sale with no item name | 2 canteen items | 2 کینٹین آئٹم | P05 |
+| The board while it loads | Loading the tables… | ٹیبلز کھل رہے ہیں… | P05 |
+| The board when it cannot load | Could not load the tables. | ٹیبلز نہیں کھل سکے۔ | P05 |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

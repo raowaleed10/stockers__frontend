@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardTable } from '../api';
-import type { Game } from '../types';
-import { summarizeTables, tableStatus } from './board';
+import type { BoardCategory, BoardTable } from '../api';
+import type { Game, Session } from '../types';
+import { boardTabs, sessionStanding, summarizeTables, tableStatus } from './board';
 
 const MIN = 60_000;
 const NOW = Date.parse('2026-10-03T21:42:00+05:00');
@@ -86,6 +86,116 @@ describe('tableStatus', () => {
     expect(tableStatus(table('po1', { price: null, outOfOrder: broken.outOfOrder }), NOW)).toBe(
       'outOfOrder',
     );
+  });
+});
+
+function category(
+  id: string,
+  kind: BoardCategory['kind'],
+  order: number,
+  inUse: number,
+  total: number,
+): BoardCategory {
+  return {
+    id,
+    name: id,
+    kind,
+    pricing: 'frame',
+    centuryAllowed: false,
+    order,
+    inUse,
+    total,
+  };
+}
+
+describe('boardTabs', () => {
+  const CATEGORIES = [
+    category('pool', 'pool', 3, 0, 4),
+    category('room', 'room', 2, 2, 2),
+    category('snooker', 'snooker', 1, 4, 7),
+    category('playstation', 'playstation', 7, 0, 5),
+    category('foosball', 'foosball', 4, 0, 3),
+    category('carrom', 'carrom', 5, 0, 3),
+    category('ludo', 'ludo', 6, 0, 4),
+  ];
+
+  it('screen 3: snooker tables and rooms are one tab, "6 of 9 in use", then the other games in order', () => {
+    expect(boardTabs(CATEGORIES).map(({ id, inUse, total }) => [id, inUse, total])).toEqual([
+      ['snooker', 6, 9],
+      ['pool', 0, 4],
+      ['foosball', 0, 3],
+      ['carrom', 0, 3],
+      ['ludo', 0, 4],
+      ['playstation', 0, 5],
+    ]);
+  });
+
+  it('gives the first tab a name and the other tabs the name of their category', () => {
+    const tabs = boardTabs(CATEGORIES);
+    expect(tabs[0]?.name).toBe('Snooker and rooms');
+    expect(tabs[1]?.name).toBe('pool');
+  });
+
+  it('is empty for no categories, and a club with rooms only still has the one tab', () => {
+    expect(boardTabs([])).toEqual([]);
+    expect(boardTabs([category('room', 'room', 1, 1, 2)])).toEqual([
+      { id: 'snooker', name: 'Snooker and rooms', inUse: 1, total: 2 },
+    ]);
+  });
+});
+
+describe('sessionStanding', () => {
+  const session = (frames: Session['frames']): Session => ({
+    id: 'sess-t1',
+    tableId: 't1',
+    playerIds: ['ali', 'bilal'],
+    frames,
+  });
+  const frame = (no: number, loser: string, endedMinutesAgo: number) => ({
+    no,
+    loserIds: [loser],
+    amount: 250,
+    startedAt: ago(endedMinutesAgo + 20),
+    endedAt: ago(endedMinutesAgo),
+  });
+
+  it('screen 3, Table 1: Frame 3, Ali leads 2–0 (Bilal lost the first two)', () => {
+    const frames = [frame(1, 'bilal', 50), frame(2, 'bilal', 25), frame(3, 'bilal', -9)];
+    // Frame 3 ends at 9:51 PM, after "now", so it does not count yet.
+    expect(sessionStanding({ frameNo: 3 }, session(frames), NOW)).toEqual({
+      frameNo: 3,
+      leader: { playerId: 'ali', wins: 2, otherWins: 0 },
+    });
+  });
+
+  it('counts a frame once it has ended', () => {
+    const frames = [frame(1, 'bilal', 50), frame(2, 'bilal', 25), frame(3, 'bilal', -9)];
+    expect(sessionStanding({ frameNo: 3 }, session(frames), NOW + 10 * MIN)?.leader).toEqual({
+      playerId: 'ali',
+      wins: 3,
+      otherWins: 0,
+    });
+  });
+
+  it('says who leads when the other player is ahead', () => {
+    const frames = [frame(1, 'ali', 50), frame(2, 'ali', 25), frame(3, 'bilal', 10)];
+    expect(sessionStanding({ frameNo: 4 }, session(frames), NOW)?.leader).toEqual({
+      playerId: 'bilal',
+      wins: 2,
+      otherWins: 1,
+    });
+  });
+
+  it('has no leader when the players are level, or when no frame has been played', () => {
+    expect(
+      sessionStanding({ frameNo: 3 }, session([frame(1, 'ali', 50), frame(2, 'bilal', 25)]), NOW),
+    ).toEqual({ frameNo: 3 });
+    expect(sessionStanding({ frameNo: 1 }, session([]), NOW)).toEqual({ frameNo: 1 });
+  });
+
+  it('has only the frame number with no session, and nothing for a game with no frame number', () => {
+    expect(sessionStanding({ frameNo: 4 }, undefined, NOW)).toEqual({ frameNo: 4 });
+    expect(sessionStanding({}, session([frame(1, 'bilal', 50)]), NOW)).toBeUndefined();
   });
 });
 

@@ -226,6 +226,8 @@ export class MockDb {
       at?: ISO;
       tonight?: boolean;
       sheetId?: string;
+      /** A canteen sale: what was sold and how many. */
+      item?: StatementLine['item'];
     },
   ): StatementLine {
     const player = this.player(playerId);
@@ -242,6 +244,7 @@ export class MockDb {
       balance: after,
       doneBy: input.by,
       ...(input.method !== undefined ? { method: input.method } : {}),
+      ...(input.item ? { item: input.item } : {}),
       sheetId: input.sheetId ?? this.s.currentSheetId,
     };
     // A statement is in time order. A frame is posted when it ends but dated when it started, so it can
@@ -255,10 +258,7 @@ export class MockDb {
         lines[i].balance = balance;
       });
     }
-    if (input.tonight) {
-      this.s.unsettled.add(line.id);
-      delete this.s.billSummaries[playerId];
-    }
+    if (input.tonight) this.s.unsettled.add(line.id);
     this.setBalance(player, after, line.at);
     return line;
   }

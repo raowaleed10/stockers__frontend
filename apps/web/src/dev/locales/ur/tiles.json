@@ -20,9 +20,9 @@
       "snooker": "Snooker table",
       "room": "Room",
       "pool": "Pool table",
-      "carrom": "Carrom board",
-      "foosball": "Foosball table",
-      "ludo": "Ludo board",
+      "carrom": "Carrom",
+      "foosball": "Foosball",
+      "ludo": "Ludo",
       "playstation": "PlayStation"
     },
     "resume": "Resume"

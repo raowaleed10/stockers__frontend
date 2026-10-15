@@ -21,11 +21,16 @@ afterEach(() => {
 });
 
 const lockDialog = () => screen.findByRole('dialog', { name: 'Zain, enter your PIN' });
-const key = (digit: string) => screen.getByRole('button', { name: digit });
 
+/**
+ * Types digits on the lock's keypad. The keys are looked up inside the dialog, not on the whole page: a role query
+ * checks every element of the page, and the board behind the lock has hundreds of them, so a query over the page
+ * made each key (and the test) several times slower.
+ */
 async function type(digits: string) {
+  const pad = within(await lockDialog());
   const u = userEvent.setup({ delay: null });
-  for (const digit of digits) await u.click(key(digit));
+  for (const digit of digits) await u.click(pad.getByRole('button', { name: digit }));
 }
 
 describe('screen 34: the lock screen', () => {
@@ -106,11 +111,13 @@ describe('screen 34: the lock screen', () => {
 
   it('asks him to wait after 5 wrong tries', async () => {
     renderCounter('/');
-    await lockDialog();
+    const dialog = await lockDialog();
     for (let attempt = 0; attempt < 5; attempt += 1) {
       await type('9999');
       await waitFor(() =>
-        expect(screen.getByRole('img', { name: '0 of 4 digits entered' })).toBeInTheDocument(),
+        expect(
+          within(dialog).getByRole('img', { name: '0 of 4 digits entered' }),
+        ).toBeInTheDocument(),
       );
     }
     expect(await screen.findByText('Wait 5 minutes')).toBeInTheDocument();

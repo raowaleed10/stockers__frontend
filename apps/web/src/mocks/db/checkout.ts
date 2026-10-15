@@ -102,7 +102,7 @@ export function checkout(
     );
   }
   lines.forEach((line) => db.s.unsettled.delete(line.id));
-  delete db.s.billSummaries[playerId];
+  db.s.billOrder = db.s.billOrder.filter((id) => id !== playerId);
 
   // Payments clear the oldest money first (old credit), so what stays on credit is new tonight.
   const tonightNet = Math.max(0, tonight - settlement.discount);

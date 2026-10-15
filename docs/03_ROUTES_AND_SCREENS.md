@@ -81,12 +81,13 @@ Image: `design/screens/<file>.png` · HTML: `design/html/<file>.html`
 
 | Route | What | Build from |
 |---|---|---|
-| counter `/board/carrom`, `/board/foosball`, `/board/ludo`, `/board/playstation` | the other game tabs | screen 3 layout + tiles from screen 5 (locked until priced, like screen 4) |
+| counter `/board/pool` (screen 4), `/board/carrom`, `/board/foosball`, `/board/ludo`, `/board/playstation` | the other game tabs. **Built in P05.** While no table has a price: the amber box, the locked tiles and the two cards of screen 4 (for the four games without a PNG, see `docs/NO_DESIGN.md` §9). Once prices are set: the grid of that game from screen 5, with no banner and no cards. No waiting list on these tabs (screens 4 and 5 draw none). `/board/snooker` and `/board/room` go to `/` | screen 4, screen 5 |
+| counter `/table/:id/start`, `/table/:id`, `/room/:id/start`, `/checkout/:playerId` | where a tap on a free table, a running table, a free room and a waiting player goes. **Placeholders until P06, P07 and P09** (the name of what opens, inside the real frame). P06 and P07 turn the first three into child routes of the board, so their panels draw over it like `/alerts` | P05 |
 | owner `/live` (desktop) | read-only live board for owners | screen 3 without the action bar and without tap actions |
 | owner `/alerts` (desktop) | notifications | screen 58 content in a desktop card |
 | counter `/checkout`, `/canteen`, `/players`, `/today`, `/expense`, `/close-sheet` | the action bar's screens, until their steps are built | placeholder with the button's name, inside the real frame (P04) |
 | counter `/alerts` | the bell's side panel with the counter's alerts, over the board | the counter side panel of screen 11 and the rows of screen 58; no PNG of its own (`docs/NO_DESIGN.md` §3). It is a child route of the board, so the board must draw an `<Outlet/>` |
-| counter `/pause-all` | **temporary.** Pause all is an action (screen 16), not a screen | placeholder, so the button goes somewhere; P05 or P07 replaces it with the action and removes the route |
+| counter `/pause-all` | **temporary.** Pause all is an action (screen 16), not a screen | placeholder, so the button goes somewhere; **P07** replaces it with the action and removes the route (P05 did not build it) |
 | counter `/sign-in?worker=<id>` | picks that worker; for a worker who is "Not now" it opens on screen 2 | P04 (test and demo link) |
 | any unknown path | "Page not found" | plain page, same look for every app; never mentions owners |
 | `/dev/kit`, `/dev/tiles`, `/dev/games-preview`, `/dev/data` | development only (`/dev/data` is in both apps: the board and workers from the mock API, with a button that starts a game) | P01, P02, P03 |

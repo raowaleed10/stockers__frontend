@@ -1,0 +1,11 @@
+{
+  "lead": "For the look only.",
+  "text": "The prices on this board are examples. These games stay locked until an owner sets real prices.",
+  "count": {
+    "pool": "{{n}} tables",
+    "carrom": "{{n}} boards",
+    "foosball": "{{n}} tables",
+    "ludo": "{{n}} boards",
+    "playstation": "{{n}} screens"
+  }
+}

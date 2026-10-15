@@ -79,8 +79,8 @@ export interface DbState {
   statements: Record<string, StatementLine[]>;
   /** Ids of charge lines not checked out yet ("tonight"). */
   unsettled: Set<string>;
-  /** The short text of a waiting bill, when the seed gave one. */
-  billSummaries: Record<string, string>;
+  /** The order the seed lists the waiting bills in. Players who start waiting later follow it. */
+  billOrder: string[];
   sheets: Sheet[];
   /** How many sheets existed after the scenario was set up, so new ones can be counted. */
   baseSheetCount: number;

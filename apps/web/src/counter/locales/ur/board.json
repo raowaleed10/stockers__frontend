@@ -1,0 +1,128 @@
+{
+  "loading": "ٹیبلز کھل رہے ہیں…",
+  "loadFailed": "ٹیبلز نہیں کھل سکے۔",
+  "retry": "دوبارہ کوشش کریں",
+  "tables": "ٹیبلز",
+  "tabs": {
+    "label": "کھیل",
+    "snooker": "اسنوکر اور رومز",
+    "pool": "پول",
+    "foosball": "فوس بال",
+    "carrom": "کیرم",
+    "ludo": "لڈو",
+    "playstation": "پلے اسٹیشن",
+    "inUse": "{{total}} میں سے {{inUse}} مصروف",
+    "count": "{{total}} میں سے {{inUse}}"
+  },
+  "kind": {
+    "snooker": "ٹیبل",
+    "room": "روم",
+    "pool": "پول ٹیبل",
+    "carrom": "کیرم",
+    "foosball": "فوس بال",
+    "ludo": "لڈو",
+    "playstation": "پلے اسٹیشن"
+  },
+  "nameOf": {
+    "snooker": "ٹیبل {{number}}",
+    "room": "روم {{number}}",
+    "pool": "پول ٹیبل {{number}}",
+    "carrom": "کیرم بورڈ {{number}}",
+    "foosball": "فوس بال ٹیبل {{number}}",
+    "ludo": "لڈو بورڈ {{number}}",
+    "playstation": "پلے اسٹیشن {{number}}"
+  },
+  "state": {
+    "free": "خالی",
+    "playing": "کھیل جاری",
+    "over30": "30 منٹ سے زیادہ",
+    "paused": "رکا ہوا",
+    "outOfOrder": "خراب",
+    "noPrice": "قیمت مقرر نہیں"
+  },
+  "named": "{{name}}، {{state}}",
+  "price": {
+    "frame": "فریم {{price}}",
+    "hour": "{{price}}/گھنٹہ",
+    "game": "گیم {{price}}",
+    "none": "— روپے"
+  },
+  "game": {
+    "single": "سنگل فریم",
+    "double": "ڈبل فریم",
+    "century": "سنچری",
+    "room": "گھنٹے کے حساب سے",
+    "gameSingle": "سنگل گیم",
+    "gameDoubles": "ڈبلز"
+  },
+  "detail": {
+    "centuryRate": "{{price}} فی منٹ",
+    "frame": "فریم {{n}}",
+    "leads": "فریم {{n}}، {{name}} {{a}}-{{b}} سے آگے",
+    "paused": "رکا ہوا",
+    "pausedAgo": "{{n}} منٹ سے رکا ہوا"
+  },
+  "cta": {
+    "startGame": "گیم شروع کریں",
+    "start": "گیم شروع کریں",
+    "startRoom": "روم شروع کریں",
+    "snookerHint": "ڈبل {{double}}۔ سنچری {{rate}} فی منٹ۔",
+    "roomHint": "کم از کم {{n}} گھنٹہ",
+    "poolHint": "ہارنے والا ادا کرتا ہے، سنگل فریم کی طرح",
+    "gameHint": "ہارنے والا گیم کے پیسے دیتا ہے"
+  },
+  "outOfOrder": {
+    "marked": "{{name}} نے {{time}} بجے لگایا"
+  },
+  "locked": "جب تک مالک قیمت مقرر نہ کرے، بند ہے",
+  "noPrice": {
+    "title": "{{games}} کی ابھی قیمت نہیں لگی",
+    "text": "قیمت مالک گیمز اور قیمتیں میں لگاتا ہے۔ تب تک ان {{things}} پر گیم شروع نہیں ہو سکتا۔",
+    "games": {
+      "pool": "پول ٹیبلز",
+      "foosball": "فوس بال ٹیبلز",
+      "carrom": "کیرم بورڈز",
+      "ludo": "لڈو بورڈز",
+      "playstation": "پلے اسٹیشن اسکرینز"
+    },
+    "things": {
+      "pool": "ٹیبلز",
+      "foosball": "ٹیبلز",
+      "carrom": "بورڈز",
+      "ludo": "بورڈز",
+      "playstation": "اسکرینز"
+    }
+  },
+  "cards": {
+    "label": "دوسرے کھیل کیسے ہوں گے",
+    "priceTitle": "قیمت لگنے کے بعد",
+    "priceText": "پول، فوس بال، کیرم، لڈو اور پلے اسٹیشن سنگل فریم کی طرح چلتے ہیں: خالی ٹیبل پر ٹیپ کریں، کھلاڑی چنیں، اور گیم ختم ہونے پر ہارنے والے پر ٹیپ کریں۔ ہارنے والا گیم کی قیمت دیتا ہے۔",
+    "centuryTitle": "سنچری صرف اسنوکر پر",
+    "centuryText": "منٹ کے حساب سے سنچری صرف اسنوکر ٹیبل 1 سے {{last}} پر ملتی ہے۔ روم ہمیشہ گھنٹے کے حساب سے ہوتے ہیں۔"
+  },
+  "waiting": {
+    "title": "ادائیگی باقی",
+    "players_one": "{{count}} کھلاڑی",
+    "players_other": "{{count}} کھلاڑی",
+    "total": "آج ابھی تک ادا نہیں ہوا",
+    "empty": "کسی کی ادائیگی باقی نہیں",
+    "separator": "، "
+  },
+  "parts": {
+    "frame_one": "{{count}} فریم ہارا",
+    "frame_other": "{{count}} فریم ہارے",
+    "game_one": "{{count}} گیم ہارا",
+    "game_other": "{{count}} گیم ہارے",
+    "double_one": "ڈبل کا آدھا",
+    "double_other": "{{count}} ڈبل کے آدھے",
+    "century_one": "سنچری",
+    "century_other": "{{count}} سنچریاں",
+    "room_one": "روم",
+    "room_other": "{{count}} روم",
+    "damage_one": "نقصان کا چارج",
+    "damage_other": "{{count}} نقصان کے چارج",
+    "canteen": "{{count}} {{item}}",
+    "canteenAny_one": "{{count}} کینٹین آئٹم",
+    "canteenAny_other": "{{count}} کینٹین آئٹم"
+  }
+}

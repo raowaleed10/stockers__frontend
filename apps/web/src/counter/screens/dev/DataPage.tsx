@@ -235,7 +235,9 @@ export default function DataPage() {
                 className="flex flex-wrap gap-x-6 rounded-card border border-c-line bg-c-panel px-4 py-3"
               >
                 <span className="min-w-[160px] font-bold">{bill.name}</span>
-                <span className="text-c-text-2">{bill.summary}</span>
+                <span className="text-c-text-2">
+                  {bill.parts.map((part) => `${part.count} ${part.item ?? part.kind}`).join(', ')}
+                </span>
                 <span className="ms-auto font-bold">{formatRs(bill.tonight)}</span>
               </li>
             ))}
