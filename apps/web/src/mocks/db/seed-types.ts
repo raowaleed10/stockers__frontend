@@ -182,6 +182,8 @@ export interface SeedScenario {
   games?: (Omit<Game, 'price'> & { price?: Rs; rate?: Rs })[];
   /** Games added to the night's own games (the others stay), for a moment that needs one more game running. */
   addGames?: (Omit<Game, 'price'> & { price?: Rs; rate?: Rs })[];
+  /** The sessions of `games` (the frames already played), when a scenario replaces the games. */
+  sessions?: Session[];
   waiting?: SeedWaiting[];
   waitingTotal?: Rs;
   movesToCreditTotal?: Rs;

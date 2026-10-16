@@ -16,12 +16,12 @@ export interface CounterDialogProps {
   icon?: ReactNode;
   /** A big number before the title (screen 7: the table number). */
   lead?: ReactNode;
-  /** `warning` has a red border and a red ball (screen 19). */
-  tone?: 'normal' | 'warning';
+  /** `warning` has a red border and a red ball (screen 19); `brass` a 2 px brass border (screen 15, the damage charge). */
+  tone?: 'normal' | 'warning' | 'brass';
   /** `lg` is the 32 px title of a warning dialog. */
   titleSize?: 'md' | 'lg';
-  /** `lg` is the wide dialog for two columns (screens 8, 9); `form` is the one with a keypad beside it (screen 10). */
-  size?: 'md' | 'form' | 'lg';
+  /** `lg` is the wide dialog for two columns (screens 8, 9); `form` is the one with a keypad beside it (screen 10); `xl` is the damage charge (screen 15). */
+  size?: 'md' | 'form' | 'xl' | 'lg';
   /** A round Back button before the title (screens 8, 9). The dialog then has no × unless `showClose` says so. */
   back?: { label: string; onBack: () => void };
   /** A short text at the end of the header, in place of the × (screen 8: "Step 2 of 2"). */
@@ -62,6 +62,7 @@ export function CounterDialog({
   const titleId = useId();
   const ref = useDialog<HTMLElement>(onClose, !inPlace);
   const warning = tone === 'warning';
+  const brass = tone === 'brass';
 
   const content = (
     <>
@@ -104,7 +105,7 @@ export function CounterDialog({
               <span
                 className={cx(
                   'text-[17px] font-semibold',
-                  warning ? 'text-c-danger-ink' : 'text-c-text-2',
+                  warning ? 'text-c-danger-ink' : brass ? 'text-c-brass' : 'text-c-text-2',
                 )}
               >
                 {kicker}
@@ -156,8 +157,18 @@ export function CounterDialog({
       // A secondary button on this panel is one step lighter than the panel (see Button).
       className={cx(
         'dialog-in screen-text flex w-full flex-col gap-[22px] rounded-dialog bg-c-panel px-8 py-7 font-body text-c-text shadow-dialog-dark outline-none [--btn-secondary-bg:var(--c-raised)]',
-        size === 'lg' ? 'max-w-[1240px]' : size === 'form' ? 'max-w-[1166px]' : 'max-w-[1046px]',
-        warning ? 'border-2 border-c-danger-line' : 'border border-c-line-2',
+        size === 'lg'
+          ? 'max-w-[1240px]'
+          : size === 'form'
+            ? 'max-w-[1166px]'
+            : size === 'xl'
+              ? 'max-w-[1128px]'
+              : 'max-w-[1046px]',
+        warning
+          ? 'border-2 border-c-danger-line'
+          : brass
+            ? 'border-2 border-c-warn-line'
+            : 'border border-c-line-2',
       )}
     >
       {side ? (
@@ -175,7 +186,7 @@ export function CounterDialog({
   return createPortal(
     // The designs centre a dialog in the page below the 70 px top bar (screens 7 to 15), so the padding on top is the
     // bar's, and the dialog sits in what is left. A dialog taller than that scrolls.
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-c-scrim pt-[70px]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-c-scrim pt-[70px] [body[data-undo-toast]_&]:pb-[110px]">
       <div className="flex min-h-full items-center justify-center p-6">{panel}</div>
     </div>,
     document.body,

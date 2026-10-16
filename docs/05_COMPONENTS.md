@@ -133,6 +133,18 @@ All in `src/counter` unless it says `src/ui`.
 - **New token:** `--c-info-text` (`#D6E4FB`, the sentence of the blue note on screen 9).
 - **Heads-up for P07:** the table panel (`/table/:id`, screen 11) and its screens (13, 14, 15) go in `TABLE_ROUTES`. Use `tablePath` for every link, `useCloseTable` (clears the start draft and goes back to the board) for closing, and `TableGate` for the table. After a write the board refreshes before the screen has closed: a redirect that says "this table is in use now" must wait for the write to finish (`mutation.isSuccess`), or it fights the close.
 
+### As built in P07 (a running table)
+
+All in `src/counter` unless it says `src/ui`.
+
+- **`screens/table/`:** `TablePanel` (screen 11), `MoveTable` (screen 13: `MovePanel` and `ReplacePanel` side by side in one dialog), `StopFrame` (screen 14), `DamageCharge` (screen 15), and `game-info.ts` (`firstName`, `gamePlayerIds`, `minutesSoFar`, `whoIsPlaying`). All four use `TableGate` and the routes in `TABLE_ROUTES`.
+- **`components/`:** `UndoToast` (the cream toast of screen 14; it reads the board and `useMe`, so it is in `CounterFrame` for every screen), `PausedBanner` (the yellow strip of screen 16), and `BoardTile` takes `pausedAll`: a paused tile then has `as="div"`, a `TileActionButton` Resume, a yellow timer and the frame line, and a free tile says only the hint. `CounterActionBar` takes `pausedAll` (its Pause all is off while it is on) and `CounterFrame` runs `usePauseAll()` for it.
+- **`locales/{en,ur}/table.json`:** the words of all of the above. Times and names inside a sentence are tagged `<when>` and `<name>` and drawn with `RichText ns="table"`; a `RichText` inside a `Button` must sit in its own `<span>` (a button is a flex row with a gap, and the pieces of the sentence would drift apart).
+- **`src/ui` changes:** `CounterDialog` takes `tone="brass"` (the 2 px brass border of screen 15) and `size="xl"` (1128 px); its dim layer leaves 110 px of room under the dialog while the Undo toast is on screen (`body[data-undo-toast]`). `PersonCard` has `variant="choice"` (84 px, a tick on the one picked). `TextArea` on the counter is fixed (no drag handle) and two rows are as tall as the text; three or more get 112 px. The Board's box is at least as tall as the screen under the top bar while a side panel is open (`data-side-panel`), so the panel does not scroll.
+- **Data:** `BoardResponse.pausedAllAt`; the `paused` scenario now holds the games of screen 16 (and `SeedScenario.sessions`); `docs/06`.
+- **New tokens:** `--c-discard-line`, `--c-note-bg`, `--c-note-text`, `--c-note-icon`, `--c-toast-muted`.
+- **Heads-up for P08 (ending):** `/table/:id/end` is a placeholder dialog (`TableScreen what="end"`); the panel's "End frame" goes there. Build `/table/:id/end` (screen 17), `/table/:id/next` (18), `/table/:id/end/overtime` (19), and the room screens (22, 23) as more `TABLE_ROUTES`. The Undo toast needs nothing from you. A write that ends the game must wait for `isSuccess` before a redirect that fires when the table has no game (see the start screens).
+
 ## Rules for components
 - `ui` and `tiles` never fetch data and never read the clock directly (`TimerText` uses `useNow()`, which is allowed).
 - All text comes in through props or `t()`; no English hard-coded inside shared components.

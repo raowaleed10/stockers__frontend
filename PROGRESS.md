@@ -9,7 +9,7 @@ The work now goes in eight sessions, with one commit per step (CLAUDE.md, "Worki
 | Session | Steps | Status | Notes |
 |---|---|---|---|
 | Done | P00 to P05 | ☑ | One commit each, with their answers (see the Log): P00 project and tools, P01 design system, P02 table tiles, P03 data, rules and mock API, P04 counter frame, sign-in and lock, P05 live board (answers applied 16 Oct 2026 in "P05 answers and faster workflow"). |
-| S1 | P06 Start a game + P07 Running game | ☐ | |
+| S1 | P06 Start a game + P07 Running game | ☑ | Two commits, "P06 Starting a game" and "P07 While a game is running". The questions are under "From P06" and "From P07" below. |
 | S2 | P08 Ending games and rooms + P09 Checkout | ☐ | |
 | S3 | P10 Canteen, drawer expense, today, close sheet | ☐ | |
 | S4 | P11 Owner shell and sign-in + P12 Dashboard, reports, activity | ☐ | |
@@ -44,12 +44,12 @@ Tick a screen when it matches its PNG at the design size and its visual test pas
 | 8 | Start a game: pick the players | counter | `/table/t2/start/players` | ☑ | ☑ | ☑ |
 | 9 | Double frame: pick the two sides | counter | `/table/t2/start/double` | ☑ | ☑ | ☑ |
 | 10 | Add a new player | counter | `/players/new?for=t2` | ☑ | ☑ | ☑ |
-| 11 | A game that is running | counter | `/table/t1` | ☐ | ☐ | ☐ |
+| 11 | A game that is running | counter | `/table/t1` | ☑ | ☑ | ☑ |
 | 12 | Change the game type | counter | `/table/t2/change-type` | ☑ | ☑ | ☑ |
-| 13 | Move to another table, or swap a player | counter | `/table/t1/move` | ☐ | ☐ | ☐ |
-| 14 | Stop a frame without the normal charge | counter | `/table/t6/stop` | ☐ | ☐ | ☐ |
-| 15 | Damage charge | counter | `/table/t1/damage` | ☐ | ☐ | ☐ |
-| 16 | Power cut | counter | `/?scenario=paused` | ☐ | ☐ | ☐ |
+| 13 | Move to another table, or swap a player | counter | `/table/t1/move` | ☑ | ☑ | ☑ |
+| 14 | Stop a frame without the normal charge | counter | `/table/t6/stop` | ☑ | ☑ | ☑ |
+| 15 | Damage charge | counter | `/table/t1/damage` | ☑ | ☑ | ☑ |
+| 16 | Power cut | counter | `/?scenario=paused` | ☑ | ☑ | ☑ |
 | 17 | End a frame: who lost? | counter | `/table/t1/end` | ☐ | ☐ | ☐ |
 | 18 | Frame charged, next frame | counter | `/table/t1/next` | ☐ | ☐ | ☐ |
 | 19 | Over 30 minutes: charge double? | counter | `/table/t4/end/overtime` | ☐ | ☐ | ☐ |
@@ -273,6 +273,22 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 - **New token:** `--c-info-text` (`#D6E4FB`, the sentence of the blue note on screen 9).
 - **Words:** 87 new rows in `docs/URDU_TO_CHECK.md`; seven new pieces in `docs/NO_DESIGN.md` (13 to 19) with pictures.
 
+**From P07: DEFAULT, needs answer** (money, charging and who can do what: I picked the safer default and kept going)
+
+- **DEFAULT, needs answer: a damage charge starts with nothing picked.** Screen 15 draws Ali, Cue and Rs 1,500 already chosen. Because it is money, the dialog begins empty and its button stays off until the payer, the thing, the amount (above Rs 0) and the note are all given. Say if a payer or an amount should be filled in for the worker.
+- **DEFAULT, needs answer: the Undo toast shows only for the worker's own game.** D16 says "undo within 2 minutes" and the server lets any worker undo any game; the toast only offers it to the worker who started the game (Zain does not see Shabir's). If a worker should be able to undo another's, say so.
+- **DEFAULT, needs answer: "Cancel, started by mistake" is not refused inside the first 2 minutes.** The card says "In the first 2 minutes use Undo instead", but nothing stops the worker cancelling with a reason. The owners see it either way. Say if it should be refused inside the 2 minutes.
+- **DEFAULT, needs answer: "Replace player" on a Century or a room changes who the game is charged to.** The game is under one player; replacing him puts the whole game under the new one, from the start. Frames already played keep their old player.
+- **DEFAULT, needs answer: a game moves only to a free table of the same kind** (snooker to snooker, room to room, pool to pool), and keeps the price it started on (the old open question, default). The screen shows the difference ("Rs 50 less") as information only.
+
+**From P07: for information (no answer needed)**
+
+- **Seed:** the `paused` scenario now holds the games of screen 16 (Table 1 in frame 4 at 06:48, a Century on Table 2 at 08:10 and so on; Tables 3 and 6 free, as the PNG draws them). Before it only paused the 9:42 PM games, so its timers could not match the PNG. `SeedScenario.sessions` was added for it. Two tests were updated.
+- **API addition the backend must copy:** `GET /board` answers `pausedAllAt` while Pause all is on.
+- **The old `/pause-all` route is gone.** Pause all is an action (the action bar button), as the P05 note said it would be.
+- **A flaw I fixed on the way:** a `RichText` sentence inside a `Button` drifted apart ("Ali  ’s bill"), because a button is a flex row with a gap. It is now in a `<span>`, and `docs/05` says so.
+- **Words:** 109 rows added to `docs/URDU_TO_CHECK.md`; seven new pieces in `docs/NO_DESIGN.md` (20 to 26) with pictures.
+
 **From P05: for information (no answer needed)**
 
 - **A bug I found and fixed: Urdu text on the counter drew in a system font, not Noto Nastaliq.** The frame, the sign-in page and the lock screen use `font-body` (Barlow, then `system-ui`), so Arabic script fell to the system font. `html[lang='ur'] .font-body` now takes the Urdu stack (`base.css`). Latin letters and digits still come from Barlow. This is also why the Urdu board was 18 px too tall in my first comparison and why P02 saw the Urdu design HTML 27 px taller: the Urdu pages are now exactly 1440 × 1040. The Urdu sign-in and lock pages changed look (Nastaliq now); I looked at both at 1440 × 900 and nothing moved.
@@ -322,7 +338,7 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 
 ## Differences from the designs that could not be fixed
 
-(Screen number, what is different, why.) Since P06, `test:visual` compares screens 1 to 10, 12 and 34 with their PNGs (and the two bars of screen 3, and the tiles); the rows for screens 7, 19, 25 and others come from comparing `/dev/kit` crops with the PNGs by eye at the design size (kit opened at 2400 px so the dialogs reach their real width).
+(Screen number, what is different, why.) Since P07, `test:visual` compares screens 1 to 16 and 34 with their PNGs (and the two bars of screen 3, and the tiles); the rows for screens 7, 19, 25 and others come from comparing `/dev/kit` crops with the PNGs by eye at the design size (kit opened at 2400 px so the dialogs reach their real width).
 
 | Screen | Difference | Why |
 |---|---|---|
@@ -345,6 +361,11 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 | 3 | 3.6 % of the pixels differ over the whole page, 1440 × 952. The tiles are 319.2 px wide and the panel 358.4 px, as in the design | Text edges and the lucide icons, which are the same family as the designs but not always the same drawing (wallet, chart) |
 | 4, 5 | The action bar is left out of the comparison (3.6 % and 2.4 % of the rest differ). The PNGs draw a shorter bar with no Expense, no Pause all and no "Backed up" | The developer chose the full seven-button bar everywhere (P05, answer 1): the docs, screens 3 and 6 and P04 all have it |
 | 6 | The phone tail "•••• 4512" is kept on the waiting rows in Urdu; the PNG leaves it out | It is in English and in `docs/04` §7 ("name, phone tail and what for"); it is listed as a question below |
+| 11, 13, 14, 15 | 3.9 %, 5.6 %, 4.8 % and 4.6 % of the pixels differ (budget 6 %). Screen 11 compares only the panel (ours is 13 px lower: the real top bar is 83 px, the PNG's header 70) | The PNGs draw a bare header and no bottom bar; the board behind is the live board |
+| 13 | "usm" lists Usman Ghani before Usman Tariq (the PNG has them the other way) | Names that start with the text come first, free players before the ones playing; Usman Tariq is on Table 4 |
+| 14 | The countdown words ("Undo for 1:42 more") are left out of the comparison | The clock moves while the page loads |
+| 15 | The dialog opens with nothing picked; the PNG has Ali, Cue and Rs 1,500 chosen (the test picks them) | Money: nothing is chosen for the worker (DEFAULT, needs answer) |
+| 16 | Only the banner (3.9 %) and the tiles (`tiles.counter.spec.ts`) are compared. The live board has tabs, a waiting list and the action bar that the PNG leaves out. Table 1 says "Frame 4, Ali leads 3–0" where the PNG says "Frame 4" | The developer chose the full bar everywhere in P05; the board always says who leads |
 | 34 | The PNG shows 11:06 PM; ours shows the app clock (9:42 PM at the demo start). The pills read "5 playing" because the paused Table 6 counts as playing | Confirmed by the developer on 15 Oct 2026: the PNG's moment is after Zain's time ends, so it is a design slip. The lock screen shows the app clock, and the visual test masks the clock block |
 | 1 to 6 | The Urdu word of the language switch is 15 px on the counter (P01 had 18) | The screens draw 15 |
 | 1, 2, 34 in Urdu | No approved Urdu PNG for these. The Urdu clock (D55) is built: the big clock reads "9:42" over "رات، ہفتہ 3 اکتوبر" | Checked by eye at 1440 × 900: mirrored, nothing clipped, the keypad still 1-2-3 from the left. Times and days follow `docs/09` |
@@ -451,6 +472,15 @@ Urdu, checked in the kit: nothing is clipped, dates and times keep their order (
 - **Proved on purpose, then undone:** a double frame allowed with two players (the test with one player on each side failed), the change-type window ignored (the test at 6 minutes failed), and the Century rate chosen on screen 7 not sent (the test of the rate failed). Every file was checked back to what it was.
 - **Two e2e tests failed once in a full run and passed alone** (`signin.counter.spec.ts` "at 23:00 he is signed out" and the Urdu type step of `start.counter.spec.ts`: the dialog was not visible within 5 s). Neither failed in two earlier full runs of the start spec; I did not find a cause, so I am noting it rather than raising a limit. If it comes back, keep the whole log.
 
+## What P07 left in place (read before P08)
+
+- **Routes to open (`npm run dev`):** `http://localhost:5173/table/t1` (screen 11: or tap Table 1 on the board), `/table/t1/move` (13), `/table/t6/stop` (14), `/table/t1/damage` (15), `/?scenario=paused` (16, the power-cut board at 10:01 PM), `/?scenario=newGame&now=2026-10-03T21:50:18%2B05:00` (the Undo toast: "Undo for 1:42 more"), `/table/t3` (a Century), `/table/r1` (a room), `/table/t2?scenario=newGame&now=2026-10-03T21:53:00%2B05:00` (the Change game type button). Press Pause all on `/` for the power cut from the board.
+- **Where things are:** `src/counter/screens/table/`, `components/UndoToast.tsx`, `components/PausedBanner.tsx`, `locales/{en,ur}/table.json`, `routes/index.tsx` (`TABLE_ROUTES`). The list with props is in `docs/05` "As built in P07".
+- **For P08:** `/table/:id/end` is a placeholder (the panel's End frame goes there); `/room/:id/start` too. A write that closes the game waits for `isSuccess` before a redirect that fires when the table has no game.
+- **Tests:** Vitest 688 in web (37 new in `table.test.tsx`: the panel for each kind of game, the score, pause and resume, move and replace, the three ways to stop, the damage charge, the Undo toast, the power-cut board, Urdu) and 210 in shared. Playwright e2e 205 (31 new in `table.counter.spec.ts`: the flows on Table 1 and Table 6, the toast, Pause all and Resume all, axe, 56 px and no sideways scroll on four screens and the power-cut board in English and Urdu, Escape and Tab, the Urdu mirror). Visual 60 (screens 11, 13, 14, 15 and the banner of 16).
+- **Proved on purpose, then undone:** the damage amount sent one rupee too high, the Undo toast kept past 2 minutes, a stopped frame allowed with no reason, and the change-type window never closing: each failed tests. Every file was checked back to what it was.
+- **Both e2e specs of S1 passed in a full run** (205 of 205 after one old data test followed the new scenario). The two tests that failed once in the P06 run did not fail again.
+
 ## Log
 
 | Date | Step | What was done | Tests |
@@ -470,3 +500,4 @@ Urdu, checked in the kit: nothing is clipped, dates and times keep their order (
 | 2026-10-16 | P05 answers and faster workflow | Applied the developer's answers: the red card and "charge double?" for every game charged per game, with a maximum time for each (`maxMinutes`, D56): the shared rule, `Table`, `Game` and settings fields, the seed, the mock (start, end, owner price, game and settings patches with their Activity lines), and the counter side (pill, aria name, red card, lock screen, in English and Urdu); the bell opens over the tab you are on (D57); the priced pages of the other games in `docs/NO_DESIGN.md` (section 12) with the changes to screens 45, 46, 47, 51 and the over-limit words; `docs/02` (D56, D57), 03, 04, 06, 07, 09. `CLAUDE.md` has the new working rules; this file has the session plan S1 to S8. | Vitest: 581 in web, 199 in shared. Playwright: 144 e2e and 50 visual, 12 screenshots. typecheck, lint, build and check:bundles pass. Five deliberate breaks of the time rule each failed tests. |
 | 2026-10-16 | P05 defaults approved | Marked the four "DEFAULT, needs answer" items from P05 as answered (limit stored per table with a whole-game set-all in P15, no saved limit gives 30, change type in 5 minutes, lock screen wording) in this file and in D56 of `docs/02`. No code changed. | None needed (documents only). |
 | 2026-10-16 | P06 | Built the start flow: screen 7 (type, Century rate, Mark out of order with a note), 8 (two players or one for a Century, search with tags, "Played here recently"), 9 (two sides, three or four players), 10 (new player on the phone keypad, similar names, no phone allowed), 12 (change the type in 5 minutes, then who plays). Child routes of the board with the tab you were on (`tablePath`), a draft store, per-game tables straight to the players. Shared `players.ts` rules, `lastPlayedAt`, `GET /players/recent`, `POST /tables/:id/out-of-order`, the `newGame` scenario, seed fixes (Ali Shah, Hamid's number, Ali Akbar's statement). `CounterDialog` back, aside, side, form size, the 70 px top offset and its own text style; `Keypad` phone; `OptionCard` badge. Docs 02 (D58), 03, 05, 06, 07, `NO_DESIGN.md` (13 to 19 with pictures), `URDU_TO_CHECK.md` (87 rows). Fixed along the way: dialogs had the wrong line height and sat 35 px high, a start dialog redirected itself when the board refreshed, Urdu phone numbers read backwards, a kit sample word collided with a real word in `check:bundles`. | Vitest: 652 in web, 210 in shared. Playwright: 172 e2e passed in the full run (30 new), 2 failed once and passed alone; 55 visual (5 new). typecheck, lint, build and check:bundles pass. Three deliberate breaks each failed tests. |
+| 2026-10-16 | P07 | Built the running table: the side panel of screen 11 for every kind of game (timer, amount, session score, End frame, Pause or Resume, Move table, Replace player, Canteen item, Damage charge, Discard, and the change-type button or the dashed note), screen 13 (move to a free table of the same kind, replace a player, both panels), 14 (discard, dispute or cancel, a reason always, written in English), 15 (damage charge, nothing picked for the worker), the cream Undo toast found from the board (every screen, survives a reload, a dialog leaves room for it), and Pause all as a real action with the power-cut board of screen 16 (banner, Resume on each paused tile, Resume all games). The `paused` scenario now holds the games of screen 16; `pausedAllAt`; tokens; `CounterDialog` brass tone, `xl` size and room for the toast; `PersonCard` choice; `TextArea` fixed height. Docs 02 (D59), 03, 05, 06, `NO_DESIGN.md` (20 to 26, with pictures), `URDU_TO_CHECK.md` (109 rows). Fixed along the way: a sentence inside a button drifted apart, the panel scrolled by 12 px on the live board, a text area was taller than the design, the board and the stop dialog fought over a redirect. | Vitest: 688 in web (37 new in `table.test.tsx`), 210 in shared. Playwright: 205 e2e (31 new in `table.counter.spec.ts`; one old data test updated for the new scenario), 60 visual (5 new: 11, 13, 14, 15 and the banner of 16), 26 no-design pictures. typecheck, lint, build and check:bundles pass. Four deliberate breaks each failed tests: the damage amount sent one rupee too high, the Undo toast kept past 2 minutes, a stopped frame with no reason, the change-type window never closing. |

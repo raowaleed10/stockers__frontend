@@ -15,6 +15,7 @@ import { useBoard } from '../api';
 import { BoardTile } from '../components/BoardTile';
 import { CategoryTabs } from '../components/CategoryTabs';
 import { InfoCard, PriceBanner } from '../components/InfoBanner';
+import { PausedBanner } from '../components/PausedBanner';
 import { TILE_FLEX, TileGrid, TileRow } from '../components/TileGrid';
 import { WaitingPanel } from '../components/WaitingPanel';
 
@@ -36,6 +37,7 @@ function SnookerBoard({ data }: { data: BoardResponse }) {
             category={data.categories.find((c) => c.id === table.categoryId)}
             players={data.players}
             className={TILE_FLEX}
+            pausedAll={data.pausedAll}
           />
         ))}
       </TileRow>
@@ -63,6 +65,7 @@ function GameBoard({ data, categoryId }: { data: BoardResponse; categoryId: stri
       category={category}
       players={data.players}
       className={unpriced ? TILE_FLEX : undefined}
+      pausedAll={data.pausedAll}
     />
   ));
   const label = kind && isPerGame(kind) ? t(`noPrice.games.${kind}`) : (category?.name ?? '');
@@ -103,6 +106,7 @@ function GameBoard({ data, categoryId }: { data: BoardResponse; categoryId: stri
  */
 export function Board() {
   const { t } = useTranslation('board');
+  const { t: tTable } = useTranslation('table');
   const navigate = useNavigate();
   const { category } = useParams<{ category: string }>();
   const selected = category ?? SNOOKER_TAB;
@@ -120,7 +124,8 @@ export function Board() {
   }
 
   return (
-    <div className="relative flex min-w-0 flex-1 flex-col">
+    // A side panel has the whole height under the top bar (screen 11), so what it holds does not have to scroll.
+    <div className="relative flex min-w-0 flex-1 flex-col has-[[data-side-panel]]:min-h-[calc(100vh-83px)]">
       <div
         ref={behind}
         aria-hidden={panel !== null ? true : undefined}
@@ -139,6 +144,7 @@ export function Board() {
           </div>
         ) : (
           <>
+            {board.data.pausedAll ? <PausedBanner pausedAt={board.data.pausedAllAt} /> : null}
             <CategoryTabs
               tabs={boardTabs(board.data.categories)}
               selectedId={selected}
@@ -149,6 +155,11 @@ export function Board() {
             ) : (
               <GameBoard data={board.data} categoryId={selected} />
             )}
+            {board.data.pausedAll ? (
+              <p className="m-0 border-t border-c-line px-6 py-4 text-[16px] text-c-text-2">
+                {tTable('pause.note')}
+              </p>
+            ) : null}
           </>
         )}
       </div>

@@ -2,7 +2,7 @@ import type { WorkerSession } from '@stockers/shared';
 import { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { cx } from '@/ui/cx';
-import { useBoard } from '../api';
+import { useBoard, usePauseAll } from '../api';
 import { useLockStore } from '../session/lock-store';
 import { useSwitchWorker } from '../session/use-leave-session';
 import { alertsPath } from './alerts-path';
@@ -11,6 +11,7 @@ import { CounterTopBar } from './CounterTopBar';
 import { IdleLock } from './IdleLock';
 import { LockScreen } from './LockScreen';
 import { SessionTiming } from './SessionTiming';
+import { UndoToast } from './UndoToast';
 
 /**
  * The frame of every signed-in counter screen: the sign-in time banner, the top bar, the screen itself and the
@@ -24,6 +25,7 @@ export function CounterFrame({ session }: { session: WorkerSession }) {
   const locked = useLockStore((state) => state.locked);
   const lock = useLockStore((state) => state.lock);
   const switchWorker = useSwitchWorker();
+  const pauseAll = usePauseAll();
   const frame = useRef<HTMLDivElement>(null);
 
   // While locked, nothing behind the lock can be reached by touch, keyboard or screen reader.
@@ -65,10 +67,12 @@ export function CounterFrame({ session }: { session: WorkerSession }) {
           onPlayers={go('/players')}
           onToday={go('/today')}
           onExpense={go('/expense')}
-          onPauseAll={go('/pause-all')}
+          onPauseAll={() => pauseAll.mutate()}
+          pausedAll={board.data?.pausedAll ?? false}
           onCloseSheet={go('/close-sheet')}
         />
       </div>
+      <UndoToast />
       <IdleLock />
       {locked ? <LockScreen session={session} /> : null}
     </>

@@ -78,7 +78,11 @@ export function AlertsPanel() {
     <>
       {/* The board stays behind, dimmed, as it does behind the panel of screen 11. */}
       <div aria-hidden="true" className="absolute inset-0 z-10 bg-[var(--ov-k50)]" />
-      <div className="absolute inset-y-0 end-0 z-20 flex w-[560px] max-w-full" data-testid="alerts">
+      <div
+        className="absolute inset-y-0 end-0 z-20 flex w-[560px] max-w-full"
+        data-testid="alerts"
+        data-side-panel=""
+      >
         <SidePanel
           title={t('title')}
           onClose={() => navigate(boardPathOf(pathname))}

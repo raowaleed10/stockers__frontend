@@ -92,7 +92,7 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `POST /auth/sign-in` | `{workerId, pin}` → `{worker, until}` · **403 `NOT_YOUR_TIME`** `{slot, now}` · 401 wrong PIN · 429 too many tries | 1, 2 |
 | `POST /auth/unlock` · `POST /auth/sign-out` · `GET /auth/me` | | 34 |
 | `GET /alerts` · `POST /alerts/read-all` | → `{alerts, unread}`. The counter's own alerts (the bell); separate from the owners' notifications. A table put out of order, a game cancelled or undone, and an item running low add one. (Added with the P03 answers. The counter's bell panel at `/alerts` shows the list, D54. A row may carry an `amount` in whole rupees.) | 3–6 |
-| `GET /board?category=` | → `{sheet, categories, tables(with game), players, waiting, unread, backedUpAt, pausedAll}`. No category is the `snooker` tab (snooker tables and rooms); `all` is the whole club. `players` names everyone on a table. | 3–6, 16 |
+| `GET /board?category=` | → `{sheet, categories, tables(with game), players, waiting, unread, backedUpAt, pausedAll, pausedAllAt?}`; `pausedAllAt` is when Pause all was pressed, while it is on (the banner of screen 16, added in P07). No category is the `snooker` tab (snooker tables and rooms); `all` is the whole club. `players` names everyone on a table. | 3–6, 16 |
 | `GET /games/:id` | → `{game, table, session?, players}` (added in P03: the `['game', id]` query needs it) | 11, 13–15, 17–23 |
 | `POST /games` | `{tableId, type, playerIds|sides|underPlayerId, price?}` | 7–10 |
 | `POST /games/:id/change-type` | `{type, ...}` (within 5 min) | 12 |
@@ -147,7 +147,7 @@ Every write returns the saved record including `doneBy`. Errors use `{code, mess
 
 | Scenario | Clock | What changes | Screens |
 |---|---|---|---|
-| `paused` | 10:01 PM | Zain pressed Pause all at 9:58 PM; every running game is paused | 16 |
+| `paused` | 10:01 PM | Zain pressed Pause all at 9:58 PM; every running game is paused. **The games are the ones screen 16 draws** (the scenario replaces the night's games and gives their sessions): Table 1 in frame 4 (06:48), a Century on Table 2 (08:10), Table 4 in frame 2 (11:20), a double on Table 5 (10:05), Room 1 (1:28:05) and Room 2 (0:06:10); Tables 3 and 6 are free | 16 |
 | `checkout` | 10:20 PM | 8 players waiting to pay, Rs 6,880 in all (Tariq has paid) | 24–27 |
 | `closing` | 3:40 AM Sun | Shabir is signed in (since 2:04 AM); one Century on Table 2; Waqas (old credit 950) and Shoaib (250) not checked out, Rs 450 and Rs 250 tonight; close numbers from `sheets[s48].final` | 32 |
 | `closed` | 3:45 AM Sun | Sheet 48 closed, sheet 49 open, the Century moved, Waqas and Shoaib moved to credit | 33, 38–44, 55, 56 |

@@ -177,5 +177,114 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Start a game: change / to | Change to {{type}} | {{type}} میں بدلیں | P06 |
 | Start a game: change / tooLate | The 5 minutes to change this game are over. End or discard the frame first. | اس گیم کو بدلنے کے 5 منٹ ختم ہو گئے۔ پہلے فریم ختم یا منسوخ کریں۔ | P06 |
 | Start a game: change / ended | This game is no longer running. | یہ گیم اب نہیں چل رہا۔ | P06 |
+| Cancel button (panels) | Cancel | منسوخ کریں | P07 |
+| Running table: panel / title / single | {{name}}, single frame | {{name}}، سنگل فریم | P07 |
+| Running table: panel / title / double | {{name}}, double frame | {{name}}، ڈبل فریم | P07 |
+| Running table: panel / title / century | {{name}}, Century | {{name}}، سنچری | P07 |
+| Running table: panel / title / room | {{name}}, room | {{name}}، روم | P07 |
+| Running table: panel / title / game | {{name}}, game | {{name}}، گیم | P07 |
+| Running table: panel / playingSince | Playing since {{time}} | {{time}} سے کھیل جاری | P07 |
+| Running table: panel / pausedSince | Paused since {{time}} | {{time}} سے رکا ہوا | P07 |
+| Running table: panel / frameOf | Frame {{n}} of this session | اس سیشن کا فریم {{n}} | P07 |
+| Running table: panel / kind / double | Double frame | ڈبل فریم | P07 |
+| Running table: panel / kind / century | Century, {{price}} a minute | سنچری، {{price}} فی منٹ | P07 |
+| Running table: panel / kind / room | Room, {{price}} an hour | روم، {{price}} فی گھنٹہ | P07 |
+| Running table: panel / kind / game | Game | گیم | P07 |
+| Running table: panel / under | Under {{name}} | {{name}} کے نام | P07 |
+| Running table: panel / vs | vs | بمقابلہ | P07 |
+| Running table: panel / score | Session score | سیشن کا اسکور | P07 |
+| Running table: panel / frameRow | Frame {{n}}, {{time}}, {{min}} min | فریم {{n}}، {{time}}، {{min}} منٹ | P07 |
+| Running table: panel / lost | {{name}} lost, {{amount}} | {{name}} ہارا، {{amount}} | P07 |
+| Running table: panel / end / single | End frame | فریم ختم کریں | P07 |
+| Running table: panel / end / double | End frame | فریم ختم کریں | P07 |
+| Running table: panel / end / century | End Century | سنچری ختم کریں | P07 |
+| Running table: panel / end / room | End room | روم ختم کریں | P07 |
+| Running table: panel / end / game | End game | گیم ختم کریں | P07 |
+| Running table: panel / pause | Pause | روکیں | P07 |
+| Running table: panel / resume | Resume | دوبارہ چلائیں | P07 |
+| Running table: panel / move | Move table | ٹیبل بدلیں | P07 |
+| Running table: panel / replace | Replace player | کھلاڑی بدلیں | P07 |
+| Running table: panel / canteen | Canteen item | کینٹین آئٹم | P07 |
+| Running table: panel / damage | Damage charge | نقصان کا چارج | P07 |
+| Running table: panel / discard / frame | Discard frame | فریم منسوخ کریں | P07 |
+| Running table: panel / discard / game | Discard game | گیم منسوخ کریں | P07 |
+| Running table: panel / changeType | Change game type | گیم کی قسم بدلیں | P07 |
+| Running table: panel / changeLeft_one | {{count}} minute left to change | بدلنے کے لیے {{count}} منٹ باقی | P07 |
+| Running table: panel / changeLeft_other | {{count}} minutes left to change | بدلنے کے لیے {{count}} منٹ باقی | P07 |
+| Running table: panel / changeClosed | Change game type was open until {{time}}. After 5 minutes, end or discard this frame first. | گیم کی قسم بدلنے کا وقت {{time}} تک تھا۔ 5 منٹ کے بعد پہلے یہ فریم ختم یا منسوخ کریں۔ | P07 |
+| Running table: panel / ended | This game is no longer running. | یہ گیم اب نہیں چل رہا۔ | P07 |
+| Running table: move / title | Move {{name}} to another table | {{name}} کو دوسرے ٹیبل پر لے جائیں | P07 |
+| Running table: move / subtitle | {{who}}, frame {{n}}, {{sofar}} | {{who}}، فریم {{n}}، {{sofar}} | P07 |
+| Running table: move / subtitlePlain | {{who}}, {{sofar}} | {{who}}، {{sofar}} | P07 |
+| Running table: move / sofar_one | {{count}} minute so far | اب تک {{count}} منٹ | P07 |
+| Running table: move / sofar_other | {{count}} minutes so far | اب تک {{count}} منٹ | P07 |
+| Running table: move / free | Free tables | خالی ٹیبلز | P07 |
+| Running table: move / same | {{price}}, same price | {{price}}، وہی قیمت | P07 |
+| Running table: move / less | {{price}}, {{diff}} less | {{price}}، {{diff}} کم | P07 |
+| Running table: move / more | {{price}}, {{diff}} more | {{price}}، {{diff}} زیادہ | P07 |
+| Running table: move / outOfOrder | Out of order, {{note}} | خراب ہے، {{note}} | P07 |
+| Running table: move / none | There is no other table of this kind to move to. | اس قسم کا کوئی اور ٹیبل نہیں جس پر لے جایا جا سکے۔ | P07 |
+| Running table: move / note | The timer and session move with the players. A frame keeps the price of the table it started on. A Century keeps counting minutes on the new table. | ٹائمر اور سیشن کھلاڑیوں کے ساتھ جاتے ہیں۔ فریم اسی ٹیبل کی قیمت پر رہتا ہے جس پر شروع ہوا تھا۔ سنچری نئے ٹیبل پر بھی منٹ گنتی رہتی ہے۔ | P07 |
+| Running table: move / to | Move to {{name}} | {{name}} پر لے جائیں | P07 |
+| Running table: replace / title | Replace a player on {{name}} | {{name}} پر کھلاڑی بدلیں | P07 |
+| Running table: replace / text | Earlier frames stay with the old player. | پچھلے فریم پرانے کھلاڑی کے نام رہتے ہیں۔ | P07 |
+| Running table: replace / leaving | Who is leaving? | کون جا رہا ہے؟ | P07 |
+| Running table: replace / coming | Who is coming in? | کون آ رہا ہے؟ | P07 |
+| Running table: replace / search | Search the new player | نئے کھلاڑی کو تلاش کریں | P07 |
+| Running table: replace / none | No player found. | کوئی کھلاڑی نہیں ملا۔ | P07 |
+| Running table: replace / confirm | Replace {{out}} with {{in}} | {{out}} کی جگہ {{in}} کو لائیں | P07 |
+| Running table: stop / title | Stop {{name}} without the normal charge | {{name}} کو عام چارج کے بغیر روکیں | P07 |
+| Running table: stop / subtitle | {{who}}, {{what}}, {{price}}. Owners see every stopped frame with its reason. | {{who}}، {{what}}، {{price}}۔ مالکان ہر روکا ہوا فریم اس کی وجہ کے ساتھ دیکھتے ہیں۔ | P07 |
+| Running table: stop / what / single | single frame | سنگل فریم | P07 |
+| Running table: stop / what / double | double frame | ڈبل فریم | P07 |
+| Running table: stop / what / century | Century | سنچری | P07 |
+| Running table: stop / what / room | room | روم | P07 |
+| Running table: stop / what / game | game | گیم | P07 |
+| Running table: stop / price / century | {{price}} a minute | {{price}} فی منٹ | P07 |
+| Running table: stop / price / room | {{price}} an hour | {{price}} فی گھنٹہ | P07 |
+| Running table: stop / options / discard / title | Discard frame | فریم منسوخ کریں | P07 |
+| Running table: stop / options / discard / text | Nobody pays. Use when the frame did not really happen. | کوئی ادا نہیں کرتا۔ تب استعمال کریں جب فریم واقعی ہوا ہی نہیں۔ | P07 |
+| Running table: stop / options / dispute / title | Unpaid, dispute | ادائیگی باقی، جھگڑا | P07 |
+| Running table: stop / options / dispute / text | Players are arguing. The frame waits, and an owner decides who pays. | کھلاڑی بحث کر رہے ہیں۔ فریم رکا رہتا ہے، اور مالک فیصلہ کرتا ہے کہ کون ادا کرے گا۔ | P07 |
+| Running table: stop / options / cancel / title | Cancel, started by mistake | منسوخ، غلطی سے شروع ہوا | P07 |
+| Running table: stop / options / cancel / text | Wrong table or wrong players. In the first 2 minutes use Undo instead. | غلط ٹیبل یا غلط کھلاڑی۔ پہلے 2 منٹ میں اس کی جگہ واپس کریں استعمال کریں۔ | P07 |
+| Running table: stop / reason | Reason (required) | وجہ (ضروری) | P07 |
+| Running table: stop / reasons / left | Players left halfway | کھلاڑی بیچ میں چلے گئے | P07 |
+| Running table: stop / reasons / power | Power cut ended the game | بجلی جانے سے گیم ختم ہوا | P07 |
+| Running table: stop / reasons / table | Table problem | ٹیبل کا مسئلہ | P07 |
+| Running table: stop / reasons / other | Other | کچھ اور | P07 |
+| Running table: stop / note | Note (optional) | نوٹ (اختیاری) | P07 |
+| Running table: stop / keep | Keep playing | کھیلنے دیں | P07 |
+| Running table: stop / confirm / discard | Discard frame | فریم منسوخ کریں | P07 |
+| Running table: stop / confirm / discardGame | Discard game | گیم منسوخ کریں | P07 |
+| Running table: stop / confirm / dispute | Mark as dispute | جھگڑا لکھیں | P07 |
+| Running table: stop / confirm / cancel | Cancel game | گیم منسوخ کریں | P07 |
+| Running table: damage / kicker | {{name}}, {{who}} | {{name}}، {{who}} | P07 |
+| Running table: damage / title | Add a damage charge | نقصان کا چارج لگائیں | P07 |
+| Running table: damage / text | For a broken cue, a damaged ball or torn cloth. It goes on the player’s bill with a note. | ٹوٹی ہوئی کیو، خراب گیند یا پھٹے کپڑے کے لیے۔ یہ نوٹ کے ساتھ کھلاڑی کے بل پر جاتا ہے۔ | P07 |
+| Running table: damage / who | Who pays? | کون ادا کرے گا؟ | P07 |
+| Running table: damage / what | What was damaged? | کیا خراب ہوا؟ | P07 |
+| Running table: damage / items / cue | Cue | کیو | P07 |
+| Running table: damage / items / ball | Ball | گیند | P07 |
+| Running table: damage / items / cloth | Cloth | کپڑا | P07 |
+| Running table: damage / items / other | Other | کچھ اور | P07 |
+| Running table: damage / note | Note (required) | نوٹ (ضروری) | P07 |
+| Running table: damage / amount | Amount | رقم | P07 |
+| Running table: damage / rs | Rs | روپے | P07 |
+| Running table: damage / footer | Shows on {{name}}’s statement as a damage charge. Owners see it in Activity. | {{name}} کے اسٹیٹمنٹ میں نقصان کے چارج کے طور پر نظر آتا ہے۔ مالکان اسے ایکٹیویٹی میں دیکھتے ہیں۔ | P07 |
+| Running table: damage / footerPlain | Shows on the player’s statement as a damage charge. Owners see it in Activity. | کھلاڑی کے اسٹیٹمنٹ میں نقصان کے چارج کے طور پر نظر آتا ہے۔ مالکان اسے ایکٹیویٹی میں دیکھتے ہیں۔ | P07 |
+| Running table: damage / add | Add {{amount}} to {{name}}’s bill | {{name}} کے بل میں {{amount}} شامل کریں | P07 |
+| Running table: damage / addPlain | Add to the bill | بل میں شامل کریں | P07 |
+| Running table: undo / started | Game started on {{table}} for {{players}}. | {{table}} پر {{players}} کے لیے گیم شروع ہوا۔ | P07 |
+| Running table: undo / left | Undo for {{time}} more | واپس کرنے کے لیے {{time}} باقی | P07 |
+| Running table: undo / button | Undo | واپس کریں | P07 |
+| Running table: undo / done | Game undone on {{table}}. | {{table}} پر گیم واپس کر دیا گیا۔ | P07 |
+| Running table: undo / and |  and  |  اور  | P07 |
+| Running table: undo / comma | ,  | ،  | P07 |
+| Running table: pause / title | All games are paused | تمام گیمز رکے ہوئے ہیں | P07 |
+| Running table: pause / text | Paused at {{time}} by the counter. Timers are stopped, so nobody is charged for the power cut. | {{time}} پر کاؤنٹر نے روکا۔ ٹائمر رکے ہوئے ہیں، اس لیے بجلی جانے کا کسی سے چارج نہیں ہوتا۔ | P07 |
+| Running table: pause / resume | Resume all games | تمام گیمز دوبارہ چلائیں | P07 |
+| Running table: pause / note | If the computer itself switched off, every game is restored with the right time when it starts again. | اگر کمپیوٹر خود بند ہو جائے تو دوبارہ چلنے پر ہر گیم صحیح وقت کے ساتھ بحال ہو جاتا ہے۔ | P07 |
+| Running table: pause / freeHint | New games can still start. Pause them too if the power is out. | نئے گیم اب بھی شروع ہو سکتے ہیں۔ اگر بجلی بند ہے تو انہیں بھی روکیں۔ | P07 |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

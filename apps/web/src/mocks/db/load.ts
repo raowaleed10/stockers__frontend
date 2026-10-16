@@ -206,7 +206,10 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
     sheetEntryEdits: {},
     today: todayFrom(raw, scenarioName),
     games,
-    sessions: night?.games ? [] : sessionsWithoutRunningFrames(raw.sessions, games),
+    sessions: sessionsWithoutRunningFrames(
+      night?.games ? (night.sessions ?? []) : raw.sessions,
+      games,
+    ),
     canteenItems: raw.canteenItems,
     canteenSales: [],
     expenses: raw.expenses,

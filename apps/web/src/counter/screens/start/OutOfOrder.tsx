@@ -80,7 +80,7 @@ function NoteStep({ table }: TableContext) {
           rows={2}
           value={note}
           onChange={(event) => setNote(event.target.value)}
-          className="min-h-[96px] text-[18px]"
+          className="min-h-[96px]"
         />
       </div>
       {mark.error ? (

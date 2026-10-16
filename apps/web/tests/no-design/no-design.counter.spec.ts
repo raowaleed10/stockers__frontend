@@ -231,6 +231,71 @@ const SHOTS: Shot[] = [
       await blur(page);
     },
   },
+  // P07: a running table
+  {
+    id: 'panel-century',
+    url: `/table/t3?now=${NIGHT}`,
+    prepare: async (page) => {
+      await expect(page.getByRole('dialog', { name: 'Table 3, Century' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'panel-change-type-open',
+    url: `/table/t2?scenario=newGame&now=${encodeURIComponent('2026-10-03T21:53:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByRole('dialog', { name: 'Table 2, single frame' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'move-a-room',
+    url: `/table/r1/move?now=${encodeURIComponent('2026-10-03T21:43:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(
+        page.getByRole('region', { name: 'Move Room 1 to another table' }),
+      ).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'stop-dispute',
+    url: `/table/t6/stop?now=${encodeURIComponent('2026-10-03T21:50:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Unpaid, dispute/ }).click();
+      await page.getByRole('button', { name: 'Other' }).click();
+      await blur(page);
+    },
+  },
+  {
+    id: 'damage-nothing-picked',
+    url: `/table/t1/damage?now=${encodeURIComponent('2026-10-03T21:45:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByRole('dialog', { name: 'Add a damage charge' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'undo-done',
+    url: `/?scenario=newGame&now=${encodeURIComponent('2026-10-03T21:50:18+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: 'Undo', exact: true }).click();
+      await expect(page.getByText('Game undone on Table 2.')).toBeVisible();
+      await blur(page);
+    },
+    clip: { x: 0, y: 700, width: 1440, height: 200 },
+  },
+  {
+    id: 'pause-all-pressed',
+    url: `/?now=${NIGHT}`,
+    prepare: async (page) => {
+      await page.getByRole('contentinfo').getByRole('button', { name: 'Pause all' }).click();
+      await expect(
+        page.getByRole('alert').filter({ hasText: 'All games are paused' }),
+      ).toBeVisible();
+      await blur(page);
+    },
+  },
 ];
 
 test.describe('screenshots for docs/NO_DESIGN.md', () => {

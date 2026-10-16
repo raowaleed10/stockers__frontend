@@ -160,7 +160,6 @@ describe('the action bar (screen 3)', () => {
     ['Players', '/players'],
     ['Today’s totals', '/today'],
     ['Expense', '/expense'],
-    ['Pause all', '/pause-all'],
     ['Close sheet', '/close-sheet'],
   ])('goes from %s to its placeholder screen at %s, inside the frame', async (name, path) => {
     const view = renderCounter('/');

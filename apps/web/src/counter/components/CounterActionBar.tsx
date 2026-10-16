@@ -31,6 +31,7 @@ function Action({
   icon: Icon,
   iconSize = 22,
   strokeWidth = 2,
+  disabled = false,
   onClick,
   children,
 }: {
@@ -38,11 +39,17 @@ function Action({
   icon: LucideIcon;
   iconSize?: number;
   strokeWidth?: number;
+  disabled?: boolean;
   onClick: () => void;
   children: ReactNode;
 }) {
   return (
-    <button type="button" className={cx(LOOK[look])} onClick={onClick}>
+    <button
+      type="button"
+      disabled={disabled}
+      className={cx(LOOK[look], 'disabled:cursor-not-allowed disabled:opacity-40')}
+      onClick={onClick}
+    >
       <Icon aria-hidden="true" size={iconSize} strokeWidth={strokeWidth} />
       {children}
     </button>
@@ -56,6 +63,8 @@ export interface CounterActionBarProps {
   onToday: () => void;
   onExpense: () => void;
   onPauseAll: () => void;
+  /** Pause all is already on: its button has nothing left to do until the games are resumed. */
+  pausedAll?: boolean;
   onCloseSheet: () => void;
   /** The last backup. Not known yet while the board loads. */
   backedUpAt?: string;
@@ -69,6 +78,7 @@ export function CounterActionBar({
   onToday,
   onExpense,
   onPauseAll,
+  pausedAll = false,
   onCloseSheet,
   backedUpAt,
 }: CounterActionBarProps) {
@@ -91,7 +101,7 @@ export function CounterActionBar({
       <Action look="plain" icon={Banknote} onClick={onExpense}>
         {t('actions.expense')}
       </Action>
-      <Action look="plain" icon={Pause} onClick={onPauseAll}>
+      <Action look="plain" icon={Pause} disabled={pausedAll} onClick={onPauseAll}>
         {t('actions.pauseAll')}
       </Action>
       <div className="flex-1" />

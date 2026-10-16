@@ -15,8 +15,9 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useNow } from '@/lib/clock';
 import { useFormat } from '@/lib/use-format';
-import { GameTile, type TileProps } from '@/tiles';
+import { GameTile, TileActionButton, type TileProps } from '@/tiles';
 import { TimerText } from '@/ui/TimerText';
+import { useResumeGame } from '../api';
 import { roomPath, tablePath } from './table-paths';
 
 const MINUTE = 60_000;
@@ -31,6 +32,8 @@ export interface BoardTileProps {
   players: Record<string, PlayerName>;
   /** The size the page gives this tile, for example `flex-[1_1_300px] min-w-0`. */
   className?: string;
+  /** Pause all is on (screen 16): paused tiles carry their own Resume button and a free one says new games can still start. */
+  pausedAll?: boolean;
 }
 
 /**
@@ -39,8 +42,16 @@ export interface BoardTileProps {
  * grows, and a frame turns into the red card at 30:00 without a reload. Pressing it goes to the screen for what
  * can be done now; a table that is out of order or has no price does nothing, and says why on the tile.
  */
-export function BoardTile({ table, category, players, className }: BoardTileProps) {
+export function BoardTile({
+  table,
+  category,
+  players,
+  className,
+  pausedAll = false,
+}: BoardTileProps) {
   const { t, i18n } = useTranslation('board');
+  const { t: tTable } = useTranslation('table');
+  const resume = useResumeGame();
   const lang: FormatLang = i18n.language === 'ur' ? 'ur' : 'en';
   const format = useFormat();
   const navigate = useNavigate();
@@ -49,6 +60,8 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
 
   const status = tableStatus(table, now);
   const { game } = table;
+  // After Pause all a paused tile is the power-cut tile of screen 16: its own Resume button, its timer yellow.
+  const powerCut = pausedAll && game?.status === 'paused';
   // The limit this game started with (a frame or a game); a Century and a room have none.
   const limit = game ? gameLimit(game) : undefined;
   const name = (id: string | undefined) => (id ? (players[id]?.name ?? '') : '');
@@ -112,18 +125,24 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
               })
             : t('detail.frame', { n: standing.frameNo })
           : undefined;
-        props.gameLine = { main: t('game.single'), detail: paused ? pausedWords : frameWords };
+        props.gameLine = {
+          main: t('game.single'),
+          detail: paused && !powerCut ? pausedWords : frameWords,
+        };
         props.players = pair();
         break;
       }
       case 'double':
-        props.gameLine = { main: t('game.double'), detail: paused ? pausedWords : undefined };
+        props.gameLine = {
+          main: t('game.double'),
+          detail: paused && !powerCut ? pausedWords : undefined,
+        };
         props.players = pair();
         break;
       case 'game':
         props.gameLine = {
           main: game.sides ? t('game.gameDoubles') : t('game.gameSingle'),
-          detail: paused ? pausedWords : undefined,
+          detail: paused && !powerCut ? pausedWords : undefined,
         };
         props.players = pair();
         break;
@@ -146,9 +165,21 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
         pausedMs={game.pausedMs}
         pausedAt={game.pausedAt}
         variant={status === 'overLimit' ? 'redCard' : 'plain'}
+        className={powerCut ? 'text-tile-frozen' : undefined}
       />
     );
+    if (powerCut) {
+      props.as = 'div';
+      props.trailing = (
+        <TileActionButton onClick={() => resume.mutate(game.id)}>
+          {tTable('panel.resume')}
+        </TileActionButton>
+      );
+    }
     props.amount = chargeForGame(game, now);
+  } else if (status === 'free' && pausedAll) {
+    // The power is out: the tile says what is still allowed, and nothing else (screen 16).
+    props.cta = { hint: tTable('pause.freeHint') };
   } else if (status === 'free') {
     if (kind === 'snooker') {
       props.cta = {

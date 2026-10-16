@@ -183,6 +183,11 @@
   /* ---------- the live board (added in P05; screens 3 to 6) ---------- */
   --c-note-line: #5C4730;     /* border of the "For the look only" box (5) */
   --c-info-text: #D6E4FB;     /* the sentence in the blue note of screen 9 */
+  --c-discard-line: #6B3A36;  /* border of the Discard frame button (11) */
+  --c-note-bg: #1A1410;       /* the dashed note under the table panel (11) */
+  --c-note-text: #A8998A;     /* its words */
+  --c-note-icon: #8C7B6B;     /* its icon */
+  --c-toast-muted: #5E5249;   /* the "Undo for 1:42 more" words on the cream toast (14) */
 
   /* ---------- shape ---------- */
   --r-tile: 18px;

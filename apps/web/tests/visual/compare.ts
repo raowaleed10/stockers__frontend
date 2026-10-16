@@ -26,6 +26,11 @@ export interface CompareOptions {
   crop?: Rect;
   /** Parts to ignore in both pictures. */
   masks?: Rect[];
+  /**
+   * Our picture is cut this far to the right and down from where the design's is: the designs of the panels draw a
+   * 70 px header where the real top bar is 83 px, so our panel starts 13 px lower than the PNG's.
+   */
+  oursShift?: { x: number; y: number };
   channel?: number;
 }
 
@@ -47,7 +52,7 @@ export async function comparePngs(
   options: CompareOptions = {},
 ): Promise<CompareResult> {
   return scratch.evaluate(
-    async ({ oursData, designData, crop, masks, channel }) => {
+    async ({ oursData, designData, crop, masks, channel, shift }) => {
       const load = (data: string) =>
         new Promise<HTMLImageElement>((resolve, reject) => {
           const image = new Image();
@@ -59,17 +64,17 @@ export async function comparePngs(
       const area = crop ?? { x: 0, y: 0, width: theirs.width, height: theirs.height };
       const width = Math.round(area.width);
       const height = Math.round(area.height);
-      const draw = (image: HTMLImageElement) => {
+      const draw = (image: HTMLImageElement, dx = 0, dy = 0) => {
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
         const context = canvas.getContext('2d', { willReadFrequently: true })!;
         context.fillStyle = '#ff00ff'; // what is left when a picture is smaller than the crop
         context.fillRect(0, 0, width, height);
-        context.drawImage(image, area.x, area.y, width, height, 0, 0, width, height);
+        context.drawImage(image, area.x + dx, area.y + dy, width, height, 0, 0, width, height);
         return { canvas, data: context.getImageData(0, 0, width, height) };
       };
-      const a = draw(mine);
+      const a = draw(mine, shift?.x ?? 0, shift?.y ?? 0);
       const b = draw(theirs);
 
       const masked = new Uint8Array(width * height);
@@ -134,6 +139,7 @@ export async function comparePngs(
       crop: options.crop ?? null,
       masks: options.masks ?? [],
       channel: options.channel ?? CHANNEL,
+      shift: options.oursShift ?? null,
     },
   );
 }

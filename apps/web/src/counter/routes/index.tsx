@@ -11,6 +11,10 @@ import { OutOfOrder } from '../screens/start/OutOfOrder';
 import { StartDouble } from '../screens/start/StartDouble';
 import { StartPlayers } from '../screens/start/StartPlayers';
 import { StartType } from '../screens/start/StartType';
+import { DamageCharge } from '../screens/table/DamageCharge';
+import { MoveTable } from '../screens/table/MoveTable';
+import { StopFrame } from '../screens/table/StopFrame';
+import { TablePanel } from '../screens/table/TablePanel';
 import { useCloseTable } from '../start/use-close';
 import { PagePlaceholder } from '../screens/PagePlaceholder';
 import { SignIn } from '../screens/SignIn';
@@ -31,8 +35,6 @@ const LATER_SCREENS = [
   { path: '/today', title: 'actions.today' },
   { path: '/expense', title: 'actions.expense' },
   { path: '/close-sheet', title: 'actions.closeSheet' },
-  // Pause all is an action, not a screen: P05 or P07 replaces this placeholder with the real thing.
-  { path: '/pause-all', title: 'actions.pauseAll' },
 ] as const;
 
 function LaterScreen({ title }: { title: (typeof LATER_SCREENS)[number]['title'] }) {
@@ -41,16 +43,17 @@ function LaterScreen({ title }: { title: (typeof LATER_SCREENS)[number]['title']
 }
 
 /**
- * What a tap on a running table (P07) or a free room (P08) opens, until those steps build it: its name inside a
- * dialog over the board, with a way out.
+ * What "End frame" (P08) and a tap on a free room (P08) open, until that step builds them: the name inside a dialog
+ * over the board, with a way out.
  */
-function TableScreen({ what }: { what: 'room' | 'running' }) {
+function TableScreen({ what }: { what: 'room' | 'end' }) {
   const { t } = useTranslation('board');
+  const { t: tTable } = useTranslation('table');
   const close = useCloseTable();
   const { id } = useParams<{ id: string }>();
   return (
     <CounterDialog
-      title={`${what === 'room' ? t('cta.startRoom') : t('state.playing')} (${id ?? ''})`}
+      title={`${what === 'room' ? t('cta.startRoom') : tTable('panel.end.single')} (${id ?? ''})`}
       onClose={close}
     />
   );
@@ -77,7 +80,11 @@ const TABLE_ROUTES = [
     path="table/:id/change-type/double"
     element={<StartDouble mode="change" />}
   />,
-  <Route key="running" path="table/:id" element={<TableScreen what="running" />} />,
+  <Route key="panel" path="table/:id" element={<TablePanel />} />,
+  <Route key="move" path="table/:id/move" element={<MoveTable />} />,
+  <Route key="stop" path="table/:id/stop" element={<StopFrame />} />,
+  <Route key="damage" path="table/:id/damage" element={<DamageCharge />} />,
+  <Route key="end" path="table/:id/end" element={<TableScreen what="end" />} />,
   <Route key="room" path="room/:id/start" element={<TableScreen what="room" />} />,
   <Route key="new-player" path="players/new" element={<NewPlayer />} />,
 ];

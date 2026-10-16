@@ -146,10 +146,14 @@ export function TextArea({ theme, className, rows = 3, ...rest }: TextAreaProps)
     <textarea
       rows={rows}
       className={cx(
-        'w-full resize-y p-3.5 disabled:cursor-not-allowed disabled:opacity-40',
+        'w-full p-3.5 disabled:cursor-not-allowed disabled:opacity-40',
         DIRECT[theme],
         PLACEHOLDER[theme],
-        theme === 'owner' ? 'min-h-[96px] text-[16px]' : 'min-h-[112px] text-[18px]',
+        // The counter's note boxes are a few lines and fixed (a touch screen has no use for a drag handle); two lines
+        // are as tall as the text, three or more get the 112 px minimum.
+        theme === 'owner'
+          ? 'min-h-[96px] resize-y text-[16px]'
+          : cx('resize-none text-[18px]', rows > 2 && 'min-h-[112px]'),
         focusRing[theme],
         className,
       )}

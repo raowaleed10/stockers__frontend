@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cx } from './cx';
 import { focusRing } from './theme';
@@ -20,9 +21,10 @@ export interface PersonCardProps extends Omit<
   status?: PersonStatus;
   selected?: boolean;
   /**
-   * `row` is a search result (screen 8), `tile` a recent player, `large` the "who lost?" card (screen 17).
+   * `row` is a search result (screen 8), `tile` a recent player, `large` the "who lost?" card (screen 17), `choice`
+   * the "who pays?" card of the damage charge (screen 15) with a tick on the one picked.
    */
-  variant?: 'row' | 'tile' | 'large';
+  variant?: 'row' | 'tile' | 'large' | 'choice';
 }
 
 const STATUS_TONE = {
@@ -48,12 +50,16 @@ export function PersonCard({
   ) : null;
 
   const look = selected
-    ? 'border-2 border-c-brass bg-c-selected'
+    ? variant === 'choice'
+      ? 'border-2 border-c-brass bg-c-raised-2'
+      : 'border-2 border-c-brass bg-c-selected'
     : variant === 'large'
       ? 'border-2 border-c-line-2 bg-c-raised'
-      : variant === 'tile'
-        ? 'border border-c-line-2 bg-c-panel'
-        : 'border border-c-line bg-c-raised';
+      : variant === 'choice'
+        ? 'border-2 border-c-line-2 bg-c-raised'
+        : variant === 'tile'
+          ? 'border border-c-line-2 bg-c-panel'
+          : 'border border-c-line bg-c-raised';
 
   return (
     <button
@@ -67,6 +73,8 @@ export function PersonCard({
           'flex min-h-[72px] flex-col justify-center rounded-[14px] px-3.5 py-2',
         variant === 'large' &&
           'flex min-h-[220px] flex-col items-start justify-between rounded-[22px] px-[26px] py-6',
+        variant === 'choice' &&
+          'relative flex min-h-[84px] flex-col items-start justify-center gap-0.5 rounded-[18px] px-[22px]',
         look,
         focusRing.counter,
         className,
@@ -90,6 +98,22 @@ export function PersonCard({
           <bdi dir="ltr" className="text-start text-[14px] text-c-text-2">
             {phoneTail}
           </bdi>
+        </>
+      ) : null}
+      {variant === 'choice' ? (
+        <>
+          <span className="text-[21px] font-bold">{name}</span>
+          <bdi dir="ltr" className="text-start text-[15px] text-c-text-2">
+            {phoneTail}
+          </bdi>
+          {selected ? (
+            <span
+              aria-hidden="true"
+              className="absolute end-3.5 top-3.5 flex h-[26px] w-[26px] items-center justify-center rounded-full bg-c-brass text-c-brass-ink"
+            >
+              <Check size={16} strokeWidth={3} />
+            </span>
+          ) : null}
         </>
       ) : null}
       {variant === 'large' ? (

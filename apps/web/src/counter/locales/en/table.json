@@ -1,0 +1,151 @@
+{
+  "cancel": "Cancel",
+  "panel": {
+    "title": {
+      "single": "{{name}}, single frame",
+      "double": "{{name}}, double frame",
+      "century": "{{name}}, Century",
+      "room": "{{name}}, room",
+      "game": "{{name}}, game"
+    },
+    "playingSince": "Playing since <when>{{time}}</when>",
+    "pausedSince": "Paused since <when>{{time}}</when>",
+    "frameOf": "Frame {{n}} of this session",
+    "kind": {
+      "double": "Double frame",
+      "century": "Century, {{price}} a minute",
+      "room": "Room, {{price}} an hour",
+      "game": "Game"
+    },
+    "under": "Under <name>{{name}}</name>",
+    "vs": "vs",
+    "score": "Session score",
+    "frameRow": "Frame {{n}}, <when>{{time}}</when>, {{min}} min",
+    "lost": "<name>{{name}}</name> lost, {{amount}}",
+    "end": {
+      "single": "End frame",
+      "double": "End frame",
+      "century": "End Century",
+      "room": "End room",
+      "game": "End game"
+    },
+    "pause": "Pause",
+    "resume": "Resume",
+    "move": "Move table",
+    "replace": "Replace player",
+    "canteen": "Canteen item",
+    "damage": "Damage charge",
+    "discard": {
+      "frame": "Discard frame",
+      "game": "Discard game"
+    },
+    "changeType": "Change game type",
+    "changeLeft_one": "{{count}} minute left to change",
+    "changeLeft_other": "{{count}} minutes left to change",
+    "changeClosed": "Change game type was open until <when>{{time}}</when>. After 5 minutes, end or discard this frame first.",
+    "ended": "This game is no longer running."
+  },
+  "move": {
+    "title": "Move {{name}} to another table",
+    "subtitle": "<name>{{who}}</name>, frame {{n}}, {{sofar}}",
+    "subtitlePlain": "<name>{{who}}</name>, {{sofar}}",
+    "sofar_one": "{{count}} minute so far",
+    "sofar_other": "{{count}} minutes so far",
+    "free": "Free tables",
+    "same": "{{price}}, same price",
+    "less": "{{price}}, {{diff}} less",
+    "more": "{{price}}, {{diff}} more",
+    "outOfOrder": "Out of order, {{note}}",
+    "none": "There is no other table of this kind to move to.",
+    "note": "The timer and session move with the players. A frame keeps the price of the table it started on. A Century keeps counting minutes on the new table.",
+    "to": "Move to {{name}}"
+  },
+  "replace": {
+    "title": "Replace a player on {{name}}",
+    "text": "Earlier frames stay with the old player.",
+    "leaving": "Who is leaving?",
+    "coming": "Who is coming in?",
+    "search": "Search the new player",
+    "none": "No player found.",
+    "confirm": "Replace <name>{{out}}</name> with <name>{{in}}</name>"
+  },
+  "stop": {
+    "title": "Stop {{name}} without the normal charge",
+    "subtitle": "<name>{{who}}</name>, {{what}}, {{price}}. Owners see every stopped frame with its reason.",
+    "what": {
+      "single": "single frame",
+      "double": "double frame",
+      "century": "Century",
+      "room": "room",
+      "game": "game"
+    },
+    "price": {
+      "century": "{{price}} a minute",
+      "room": "{{price}} an hour"
+    },
+    "options": {
+      "discard": {
+        "title": "Discard frame",
+        "text": "Nobody pays. Use when the frame did not really happen."
+      },
+      "dispute": {
+        "title": "Unpaid, dispute",
+        "text": "Players are arguing. The frame waits, and an owner decides who pays."
+      },
+      "cancel": {
+        "title": "Cancel, started by mistake",
+        "text": "Wrong table or wrong players. In the first 2 minutes use Undo instead."
+      }
+    },
+    "reason": "Reason (required)",
+    "reasons": {
+      "left": "Players left halfway",
+      "power": "Power cut ended the game",
+      "table": "Table problem",
+      "other": "Other"
+    },
+    "note": "Note (optional)",
+    "keep": "Keep playing",
+    "confirm": {
+      "discard": "Discard frame",
+      "discardGame": "Discard game",
+      "dispute": "Mark as dispute",
+      "cancel": "Cancel game"
+    }
+  },
+  "damage": {
+    "kicker": "{{name}}, <name>{{who}}</name>",
+    "title": "Add a damage charge",
+    "text": "For a broken cue, a damaged ball or torn cloth. It goes on the player’s bill with a note.",
+    "who": "Who pays?",
+    "what": "What was damaged?",
+    "items": {
+      "cue": "Cue",
+      "ball": "Ball",
+      "cloth": "Cloth",
+      "other": "Other"
+    },
+    "note": "Note (required)",
+    "amount": "Amount",
+    "rs": "Rs",
+    "footer": "Shows on <name>{{name}}</name>’s statement as a damage charge. Owners see it in Activity.",
+    "footerPlain": "Shows on the player’s statement as a damage charge. Owners see it in Activity.",
+    "add": "Add {{amount}} to <name>{{name}}</name>’s bill",
+    "addPlain": "Add to the bill"
+  },
+  "undo": {
+    "started": "Game started on {{table}} for <name>{{players}}</name>.",
+    "left": "Undo for {{time}} more",
+    "button": "Undo",
+    "done": "Game undone on {{table}}.",
+    "and": " and ",
+    "comma": ", "
+  },
+  "pause": {
+    "title": "All games are paused",
+    "text": "Paused at <when>{{time}}</when> by the counter. Timers are stopped, so nobody is charged for the power cut.",
+    "resume": "Resume all games",
+    "note": "If the computer itself switched off, every game is restored with the right time when it starts again.",
+    "freeHint": "New games can still start. Pause them too if the power is out."
+  }
+}

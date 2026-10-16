@@ -128,6 +128,7 @@ export function board(db: MockDb, requested?: string): BoardResponse {
     unread: counterUnread(db),
     backedUpAt: backedUpAt(db),
     pausedAll: db.s.pauseAll !== null,
+    ...(db.s.pauseAll ? { pausedAllAt: db.s.pauseAll.at } : {}),
   };
 }
 

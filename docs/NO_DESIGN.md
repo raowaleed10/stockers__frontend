@@ -34,6 +34,13 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 17 | [The players screen before anything is typed](#17-the-players-screen-before-anything-is-typed) | counter | P06 |
 | 18 | [Add a new player: the number is not whole](#18-add-a-new-player-the-number-is-not-whole) | counter | P06 |
 | 19 | [Change the game type: who plays after the change](#19-change-the-game-type-who-plays-after-the-change) | counter | P06 |
+| 20 | [The panel of a Century, a room or a double](#20-the-panel-of-a-century-a-room-or-a-double) | counter | P07 |
+| 21 | [The panel in the first 5 minutes: Change game type](#21-the-panel-in-the-first-5-minutes-change-game-type) | counter | P07 |
+| 22 | [Move a room, and the players to pick from](#22-move-a-room-and-the-players-to-pick-from) | counter | P07 |
+| 23 | [Stop a frame: the dispute and the cancel](#23-stop-a-frame-the-dispute-and-the-cancel) | counter | P07 |
+| 24 | [Damage charge: nothing picked yet](#24-damage-charge-nothing-picked-yet) | counter | P07 |
+| 25 | [Undo done](#25-undo-done) | counter | P07 |
+| 26 | [Pause all from the action bar](#26-pause-all-from-the-action-bar) | counter | P07 |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -243,6 +250,87 @@ Below the numbered pieces there are also [the approved screens that change](#app
 
 ![Who plays after the type changes](no-design/change-type-players.png)
 
+## 20. The panel of a Century, a room or a double
+
+- **What:** screen 11 draws a single frame. The same panel serves every game on a table: a Century (title "Table 3, Century",
+  "Century, Rs 15 a minute", "Under Saad Hussain", "End Century", no session score, a timer that is never the red card), a room
+  ("Room, Rs 1,500 an hour", "End room"), a double frame (the two sides as first names) and a game of pool or the others. A frame
+  past its limit has the red card in the panel too. A game that is not a frame says "Discard game" where a frame says "Discard
+  frame". A paused game shows "Paused since 9:58 PM" in yellow and a Resume button in place of Pause.
+- **Where:** `/table/t3` (a Century), `/table/r1` (a room), `/table/t5` (a double).
+- **Words:** "Table 3, Century", "Century, {{price}} a minute", "Room, {{price}} an hour", "Under {{name}}", "End Century", "End room",
+  "End game", "Discard game", "Resume", "Paused since {{time}}". Urdu: see `docs/URDU_TO_CHECK.md`.
+- **Built from:** screen 11.
+
+![The panel of a Century](no-design/panel-century.png)
+
+## 21. The panel in the first 5 minutes: Change game type
+
+- **What:** screen 11 shows a dashed note once the 5 minutes are over ("Change game type was open until 9:28 PM"). Inside the 5
+  minutes the note is replaced by a button, "Change game type", with the minutes left beside it. It opens screen 12. Only snooker
+  tables have it (the other games have one kind of game).
+- **Where:** `/table/t2?scenario=newGame` at 9:53 PM.
+- **Words:** "Change game type", "2 minutes left to change", "1 minute left to change".
+- **Built from:** screen 11 and the outline button of screen 7.
+
+![The panel with the change button](no-design/panel-change-type-open.png)
+
+## 22. Move a room, and the players to pick from
+
+- **What:** a game moves only to a free table of the same kind, so a room is offered the other rooms and a snooker table the other
+  snooker tables. With nothing typed, "Who is coming in?" offers the four players who played here lately (never the ones already in
+  the game), so a replacement can be picked with one tap. If there is no other table, the panel says so.
+- **Where:** `/table/r1/move`.
+- **Words:** "Move Room 1 to another table", "Rs 1,500/hr, same price", "There is no other table of this kind to move to." and the
+  words of screen 13.
+- **Built from:** screen 13.
+
+![Moving a room](no-design/move-a-room.png)
+
+## 23. Stop a frame: the dispute and the cancel
+
+- **What:** screen 14 draws Discard frame picked. The other two choices use the same dialog. The button says what will happen:
+  "Discard frame" (or "Discard game" for a Century, a room or a game), "Mark as dispute", "Cancel game". A reason is always asked
+  for; the note is optional. What is written for the owners is the reason in English whatever language the counter is in, with the
+  note after it. A dispute and a cancel are sent as one text: the reason, then the note.
+- **Where:** `/table/t6/stop`, pick "Unpaid, dispute".
+- **Words:** "Mark as dispute", "Cancel game", "Discard game".
+- **Built from:** screen 14.
+
+![Stopping a frame as a dispute](no-design/stop-dispute.png)
+
+## 24. Damage charge: nothing picked yet
+
+- **What:** screen 15 draws Ali, Cue and Rs 1,500 already picked. It is money, so the dialog starts with nothing picked (who pays,
+  what was damaged, the amount, the note); the button says "Add to the bill" and stays off until all four are filled in, and then says
+  what it will do ("Add Rs 1,500 to Ali’s bill"). A Century has one player, so he is the only one offered.
+- **Where:** `/table/t1/damage`.
+- **Words:** "Add to the bill", "Shows on the player’s statement as a damage charge. Owners see it in Activity."
+- **Built from:** screen 15.
+
+![The damage charge with nothing picked](no-design/damage-nothing-picked.png)
+
+## 25. Undo done
+
+- **What:** after "Undo" on the toast of screen 14, the toast says what happened for four seconds, then goes. The table is free again
+  and the owners see the undo in Activity with the worker's name (D16).
+- **Where:** any counter screen within 2 minutes of starting a game, for example `/?scenario=newGame` at 9:50:18 PM, then Undo.
+- **Words:** "Game undone on Table 2."
+- **Built from:** the toast of screen 14.
+
+![The toast after Undo](no-design/undo-done.png)
+
+## 26. Pause all from the action bar
+
+- **What:** the "Pause all" button pauses every running game at once and the board becomes the power-cut board of screen 16. While
+  it is on, the button is off (there is nothing left to pause); "Resume all games" on the banner is the way back. Tiles that were
+  paused one by one show "paused 3 min ago" as before; after Pause all they show the Resume button of screen 16.
+- **Where:** `/`, then "Pause all" in the action bar.
+- **Words:** the words of screen 16.
+- **Built from:** screen 16.
+
+![The board after Pause all](no-design/pause-all-pressed.png)
+
 ## Approved screens that change a field or a word
 
 These are changes to screens the owners already approved. They are built in P15 and P16 (the owner screens), so there is no
@@ -300,3 +388,20 @@ picture yet; each one is listed here so the owners see it with the rest of the b
 
 - **Change:** the rate row is always there (so the dialog keeps its height) but its minus, plus and number work only while Century is
   picked. A frame is picked to begin with.
+
+### Screen 11, A game that is running: more than a single frame
+
+- **Change:** the panel also serves a Century, a room, a double and a game, and has a "Change game type" button in the first 5
+  minutes (section 21). The six buttons are always the same six; "Replace player" and "Move table" both open screen 13, which has
+  both panels. "Canteen item" opens the canteen (P10).
+
+### Screen 14, Stop a frame: the toast
+
+- **Change:** the cream toast is the one the PNG draws, not the dark `Toast`: it is built for the counter only (`UndoToast`), it finds
+  the game from the board (the worker's own latest game started in the last 2 minutes), so it is on every screen and survives a
+  reload, and a dialog on screen leaves room for it underneath.
+
+### Screen 16, Power cut: what is compared
+
+- **Change:** none to the screen. The PNG leaves out the tabs, the waiting list and the action bar of the live board (the developer
+  chose the full bar everywhere in P05), so the visual test compares the banner and the tiles, not the whole page.

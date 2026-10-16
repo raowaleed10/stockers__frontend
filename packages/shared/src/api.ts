@@ -146,6 +146,8 @@ export interface BoardResponse {
   unread: number;
   backedUpAt: ISO;
   pausedAll: boolean;
+  /** When Pause all was pressed, while it is on (the banner of screen 16: "Paused at 9:58 PM"). */
+  pausedAllAt?: ISO;
 }
 
 // ---------------------------------------------------------------------------------------------

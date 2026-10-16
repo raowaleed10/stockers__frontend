@@ -186,9 +186,12 @@ describe('scenarios', () => {
   it('paused: every game is paused since 9:58 PM and the board says so (screen 16)', () => {
     const db = make({ scenario: 'paused' });
     expect(db.s.games.every((g) => g.status === 'paused')).toBe(true);
-    expect(db.game('g-t1-3').pausedAt).toBe('2026-10-03T21:58:00+05:00');
-    expect(db.game('g-t6-1').pausedAt).toBe('2026-10-03T21:39:00+05:00');
+    // The games of screen 16, all stopped by Pause all at 9:58 PM.
+    expect(db.s.games.map((g) => g.tableId)).toEqual(['t1', 't2', 't4', 't5', 'r1', 'r2']);
+    expect(db.s.games.every((g) => g.pausedAt === '2026-10-03T21:58:00+05:00')).toBe(true);
     expect(board(db).pausedAll).toBe(true);
+    expect(board(db).pausedAllAt).toBe('2026-10-03T21:58:00+05:00');
+    expect(board(db, 'all').tables.find((t) => t.id === 't1')?.session?.frames).toHaveLength(3);
   });
 
   it('checkout: 8 players are waiting, Rs 6,880 in all (screen 24)', () => {

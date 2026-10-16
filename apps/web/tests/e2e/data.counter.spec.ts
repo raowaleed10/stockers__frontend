@@ -108,8 +108,12 @@ test.describe('/dev/data (counter)', () => {
 
   test('?scenario=paused shows every game paused since the power cut', async ({ page }) => {
     await open(page, '?scenario=paused');
-    for (const id of ['t1', 't3', 't4', 't5', 't6', 'r1']) {
+    // The games of screen 16: Tables 1, 2, 4 and 5 and both rooms. Tables 3 and 6 are free.
+    for (const id of ['t1', 't2', 't4', 't5', 'r1', 'r2']) {
       await expect(row(page, id)).toContainText('Paused');
+    }
+    for (const id of ['t3', 't6']) {
+      await expect(row(page, id)).toContainText('Free');
     }
     await expect(page.getByText(/10:0[0-9] PM/).first()).toBeVisible();
   });

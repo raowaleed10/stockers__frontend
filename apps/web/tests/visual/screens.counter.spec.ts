@@ -53,6 +53,10 @@ const BUILT: Record<
      * board is taller than the screen and scrolls). The picture is taken of the window.
      */
     window?: boolean;
+    /** Compare only this part of the design (a banner, a panel). The size of the page is then not compared. */
+    crop?: Rect;
+    /** Our picture is cut this far right and down from the design's: the real top bar is 83 px, the designs draw 70. */
+    shift?: { x: number; y: number };
   }
 > = {
   3: {},
@@ -142,6 +146,58 @@ const BUILT: Record<
       await blur(page);
     },
   },
+  // Screen 11: the panel of a running table. The designs draw a 70 px header and no bottom bar, so only the panel is
+  // compared, with ours moved up by the 13 px the real top bar is taller.
+  11: {
+    window: true,
+    crop: { x: 880, y: 70, width: 560, height: 817 },
+    shift: { x: 0, y: 13 },
+  },
+  // Screen 13: the move and replace panels. Search "usm" and pick Ali, then Usman Tariq, as the PNG does.
+  13: {
+    window: true,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Ali Raza/ }).click();
+      await page.getByRole('searchbox', { name: 'Search the new player' }).fill('usm');
+      await page.getByRole('button', { name: /^Usman Tariq/ }).click();
+      await blur(page);
+    },
+  },
+  // Screen 14: the PNG's toast says 1:42 left, 18 seconds after the game started at 9:50 on Table 2.
+  14: {
+    window: true,
+    scenario: 'newGame',
+    now: '2026-10-03T21:50:18+05:00',
+    prepare: async (page) => {
+      await page.getByRole('button', { name: 'Players left halfway' }).click();
+      await page.getByLabel('Note (optional)').fill('Tariq got a call and left after 12 minutes');
+      await expect(page.getByText(/^Undo for \d:\d\d more$/)).toBeVisible();
+      await blur(page);
+    },
+    // The countdown keeps running while the page loads, so the words with the seconds are left out.
+    masks: async (page) => {
+      const box = await page.getByText(/^Undo for/).boundingBox();
+      return box ? [box] : [];
+    },
+  },
+  15: {
+    window: true,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Ali Raza/ }).click();
+      await page.getByRole('button', { name: 'Cue', exact: true }).click();
+      await page.getByRole('button', { name: '1,500', exact: true }).click();
+      await page
+        .getByLabel('Note (required)')
+        .fill('Cue snapped at the joint after he hit the cushion');
+      await blur(page);
+    },
+  },
+  // Screen 16: the real board has tabs, a waiting list and the action bar that the PNG leaves out (P05 answer 1), so the
+  // power-cut banner is compared, and the tiles are compared in tiles.counter.spec.ts.
+  16: {
+    crop: { x: 24, y: 99, width: 1392, height: 104 },
+    shift: { x: 0, y: 2 },
+  },
   34: {
     masks: async (page) => {
       const box = await page.getByTestId('big-clock').boundingBox();
@@ -202,14 +258,15 @@ test.describe('counter screens against their PNGs', () => {
       const masks = (await BUILT[screen.n].masks?.(page)) ?? [];
       const png = readFileSync(path.join(REPO, 'design/screens', `${screen.file}.png`));
       const shot = await page.screenshot({ fullPage: !BUILT[screen.n].window });
-      const result = await comparePngs(scratch, shot, png, { masks });
+      const { crop, shift } = BUILT[screen.n];
+      const result = await comparePngs(scratch, shot, png, { masks, crop, oursShift: shift });
       const picture = `${String(screen.n).padStart(2, '0')}-${screen.file}`;
       saveComparison('screens', picture, result);
 
       expect(problems, 'the page logged errors').toEqual([]);
 
       // The page must be the size the design draws; a different size means the layout moved.
-      expect(result.ours, 'size of the page').toEqual(result.design);
+      if (!BUILT[screen.n].crop) expect(result.ours, 'size of the page').toEqual(result.design);
       expect(
         result.ratio,
         `${(result.ratio * 100).toFixed(1)} % of the pixels differ (see test-results/screens)`,

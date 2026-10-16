@@ -1858,15 +1858,47 @@
     },
     "paused": {
       "now": "2026-10-03T22:01:00+05:00",
-      "note": "Power cut. Zain pressed Pause all at 9:58 PM; every running game is paused (screen 16).",
+      "note": "Power cut. Zain pressed Pause all at 9:58 PM; every running game is paused (screen 16). The games are the ones screen 16 draws at that moment: Table 1 in frame 4, a Century on Table 2, Table 4 in frame 2, a double on Table 5 and both rooms; Tables 3 and 6 are free.",
       "pauseAll": {
         "at": "2026-10-03T21:58:00+05:00",
-        "doneBy": {
-          "id": "zain",
-          "name": "Zain",
-          "role": "worker"
+        "doneBy": { "id": "zain", "name": "Zain", "role": "worker" }
+      },
+      "games": [
+        {
+          "id": "g-t1-4", "tableId": "t1", "sheetId": "s48", "type": "single", "maxMinutes": 30, "status": "running",
+          "startedAt": "2026-10-03T21:51:12+05:00", "startedBy": { "id": "zain", "name": "Zain", "role": "worker" }, "pausedMs": 0, "price": 250, "playerIds": ["ali-raza", "bilal"], "sessionId": "sess-t1", "frameNo": 4
+        },
+        {
+          "id": "g-t2-c", "tableId": "t2", "sheetId": "s48", "type": "century", "status": "running",
+          "startedAt": "2026-10-03T21:49:50+05:00", "startedBy": { "id": "zain", "name": "Zain", "role": "worker" }, "pausedMs": 0, "price": 15, "underPlayerId": "ahmed-nawaz"
+        },
+        {
+          "id": "g-t4-2", "tableId": "t4", "sheetId": "s48", "type": "single", "maxMinutes": 30, "status": "running",
+          "startedAt": "2026-10-03T21:46:40+05:00", "startedBy": { "id": "zain", "name": "Zain", "role": "worker" }, "pausedMs": 0, "price": 200, "playerIds": ["usman-t", "zubair"], "sessionId": "sess-t4", "frameNo": 2
+        },
+        {
+          "id": "g-t5-d", "tableId": "t5", "sheetId": "s48", "type": "double", "maxMinutes": 30, "status": "running",
+          "startedAt": "2026-10-03T21:47:55+05:00", "startedBy": { "id": "zain", "name": "Zain", "role": "worker" }, "pausedMs": 0, "price": 400, "sides": [["kamran", "faisal"], ["imran", "naveed"]]
+        },
+        {
+          "id": "g-r1", "tableId": "r1", "sheetId": "s48", "type": "room", "status": "running",
+          "startedAt": "2026-10-03T20:29:55+05:00", "startedBy": { "id": "zain", "name": "Zain", "role": "worker" }, "pausedMs": 0, "price": 1500, "underPlayerId": "ali-hassan"
+        },
+        {
+          "id": "g-r2", "tableId": "r2", "sheetId": "s48", "type": "room", "status": "running",
+          "startedAt": "2026-10-03T21:51:50+05:00", "startedBy": { "id": "zain", "name": "Zain", "role": "worker" }, "pausedMs": 0, "price": 1500, "underPlayerId": "danish"
         }
-      }
+      ],
+      "sessions": [
+        { "id": "sess-t1", "tableId": "t1", "playerIds": ["ali-raza", "bilal"], "frames": [
+          { "no": 1, "loserIds": ["bilal"], "amount": 250, "startedAt": "2026-10-03T20:31:00+05:00", "endedAt": "2026-10-03T20:55:00+05:00" },
+          { "no": 2, "loserIds": ["bilal"], "amount": 250, "startedAt": "2026-10-03T20:56:00+05:00", "endedAt": "2026-10-03T21:23:00+05:00" },
+          { "no": 3, "loserIds": ["bilal"], "amount": 250, "startedAt": "2026-10-03T21:23:00+05:00", "endedAt": "2026-10-03T21:51:00+05:00" }
+        ] },
+        { "id": "sess-t4", "tableId": "t4", "playerIds": ["usman-t", "zubair"], "frames": [
+          { "no": 1, "loserIds": ["zubair"], "amount": 200, "startedAt": "2026-10-03T21:19:00+05:00", "endedAt": "2026-10-03T21:46:30+05:00" }
+        ] }
+      ]
     },
     "checkout": {
       "now": "2026-10-03T22:20:00+05:00",
