@@ -41,20 +41,24 @@ function TypeStep({ table, category }: TableContext) {
 
   const name = tBoard(`nameOf.${table.kind}`, { number: table.number.replace(/^R/i, '') });
 
+  // A grey table cannot start a game: it says why, and a worker can put it back in order (D60).
+  if (table.outOfOrder) {
+    return <Navigate to={tablePath(pathname, table.id, '/back-in-order')} replace />;
+  }
   if (table.kind === 'room')
     return <Navigate to={roomPath(pathname, table.id, '/start')} replace />;
   if (table.game) return <Navigate to={tablePath(pathname, table.id)} replace />;
-  if (table.kind !== 'snooker' && table.price !== null && !table.outOfOrder) {
+  if (table.kind !== 'snooker' && table.price !== null) {
     return <Navigate to={tablePath(pathname, table.id, '/start/players')} replace />;
   }
 
-  // A table that cannot be started says why, in the same dialog, with only a way out.
-  if (table.outOfOrder || table.price === null) {
+  // A table with no price says why, in the same dialog, with only a way out.
+  if (table.price === null) {
     return (
       <CounterDialog
         lead={table.number}
-        title={table.outOfOrder ? t('outOfOrder.is', { name }) : t('outOfOrder.noPrice', { name })}
-        subtitle={table.outOfOrder ? table.outOfOrder.note : tBoard('locked')}
+        title={t('outOfOrder.noPrice', { name })}
+        subtitle={tBoard('locked')}
         onClose={close}
         actions={
           <Button theme="counter" size="counter-main" onClick={close}>

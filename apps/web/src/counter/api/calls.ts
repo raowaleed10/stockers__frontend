@@ -26,6 +26,7 @@ import type {
   GameView,
   MoveGameRequest,
   NewPlayerRequest,
+  BackInOrderRequest,
   OutOfOrderRequest,
   PlayerStatement,
   PlayerWithTail,
@@ -91,6 +92,8 @@ export const endRoom = (id: string) => api.post<EndGameResult>(`/games/${id}/end
 // Tables
 export const markOutOfOrder = (tableId: string, request: OutOfOrderRequest) =>
   api.post<Table>(`/tables/${tableId}/out-of-order`, request);
+export const backInOrder = (tableId: string, request: BackInOrderRequest) =>
+  api.post<Table>(`/tables/${tableId}/back-in-order`, request);
 
 // Players
 export const recentPlayers = () => api.get<PlayerWithTail[]>('/players/recent');

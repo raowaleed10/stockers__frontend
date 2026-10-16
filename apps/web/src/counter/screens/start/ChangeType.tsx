@@ -38,8 +38,10 @@ const playerIdsOf = (game: Game): string[] => [
 /**
  * Screen 12, `/table/:id/change-type`: within the first 5 minutes the worker can change a frame into a double frame
  * or a Century (D17). The same three cards as screen 7, with "Now" on the type the game has, the Century rate, and
- * how long is left. Choosing a type goes on to the players (screens 8 and 9, with the game's own players already in
- * them), because who pays for a Century or who is on which side cannot be guessed (docs/NO_DESIGN.md).
+ * how long is left. The new type always needs something the game does not have: a Century needs one name, a double
+ * needs the sides (3 or 4 players), a single frame needs two. So the one extra step (screens 8 and 9) opens with the
+ * game's own players already in it: the first player for a Century, the current pairs for a double, one from each side
+ * for a single frame (D58, D60, docs/NO_DESIGN.md).
  */
 export function ChangeType() {
   const { id } = useParams<{ id: string }>();
@@ -113,7 +115,9 @@ function ChangeStep({ table, category, board }: TableContext) {
 
   const next = () => {
     const ids = playerIdsOf(game);
-    const players = pick === 'century' ? ids.slice(0, 1) : pick === 'single' ? ids.slice(0, 2) : [];
+    // A single frame from a double starts with one player from each side, so two partners are not set against each other.
+    const frame = game.sides ? game.sides.map((side) => side[0]).filter(Boolean) : ids.slice(0, 2);
+    const players = pick === 'century' ? ids.slice(0, 1) : pick === 'single' ? frame : [];
     const sides: [PickedPlayer[], PickedPlayer[]] =
       pick !== 'double'
         ? [[], []]

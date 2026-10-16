@@ -162,14 +162,15 @@ test.describe('what a tap does', () => {
     await expect(page).toHaveURL(/\/room\/r2\/start$/);
   });
 
-  test('an out-of-order table does nothing and says why', async ({ page }) => {
+  test('an out-of-order table says why, and a tap opens the put-back dialog (D60)', async ({
+    page,
+  }) => {
     await open(page, `/?now=${NIGHT}`);
     const t7 = page.getByRole('button', { name: 'Table 7, out of order' });
-    // Playwright counts aria-disabled as "not enabled", so the tap is forced: a real finger can still touch it.
-    await t7.click({ force: true });
-    await expect(page).toHaveURL(/\/\?now=|\/$/);
-    expect(new URL(page.url()).pathname).toBe('/');
     await expect(t7).toContainText('Cloth change');
+    await t7.click();
+    await expect(page).toHaveURL(/\/table\/t7\/back-in-order/);
+    await expect(page.getByRole('dialog', { name: 'Table 7 is out of order' })).toBeVisible();
   });
 
   test('a tab opens its game, and a waiting player opens his bill', async ({ page }) => {

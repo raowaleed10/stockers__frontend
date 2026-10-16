@@ -108,6 +108,10 @@ export const useMarkOutOfOrder = () =>
   useAction((v: { tableId: string; request: Parameters<typeof calls.markOutOfOrder>[1] }) =>
     calls.markOutOfOrder(v.tableId, v.request),
   );
+export const useBackInOrder = () =>
+  useAction((v: { tableId: string; request: Parameters<typeof calls.backInOrder>[1] }) =>
+    calls.backInOrder(v.tableId, v.request),
+  );
 export const useCreatePlayer = () => useAction(calls.createPlayer, [['players']]);
 export const usePayCheckout = () =>
   useAction((v: { playerId: string; request: Parameters<typeof calls.payCheckout>[1] }) =>

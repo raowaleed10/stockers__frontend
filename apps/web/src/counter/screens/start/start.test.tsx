@@ -1,6 +1,8 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { markOutOfOrder } from '@/mocks/db/board';
+import { changeGameType } from '@/mocks/db/games';
 import { createTestApi } from '@/mocks/test-server';
 import {
   renderCounter,
@@ -144,11 +146,50 @@ describe('screen 7: start a game, choose the type', () => {
     });
   });
 
-  it('a table that cannot be started says why, and a table in use opens the game instead', async () => {
-    renderCounter('/table/t7/start');
-    const d = await dialog('Table 7 is out of order');
-    expect(within(d).getByText(/^Marked|^Cloth change/)).toBeInTheDocument();
+  it('a table with no price says why and cannot start', async () => {
+    renderCounter('/board/pool/table/po1/start');
+    const d = await dialog('Pool table 1 has no price yet');
+    expect(within(d).getByText('Locked until an owner sets the price')).toBeInTheDocument();
     expect(within(d).queryByRole('button', { name: 'Next: pick players' })).not.toBeInTheDocument();
+  });
+
+  it('a grey table that an owner marked says so and has no way to put it back (D60)', async () => {
+    renderCounter('/table/t7/back-in-order');
+    const d = await dialog('Table 7 is out of order');
+    expect(d).toHaveTextContent('Cloth change. Marked by Adil at 4:15 PM');
+    expect(d).toHaveTextContent('Adil marked this table. Only an owner can put it back.');
+    expect(within(d).queryByRole('button', { name: 'Put back in order' })).toBeNull();
+    expect(within(d).queryByRole('textbox')).toBeNull();
+  });
+
+  it('a worker taps a grey table that a worker marked, writes a note and puts it back in order', async () => {
+    markOutOfOrder(api.db, { id: 'shabir', name: 'Shabir', role: 'worker' }, 't2', 'Cloth change');
+    const view = renderCounter('/');
+    await userEvent.click(await screen.findByRole('button', { name: 'Table 2, out of order' }));
+    expect(wherePath(view)).toBe('/table/t2/back-in-order');
+    const d = await dialog('Table 2 is out of order');
+    const confirm = within(d).getByRole('button', { name: 'Put back in order' });
+    expect(confirm).toBeDisabled();
+    await userEvent.type(within(d).getByLabelText('Note (required)'), 'Cloth changed');
+    await userEvent.click(confirm);
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+    expect(await screen.findByRole('button', { name: 'Table 2, free' })).toBeInTheDocument();
+    expect(api.db.table('t2').outOfOrder).toBeUndefined();
+    expect(api.db.s.activity[0]).toMatchObject({
+      type: 'out-of-order',
+      title: 'Table 2 put back in order',
+      by: { name: 'Zain' },
+    });
+  });
+
+  it('a table that is in order has nothing to put back and goes to the board', async () => {
+    const view = renderCounter('/table/t2/back-in-order');
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+  });
+
+  it('/start on a grey table goes to the put-back dialog', async () => {
+    const view = renderCounter('/table/t7/start');
+    await waitFor(() => expect(wherePath(view)).toBe('/table/t7/back-in-order'));
   });
 
   it('a table in use goes to the running game, and a room to its own start', async () => {
@@ -603,6 +644,29 @@ describe('screen 12: change the game type in the first 5 minutes', () => {
     await userEvent.click(within(sides).getByRole('button', { name: 'Change to Double frame' }));
     await waitFor(() => expect(gameOn('t2')?.type).toBe('double'));
     expect(gameOn('t2')?.price).toBe(500);
+  });
+
+  it('a double changed to a single frame starts with one player from each side, not two partners (D60)', async () => {
+    at953();
+    changeGameType(api.db, { id: 'zain', name: 'Zain', role: 'worker' }, gameOn('t2')?.id ?? '', {
+      type: 'double',
+      sides: [['ahmed-nawaz', 'ali-akbar'], ['imran']],
+    });
+    const view = renderCounter('/table/t2/change-type');
+    const d = await dialog('Change the game on Table 2');
+    await userEvent.click(within(d).getByRole('button', { name: /^Single frame/ }));
+    await userEvent.click(within(d).getByRole('button', { name: 'Change to Single frame' }));
+    expect(wherePath(view)).toBe('/table/t2/change-type/players');
+    const players = await dialog('Who is playing on Table 2?');
+    const names = within(players)
+      .getAllByTestId('slot-filled')
+      .map((slot) => slot.textContent);
+    expect(names).toHaveLength(2);
+    expect(names[0]).toContain('Ahmed Nawaz');
+    expect(names[1]).toContain('Imran');
+    await userEvent.click(within(players).getByRole('button', { name: 'Change to Single frame' }));
+    await waitFor(() => expect(gameOn('t2')?.type).toBe('single'));
+    expect(gameOn('t2')?.playerIds).toEqual(['ahmed-nawaz', 'imran']);
   });
 
   it('at 6 minutes it is too late: the dialog says so and offers no change', async () => {

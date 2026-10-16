@@ -69,7 +69,7 @@ export interface Sheet { id: string; number: number; openedAt: ISO; openedBy: Pe
   cash: { received: Rs; drawerExpenses: Rs; expected: Rs; counted?: Rs; difference?: Rs; note?: string };
   online: Record<string, Rs>; frames: number; centuryMinutes: number; roomMinutes: number; editedBy?: PersonRef[] }
 
-export type ActivityType = 'discount' | 'discard' | 'dispute' | 'cancel' | 'undo' | 'double-charge' | 'damage' | 'drawer-expense'
+export type ActivityType = 'discount' | 'discard' | 'dispute' | 'cancel' | 'undo' | 'double-charge' | 'damage' | 'drawer-expense' | 'out-of-order'
   | 'edit' | 'left-without-checkout' | 'cash-difference' | 'pause-all' | 'price-change' | 'worker-change' | 'settings-change' | 'sign-in' | 'sign-out';
 export interface ActivityEvent { id: string; at: ISO; by: PersonRef; type: ActivityType; title: string; detail?: string; amount?: Rs;
   sheetId?: string; needsDecision?: boolean }
@@ -98,14 +98,15 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `POST /games/:id/change-type` | `{type, ...}` (within 5 min) | 12 |
 | `POST /games/:id/pause` · `/resume` · `POST /games/pause-all` · `/resume-all` | | 11, 16 |
 | `POST /games/:id/move` `{toTableId}` · `POST /games/:id/replace` `{outId, inId}` | | 13 |
-| `POST /games/:id/discard` `{reason, note}` · `/dispute` `{note}` · `/cancel` `{reason}` · `/undo` | | 14 |
+| `POST /games/:id/discard` `{reason, note}` · `/dispute` `{note}` · `/cancel` `{reason?}` · `/undo` | `/undo` is for the worker who started the game, in its first 2 minutes (`NOT_ALLOWED` for another worker, `UNDO_EXPIRED` after). `/cancel` in the first 2 minutes of the caller's own game does exactly what `/undo` does and needs no reason; after that, or on another worker's game, it needs a `reason` (`NOTE_REQUIRED`). D60 | 14 |
 | `POST /games/:id/damage` | `{playerId, item, amount, note}` | 15 |
 | `POST /games/:id/end` | `{loserIds, split?, chargeDouble?}` → charged lines | 17, 19, 20 |
 | `POST /games/:id/next` | same players, next frame | 18 |
 | `POST /games/:id/end-century` | → minutes, amount | 21 |
 | `POST /rooms/:tableId/start` · `POST /games/:id/end-room` | `{underPlayerId, hourly}` | 22, 23 |
 | `GET /players?q=` · `GET /players/recent` · `POST /players` `{name, phone?}` · `GET /players/:id/statement` | `?q=` matches a name or nickname that starts with the text or has a word that does ("ali" finds Ali Raza and Hamid Ali, not Malik), or three or more digits of the phone number. Each player carries `lastPlayedAt` (the start of his latest frame, game, Century or room, or of the game he is in; nothing if he has not played), which the counter writes as "Last played Thursday". `GET /players/recent` is the last eight to play, the latest first, for "Played here recently" (added in P06: the backend must implement it). A player made with `POST /players` needs only a name (Q18); a phone number, if given, has at least 10 digits | 8, 10, 30 |
-| `POST /tables/:id/out-of-order` `{note}` | A worker marks a **free** table out of order with a note (screen 7). Answers the table. `NOTE_REQUIRED` with no note, `TABLE_BUSY` if a game is running, `TABLE_OUT_OF_ORDER` if it already is. The counter's bell gets an alert ("Table 2 marked out of order by Zain"). **Putting it back in order is the owners'** (`PATCH /tables/:id` with `outOfOrder: null`); the counter has no call for it (added in P06: the backend must implement it) | 7 |
+| `POST /tables/:id/out-of-order` `{note}` | A worker marks a **free** table out of order with a note (screen 7). Answers the table. `NOTE_REQUIRED` with no note, `TABLE_BUSY` if a game is running, `TABLE_OUT_OF_ORDER` if it already is. The counter's bell gets an alert ("Table 2 marked out of order by Zain"). Written in Activity (`out-of-order`) with his name. Putting it back is `POST /tables/:id/back-in-order` (below) or, for an owner, `PATCH /tables/:id` with `outOfOrder: null` (added in P06: the backend must implement it) | 7 |
+| `POST /tables/:id/back-in-order` `{note}` | A worker puts a table back in order with a note (D60). Answers the table. A table a worker marked can be put back by any worker; a table an owner marked answers `NOT_ALLOWED` (403: "Adil marked Table 7 out of order. Only an owner can put it back."). `NOTE_REQUIRED` with no note, `VALIDATION` if the table is not out of order. Written in Activity (`out-of-order`, "Table 2 put back in order") with his name; an owner's `PATCH` with `outOfOrder: null` is written the same way and needs no note | 7 |
 | `GET /checkout` · `GET /checkout/:playerId` · `POST /checkout/:playerId` | `CheckoutRequest` | 24–27 |
 | `GET /canteen/items` · `POST /canteen/sales` | `{playerId|null, items, payNow?}` | 28 |
 | `POST /expenses/drawer` | `{category, amount, note}` → new expected drawer cash | 29 |
@@ -179,7 +180,7 @@ Code: `apps/web/src/mocks` (`db/` is the store, `counter/` and `owner/` are the 
 
 **Money model.** The seed's `balance` is the credit from before tonight. Each waiting bill is tonight's charges, posted at load as statement lines and added to the balance (Kamran 1,100 + 250 = 1,350, as on screen 30), so `balance` equals the sum of the statement lines for every player. A charge stays "tonight" until checkout; at close, bills not paid get a "Left without checkout" line. Payments clear the oldest money first (old credit), so what stays on credit after a checkout is new from tonight. Players the seed gives only a balance get one opening-balance line from an owner (D28).
 
-**Who did it.** The client never sends a name. Every write takes `doneBy` from the session and writes it on the record, on the sheet's history, and, for the D52 events (discount, discard, cancel, undo, dispute, double charge, damage, drawer expense, edit, left without checkout, cash difference, pause all, price change, worker change, settings change), in Activity. Activity and notifications dated after the demo clock are not listed yet.
+**Who did it.** The client never sends a name. Every write takes `doneBy` from the session and writes it on the record, on the sheet's history, and, for the D52 events (discount, discard, cancel, undo, dispute, double charge, damage, drawer expense, edit, left without checkout, cash difference, pause all, price change, worker change, settings change, and a table marked out of order or put back, D60), in Activity. Activity and notifications dated after the demo clock are not listed yet.
 
 **Live events** (what each refreshes; a key matches by its first word). The mock server fires them after every write; the counter map is `counter/api/invalidations.ts` and the owner map `owner/api/invalidations.ts`.
 

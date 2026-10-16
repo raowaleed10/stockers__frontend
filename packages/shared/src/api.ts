@@ -51,7 +51,8 @@ export type ApiErrorCode =
   | 'GAME_NOT_RUNNING' // 409
   | 'BILL_MISMATCH' // 400: the parts and credit do not make the bill
   | 'NOTE_REQUIRED' // 400
-  | 'OUT_OF_STOCK'; // 409
+  | 'OUT_OF_STOCK' // 409
+  | 'NOT_ALLOWED'; // 403: the signed-in person may not do this (an owner's table, another worker's game)
 
 export interface NotYourTimeDetails {
   slot: Slot;
@@ -212,7 +213,8 @@ export interface DisputeRequest {
   note: string;
 }
 export interface CancelRequest {
-  reason: string;
+  /** Required, except in the first 2 minutes of the worker's own game, when Cancel acts exactly like Undo (D60). */
+  reason?: string;
 }
 export interface DamageRequest {
   playerId: string;
@@ -250,6 +252,11 @@ export interface NewPlayerRequest {
 
 /** The note a worker writes when he marks a free table out of order (screen 7). Required. */
 export interface OutOfOrderRequest {
+  note: string;
+}
+
+/** The note a worker writes when he puts a table back in order (D60). Required. */
+export interface BackInOrderRequest {
   note: string;
 }
 

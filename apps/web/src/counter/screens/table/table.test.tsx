@@ -343,6 +343,38 @@ describe('screen 14: stop without the normal charge', () => {
     });
   });
 
+  it('Cancel in the first 2 minutes of his own game acts like Undo: no reason is asked and nothing is charged (D60)', async () => {
+    api.load({ scenario: 'newGame' });
+    at('2026-10-03T21:51:00+05:00');
+    const view = renderCounter('/table/t2/stop');
+    const d = await dialog('Stop Table 2 without the normal charge');
+    await userEvent.click(within(d).getByRole('button', { name: /^Cancel, started by mistake/ }));
+    expect(d).toHaveTextContent(
+      'Started less than 2 minutes ago, so this works like Undo: no reason is needed and nothing is charged.',
+    );
+    expect(within(d).queryByRole('button', { name: 'Table problem' })).toBeNull();
+    const confirm = within(d).getByRole('button', { name: 'Cancel game' });
+    expect(confirm).toBeEnabled();
+    await userEvent.click(confirm);
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+    expect(gameOn('t2')).toBeUndefined();
+    expect(lastActivity()).toMatchObject({
+      type: 'undo',
+      title: 'Game undone on Table 2',
+      by: { name: 'Zain' },
+    });
+  });
+
+  it('after 2 minutes Cancel asks for a reason again', async () => {
+    api.load({ scenario: 'newGame' });
+    at('2026-10-03T21:53:00+05:00');
+    renderCounter('/table/t2/stop');
+    const d = await dialog('Stop Table 2 without the normal charge');
+    await userEvent.click(within(d).getByRole('button', { name: /^Cancel, started by mistake/ }));
+    expect(within(d).getByRole('button', { name: 'Cancel game' })).toBeDisabled();
+    expect(within(d).getByRole('button', { name: 'Table problem' })).toBeInTheDocument();
+  });
+
   it('writes the reason in English even when the counter is in Urdu', async () => {
     setLanguage('ur');
     const view = renderCounter('/table/t6/stop');

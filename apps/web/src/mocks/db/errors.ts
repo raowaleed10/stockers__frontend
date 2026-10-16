@@ -31,6 +31,7 @@ const STATUS: Record<ApiErrorCode, number> = {
   BILL_MISMATCH: 400,
   NOTE_REQUIRED: 400,
   OUT_OF_STOCK: 409,
+  NOT_ALLOWED: 403,
 };
 
 export function fail(code: ApiErrorCode, message: string, details?: unknown): never {

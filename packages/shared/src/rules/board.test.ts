@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardCategory, BoardTable } from '../api';
 import type { Game, Session } from '../types';
-import { boardTabs, sessionStanding, summarizeTables, tableStatus } from './board';
+import {
+  boardTabs,
+  canPutBackInOrder,
+  sessionStanding,
+  summarizeTables,
+  tableStatus,
+} from './board';
 
 const MIN = 60_000;
 const NOW = Date.parse('2026-10-03T21:42:00+05:00');
@@ -281,5 +287,23 @@ describe('summarizeTables', () => {
     const tables = [table('4', { game: game('single', 29) })];
     expect(summarizeTables(tables, NOW).playing).toBe(1);
     expect(summarizeTables(tables, NOW + 2 * MIN)).toMatchObject({ playing: 0, overLimit: 1 });
+  });
+});
+
+describe('canPutBackInOrder (D60)', () => {
+  const worker = { role: 'worker' as const };
+  const owner = { role: 'owner' as const };
+
+  it('lets a worker put back a table that a worker marked', () => {
+    expect(canPutBackInOrder(worker, worker)).toBe(true);
+  });
+
+  it('keeps a table an owner marked for the owners', () => {
+    expect(canPutBackInOrder(owner, worker)).toBe(false);
+    expect(canPutBackInOrder(owner, owner)).toBe(true);
+  });
+
+  it('lets an owner put back a table a worker marked', () => {
+    expect(canPutBackInOrder(worker, owner)).toBe(true);
   });
 });

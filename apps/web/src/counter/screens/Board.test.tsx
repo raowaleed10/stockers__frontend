@@ -189,10 +189,10 @@ describe('what a tap does', () => {
     expect(wherePath(fourth)).toBe('/table/t6');
   });
 
-  it('an out-of-order table does nothing when it is pressed', async () => {
+  it('an out-of-order table opens the put-back dialog when it is pressed (D60)', async () => {
     const view = renderCounter('/');
     await userEvent.click(await tile('Table 7, out of order'));
-    expect(wherePath(view)).toBe('/');
+    expect(wherePath(view)).toBe('/table/t7/back-in-order');
   });
 
   it('a waiting player opens his bill', async () => {

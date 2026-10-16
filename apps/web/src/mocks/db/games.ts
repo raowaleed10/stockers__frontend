@@ -435,9 +435,16 @@ export function disputeGame(db: MockDb, by: PersonRef, id: string, request: Disp
   return game;
 }
 
-/** After the undo window a game can still be cancelled, with a reason the owners see (D16). */
+/**
+ * Cancel, started by mistake (D16, D60). In the first 2 minutes of the worker's own game it acts exactly like Undo: no
+ * reason, nothing charged, the same event. After that, or on another worker's game, a reason is required and the
+ * owners see it.
+ */
 export function cancelGame(db: MockDb, by: PersonRef, id: string, request: CancelRequest): Game {
   const game = activeGame(db, id);
+  if (canUndo(game.startedAt, db.now()) && game.startedBy.id === by.id) {
+    return undoGame(db, by, id);
+  }
   const table = db.table(game.tableId);
   const reason = request.reason?.trim();
   if (!reason) fail('NOTE_REQUIRED', 'Write why.');
@@ -450,10 +457,19 @@ export function cancelGame(db: MockDb, by: PersonRef, id: string, request: Cance
   return game;
 }
 
-/** Started by mistake: undo within 2 minutes with no reason (D16). */
+/**
+ * Started by mistake: undo within 2 minutes with no reason (D16). A worker can undo only his own game (D60); the
+ * owners do not use the counter, and another worker cancels with a reason.
+ */
 export function undoGame(db: MockDb, by: PersonRef, id: string): Game {
   const game = activeGame(db, id);
   const table = db.table(game.tableId);
+  if (game.startedBy.id !== by.id) {
+    fail(
+      'NOT_ALLOWED',
+      `${game.startedBy.name.split(' ')[0]} started this game, so only ${game.startedBy.name.split(' ')[0]} can undo it. Cancel it with a reason.`,
+    );
+  }
   if (!canUndo(game.startedAt, db.now())) {
     fail(
       'UNDO_EXPIRED',

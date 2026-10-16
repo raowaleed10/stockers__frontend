@@ -170,7 +170,30 @@ const SHOTS: Shot[] = [
   },
   {
     id: 'start-table-cannot-start',
-    url: `/table/t7/start?now=${NIGHT}`,
+    url: `/board/pool/table/po1/start?now=${NIGHT}`,
+    prepare: async (page) => {
+      await expect(
+        page.getByRole('dialog', { name: 'Pool table 1 has no price yet' }),
+      ).toBeVisible();
+      await blur(page);
+    },
+  },
+  // P07 answers: putting a table back in order (D60)
+  {
+    id: 'back-in-order-worker',
+    url: `/table/t2/start/out-of-order?now=${NIGHT}`,
+    prepare: async (page) => {
+      await page.getByLabel('Note (required)').fill('Cloth change');
+      await page.getByRole('button', { name: 'Mark out of order' }).click();
+      await page.getByRole('button', { name: 'Table 2, out of order' }).click();
+      const dialog = page.getByRole('dialog', { name: 'Table 2 is out of order' });
+      await dialog.getByLabel('Note (required)').fill('Cloth changed');
+      await blur(page);
+    },
+  },
+  {
+    id: 'back-in-order-owner',
+    url: `/table/t7/back-in-order?now=${NIGHT}`,
     prepare: async (page) => {
       await expect(page.getByRole('dialog', { name: 'Table 7 is out of order' })).toBeVisible();
       await blur(page);

@@ -2,7 +2,7 @@
 // Pure: `now` is always an argument.
 
 import type { BoardCategory, BoardTable } from '../api';
-import type { Game, Session, TableStatus } from '../types';
+import type { Game, PersonRef, Session, TableStatus } from '../types';
 import { elapsed, gameLimit, isGameOverLimit } from './time';
 
 /** One tab of the board: a game type, or snooker tables and rooms together. */
@@ -90,6 +90,17 @@ export function tableStatus(table: BoardTable, now: number): TableStatus {
   return isGameOverLimit(game, elapsed(game.startedAt, now, game.pausedMs, game.pausedAt))
     ? 'overLimit'
     : 'playing';
+}
+
+/**
+ * Who may put a table back in order (D60). A worker can put back a table that a worker marked; a table an owner marked
+ * (Adil on Table 7) can only be put back by an owner. An owner can put back any table.
+ */
+export function canPutBackInOrder(
+  markedBy: Pick<PersonRef, 'role'>,
+  by: Pick<PersonRef, 'role'>,
+): boolean {
+  return by.role === 'owner' || markedBy.role !== 'owner';
 }
 
 export interface TableSummary {

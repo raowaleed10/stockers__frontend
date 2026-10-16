@@ -40,7 +40,8 @@ export interface BoardTileProps {
  * One table of the live board (screens 3 to 6): a `BoardTable` turned into the words and numbers of a tile. It reads
  * the clock itself, so only this tile re-renders each second: the timer ticks, the amount of a Century or a room
  * grows, and a frame turns into the red card at 30:00 without a reload. Pressing it goes to the screen for what
- * can be done now; a table that is out of order or has no price does nothing, and says why on the tile.
+ * can be done now (a grey table opens the dialog that puts it back in order); a table with no price does nothing,
+ * and says why on the tile.
  */
 export function BoardTile({
   table,
@@ -207,8 +208,11 @@ export function BoardTile({
     }
   }
 
-  // What a tap does: start on a free table, open what is running. The tile itself ignores a tap when it is out of order.
-  if (status === 'free') {
+  // What a tap does: start on a free table, open what is running, and on a grey table open the put-back dialog (D60).
+  // A table with no price does nothing.
+  if (status === 'outOfOrder') {
+    props.onPress = () => navigate(tablePath(pathname, table.id, '/back-in-order'));
+  } else if (status === 'free') {
     props.onPress = () =>
       navigate(
         kind === 'room'

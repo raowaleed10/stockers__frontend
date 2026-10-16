@@ -245,6 +245,7 @@ export type ActivityType =
   | 'price-change'
   | 'worker-change'
   | 'settings-change'
+  | 'out-of-order'
   | 'sign-in'
   | 'sign-out';
 export interface ActivityEvent {

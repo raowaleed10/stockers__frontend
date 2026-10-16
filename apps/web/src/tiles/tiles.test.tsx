@@ -178,7 +178,24 @@ describe('a table with no price', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('a table that is out of order does nothing when pressed, and its note is its description', async () => {
+  it('a table that is out of order and has no press does nothing, and its note is its description', async () => {
+    render(
+      <GameTile
+        kind="snooker"
+        {...base('outOfOrder', {
+          note: { title: 'Cloth change', detail: 'Marked by Adil at 4:15 PM' },
+          ariaLabel: 'Table 7, out of order',
+        })}
+      />,
+    );
+    const tile = screen.getByRole('button', { name: 'Table 7, out of order' });
+    // Still focusable, so a screen reader can read why; it is not `disabled`.
+    expect(tile).not.toBeDisabled();
+    expect(tile).toHaveAttribute('aria-disabled', 'true');
+    expect(tile).toHaveAccessibleDescription(/^Cloth change\s*Marked by Adil at 4:15 PM$/);
+  });
+
+  it('a table that is out of order can be given a press: that is how a worker puts it back (D60)', async () => {
     const onPress = vi.fn();
     render(
       <GameTile
@@ -191,12 +208,10 @@ describe('a table with no price', () => {
       />,
     );
     const tile = screen.getByRole('button', { name: 'Table 7, out of order' });
-    // Still focusable, so a screen reader can read why; it is not `disabled`.
-    expect(tile).not.toBeDisabled();
-    expect(tile).toHaveAttribute('aria-disabled', 'true');
+    expect(tile).not.toHaveAttribute('aria-disabled');
     expect(tile).toHaveAccessibleDescription(/^Cloth change\s*Marked by Adil at 4:15 PM$/);
     await userEvent.click(tile);
-    expect(onPress).not.toHaveBeenCalled();
+    expect(onPress).toHaveBeenCalledTimes(1);
   });
 });
 

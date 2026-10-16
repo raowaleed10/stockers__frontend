@@ -5,6 +5,7 @@ import { CounterDialog } from '@/ui/CounterDialog';
 import { NotFound } from '@/ui/NotFound';
 import { AlertsPanel } from '../components/AlertsPanel';
 import { Board } from '../screens/Board';
+import { BackInOrder } from '../screens/start/BackInOrder';
 import { ChangeType } from '../screens/start/ChangeType';
 import { NewPlayer } from '../screens/start/NewPlayer';
 import { OutOfOrder } from '../screens/start/OutOfOrder';
@@ -69,6 +70,7 @@ const TABLE_ROUTES = [
   <Route key="start-players" path="table/:id/start/players" element={<StartPlayers />} />,
   <Route key="start-double" path="table/:id/start/double" element={<StartDouble />} />,
   <Route key="start-ooo" path="table/:id/start/out-of-order" element={<OutOfOrder />} />,
+  <Route key="back" path="table/:id/back-in-order" element={<BackInOrder />} />,
   <Route key="change" path="table/:id/change-type" element={<ChangeType />} />,
   <Route
     key="change-players"

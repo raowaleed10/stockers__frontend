@@ -9,7 +9,13 @@ import type {
   SheetSummary,
   WaitingBill,
 } from '@stockers/shared';
-import { billBreakdown, billParts, phoneTail, toClubIso } from '@stockers/shared';
+import {
+  billBreakdown,
+  billParts,
+  canPutBackInOrder,
+  phoneTail,
+  toClubIso,
+} from '@stockers/shared';
 import { counterUnread } from './alerts';
 import type { MockDb } from './db';
 import { fail } from './errors';
@@ -134,7 +140,7 @@ export function board(db: MockDb, requested?: string): BoardResponse {
 
 /**
  * `POST /tables/:id/out-of-order` (screen 7's "Mark out of order"): a worker puts a free table out of order with a note.
- * Putting it back is the owners' (`PATCH /tables/:id` with `outOfOrder: null`). The counter's bell gets an alert.
+ * The counter's bell gets an alert and Activity gets the event with his name. Putting it back is `backInOrder` (D60).
  */
 export function markOutOfOrder(db: MockDb, by: PersonRef, tableId: string, note: string): Table {
   const table = db.table(tableId);
@@ -149,7 +155,38 @@ export function markOutOfOrder(db: MockDb, by: PersonRef, tableId: string, note:
     `${table.name} marked out of order by ${by.name.split(' ')[0]}`,
     text,
   );
+  db.logActivity(by, 'out-of-order', `${table.name} marked out of order`, { detail: `“${text}”` });
   db.history(by, `Marked ${table.name} out of order: ${text}`);
   db.emit('board.changed', { tableId: table.id });
+  return table;
+}
+
+/**
+ * Puts a table back in order and writes it in Activity with the name of whoever did it. A worker needs a note and can
+ * only put back a table another worker marked; an owner can put back any table, and the note is optional for him.
+ */
+export function releaseTable(db: MockDb, by: PersonRef, table: Table, note?: string): void {
+  const marked = table.outOfOrder;
+  if (!marked) fail('VALIDATION', `${table.name} is not out of order.`);
+  if (!canPutBackInOrder(marked.by, by)) {
+    fail(
+      'NOT_ALLOWED',
+      `${marked.by.name.split(' ')[0]} marked ${table.name} out of order. Only an owner can put it back.`,
+    );
+  }
+  const text = note?.trim();
+  if (by.role !== 'owner' && !text) fail('NOTE_REQUIRED', 'Write what was done.');
+  delete table.outOfOrder;
+  db.logActivity(by, 'out-of-order', `${table.name} put back in order`, {
+    detail: `Was out of order: “${marked.note}”${text ? `. Now: “${text}”` : ''}`,
+  });
+  db.history(by, `Put ${table.name} back in order${text ? `: ${text}` : ''}`);
+  db.emit('board.changed', { tableId: table.id });
+}
+
+/** `POST /tables/:id/back-in-order`: a worker puts a table back, with a note (D60). */
+export function backInOrder(db: MockDb, by: PersonRef, tableId: string, note: string): Table {
+  const table = db.table(tableId);
+  releaseTable(db, by, table, note);
   return table;
 }

@@ -41,6 +41,8 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 24 | [Damage charge: nothing picked yet](#24-damage-charge-nothing-picked-yet) | counter | P07 |
 | 25 | [Undo done](#25-undo-done) | counter | P07 |
 | 26 | [Pause all from the action bar](#26-pause-all-from-the-action-bar) | counter | P07 |
+| 27 | [Put a table back in order](#27-put-a-table-back-in-order) | counter | P07 answers |
+| 28 | [A table an owner marked](#28-a-table-an-owner-marked) | counter | P07 answers |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -173,8 +175,8 @@ Below the numbered pieces there are also [the approved screens that change](#app
 ## 13. Mark out of order: the note
 
 - **What:** the "Mark out of order" button of screen 7 asks for a note before it does anything. The table then turns grey with the note
-  on the board, and the counter's bell gets an alert. Only a free table can be marked. A worker cannot put it back: an owner does that in
-  Games and prices (DEFAULT, needs answer: it is a question of who can do what).
+  on the board, and the counter's bell gets an alert. Only a free table can be marked. The event is written in Activity with the worker's name.
+  A worker can put back a table another worker marked ([27](#27-put-a-table-back-in-order)); answered by the developer on 17 Oct 2026.
 - **Where:** `/table/t2/start/out-of-order` (from "Mark out of order" on `/table/t2/start`).
 - **Words:** "Mark Table 2 out of order", "Write why, for example “Cloth change”. Everyone sees it on the table.", "Note (required)",
   "Mark out of order", "Cancel". Urdu: see `docs/URDU_TO_CHECK.md`.
@@ -184,14 +186,14 @@ Below the numbered pieces there are also [the approved screens that change](#app
 
 ## 14. A table that cannot be started
 
-- **What:** a table with no price, or one that is out of order, cannot start a game. Its start dialog says why and has one way out. The
-  board does not open this dialog by a tap (those tiles do nothing), so it is only reached by the address.
-- **Where:** `/table/t7/start` (Table 7 is out of order); a pool table with no price: `/board/pool/table/po1/start`.
-- **Words:** "Table 7 is out of order" with the note under it, or "Pool table 1 has no price yet" with "Locked until an owner sets the
-  price" (the words of screen 4), and "Cancel".
+- **What:** a table with no price cannot start a game. Its start dialog says why and has one way out. The board does not open this
+  dialog by a tap (those tiles do nothing), so it is only reached by the address. A table that is out of order is different: a tap
+  opens the dialog that puts it back in order ([27](#27-put-a-table-back-in-order)), and its `/start` address goes there.
+- **Where:** a pool table with no price: `/board/pool/table/po1/start`.
+- **Words:** "Pool table 1 has no price yet" with "Locked until an owner sets the price" (the words of screen 4), and "Cancel".
 - **Built from:** the dialog of screen 7.
 
-![Table 7 cannot be started](no-design/start-table-cannot-start.png)
+![Pool table 1 cannot be started](no-design/start-table-cannot-start.png)
 
 ## 15. Starting pool, foosball, carrom, ludo and PlayStation
 
@@ -241,9 +243,10 @@ Below the numbered pieces there are also [the approved screens that change](#app
 ## 19. Change the game type: who plays after the change
 
 - **What:** on screen 12 "Change to Century" cannot know who pays for the Century, or who is on which side of a double, so it goes on to
-  the players (screen 8 or 9) with the game's own players already in the slots; the last button says "Change to Century" again and
-  does the change. The game keeps its start time and counts from there. Back returns to the three choices. (DEFAULT, needs answer: a
-  question of who is charged.)
+  the players (screen 8 or 9) with the game's own players already in the slots: the first player for a Century, the current pairs for a
+  double, one player from each side for a single frame. The last button says "Change to Century" again and does the change. The game
+  keeps its start time and counts from there. Back returns to the three choices. Every change between snooker types needs a name or the
+  sides, so this step is always there. Answered by the developer on 17 Oct 2026.
 - **Where:** `/table/t2/change-type?scenario=newGame` at 9:53 PM, pick Century, "Change to Century".
 - **Words:** "Who is playing on Table 2?", "Change to Century", "Change to Double frame", "Back to game type".
 - **Built from:** screens 8 and 9.
@@ -292,7 +295,11 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **What:** screen 14 draws Discard frame picked. The other two choices use the same dialog. The button says what will happen:
   "Discard frame" (or "Discard game" for a Century, a room or a game), "Mark as dispute", "Cancel game". A reason is always asked
   for; the note is optional. What is written for the owners is the reason in English whatever language the counter is in, with the
-  note after it. A dispute and a cancel are sent as one text: the reason, then the note.
+  note after it. A dispute and a cancel are sent as one text: the reason, then the note. **Exception, answered on 17 Oct 2026:** "Cancel,
+  started by mistake" in the first 2 minutes of the worker's own game acts exactly like Undo: no reason is asked, nothing is charged,
+  and Activity shows "Game undone". The card says "Wrong table or wrong players. In the first 2 minutes it works like Undo: no reason,
+  nothing charged." and the dialog says "Started less than 2 minutes ago, so this works like Undo: no reason is needed and nothing is
+  charged." After 2 minutes, or on another worker's game, a reason is asked as before.
 - **Where:** `/table/t6/stop`, pick "Unpaid, dispute".
 - **Words:** "Mark as dispute", "Cancel game", "Discard game".
 - **Built from:** screen 14.
@@ -303,7 +310,8 @@ Below the numbered pieces there are also [the approved screens that change](#app
 
 - **What:** screen 15 draws Ali, Cue and Rs 1,500 already picked. It is money, so the dialog starts with nothing picked (who pays,
   what was damaged, the amount, the note); the button says "Add to the bill" and stays off until all four are filled in, and then says
-  what it will do ("Add Rs 1,500 to Ali’s bill"). A Century has one player, so he is the only one offered.
+  what it will do ("Add Rs 1,500 to Ali’s bill"). A Century has one player, so he is the only one offered. Approved by the developer on
+  17 Oct 2026; the visual test leaves the picked state out of the comparison.
 - **Where:** `/table/t1/damage`.
 - **Words:** "Add to the bill", "Shows on the player’s statement as a damage charge. Owners see it in Activity."
 - **Built from:** screen 15.
@@ -313,7 +321,8 @@ Below the numbered pieces there are also [the approved screens that change](#app
 ## 25. Undo done
 
 - **What:** after "Undo" on the toast of screen 14, the toast says what happened for four seconds, then goes. The table is free again
-  and the owners see the undo in Activity with the worker's name (D16).
+  and the owners see the undo in Activity with the worker's name (D16). A worker can undo only his own game: the toast shows only the
+  game he started, and the server refuses another worker's undo (answered on 17 Oct 2026).
 - **Where:** any counter screen within 2 minutes of starting a game, for example `/?scenario=newGame` at 9:50:18 PM, then Undo.
 - **Words:** "Game undone on Table 2."
 - **Built from:** the toast of screen 14.
@@ -330,6 +339,30 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **Built from:** screen 16.
 
 ![The board after Pause all](no-design/pause-all-pressed.png)
+
+## 27. Put a table back in order
+
+- **What:** a tap on a grey table opens a dialog. If a **worker** marked the table, another worker (or the same one) can put it back
+  with a short note: the dialog has a note box and "Put back in order", which stays off until the note is written. Both the marking
+  and the putting back are written in Activity with the worker's name. Answered by the developer on 17 Oct 2026. A table that is not
+  grey has nothing to put back, and a grey table's `/start` address opens this dialog.
+- **Where:** mark Table 2 out of order from `/table/t2/start`, then tap the grey tile.
+- **Words:** "Table 2 is out of order" with the note and "Marked by Zain at 9:42 PM", "Note (required)", "Write what was done, for
+  example “Cloth changed”. Everyone sees it.", "Put back in order", "Cancel". Urdu: see `docs/URDU_TO_CHECK.md`.
+- **Built from:** the dialog of screen 7 with the round brass ball and wrench of screen 15, and the note box of section 13.
+
+![A table a worker marked, with the note box](no-design/back-in-order-worker.png)
+
+## 28. A table an owner marked
+
+- **What:** the same dialog for a table an **owner** marked (Adil on Table 7): it says who marked it and that only an owner can put it
+  back (in Games and prices). It has no note box and no put-back button; the server refuses a worker's call as well.
+- **Where:** `/table/t7/back-in-order`, or tap the grey Table 7.
+- **Words:** "Table 7 is out of order" with "Cloth change. Marked by Adil at 4:15 PM", "Adil marked this table. Only an owner can put
+  it back.", "Cancel". Urdu: see `docs/URDU_TO_CHECK.md`.
+- **Built from:** section 27.
+
+![A table an owner marked](no-design/back-in-order-owner.png)
 
 ## Approved screens that change a field or a word
 

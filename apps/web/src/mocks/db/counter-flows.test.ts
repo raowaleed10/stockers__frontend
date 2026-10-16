@@ -539,6 +539,69 @@ describe('undo, cancel, discard and dispute', () => {
     expect(db.s.notifications[0]).toMatchObject({ kind: 'cancelled-or-discarded', read: false });
   });
 
+  it('a worker can undo only his own game (D60)', () => {
+    const db = make();
+    const zain = actor(db);
+    const shabir = { id: 'shabir', name: 'Shabir', role: 'worker' as const };
+    const game = startGame(db, zain, {
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['ahmed-nawaz', 'ali-akbar'],
+    });
+    clock += 30_000;
+    const error = refusal(() => undoGame(db, shabir, game.id));
+    expect([error.status, error.body.code]).toEqual([403, 'NOT_ALLOWED']);
+    expect(db.activeGameOn('t2')).toBeDefined();
+    expect(undoGame(db, zain, game.id).status).toBe('cancelled');
+  });
+
+  it('Cancel in the first 2 minutes of his own game acts exactly like Undo: no reason, nothing charged (D60)', () => {
+    const db = make();
+    const by = actor(db);
+    const game = startGame(db, by, {
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['ahmed-nawaz', 'ali-akbar'],
+    });
+    clock += 40_000;
+    expect(cancelGame(db, by, game.id, {}).status).toBe('cancelled');
+    expect(db.activeGameOn('t2')).toBeUndefined();
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'undo',
+      title: 'Game undone on Table 2',
+      detail: 'Started by mistake, undone after 40 seconds. No reason needed.',
+      by: { name: 'Zain' },
+    });
+    expect(db.tonightLines('ahmed-nawaz')).toHaveLength(0);
+  });
+
+  it('Cancel on another worker’s game, even in the first 2 minutes, needs a reason', () => {
+    const db = make();
+    const shabir = { id: 'shabir', name: 'Shabir', role: 'worker' as const };
+    const game = startGame(db, shabir, {
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['ahmed-nawaz', 'ali-akbar'],
+    });
+    clock += 30_000;
+    const by = actor(db);
+    expect(refusal(() => cancelGame(db, by, game.id, {})).body.code).toBe('NOTE_REQUIRED');
+    expect(cancelGame(db, by, game.id, { reason: 'Wrong table' }).status).toBe('cancelled');
+    expect(db.s.activity[0]).toMatchObject({ type: 'cancel', detail: '“Wrong table”' });
+  });
+
+  it('after 2 minutes Cancel needs a reason, even on his own game', () => {
+    const db = make();
+    const by = actor(db);
+    const game = startGame(db, by, {
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['ahmed-nawaz', 'ali-akbar'],
+    });
+    clock += 2 * 60_000 + 1000;
+    expect(refusal(() => cancelGame(db, by, game.id, {})).body.code).toBe('NOTE_REQUIRED');
+  });
+
   it('refuses an undo after 2 minutes, but allows a cancel with a reason', () => {
     const db = make();
     const by = actor(db);

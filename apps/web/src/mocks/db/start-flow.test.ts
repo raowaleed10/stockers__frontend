@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { eventBus, type LiveEventName } from '@/lib/events';
 import { requireWorker } from './auth';
 import { counterAlerts } from './alerts';
-import { board, markOutOfOrder } from './board';
+import { backInOrder, board, markOutOfOrder } from './board';
 import type { MockDb } from './db';
 import { MockApiError } from './errors';
 import { startGame } from './games';
@@ -200,5 +200,62 @@ describe('"Mark out of order" on screen 7 (POST /tables/:id/out-of-order)', () =
       'NOT_FOUND',
     );
     expect(db.table('t2').outOfOrder).toBeUndefined();
+  });
+});
+
+describe('putting a table back in order (POST /tables/:id/back-in-order, D60)', () => {
+  const shabir = { id: 'shabir', name: 'Shabir', role: 'worker' as const };
+
+  it('a worker puts back a table that a worker marked, with a note, and Activity keeps his name', () => {
+    const db = make();
+    markOutOfOrder(db, actor(db), 't2', 'Cloth change');
+    clock += 30 * 60_000;
+    const table = backInOrder(db, shabir, 't2', '  Cloth changed  ');
+    expect(table.outOfOrder).toBeUndefined();
+    expect(board(db).tables.find((t) => t.id === 't2')?.outOfOrder).toBeUndefined();
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'out-of-order',
+      title: 'Table 2 put back in order',
+      by: { name: 'Shabir' },
+    });
+    expect(db.s.activity[0].detail).toContain('Cloth change');
+    expect(db.s.activity[0].detail).toContain('Cloth changed');
+    // The table can start a game again.
+    expect(
+      startGame(db, actor(db), {
+        tableId: 't2',
+        type: 'single',
+        playerIds: ['ahmed-nawaz', 'ali-akbar'],
+      }).status,
+    ).toBe('running');
+  });
+
+  it('marking a table is in Activity too, with the worker’s name', () => {
+    const db = make();
+    markOutOfOrder(db, actor(db), 't2', 'Cloth change');
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'out-of-order',
+      title: 'Table 2 marked out of order',
+      detail: '“Cloth change”',
+      by: { name: 'Zain' },
+    });
+  });
+
+  it('a table an owner marked (Adil on Table 7) can only be put back by an owner', () => {
+    const db = make();
+    const error = refusal(() => backInOrder(db, actor(db), 't7', 'Cloth changed'));
+    expect([error.status, error.body.code]).toEqual([403, 'NOT_ALLOWED']);
+    expect(error.body.message).toBe(
+      'Adil marked Table 7 out of order. Only an owner can put it back.',
+    );
+    expect(db.table('t7').outOfOrder).toBeDefined();
+  });
+
+  it('needs a note from a worker, and refuses a table that is in order', () => {
+    const db = make();
+    markOutOfOrder(db, actor(db), 't2', 'Cloth change');
+    expect(refusal(() => backInOrder(db, actor(db), 't2', '   ')).body.code).toBe('NOTE_REQUIRED');
+    expect(db.table('t2').outOfOrder).toBeDefined();
+    expect(refusal(() => backInOrder(db, actor(db), 't3', 'Fixed')).body.code).toBe('VALIDATION');
   });
 });

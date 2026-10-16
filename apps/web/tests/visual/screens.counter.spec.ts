@@ -180,16 +180,21 @@ const BUILT: Record<
       return box ? [box] : [];
     },
   },
+  // Screen 15 draws Ali, Cue, Rs 1,500 and a note already picked. Money starts empty on ours (D59, answered 17 Oct 2026),
+  // so the page is not touched and the places where the PNG shows a picked state are left out of the comparison.
   15: {
     window: true,
-    prepare: async (page) => {
-      await page.getByRole('button', { name: /^Ali Raza/ }).click();
-      await page.getByRole('button', { name: 'Cue', exact: true }).click();
-      await page.getByRole('button', { name: '1,500', exact: true }).click();
-      await page
-        .getByLabel('Note (required)')
-        .fill('Cue snapped at the joint after he hit the cushion');
-      await blur(page);
+    masks: async (page) => {
+      const places = [
+        page.getByRole('group', { name: 'Who pays?' }),
+        page.getByRole('group', { name: 'What was damaged?' }),
+        page.getByLabel('Note (required)'),
+        page.getByText('Amount', { exact: true }).locator('..'),
+        page.getByText(/statement as a damage charge/),
+        page.getByRole('button', { name: 'Add to the bill' }),
+      ];
+      const boxes = await Promise.all(places.map((place) => place.boundingBox()));
+      return boxes.filter((box): box is Rect => box !== null);
     },
   },
   // Screen 16: the real board has tabs, a waiting list and the action bar that the PNG leaves out (P05 answer 1), so the

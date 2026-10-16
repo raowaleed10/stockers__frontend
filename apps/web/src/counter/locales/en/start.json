@@ -109,5 +109,10 @@
     "to": "Change to {{type}}",
     "tooLate": "The 5 minutes to change this game are over. End or discard the frame first.",
     "ended": "This game is no longer running."
+  },
+  "backInOrder": {
+    "text": "Write what was done, for example “Cloth changed”. Everyone sees it.",
+    "confirm": "Put back in order",
+    "ownerOnly": "{{name}} marked this table. Only an owner can put it back."
   }
 }

@@ -11,6 +11,7 @@ import type {
   EndGameRequest,
   MoveGameRequest,
   NewPlayerRequest,
+  BackInOrderRequest,
   OutOfOrderRequest,
   PersonRef,
   ReplacePlayerRequest,
@@ -29,7 +30,7 @@ import {
   workerUnlock,
 } from '../db/auth';
 import { counterAlerts, readAllCounterAlerts } from '../db/alerts';
-import { board, clubStatus, markOutOfOrder } from '../db/board';
+import { backInOrder, board, clubStatus, markOutOfOrder } from '../db/board';
 import { canteenSale, counterCanteenItems } from '../db/canteen';
 import { checkout, checkoutBill, checkoutList } from '../db/checkout';
 import type { MockDb } from '../db/db';
@@ -205,6 +206,10 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
       asWorker<OutOfOrderRequest>((db, by, c) =>
         markOutOfOrder(db, by, c.param('id'), c.body.note),
       ),
+    ),
+    http.post(
+      `${B}/tables/:id/back-in-order`,
+      asWorker<BackInOrderRequest>((db, by, c) => backInOrder(db, by, c.param('id'), c.body.note)),
     ),
 
     // Players

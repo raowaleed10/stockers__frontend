@@ -19,8 +19,10 @@ export function TileFrame({ kind, children, ...props }: TileFrameProps) {
   const lockId = useId();
   const look = STATUS_LOOK[props.status];
   // A tile with no price is disabled. A tile that is out of order stays focusable (so a screen reader can read
-  // its note) but does nothing when pressed. Both say why through their description.
-  const blocked = look.locked || props.status === 'outOfOrder';
+  // its note); it does nothing when pressed unless the screen gives it a press, which is how a worker puts it back
+  // (D60). Both say why through their description.
+  const described = look.locked || props.status === 'outOfOrder';
+  const blocked = look.locked || (props.status === 'outOfOrder' && !props.onPress);
   const state = useMemo<TileState>(() => ({ props, look, lockId }), [props, look, lockId]);
   const common = {
     'aria-label': props.ariaLabel,
@@ -40,7 +42,7 @@ export function TileFrame({ kind, children, ...props }: TileFrameProps) {
           type="button"
           disabled={look.locked}
           aria-disabled={blocked || undefined}
-          aria-describedby={blocked && (props.lockReason || props.note) ? lockId : undefined}
+          aria-describedby={described && (props.lockReason || props.note) ? lockId : undefined}
           onClick={blocked ? undefined : props.onPress}
           {...common}
         >

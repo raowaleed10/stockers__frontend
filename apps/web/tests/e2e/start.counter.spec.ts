@@ -139,6 +139,37 @@ test.describe('starting a game on Table 2', () => {
     );
   });
 
+  test('a worker puts a grey table back with a note; a table an owner marked stays grey (D60)', async ({
+    page,
+  }) => {
+    await open(page, `/table/t2/start?now=${NIGHT}`);
+    await page.getByRole('button', { name: 'Mark out of order' }).click();
+    await page
+      .getByRole('dialog', { name: 'Mark Table 2 out of order' })
+      .getByLabel('Note (required)')
+      .fill('Cloth change');
+    await page
+      .getByRole('dialog', { name: 'Mark Table 2 out of order' })
+      .getByRole('button', { name: 'Mark out of order' })
+      .click();
+    await expect(page).toHaveURL(/\/$/);
+
+    await page.getByRole('button', { name: 'Table 2, out of order' }).click();
+    const back = page.getByRole('dialog', { name: 'Table 2 is out of order' });
+    await expect(back.getByRole('button', { name: 'Put back in order' })).toBeDisabled();
+    await back.getByLabel('Note (required)').fill('Cloth changed');
+    await back.getByRole('button', { name: 'Put back in order' }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole('button', { name: 'Table 2, free' })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Table 7, out of order' }).click();
+    const owners = page.getByRole('dialog', { name: 'Table 7 is out of order' });
+    await expect(owners).toContainText('Adil marked this table. Only an owner can put it back.');
+    await expect(owners.getByRole('button', { name: 'Put back in order' })).toHaveCount(0);
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('button', { name: 'Table 7, out of order' })).toBeVisible();
+  });
+
   test('Escape closes a start dialog and goes back to the board; Tab stays inside it', async ({
     page,
   }) => {

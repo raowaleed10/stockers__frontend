@@ -247,7 +247,7 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Running table: stop / options / dispute / title | Unpaid, dispute | ادائیگی باقی، جھگڑا | P07 |
 | Running table: stop / options / dispute / text | Players are arguing. The frame waits, and an owner decides who pays. | کھلاڑی بحث کر رہے ہیں۔ فریم رکا رہتا ہے، اور مالک فیصلہ کرتا ہے کہ کون ادا کرے گا۔ | P07 |
 | Running table: stop / options / cancel / title | Cancel, started by mistake | منسوخ، غلطی سے شروع ہوا | P07 |
-| Running table: stop / options / cancel / text | Wrong table or wrong players. In the first 2 minutes use Undo instead. | غلط ٹیبل یا غلط کھلاڑی۔ پہلے 2 منٹ میں اس کی جگہ واپس کریں استعمال کریں۔ | P07 |
+| Running table: stop / options / cancel / text | Wrong table or wrong players. In the first 2 minutes it works like Undo: no reason, nothing charged. | غلط ٹیبل یا غلط کھلاڑی۔ پہلے 2 منٹ میں یہ واپس کریں کی طرح کام کرتا ہے: وجہ نہیں پوچھی جاتی اور کچھ چارج نہیں ہوتا۔ | P07 answers |
 | Running table: stop / reason | Reason (required) | وجہ (ضروری) | P07 |
 | Running table: stop / reasons / left | Players left halfway | کھلاڑی بیچ میں چلے گئے | P07 |
 | Running table: stop / reasons / power | Power cut ended the game | بجلی جانے سے گیم ختم ہوا | P07 |
@@ -286,5 +286,9 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Running table: pause / resume | Resume all games | تمام گیمز دوبارہ چلائیں | P07 |
 | Running table: pause / note | If the computer itself switched off, every game is restored with the right time when it starts again. | اگر کمپیوٹر خود بند ہو جائے تو دوبارہ چلنے پر ہر گیم صحیح وقت کے ساتھ بحال ہو جاتا ہے۔ | P07 |
 | Running table: pause / freeHint | New games can still start. Pause them too if the power is out. | نئے گیم اب بھی شروع ہو سکتے ہیں۔ اگر بجلی بند ہے تو انہیں بھی روکیں۔ | P07 |
+| Put a table back: button | Put back in order | ٹھیک لگائیں | P07 answers |
+| Put a table back: note help | Write what was done, for example “Cloth changed”. Everyone sees it. | لکھیں کیا کام ہوا، مثلاً “کپڑا بدل دیا”۔ سب کو نظر آئے گا۔ | P07 answers |
+| Put a table back: an owner's table | {{name}} marked this table. Only an owner can put it back. | {{name}} نے یہ ٹیبل خراب لگایا ہے۔ اسے صرف مالک ٹھیک کر سکتا ہے۔ | P07 answers |
+| Stop a frame: Cancel inside 2 minutes | Started less than 2 minutes ago, so this works like Undo: no reason is needed and nothing is charged. | گیم کو شروع ہوئے 2 منٹ سے کم ہوئے ہیں، اس لیے یہ واپس کریں کی طرح کام کرے گا: وجہ ضروری نہیں اور کچھ چارج نہیں ہوگا۔ | P07 answers |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

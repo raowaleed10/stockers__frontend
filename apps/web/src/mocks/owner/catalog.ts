@@ -13,6 +13,7 @@ import type {
   TablePatch,
 } from '@stockers/shared';
 import { formatRs, isValidMaxMinutes } from '@stockers/shared';
+import { releaseTable } from '../db/board';
 import type { MockDb } from '../db/db';
 import { fail } from '../db/errors';
 
@@ -123,7 +124,7 @@ export function patchTable(db: MockDb, by: PersonRef, id: string, patch: TablePa
 
   if (patch.outOfOrder !== undefined) {
     if (patch.outOfOrder === null) {
-      delete table.outOfOrder;
+      if (table.outOfOrder) releaseTable(db, by, table);
     } else {
       if (!patch.outOfOrder.note?.trim()) fail('NOTE_REQUIRED', 'Write why it is out of order.');
       if (db.activeGameOn(table.id))
@@ -134,6 +135,9 @@ export function patchTable(db: MockDb, by: PersonRef, id: string, patch: TablePa
         `${table.name} marked out of order by ${by.name.split(' ')[0]}`,
         table.outOfOrder.note,
       );
+      db.logActivity(by, 'out-of-order', `${table.name} marked out of order`, {
+        detail: `“${table.outOfOrder.note}”`,
+      });
     }
     db.emit('board.changed', { tableId: table.id });
   }

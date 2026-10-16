@@ -94,7 +94,7 @@
       },
       "cancel": {
         "title": "Cancel, started by mistake",
-        "text": "Wrong table or wrong players. In the first 2 minutes use Undo instead."
+        "text": "Wrong table or wrong players. In the first 2 minutes it works like Undo: no reason, nothing charged."
       }
     },
     "reason": "Reason (required)",
@@ -111,7 +111,8 @@
       "discardGame": "Discard game",
       "dispute": "Mark as dispute",
       "cancel": "Cancel game"
-    }
+    },
+    "undoLike": "Started less than 2 minutes ago, so this works like Undo: no reason is needed and nothing is charged."
   },
   "damage": {
     "kicker": "{{name}}, <name>{{who}}</name>",
