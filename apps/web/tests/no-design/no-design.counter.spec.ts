@@ -254,6 +254,48 @@ const SHOTS: Shot[] = [
       await blur(page);
     },
   },
+  // P08: ending games and rooms
+  {
+    id: 'end-double-one-pays-all',
+    url: `/table/t5/end?now=${encodeURIComponent('2026-10-03T21:47:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /Imran Shah.*Naveed Akhtar/ }).click();
+      await page.getByRole('radio', { name: 'One pays all' }).click();
+      await page.getByRole('button', { name: 'Naveed pays' }).click();
+      await blur(page);
+    },
+  },
+  {
+    id: 'end-double-overtime',
+    url: `/table/t5/end?now=${encodeURIComponent('2026-10-03T22:00:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /Imran Shah.*Naveed Akhtar/ }).click();
+      await page.getByRole('button', { name: 'Charge Imran and Naveed' }).click();
+      await expect(page.getByRole('dialog', { name: /^This frame took 40 minutes/ })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'room-start-nobody',
+    url: `/room/r2/start?now=${encodeURIComponent('2026-10-03T21:52:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByRole('dialog', { name: 'Start Room 2' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'next-frame-undone',
+    url: `/table/t1/end?now=${encodeURIComponent('2026-10-03T21:51:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Bilal Ahmed/ }).click();
+      await page.getByRole('button', { name: /^Undo, / }).click();
+      await expect(page.getByRole('dialog', { name: 'Who lost this frame?' })).toBeVisible();
+      await expect(page.getByRole('button', { name: /^Bilal Ahmed/ })).toContainText(
+        'Rs 600 waiting',
+      );
+      await blur(page);
+    },
+  },
   // P07: a running table
   {
     id: 'panel-century',

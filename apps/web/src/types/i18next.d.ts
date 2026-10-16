@@ -1,5 +1,6 @@
 import type alerts from '@/counter/locales/en/alerts.json';
 import type board from '@/counter/locales/en/board.json';
+import type end from '@/counter/locales/en/end.json';
 import type frame from '@/counter/locales/en/frame.json';
 import type lock from '@/counter/locales/en/lock.json';
 import type signin from '@/counter/locales/en/signin.json';
@@ -21,6 +22,7 @@ declare module 'i18next' {
       common: typeof common;
       alerts: typeof alerts; // counter: the bell's side panel
       board: typeof board; // counter: the live board, its tabs, tiles and the waiting list
+      end: typeof end; // counter: ending a frame, a double, a Century or a room, the next frame, starting a room
       frame: typeof frame; // counter: the top bar, the action bar and the sign-in time banner
       lock: typeof lock; // counter: the lock screen
       signin: typeof signin; // counter: the sign-in page

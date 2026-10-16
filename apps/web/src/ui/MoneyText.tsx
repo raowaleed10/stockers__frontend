@@ -2,13 +2,15 @@ import { formatRs, type FormatLang } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
 import { cx } from './cx';
 
-export type MoneySize = 'inherit' | 'row' | 'big' | 'hero';
+export type MoneySize = 'inherit' | 'row' | 'big' | 'total' | 'hero';
 
 // row: an amount in a list (screen 25). big and hero: the numbers in Barlow Condensed (26, 25 total).
 const SIZE: Record<MoneySize, { text: string; condensed: boolean }> = {
   inherit: { text: '', condensed: false },
   row: { text: 'text-[20px] font-semibold', condensed: false },
   big: { text: 'text-[40px] font-semibold leading-none', condensed: true },
+  // total: the amount that goes on a bill in the end dialogs (21, 23).
+  total: { text: 'text-[52px] font-bold leading-none', condensed: true },
   hero: { text: 'text-[60px] font-bold leading-none', condensed: true },
 };
 

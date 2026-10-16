@@ -46,6 +46,8 @@ const BUILT: Record<
     masks?: (page: Page) => Promise<Rect[]>;
     /** The seed's scenario that gives the screen its state (a game that is already running, for instance). */
     scenario?: string;
+    /** Open this address instead of the design's, when the screen can only be reached from another one (screen 18). */
+    route?: string;
     /** A moment other than the one in design/screens.json: the PNG's clock is whole minutes, its countdowns are not. */
     now?: string;
     /**
@@ -197,6 +199,59 @@ const BUILT: Record<
       return boxes.filter((box): box is Rect => box !== null);
     },
   },
+  // Screens 17 to 23 (P08). Each is a dialog over the live board, so the 1440 x 900 window is compared. The designs draw a
+  // bare header at 55 %; the real page behind the scrim has the board (the same difference as screens 7 to 15).
+  17: { window: true },
+  // Screen 18 is reached by charging Bilal on screen 17, as a worker does. The countdown on Undo keeps running, so it is left out.
+  18: {
+    window: true,
+    route: '/table/t1/end',
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Bilal Ahmed/ }).click();
+      await expect(page.getByRole('dialog', { name: /added to Bilal Ahmed/ })).toBeVisible();
+      await blur(page);
+    },
+    masks: async (page) => {
+      const box = await page.getByRole('button', { name: /^Undo, / }).boundingBox();
+      return box ? [box] : [];
+    },
+  },
+  // Table 4 is 36 minutes into its frame at 9:44 PM (the PNG's clock says 9:46, a design slip: at 9:46 the frame is 38).
+  19: {
+    window: true,
+    route: '/table/t4/end',
+    now: '2026-10-03T21:44:00+05:00',
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Zubair Khan/ }).click();
+      await expect(page.getByRole('dialog', { name: /^This frame took 36 minutes/ })).toBeVisible();
+      await blur(page);
+    },
+  },
+  // The PNG draws Side B picked, with half each.
+  20: {
+    window: true,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /Imran Shah and Naveed Akhtar/ }).click();
+      await blur(page);
+    },
+  },
+  // 42 min 35 sec: the seed starts the Century at 9:04:55 PM (37:05 on screen 3), the PNG at 9:04:25, so the moment is 9:47:30.
+  21: { window: true, now: '2026-10-03T21:47:30+05:00' },
+  // Danish Iqbal is picked, as the PNG draws it.
+  22: {
+    window: true,
+    prepare: async (page) => {
+      await page
+        .getByRole('searchbox', { name: 'Search the player the room is under' })
+        .fill('danish');
+      await page
+        .getByRole('list', { name: 'Search results' })
+        .getByRole('button', { name: /^Danish Iqbal/ })
+        .click();
+      await blur(page);
+    },
+  },
+  23: { window: true, scenario: 'roomEnd' },
   // Screen 16: the real board has tabs, a waiting list and the action bar that the PNG leaves out (P05 answer 1), so the
   // power-cut banner is compared, and the tiles are compared in tiles.counter.spec.ts.
   16: {
@@ -223,8 +278,8 @@ async function actionBar(page: Page): Promise<Rect[]> {
 
 /** The route of the design with the demo clock added. Some routes show more than the path ("/  (= /board/snooker)"). */
 function urlOf(screen: ScreenEntry): string {
-  const route = screen.route.split(/\s/)[0];
   const built = BUILT[screen.n];
+  const route = (built?.route ?? screen.route).split(/\s/)[0];
   const query = [`now=${encodeURIComponent(built?.now ?? screen.now)}`];
   const scenario = built?.scenario ?? screen.scenario;
   if (scenario) query.push(`scenario=${scenario}`);

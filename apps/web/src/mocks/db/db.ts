@@ -263,6 +263,24 @@ export class MockDb {
     return line;
   }
 
+  /**
+   * Takes a line off a player's statement again (an undone frame): his balance goes back, the lines after it are worked
+   * out again, and it is no longer "tonight".
+   */
+  removeLine(playerId: string, lineId: string): StatementLine | undefined {
+    const lines = this.statement(playerId);
+    const index = lines.findIndex((line) => line.id === lineId);
+    if (index < 0) return undefined;
+    const [line] = lines.splice(index, 1);
+    runningBalances(lines).forEach((balance, i) => {
+      lines[i].balance = balance;
+    });
+    this.s.unsettled.delete(line.id);
+    const player = this.player(playerId);
+    this.setBalance(player, player.balance - (line.charge ?? 0) + (line.paid ?? 0), line.at);
+    return line;
+  }
+
   /** Sets a balance and keeps "oldest unpaid" and the credit totals right. */
   setBalance(player: Player, balance: number, at: ISO): void {
     const before = player.balance;

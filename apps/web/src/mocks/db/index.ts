@@ -11,7 +11,15 @@ export { createDb } from './load';
 export { seed } from './seed';
 export type { ScenarioName } from './seed-types';
 
-const SCENARIOS: ScenarioName[] = ['paused', 'checkout', 'closing', 'closed', 'empty', 'newGame'];
+const SCENARIOS: ScenarioName[] = [
+  'paused',
+  'checkout',
+  'closing',
+  'closed',
+  'empty',
+  'newGame',
+  'roomEnd',
+];
 
 let instance: MockDb | null = null;
 

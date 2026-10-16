@@ -46,7 +46,14 @@ export function PersonCard({
   ...rest
 }: PersonCardProps) {
   const statusText = status ? (
-    <span className={cx(STATUS_TONE[status.tone ?? 'neutral'])}>{status.text}</span>
+    // The large card (screen 17) draws "Owes nothing" in the same soft colour as the line beside it.
+    <span
+      className={cx(
+        variant === 'large' && !status.tone ? '' : STATUS_TONE[status.tone ?? 'neutral'],
+      )}
+    >
+      {status.text}
+    </span>
   ) : null;
 
   const look = selected

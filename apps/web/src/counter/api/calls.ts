@@ -79,6 +79,7 @@ export const disputeGame = (id: string, request: DisputeRequest) =>
 export const cancelGame = (id: string, request: CancelRequest) =>
   api.post<Game>(`/games/${id}/cancel`, request);
 export const undoGame = (id: string) => api.post<Game>(`/games/${id}/undo`);
+export const undoEnd = (id: string) => api.post<Game>(`/games/${id}/undo-end`);
 export const damageCharge = (id: string, request: DamageRequest) =>
   api.post<StatementLine>(`/games/${id}/damage`, request);
 export const endGame = (id: string, request: EndGameRequest) =>

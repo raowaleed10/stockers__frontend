@@ -1,10 +1,14 @@
 import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, Route, Routes, useParams } from 'react-router-dom';
-import { CounterDialog } from '@/ui/CounterDialog';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { NotFound } from '@/ui/NotFound';
 import { AlertsPanel } from '../components/AlertsPanel';
 import { Board } from '../screens/Board';
+import { EndGame } from '../screens/end/EndGame';
+import { NextFrame } from '../screens/end/NextFrame';
+import { Overtime } from '../screens/end/Overtime';
+import { RoomEnd } from '../screens/end/RoomEnd';
+import { RoomStart } from '../screens/end/RoomStart';
 import { BackInOrder } from '../screens/start/BackInOrder';
 import { ChangeType } from '../screens/start/ChangeType';
 import { NewPlayer } from '../screens/start/NewPlayer';
@@ -16,7 +20,6 @@ import { DamageCharge } from '../screens/table/DamageCharge';
 import { MoveTable } from '../screens/table/MoveTable';
 import { StopFrame } from '../screens/table/StopFrame';
 import { TablePanel } from '../screens/table/TablePanel';
-import { useCloseTable } from '../start/use-close';
 import { PagePlaceholder } from '../screens/PagePlaceholder';
 import { SignIn } from '../screens/SignIn';
 import { RequireWorker } from '../session/RequireWorker';
@@ -41,23 +44,6 @@ const LATER_SCREENS = [
 function LaterScreen({ title }: { title: (typeof LATER_SCREENS)[number]['title'] }) {
   const { t } = useTranslation('frame');
   return <PagePlaceholder title={t(title)} />;
-}
-
-/**
- * What "End frame" (P08) and a tap on a free room (P08) open, until that step builds them: the name inside a dialog
- * over the board, with a way out.
- */
-function TableScreen({ what }: { what: 'room' | 'end' }) {
-  const { t } = useTranslation('board');
-  const { t: tTable } = useTranslation('table');
-  const close = useCloseTable();
-  const { id } = useParams<{ id: string }>();
-  return (
-    <CounterDialog
-      title={`${what === 'room' ? t('cta.startRoom') : tTable('panel.end.single')} (${id ?? ''})`}
-      onClose={close}
-    />
-  );
 }
 
 /**
@@ -86,8 +72,11 @@ const TABLE_ROUTES = [
   <Route key="move" path="table/:id/move" element={<MoveTable />} />,
   <Route key="stop" path="table/:id/stop" element={<StopFrame />} />,
   <Route key="damage" path="table/:id/damage" element={<DamageCharge />} />,
-  <Route key="end" path="table/:id/end" element={<TableScreen what="end" />} />,
-  <Route key="room" path="room/:id/start" element={<TableScreen what="room" />} />,
+  <Route key="end" path="table/:id/end" element={<EndGame />} />,
+  <Route key="overtime" path="table/:id/end/overtime" element={<Overtime />} />,
+  <Route key="next" path="table/:id/next" element={<NextFrame />} />,
+  <Route key="room" path="room/:id/start" element={<RoomStart />} />,
+  <Route key="room-end" path="room/:id/end" element={<RoomEnd />} />,
   <Route key="new-player" path="players/new" element={<NewPlayer />} />,
 ];
 

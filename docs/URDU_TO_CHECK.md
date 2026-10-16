@@ -290,5 +290,103 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Put a table back: note help | Write what was done, for example “Cloth changed”. Everyone sees it. | لکھیں کیا کام ہوا، مثلاً “کپڑا بدل دیا”۔ سب کو نظر آئے گا۔ | P07 answers |
 | Put a table back: an owner's table | {{name}} marked this table. Only an owner can put it back. | {{name}} نے یہ ٹیبل خراب لگایا ہے۔ اسے صرف مالک ٹھیک کر سکتا ہے۔ | P07 answers |
 | Stop a frame: Cancel inside 2 minutes | Started less than 2 minutes ago, so this works like Undo: no reason is needed and nothing is charged. | گیم کو شروع ہوئے 2 منٹ سے کم ہوئے ہیں، اس لیے یہ واپس کریں کی طرح کام کرے گا: وجہ ضروری نہیں اور کچھ چارج نہیں ہوگا۔ | P07 answers |
+| Ending: who / kicker | {{name}}, frame {{n}} ended at <when>{{time}}</when> after {{minutes}} minutes | {{name}}، فریم {{n}} {{minutes}} منٹ بعد <when>{{time}}</when> پر ختم ہوا | P08 |
+| Ending: who / kickerPlain | {{name}}, frame ended at <when>{{time}}</when> after {{minutes}} minutes | {{name}}، فریم {{minutes}} منٹ بعد <when>{{time}}</when> پر ختم ہوا | P08 |
+| Ending: who / kickerGame | {{name}}, game ended at <when>{{time}}</when> after {{minutes}} minutes | {{name}}، گیم {{minutes}} منٹ بعد <when>{{time}}</when> پر ختم ہوا | P08 |
+| Ending: who / title | Who lost this frame? | یہ فریم کس نے ہارا؟ | P08 |
+| Ending: who / titleGame | Who lost this game? | یہ گیم کس نے ہارا؟ | P08 |
+| Ending: who / hint | Tap the loser. The frame price goes on his bill and the winner is recorded. | ہارنے والے پر ٹیپ کریں۔ فریم کی قیمت اس کے بل میں لگے گی اور جیتنے والا درج ہو جائے گا۔ | P08 |
+| Ending: who / hintGame | Tap the loser. The game price goes on his bill and the winner is recorded. | ہارنے والے پر ٹیپ کریں۔ گیم کی قیمت اس کے بل میں لگے گی اور جیتنے والا درج ہو جائے گا۔ | P08 |
+| Ending: who / nobody | Nobody pays | کوئی ادا نہیں کرے گا | P08 |
+| Ending: who / won_one | Won {{count}} frame | {{count}} فریم جیتا | P08 |
+| Ending: who / won_other | Won {{count}} frames | {{count}} فریم جیتے | P08 |
+| Ending: who / lost | Lost {{what}} | ہارے: {{what}} | P08 |
+| Ending: who / both | {{won}}. {{lost}} tonight | {{won}}۔ آج رات {{lost}} | P08 |
+| Ending: who / tonight | {{text}} tonight | آج رات {{text}} | P08 |
+| Ending: who / nothing | No frames yet tonight | آج رات ابھی کوئی فریم نہیں | P08 |
+| Ending: who / owesNothing | Owes nothing | کچھ باقی نہیں | P08 |
+| Ending: who / owesBefore | Owes {{amount}} from before | پہلے کے {{amount}} باقی | P08 |
+| Ending: who / waiting | {{amount}} waiting | {{amount}} ادائیگی باقی | P08 |
+| Ending: parts / frame_one | {{count}} frame | {{count}} فریم | P08 |
+| Ending: parts / frame_other | {{count}} frames | {{count}} فریم | P08 |
+| Ending: parts / game_one | {{count}} game | {{count}} گیم | P08 |
+| Ending: parts / game_other | {{count}} games | {{count}} گیم | P08 |
+| Ending: over / kicker | {{name}} ran over {{limit}} minutes | {{name}} {{limit}} منٹ سے زیادہ چلا | P08 |
+| Ending: over / title | This frame took {{minutes}} minutes. Charge double? | یہ فریم {{minutes}} منٹ چلا۔ ڈبل چارج کریں؟ | P08 |
+| Ending: over / titleGame | This game took {{minutes}} minutes. Charge double? | یہ گیم {{minutes}} منٹ چلا۔ ڈبل چارج کریں؟ | P08 |
+| Ending: over / subtitle | {{loser}} lost to {{winner}}. Choose what {{first}} pays. | {{loser}} {{winner}} سے ہارا۔ چنیں {{first}} کتنے دے گا۔ | P08 |
+| Ending: over / subtitleSide | {{losers}} lost to {{winners}}. Choose what they pay. | {{losers}} {{winners}} سے ہارے۔ چنیں وہ کتنے دیں گے۔ | P08 |
+| Ending: over / normal | Normal price | عام قیمت | P08 |
+| Ending: over / double | Double price | ڈبل قیمت | P08 |
+| Ending: over / note | The timer showed a red card at {{limit}} minutes. Owners see which frames were charged double. | ٹائمر {{limit}} منٹ پر ریڈ کارڈ دکھا چکا تھا۔ مالکان دیکھتے ہیں کون سے فریم ڈبل چارج ہوئے۔ | P08 |
+| Ending: over / back | Back | واپس | P08 |
+| Ending: double / kicker | {{name}}, double frame ended after {{minutes}} minutes | {{name}}، ڈبل فریم {{minutes}} منٹ بعد ختم ہوا | P08 |
+| Ending: double / title | Which side lost? | کون سی طرف ہاری؟ | P08 |
+| Ending: double / sideA | Side A | سائیڈ A | P08 |
+| Ending: double / sideB | Side B | سائیڈ B | P08 |
+| Ending: double / lostA | Side A lost | سائیڈ A ہاری | P08 |
+| Ending: double / lostB | Side B lost | سائیڈ B ہاری | P08 |
+| Ending: double / choose | Choose the side that lost | ہارنے والی طرف چنیں | P08 |
+| Ending: double / split | How the {{amount}} is split | {{amount}} کی تقسیم | P08 |
+| Ending: double / splitLabel | Split | تقسیم | P08 |
+| Ending: double / half | Half each | آدھا آدھا | P08 |
+| Ending: double / one | One pays all | ایک سب دے | P08 |
+| Ending: double / custom | Custom | اپنی مرضی | P08 |
+| Ending: double / pays | {{name}} pays | {{name}} ادا کرتا ہے | P08 |
+| Ending: double / mismatch | The amounts add up to {{sum}}, not {{total}}. | رقمیں {{sum}} بنتی ہیں، {{total}} نہیں۔ | P08 |
+| Ending: double / charge | Charge {{names}} | {{names}} سے چارج کریں | P08 |
+| Ending: double / rs | Rs | روپے | P08 |
+| Ending: century / kicker | Century on {{name}}, started <when>{{time}}</when> | {{name}} پر سنچری، <when>{{time}}</when> پر شروع ہوئی | P08 |
+| Ending: century / title | End Century for {{who}}? | {{who}} کی سنچری ختم کریں؟ | P08 |
+| Ending: century / onTable | Time on the table | ٹیبل پر وقت | P08 |
+| Ending: century / minutesCharged | Minutes charged | چارج ہونے والے منٹ | P08 |
+| Ending: century / rate | Rate set at start | شروع میں طے ریٹ | P08 |
+| Ending: century / paused | Paused time, not charged | رکا ہوا وقت، چارج نہیں | P08 |
+| Ending: century / sec | {{min}} min {{sec}} sec | {{min}} منٹ {{sec}} سیکنڈ | P08 |
+| Ending: century / min | {{count}} min | {{count}} منٹ | P08 |
+| Ending: century / perMinute | {{rate}} a minute | {{rate}} فی منٹ | P08 |
+| Ending: century / sum | {{minutes}} × {{rate}} goes on <name>{{who}}</name>’s bill | {{minutes}} × {{rate}} <name>{{who}}</name> کے بل میں لگے گا | P08 |
+| Ending: century / note | Extra seconds are not charged. How the players share it is up to them. | اضافی سیکنڈ چارج نہیں ہوتے۔ کھلاڑی آپس میں کیسے بانٹیں، یہ ان کی مرضی ہے۔ | P08 |
+| Ending: century / confirm | End and charge {{amount}} | ختم کریں اور {{amount}} چارج کریں | P08 |
+| Ending: room / kickerStart | {{name}}, snooker table with sofa seating | {{name}}، صوفے والا اسنوکر ٹیبل | P08 |
+| Ending: room / titleStart | Start {{name}} | {{name}} شروع کریں | P08 |
+| Ending: room / under | Under | کس کے نام پر | P08 |
+| Ending: room / whole | {{tail}}. The whole room bill goes to him. | {{tail}}۔ پورے روم کا بل اسی پر آئے گا۔ | P08 |
+| Ending: room / change | Change | بدلیں | P08 |
+| Ending: room / search | Search the player the room is under | جس کے نام پر روم ہے اسے تلاش کریں | P08 |
+| Ending: room / price | Price for one hour | ایک گھنٹے کی قیمت | P08 |
+| Ending: room / priceNote | Starts at {{amount}}. Change it if the owners agreed a different price. | {{amount}} سے شروع۔ اگر مالکان نے کوئی اور قیمت طے کی ہے تو بدل لیں۔ | P08 |
+| Ending: room / lower | Lower by 100 rupees | 100 روپے کم کریں | P08 |
+| Ending: room / raise | Raise by 100 rupees | 100 روپے بڑھائیں | P08 |
+| Ending: room / first | First hour (minimum) | پہلا گھنٹہ (کم از کم) | P08 |
+| Ending: room / afterEvery | After that, every minute | اس کے بعد ہر منٹ | P08 |
+| Ending: room / example | Example, {{duration}} | مثال، {{duration}} | P08 |
+| Ending: room / startTime | Start time is filled in when you tap Start. | شروع کا وقت ٹیپ کرنے پر خود بھر جاتا ہے۔ | P08 |
+| Ending: room / start | Start {{name}} | {{name}} شروع کریں | P08 |
+| Ending: room / kickerEnd | {{name}}, started <when>{{time}}</when>, {{price}} an hour | {{name}}، <when>{{time}}</when> پر شروع ہوا، {{price}} فی گھنٹہ | P08 |
+| Ending: room / titleEnd | End {{name}} for {{who}}? | {{who}} کا {{name}} ختم کریں؟ | P08 |
+| Ending: room / inRoom | Time in the room | روم میں وقت | P08 |
+| Ending: room / pausedFor | Paused for the power cut, not charged | بجلی جانے پر رکا رہا، چارج نہیں | P08 |
+| Ending: room / firstHour | First hour, minimum | پہلا گھنٹہ، کم از کم | P08 |
+| Ending: room / next | Next {{minutes}} minutes at {{rate}} a minute | اگلے {{minutes}} منٹ {{rate}} فی منٹ | P08 |
+| Ending: room / goesOn | Goes on <name>{{who}}</name>’s bill | <name>{{who}}</name> کے بل میں لگے گا | P08 |
+| Ending: room / round | Any paisa is rounded to the nearest rupee. | پیسے قریب ترین روپے پر گول ہوتے ہیں۔ | P08 |
+| Ending: room / keep | Keep the room going | روم چلنے دیں | P08 |
+| Ending: room / confirm | End and charge {{amount}} | ختم کریں اور {{amount}} چارج کریں | P08 |
+| Ending: duration / hm | {{h}} h {{m}} min | {{h}} گھنٹہ {{m}} منٹ | P08 |
+| Ending: duration / m | {{m}} min | {{m}} منٹ | P08 |
+| Ending: duration / h | {{h}} hour | {{h}} گھنٹہ | P08 |
+| Ending: duration / exampleHm | {{h}} hour {{m}} min | {{h}} گھنٹہ {{m}} منٹ | P08 |
+| Ending: next / title | {{amount}} added to <name>{{name}}</name>’s bill | {{amount}} <name>{{name}}</name> کے بل میں لگ گئے | P08 |
+| Ending: next / sub | He now has {{amount}} waiting to pay. {{winner}} won frame {{n}}. | اب اس کے {{amount}} ادا کرنے باقی ہیں۔ {{winner}} نے فریم {{n}} جیتا۔ | P08 |
+| Ending: next / session | {{name}} session, {{count}} frames | {{name}} کا سیشن، {{count}} فریم | P08 |
+| Ending: next / again | Next frame, same players | اگلا فریم، وہی کھلاڑی | P08 |
+| Ending: next / againSub | Frame {{n}} starts now, {{price}} | فریم {{n}} ابھی شروع ہوگا، {{price}} | P08 |
+| Ending: next / change | Change players | کھلاڑی بدلیں | P08 |
+| Ending: next / changeSub | New frame on {{name}} | {{name}} پر نیا فریم | P08 |
+| Ending: next / free | Free the table | ٹیبل خالی کریں | P08 |
+| Ending: next / freeSub | Players are done | کھلاڑی ختم کر چکے | P08 |
+| Ending: next / wrong | Tapped the wrong player? | غلط کھلاڑی پر ٹیپ ہو گیا؟ | P08 |
+| Ending: next / undo | Undo, {{time}} left | واپس کریں، {{time}} باقی | P08 |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

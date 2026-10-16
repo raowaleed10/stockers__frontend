@@ -53,6 +53,7 @@ import {
   resumeGame,
   startGame,
   startRoom,
+  undoEnd,
   undoGame,
 } from '../db/games';
 import { createPlayer, recentPlayers, searchPlayers, statementOf } from '../db/players';
@@ -175,6 +176,10 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
     http.post(
       `${B}/games/:id/undo`,
       asWorker((db, by, c) => undoGame(db, by, c.param('id'))),
+    ),
+    http.post(
+      `${B}/games/:id/undo-end`,
+      asWorker((db, by, c) => undoEnd(db, by, c.param('id'))),
     ),
     http.post(
       `${B}/games/:id/damage`,

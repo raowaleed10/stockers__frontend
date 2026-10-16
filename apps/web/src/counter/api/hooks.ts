@@ -20,8 +20,8 @@ export const useAlerts = () => useQuery({ queryKey: keys.alerts, queryFn: calls.
 export const useBoard = (category?: string) =>
   useQuery({ queryKey: keys.board(category), queryFn: () => calls.getBoard(category) });
 
-export const useGame = (id: string) =>
-  useQuery({ queryKey: keys.game(id), queryFn: () => calls.getGame(id) });
+export const useGame = (id: string, enabled = true) =>
+  useQuery({ queryKey: keys.game(id), queryFn: () => calls.getGame(id), enabled });
 
 /** Who played here lately, for the "Played here recently" chips (screen 8). */
 export const useRecentPlayers = () =>
@@ -88,6 +88,7 @@ export const useCancelGame = () =>
     calls.cancelGame(v.id, v.request),
   );
 export const useUndoGame = () => useAction(calls.undoGame);
+export const useUndoEnd = () => useAction(calls.undoEnd);
 export const useDamageCharge = () =>
   useAction((v: { id: string; request: Parameters<typeof calls.damageCharge>[1] }) =>
     calls.damageCharge(v.id, v.request),

@@ -3,6 +3,7 @@ import {
   canChangeType,
   canStartGame,
   canUndo,
+  centuryBreakdown,
   centuryCharge,
   changeTypeMinutesLeft,
   chargeForGame,
@@ -11,7 +12,9 @@ import {
   frameCharge,
   gameCharge,
   overtimeOptions,
+  roomBreakdown,
   roomCharge,
+  roomPreview,
   splitEvenly,
   undoSecondsLeft,
 } from './charges';
@@ -248,5 +251,106 @@ describe('chargeForGame: the amount so far on a tile', () => {
         now,
       ),
     ).toBe(250);
+  });
+});
+
+describe('centuryBreakdown (screen 21)', () => {
+  const century = {
+    startedAt: '2026-10-03T21:04:25+05:00',
+    pausedMs: 0,
+    price: 15,
+  };
+
+  it('Table 3 at 9:47:00 PM: 42 min 35 sec on the table, 42 minutes charged, Rs 630', () => {
+    expect(centuryBreakdown(century, at('2026-10-03T21:47:00+05:00'))).toEqual({
+      onTableMs: 42 * MIN + 35 * SEC,
+      chargedMinutes: 42,
+      pausedMinutes: 0,
+      rate: 15,
+      amount: 630,
+    });
+  });
+
+  it('does not charge the paused minutes, and says how many there were', () => {
+    const paused = { ...century, pausedMs: 5 * MIN + 20 * SEC };
+    expect(centuryBreakdown(paused, at('2026-10-03T21:47:00+05:00'))).toMatchObject({
+      onTableMs: 42 * MIN + 35 * SEC,
+      chargedMinutes: 37,
+      pausedMinutes: 5,
+      amount: 555,
+    });
+  });
+
+  it('counts a pause that is still going on, so the minutes add up to the time on the table', () => {
+    const now = at('2026-10-03T21:47:00+05:00');
+    const stillPaused = { ...century, pausedAt: '2026-10-03T21:40:00+05:00' };
+    expect(centuryBreakdown(stillPaused, now)).toMatchObject({
+      chargedMinutes: 35,
+      pausedMinutes: 7,
+      amount: 525,
+    });
+  });
+});
+
+describe('roomBreakdown (screen 23)', () => {
+  const room = { startedAt: '2026-10-03T20:29:55+05:00', pausedMs: 5 * MIN, price: 1500 };
+
+  it('Room 1 at 10:15 PM: 1 h 45 min in the room, 5 min paused, first hour 1,500 and 40 minutes at Rs 25 = 2,500', () => {
+    const result = roomBreakdown(room, at('2026-10-03T22:15:00+05:00'));
+    expect(result).toEqual({
+      onRoomMs: 105 * MIN + 5 * SEC,
+      pausedMinutes: 5,
+      chargedMinutes: 100,
+      minMinutes: 60,
+      firstAmount: 1500,
+      extraMinutes: 40,
+      extraAmount: 1000,
+      amount: 2500,
+    });
+    expect(result.firstAmount + result.extraAmount).toBe(result.amount);
+  });
+
+  it('charges the first hour at least: 6 minutes is Rs 1,500 and no minutes after it', () => {
+    const result = roomBreakdown(
+      { startedAt: '2026-10-03T22:09:00+05:00', pausedMs: 0, price: 1500 },
+      at('2026-10-03T22:15:00+05:00'),
+    );
+    expect(result).toMatchObject({
+      chargedMinutes: 60,
+      extraMinutes: 0,
+      extraAmount: 0,
+      amount: 1500,
+    });
+  });
+
+  it('rounds the paisa once, so the two parts still add up: 1 h 40 min at Rs 700 is Rs 1,167', () => {
+    const result = roomBreakdown(
+      { startedAt: '2026-10-03T20:35:00+05:00', pausedMs: 0, price: 700 },
+      at('2026-10-03T22:15:00+05:00'),
+    );
+    expect(result.amount).toBe(1167);
+    expect(result.firstAmount + result.extraAmount).toBe(1167);
+  });
+});
+
+describe('roomPreview (screen 22)', () => {
+  it('Rs 1,500 an hour: the first hour Rs 1,500, Rs 25 a minute after it, 1 hour 40 min is Rs 2,500', () => {
+    expect(roomPreview(1500)).toEqual({
+      firstAmount: 1500,
+      perMinute: 25,
+      exampleMinutes: 100,
+      exampleAmount: 2500,
+    });
+  });
+
+  it('follows the price when the worker changes it: Rs 700 is not a whole rupee a minute', () => {
+    const preview = roomPreview(700);
+    expect(preview.firstAmount).toBe(700);
+    expect(preview.perMinute).toBeCloseTo(11.67, 2);
+    expect(preview.exampleAmount).toBe(1167);
+  });
+
+  it('refuses a price that is not whole rupees', () => {
+    expect(() => roomPreview(1500.5)).toThrow(RangeError);
   });
 });

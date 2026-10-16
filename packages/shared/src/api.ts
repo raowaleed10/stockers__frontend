@@ -112,6 +112,16 @@ export interface GameView {
   table: Table;
   session?: Session;
   players: Record<string, PlayerName>;
+  /** What each player has done on the open sheet, for the cards of "Who lost this frame?" (screen 17). */
+  tonight: Record<string, PlayerTonight>;
+}
+
+/** A player's night so far, apart from his bill (the bill is in `BoardResponse.waiting`). */
+export interface PlayerTonight {
+  /** Frames and games he played in tonight and did not lose. */
+  won: number;
+  /** What he has waiting to pay from tonight's charges (his bill without old credit), in whole rupees. */
+  waiting: Rs;
 }
 
 /** An alert on the counter's bell. Counter alerts are separate from the owners' notifications. */

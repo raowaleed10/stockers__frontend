@@ -78,6 +78,8 @@ export interface Game {
     chargedDouble?: boolean;
     split?: Record<string, Rs>;
     minutes?: number;
+    /** The statement lines this end posted, so "Undo" on screen 18 can take them back. */
+    lineIds?: string[];
   };
 }
 export interface Session {

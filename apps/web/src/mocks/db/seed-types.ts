@@ -20,7 +20,8 @@ import type {
 
 /** The shape of `mock/seed.json`, as far as the mock needs it. */
 
-export type ScenarioName = 'paused' | 'checkout' | 'closing' | 'closed' | 'empty' | 'newGame';
+export type ScenarioName =
+  'paused' | 'checkout' | 'closing' | 'closed' | 'empty' | 'newGame' | 'roomEnd';
 
 export interface SeedPlayer {
   id: string;

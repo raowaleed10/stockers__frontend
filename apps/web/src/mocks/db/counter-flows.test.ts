@@ -17,6 +17,7 @@ import {
   endCentury,
   endGame,
   endRoom,
+  gameView,
   moveGame,
   nextFrame,
   pauseAll,
@@ -24,6 +25,7 @@ import {
   resumeAll,
   resumeGame,
   startGame,
+  undoEnd,
   undoGame,
 } from './games';
 import { createDb, type CreateDbOptions } from './load';
@@ -1782,5 +1784,133 @@ describe('a discount (Q6)', () => {
       amount: -50,
       by: { name: 'Zain' },
     });
+  });
+});
+
+describe('undoing a charged frame (screen 18, D60)', () => {
+  const shabir = { id: 'shabir', name: 'Shabir', role: 'worker' as const };
+  const bilalTonight = (db: MockDb) =>
+    db.tonightLines('bilal').reduce((sum, line) => sum + (line.charge ?? 0), 0);
+
+  /** Table 1's frame 3 ends at 9:51 PM with Bilal losing, as on screens 17 and 18. */
+  function ended() {
+    const db = make();
+    clock = at('2026-10-03T21:51:00+05:00');
+    const by = actor(db);
+    const result = endGame(db, by, 'g-t1-3', { loserIds: ['bilal'] });
+    return { db, by, result };
+  }
+
+  it('takes the charge, the player’s numbers, the session frame and the sheet totals back, and runs the frame again', () => {
+    const db = make();
+    const before = {
+      bilal: { ...db.player('bilal') },
+      aliWon: db.player('ali-raza').framesWon,
+      today: { ...db.s.today },
+      earned: db.s.deltas.earned,
+      frames: db.s.sessions[0].frames.length,
+      lines: db.statement('bilal').length,
+    };
+    clock = at('2026-10-03T21:51:00+05:00');
+    const by = actor(db);
+    endGame(db, by, 'g-t1-3', { loserIds: ['bilal'] });
+    expect(bilalTonight(db)).toBe(850);
+    expect(db.s.sessions[0].frames).toHaveLength(before.frames + 1);
+
+    clock += 56_000;
+    const game = undoEnd(db, by, 'g-t1-3');
+    expect(game).toMatchObject({ status: 'running' });
+    expect(game.result).toBeUndefined();
+    expect(game.endedAt).toBeUndefined();
+    expect(bilalTonight(db)).toBe(600);
+    expect(db.statement('bilal')).toHaveLength(before.lines);
+    expect(db.player('bilal')).toMatchObject({
+      balance: before.bilal.balance,
+      framesPlayed: before.bilal.framesPlayed,
+      framesWon: before.bilal.framesWon,
+      spent: before.bilal.spent,
+    });
+    expect(db.player('ali-raza').framesWon).toBe(before.aliWon);
+    expect(db.s.sessions[0].frames).toHaveLength(before.frames);
+    expect(db.s.today).toMatchObject({ frames: before.today.frames, earned: before.today.earned });
+    expect(db.s.deltas.earned).toBe(before.earned);
+    // The minutes since it ended are not played minutes: the frame is where it was.
+    expect(clock - Date.parse(game.startedAt) - game.pausedMs).toBe(
+      at('2026-10-03T21:51:00+05:00') - Date.parse(game.startedAt),
+    );
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'undo',
+      title: 'Frame undone on Table 1',
+      detail: 'Rs 250 taken off Bilal Ahmed’s bill. The frame is running again.',
+      by: { name: 'Zain' },
+    });
+    expect(db.activeGameOn('t1')?.id).toBe('g-t1-3');
+  });
+
+  it('only the worker who charged it can undo it, and only for 2 minutes', () => {
+    const { db, by } = ended();
+    clock += 30_000;
+    expect(refusal(() => undoEnd(db, shabir, 'g-t1-3')).body.code).toBe('NOT_ALLOWED');
+    clock += 2 * 60_000;
+    expect(refusal(() => undoEnd(db, by, 'g-t1-3')).body.code).toBe('UNDO_EXPIRED');
+    expect(bilalTonight(db)).toBe(850);
+  });
+
+  it('is refused once another frame has started on the table, and for a game that is still running', () => {
+    const { db, by } = ended();
+    nextFrame(db, by, 'g-t1-3');
+    clock += 10_000;
+    expect(refusal(() => undoEnd(db, by, 'g-t1-3')).body.code).toBe('TABLE_BUSY');
+    expect(refusal(() => undoEnd(db, by, 'g-t3-c')).body.code).toBe('GAME_NOT_RUNNING');
+  });
+
+  it('a frame charged double is undone with its double-charge event', () => {
+    const db = make();
+    clock = at('2026-10-03T21:44:00+05:00');
+    const by = actor(db);
+    const doubles = db.s.activity.filter((a) => a.type === 'double-charge').length;
+    endGame(db, by, 'g-t4-1', { loserIds: ['zubair'], chargeDouble: true });
+    expect(db.s.activity.filter((a) => a.type === 'double-charge')).toHaveLength(doubles + 1);
+    clock += 20_000;
+    undoEnd(db, by, 'g-t4-1');
+    expect(db.s.activity.filter((a) => a.type === 'double-charge')).toHaveLength(doubles);
+    expect(db.activeGameOn('t4')).toBeDefined();
+  });
+
+  it('a double frame’s two lines both go back', () => {
+    const db = make();
+    clock = at('2026-10-03T21:47:00+05:00');
+    const by = actor(db);
+    const lines = (id: string) => db.statement(id).length;
+    const before = [lines('imran'), lines('naveed')];
+    endGame(db, by, 'g-t5-d', { loserIds: ['imran', 'naveed'] });
+    clock += 5_000;
+    undoEnd(db, by, 'g-t5-d');
+    expect([lines('imran'), lines('naveed')]).toEqual(before);
+    expect(db.s.today.doubles).toBe(seed.aggregates.today.doubles);
+  });
+});
+
+describe('what a game view says each player won tonight (screen 17)', () => {
+  it('Table 1 at 9:51 PM: Ali Raza won 2 frames and Bilal none; it counts the frames of the session', () => {
+    const db = make();
+    clock = at('2026-10-03T21:51:00+05:00');
+    expect(gameView(db, 'g-t1-3').tonight).toEqual({
+      'ali-raza': { won: 2, waiting: 0 },
+      bilal: { won: 0, waiting: 600 },
+    });
+    endGame(db, actor(db), 'g-t1-3', { loserIds: ['bilal'] });
+    expect(gameView(db, 'g-t1-3').tonight).toEqual({
+      'ali-raza': { won: 3, waiting: 0 },
+      bilal: { won: 0, waiting: 850 },
+    });
+  });
+
+  it('counts a double frame and a game that ended with the player not among the losers', () => {
+    const db = make();
+    clock = at('2026-10-03T21:47:00+05:00');
+    endGame(db, actor(db), 'g-t5-d', { loserIds: ['imran', 'naveed'] });
+    expect(gameView(db, 'g-t5-d').tonight['kamran']).toMatchObject({ won: 1 });
+    expect(gameView(db, 'g-t5-d').tonight['imran']).toMatchObject({ won: 0 });
   });
 });

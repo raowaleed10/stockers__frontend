@@ -143,7 +143,18 @@ All in `src/counter` unless it says `src/ui`.
 - **`src/ui` changes:** `CounterDialog` takes `tone="brass"` (the 2 px brass border of screen 15) and `size="xl"` (1128 px); its dim layer leaves 110 px of room under the dialog while the Undo toast is on screen (`body[data-undo-toast]`). `PersonCard` has `variant="choice"` (84 px, a tick on the one picked). `TextArea` on the counter is fixed (no drag handle) and two rows are as tall as the text; three or more get 112 px. The Board's box is at least as tall as the screen under the top bar while a side panel is open (`data-side-panel`), so the panel does not scroll.
 - **Data:** `BoardResponse.pausedAllAt`; the `paused` scenario now holds the games of screen 16 (and `SeedScenario.sessions`); `docs/06`.
 - **New tokens:** `--c-discard-line`, `--c-note-bg`, `--c-note-text`, `--c-note-icon`, `--c-toast-muted`.
-- **Heads-up for P08 (ending):** `/table/:id/end` is a placeholder dialog (`TableScreen what="end"`); the panel's "End frame" goes there. Build `/table/:id/end` (screen 17), `/table/:id/next` (18), `/table/:id/end/overtime` (19), and the room screens (22, 23) as more `TABLE_ROUTES`. The Undo toast needs nothing from you. A write that ends the game must wait for `isSuccess` before a redirect that fires when the table has no game (see the start screens).
+
+## As built in P08 (ending games and rooms)
+
+All in `src/counter` unless it says `src/ui`.
+
+- **`screens/end/`:** `EndGame` (the router of `/table/:id/end`, and `EndScreenProps`), `WhoLost` (17), `EndDouble` (20, with its `ShareRow`), `EndCentury` (21), `Overtime` (19), `NextFrame` (18), `RoomStart` (22), `RoomEnd` (23).
+- **`end/`:** `draft.ts` (`useEndDraft`: who lost and a custom split, carried from 17 or 20 to 19; it lives in memory), `use-kept-game.ts` (`useKeptGame`: the screens of the end flow keep the last game they saw, because ending a game makes it vanish from the board before the next screen opens), `night.ts` (`useNightCard`: the two lines on a player's card, from the bill on the board, `GameView.tonight` and the player's balance), `buttons.tsx` (`KeepButton`, `ChargeButton`, `NobodyPaysButton`), `duration.ts` (`durationWords`, `exampleWords`, `perMinuteMoney`).
+- **`locales/{en,ur}/end.json`:** the namespace `end`; `RichText` takes `ns="end"` for the times and names inside a sentence.
+- **Data:** `GameView.tonight` (frames won tonight per player), `POST /games/:id/undo-end`, `Game.result.lineIds`, `ApiErrorCode` `NOT_ALLOWED`, the `roomEnd` scenario; `docs/06`.
+- **Shared rules:** `centuryBreakdown`, `roomBreakdown`, `roomPreview`, `pausedTotalMs` (`rules/charges.ts`, `docs/07` §2).
+- **`src/ui` changes:** `CounterDialog` takes `width` (the panel's own max width in px: 1106, 1068, 1166, 966, 1066 on these screens), `headerAlign="end"` (a big amount at the end sits on the title's baseline), `kickerPlain`, `leadSize` (80 px on 21 to 23), `iconTone="felt"` (the flat green ball of screen 18) and a numeric `titleSize`; `MoneyText` has `size="total"` (52 px); `PersonCard` `large` draws a plain "Owes nothing" in the soft colour of the line beside it.
+- **`useGame(id, enabled)`** takes a flag so a screen that has no id yet does not ask.
 
 ## Rules for components
 - `ui` and `tiles` never fetch data and never read the clock directly (`TimerText` uses `useNow()`, which is allowed).

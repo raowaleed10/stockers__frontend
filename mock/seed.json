@@ -1856,6 +1856,16 @@
         }
       ]
     },
+    "roomEnd": {
+      "now": "2026-10-03T22:15:00+05:00",
+      "note": "Room 1 at 10:15 PM after a 5-minute power cut: 1 h 45 min in the room, 5 min paused, so Rs 2,500 (screen 23). Only the room is running; the other tables are free.",
+      "games": [
+        {
+          "id": "g-r1", "tableId": "r1", "sheetId": "s48", "type": "room", "status": "running",
+          "startedAt": "2026-10-03T20:29:55+05:00", "startedBy": { "id": "zain", "name": "Zain", "role": "worker" }, "pausedMs": 300000, "price": 1500, "underPlayerId": "ali-hassan"
+        }
+      ]
+    },
     "paused": {
       "now": "2026-10-03T22:01:00+05:00",
       "note": "Power cut. Zain pressed Pause all at 9:58 PM; every running game is paused (screen 16). The games are the ones screen 16 draws at that moment: Table 1 in frame 4, a Century on Table 2, Table 4 in frame 2, a double on Table 5 and both rooms; Tables 3 and 6 are free.",

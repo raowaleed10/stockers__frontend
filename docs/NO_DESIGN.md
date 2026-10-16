@@ -43,6 +43,10 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 26 | [Pause all from the action bar](#26-pause-all-from-the-action-bar) | counter | P07 |
 | 27 | [Put a table back in order](#27-put-a-table-back-in-order) | counter | P07 answers |
 | 28 | [A table an owner marked](#28-a-table-an-owner-marked) | counter | P07 answers |
+| 29 | [Which side lost: one pays all, and a custom split](#29-which-side-lost-one-pays-all-and-a-custom-split) | counter | P08 |
+| 30 | [Charge double? for a double frame](#30-charge-double-for-a-double-frame) | counter | P08 |
+| 31 | [Start a room: nobody picked yet](#31-start-a-room-nobody-picked-yet) | counter | P08 |
+| 32 | [Undo on the next-frame screen](#32-undo-on-the-next-frame-screen) | counter | P08 |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -202,6 +206,9 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **Where:** `/board/pool/table/po1/start/players` once an owner has set the price (the picture is made with Rs 300 on every pool table).
 - **Words:** "Who is playing on Pool table 1?", "Game, Rs 300. The loser pays.", then the words of screen 8.
 - **Built from:** screen 8.
+- **When the game ends:** the same "Who lost this game?" as screen 17 ("Pool table 1, game ended at 9:42 PM after 12 minutes"), with
+  "game" where it says "frame". The loser is charged the game price and the table is free; there is no next-frame screen. Past the game's
+  own limit it asks "Charge double?" first (screen 19).
 
 ![Starting a game of pool](no-design/start-pool-players.png)
 
@@ -363,6 +370,55 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **Built from:** section 27.
 
 ![A table an owner marked](no-design/back-in-order-owner.png)
+
+## 29. Which side lost: one pays all, and a custom split
+
+- **What:** screen 20 draws Side B picked with "Half each". Before a side is chosen there is no split box and the brass button says
+  "Choose the side that lost" and stays off. After it, the split box offers three choices. **Half each** shows what each pays as
+  words. **One pays all** makes each player's row a button: the one tapped pays the whole price ("Charge Naveed") and the other pays
+  nothing. **Custom** makes the two amounts fields; typing in one sets the other to what is left, so they always add up to the price
+  (the server refuses a split that does not, D9). A side with one player has no split to choose: he pays all of it.
+- **Where:** `/table/t5/end?now=2026-10-03T21:47:00%2B05:00`, tap "Side B", then "One pays all".
+- **Words:** "Choose the side that lost", "One pays all", "Naveed pays", "Charge Naveed", "The amounts add up to Rs 390, not Rs 400."
+- **Built from:** screen 20.
+
+![One pays all](no-design/end-double-one-pays-all.png)
+
+## 30. Charge double? for a double frame
+
+- **What:** the over-the-limit question (screen 19) is also asked for a double frame (Q2, `docs/11` 15). It comes after the side and
+  the split, because the split is the worker's, and before anything is charged. The question names the two sides ("Imran Shah and
+  Naveed Akhtar lost to Kamran Iqbal and Faisal Mehmood. Choose what they pay.") and offers the whole price (Rs 400) or double
+  (Rs 800). A custom split doubles with it, so it still adds up (300 + 100 becomes 600 + 200).
+- **Where:** `/table/t5/end?now=2026-10-03T22:00:00%2B05:00`, tap "Side B", then "Charge Imran and Naveed".
+- **Words:** "This frame took 40 minutes. Charge double?", "Choose what they pay."
+- **Built from:** screen 19.
+
+![Charge double for a double frame](no-design/end-double-overtime.png)
+
+## 31. Start a room: nobody picked yet
+
+- **What:** screen 22 draws Danish Iqbal already picked. Before anybody is, "Under" holds the player search of screen 8 (with "Add
+  as a new player"), and "Start Room 2" stays off. Picking a player shows the green card of the screen with "Change", which takes
+  him off again.
+- **Where:** `/room/r2/start?now=2026-10-03T21:52:00%2B05:00`.
+- **Words:** "Search the player the room is under" (the name of the box).
+- **Built from:** screens 8 and 22.
+
+![Start a room with nobody picked](no-design/room-start-nobody.png)
+
+## 32. Undo on the next-frame screen
+
+- **What:** screen 18 draws "Tapped the wrong player? Undo, 1:56 left" and no document says what it does. It takes the charge
+  back (the line on the player's statement, his numbers, the session score and the sheet's totals) and asks "Who lost this frame?"
+  again, with the frame running as if it had not ended (the time since is not counted). Only the worker who charged the frame can
+  do it, only for 2 minutes, and only while no other game has started on the table (DEFAULT, needs answer, in `PROGRESS.md`).
+  Activity shows "Frame undone on Table 1" with his name. A Century, a room or a double frame has no Undo.
+- **Where:** `/table/t1/end?now=2026-10-03T21:51:00%2B05:00`, tap Bilal Ahmed, then "Undo". The picture is the screen it comes back to.
+- **Words:** "Undo, 1:56 left" (the words of screen 18).
+- **Built from:** screens 17 and 18.
+
+![Who lost, after Undo](no-design/next-frame-undone.png)
 
 ## Approved screens that change a field or a word
 

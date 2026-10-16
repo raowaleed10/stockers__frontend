@@ -24,6 +24,9 @@ The backend owns the final numbers. The frontend still needs the same rules to s
 | Century: whole minutes × rate, under one player, no minimum (D11) | `centuryCharge(elapsedMs, rate)` | 42 min 35 s at Rs 15 → **42 × 15 = Rs 630**; 37:05 on the tile → Rs 555 |
 | Room: 1 hour minimum, then hourly ÷ 60 × minutes, rounded to the nearest rupee (D12, Q9) | `roomCharge(elapsedMs, hourly)` | 1 h 40 min at 1,500 → **Rs 2,500**; 1 h 12 min at 1,500 → Rs 1,800; 6 min → Rs 1,500 (minimum); 1 h 40 min at 700 → Rs 1,167 |
 | Other games: per game, loser pays; locked while the price is null (D13, Q3) | `gameCharge(price)` | price null → cannot start |
+| What "End Century" shows (screen 21): the time on the table since the start, the whole minutes charged, the minutes paused (not charged), the rate and the amount | `centuryBreakdown(game, now)` | Table 3 at 42 min 35 s: 42 min charged, Rs 630; 5 min paused: 37 min, Rs 555 |
+| What "End room" shows (screen 23): the time in the room, the pause, the first hour, the minutes after it and the amount; `firstAmount + extraAmount` is always `amount` | `roomBreakdown(game, now, minMinutes)` | Room 1, 1 h 45 min with 5 paused: 100 min, Rs 1,500 + 40 × Rs 25 = Rs 2,500 |
+| The three numbers under the price on "Start a room" (screen 22) | `roomPreview(hourly, minMinutes)` | Rs 1,500: first hour Rs 1,500, Rs 25 a minute, 1 h 40 min is Rs 2,500; Rs 700: Rs 11.67 a minute, Rs 1,167 |
 | Paused time is not charged (D14) | `elapsed(startedAt, now, pausedMs, pausedAt?)` | paused at 12:04 → stays 12:04 |
 | Moved frame keeps the price of the table it started on (open question; default) | – | Table 1 (250) → Table 4: still Rs 250 |
 | Undo within 2 minutes with no reason (D16) | `canUndo(startedAt, now)` | 1:42 left → true |

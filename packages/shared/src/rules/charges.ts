@@ -149,3 +149,87 @@ export function chargeForGame(game: ChargedGame, now: Moment): Rs {
       return frameCharge(game.price);
   }
 }
+
+type TimedGame = Pick<Game, 'startedAt' | 'pausedMs' | 'pausedAt' | 'price'>;
+
+/** The time a game was paused, including a pause that is still going on. Not charged (D14). */
+export function pausedTotalMs(game: Pick<Game, 'pausedMs' | 'pausedAt'>, now: Moment): number {
+  return game.pausedMs + (game.pausedAt ? Math.max(0, toMs(now) - Date.parse(game.pausedAt)) : 0);
+}
+
+/** What "End Century" says (screen 21): the time on the table, the minutes charged, the rate, and the pause. */
+export interface CenturyBreakdown {
+  /** Since the start, with any time paused still in it ("42 min 35 sec"). */
+  onTableMs: number;
+  /** Whole minutes charged: the time played, without the pause. */
+  chargedMinutes: number;
+  /** Whole minutes paused, not charged. */
+  pausedMinutes: number;
+  rate: Rs;
+  amount: Rs;
+}
+
+export function centuryBreakdown(game: TimedGame, now: Moment): CenturyBreakdown {
+  const playedMs = elapsed(game.startedAt, toMs(now), game.pausedMs, game.pausedAt);
+  return {
+    onTableMs: Math.max(0, toMs(now) - Date.parse(game.startedAt)),
+    chargedMinutes: Math.floor(playedMs / MINUTE_MS),
+    pausedMinutes: Math.floor(pausedTotalMs(game, now) / MINUTE_MS),
+    rate: game.price,
+    amount: centuryCharge(playedMs, game.price),
+  };
+}
+
+/** What "End room" says (screen 23): the time in the room, the pause, the first hour and the minutes after it. */
+export interface RoomBreakdown {
+  /** Since the start, with any time paused still in it ("1 h 45 min"). */
+  onRoomMs: number;
+  pausedMinutes: number;
+  /** Whole minutes charged, never below the minimum. */
+  chargedMinutes: number;
+  minMinutes: number;
+  /** The minimum, as an amount ("First hour, minimum Rs 1,500"). */
+  firstAmount: Rs;
+  /** Minutes after the minimum ("Next 40 minutes"), and what they cost. `firstAmount + extraAmount` is `amount`. */
+  extraMinutes: number;
+  extraAmount: Rs;
+  amount: Rs;
+}
+
+export function roomBreakdown(game: TimedGame, now: Moment, minMinutes = 60): RoomBreakdown {
+  const playedMs = elapsed(game.startedAt, toMs(now), game.pausedMs, game.pausedAt);
+  const chargedMinutes = Math.max(Math.floor(playedMs / MINUTE_MS), minMinutes);
+  const amount = roomCharge(playedMs, game.price, minMinutes);
+  const firstAmount = Math.round((game.price * minMinutes) / 60);
+  return {
+    onRoomMs: Math.max(0, toMs(now) - Date.parse(game.startedAt)),
+    pausedMinutes: Math.floor(pausedTotalMs(game, now) / MINUTE_MS),
+    chargedMinutes,
+    minMinutes,
+    firstAmount,
+    extraMinutes: chargedMinutes - minMinutes,
+    extraAmount: amount - firstAmount,
+    amount,
+  };
+}
+
+/** The three numbers under the price on "Start a room" (screen 22). */
+export interface RoomPreview {
+  firstAmount: Rs;
+  /** The price of one minute after the first hour. Whole for Rs 1,500 (25), not for Rs 700 (11.67). */
+  perMinute: number;
+  exampleMinutes: number;
+  exampleAmount: Rs;
+}
+
+export const ROOM_EXAMPLE_MINUTES = 100;
+
+export function roomPreview(hourly: Rs, minMinutes = 60): RoomPreview {
+  assertRupees(hourly, 'The hourly price');
+  return {
+    firstAmount: Math.round((hourly * minMinutes) / 60),
+    perMinute: hourly / 60,
+    exampleMinutes: ROOM_EXAMPLE_MINUTES,
+    exampleAmount: roomCharge(ROOM_EXAMPLE_MINUTES * MINUTE_MS, hourly, minMinutes),
+  };
+}

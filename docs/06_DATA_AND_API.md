@@ -93,7 +93,7 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `POST /auth/unlock` · `POST /auth/sign-out` · `GET /auth/me` | | 34 |
 | `GET /alerts` · `POST /alerts/read-all` | → `{alerts, unread}`. The counter's own alerts (the bell); separate from the owners' notifications. A table put out of order, a game cancelled or undone, and an item running low add one. (Added with the P03 answers. The counter's bell panel at `/alerts` shows the list, D54. A row may carry an `amount` in whole rupees.) | 3–6 |
 | `GET /board?category=` | → `{sheet, categories, tables(with game), players, waiting, unread, backedUpAt, pausedAll, pausedAllAt?}`; `pausedAllAt` is when Pause all was pressed, while it is on (the banner of screen 16, added in P07). No category is the `snooker` tab (snooker tables and rooms); `all` is the whole club. `players` names everyone on a table. | 3–6, 16 |
-| `GET /games/:id` | → `{game, table, session?, players}` (added in P03: the `['game', id]` query needs it) | 11, 13–15, 17–23 |
+| `GET /games/:id` | → `{game, table, session?, players, tonight}` (added in P03: the `['game', id]` query needs it). `tonight` is `{[playerId]: {won, waiting}}`: the frames and games he played in on the open sheet and did not lose, and what he has waiting to pay from tonight's charges (his bill without old credit). Screens 17 and 18 read them (P08); `waiting` comes in the same answer as the charge, so screen 18 never shows the bill from before it | 11, 13–15, 17–23 |
 | `POST /games` | `{tableId, type, playerIds|sides|underPlayerId, price?}` | 7–10 |
 | `POST /games/:id/change-type` | `{type, ...}` (within 5 min) | 12 |
 | `POST /games/:id/pause` · `/resume` · `POST /games/pause-all` · `/resume-all` | | 11, 16 |
@@ -102,6 +102,7 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `POST /games/:id/damage` | `{playerId, item, amount, note}` | 15 |
 | `POST /games/:id/end` | `{loserIds, split?, chargeDouble?}` → charged lines | 17, 19, 20 |
 | `POST /games/:id/next` | same players, next frame | 18 |
+| `POST /games/:id/undo-end` | "Tapped the wrong player?" on screen 18 (P08, **DEFAULT, needs answer**). Takes the charge of a frame that was just charged back: its statement lines (`Game.result.lineIds`), the players' numbers, the session frame and the sheet totals; the game runs again from where it ended (the time since is added to `pausedMs`); a double-charge event is removed; Activity gets `undo` "Frame undone on Table 1". Only the worker who charged it (`NOT_ALLOWED`), within 2 minutes (`UNDO_EXPIRED`), while the table has no other game (`TABLE_BUSY`); `GAME_NOT_RUNNING` for a game that is not a charged frame | 18 |
 | `POST /games/:id/end-century` | → minutes, amount | 21 |
 | `POST /rooms/:tableId/start` · `POST /games/:id/end-room` | `{underPlayerId, hourly}` | 22, 23 |
 | `GET /players?q=` · `GET /players/recent` · `POST /players` `{name, phone?}` · `GET /players/:id/statement` | `?q=` matches a name or nickname that starts with the text or has a word that does ("ali" finds Ali Raza and Hamid Ali, not Malik), or three or more digits of the phone number. Each player carries `lastPlayedAt` (the start of his latest frame, game, Century or room, or of the game he is in; nothing if he has not played), which the counter writes as "Last played Thursday". `GET /players/recent` is the last eight to play, the latest first, for "Played here recently" (added in P06: the backend must implement it). A player made with `POST /players` needs only a name (Q18); a phone number, if given, has at least 10 digits | 8, 10, 30 |
@@ -153,6 +154,7 @@ Every write returns the saved record including `doneBy`. Errors use `{code, mess
 | `closing` | 3:40 AM Sun | Shabir is signed in (since 2:04 AM); one Century on Table 2; Waqas (old credit 950) and Shoaib (250) not checked out, Rs 450 and Rs 250 tonight; close numbers from `sheets[s48].final` | 32 |
 | `closed` | 3:45 AM Sun | Sheet 48 closed, sheet 49 open, the Century moved, Waqas and Shoaib moved to credit | 33, 38–44, 55, 56 |
 | `empty` | any | No games, no bills, no activity | empty states |
+| `roomEnd` | 10:15 PM | Only Room 1 is running, with a 5-minute power cut already paused (`pausedMs` 300000): 1 h 45 min in the room, Rs 2,500 | 23 |
 | `newGame` | 9:53 PM | Zain started a single frame on Table 2 at 9:50 PM for Ahmed Nawaz and Ali Akbar, **added** to the night's own games (`addGames`; the others stay): inside the 5 minutes to change the type, and at 9:50 the 2 minutes to undo | 12, 14 |
 
 - `design/screens.json` gives every screen its `now` (the demo clock the design shows) and, where needed, its `scenario`. Visual tests open `route?now=<now>&scenario=<scenario>`.

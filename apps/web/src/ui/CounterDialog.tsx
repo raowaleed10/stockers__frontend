@@ -10,16 +10,26 @@ export interface CounterDialogProps {
   title: ReactNode;
   /** A short line above the title (screen 19: "Table 4 ran over 30 minutes"). */
   kicker?: ReactNode;
+  /** The kicker in normal weight, as the end screens draw it (17, 20 to 23); screens 15 and 19 draw it bold. */
+  kickerPlain?: boolean;
   /** A line under the title. */
   subtitle?: ReactNode;
   /** Drawn inside a 64 px ball before the title. Pass the icon element. */
   icon?: ReactNode;
   /** A big number before the title (screen 7: the table number). */
   lead?: ReactNode;
+  /** Its size in px when a screen draws it bigger than 72 (80 on screens 21 to 23). */
+  leadSize?: number;
   /** `warning` has a red border and a red ball (screen 19); `brass` a 2 px brass border (screen 15, the damage charge). */
   tone?: 'normal' | 'warning' | 'brass';
   /** `lg` is the 32 px title of a warning dialog. */
-  titleSize?: 'md' | 'lg';
+  titleSize?: 'md' | 'lg' | number;
+  /** The panel's own width in px, for a screen that draws one (the end screens, 17 to 23). Replaces `size`. */
+  width?: number;
+  /** `end` lines the header up along its bottom edge, so a big amount at the end sits on the title's baseline (17, 20). */
+  headerAlign?: 'start' | 'end';
+  /** `felt` is the flat green ball of a success header (screen 18); `brass` is the round brass ball. */
+  iconTone?: 'brass' | 'felt';
   /** `lg` is the wide dialog for two columns (screens 8, 9); `form` is the one with a keypad beside it (screen 10); `xl` is the damage charge (screen 15). */
   size?: 'md' | 'form' | 'xl' | 'lg';
   /** A round Back button before the title (screens 8, 9). The dialog then has no × unless `showClose` says so. */
@@ -43,11 +53,16 @@ export interface CounterDialogProps {
 export function CounterDialog({
   title,
   kicker,
+  kickerPlain = false,
   subtitle,
   icon,
   lead,
+  leadSize,
   tone = 'normal',
   titleSize = 'md',
+  width,
+  headerAlign = 'start',
+  iconTone = 'brass',
   size = 'md',
   back,
   aside,
@@ -69,7 +84,7 @@ export function CounterDialog({
       <header
         className={cx(
           'flex flex-wrap justify-between gap-4',
-          back || aside ? 'items-center' : 'items-start',
+          headerAlign === 'end' ? 'items-end' : back || aside ? 'items-center' : 'items-start',
         )}
       >
         <div
@@ -90,21 +105,32 @@ export function CounterDialog({
             <span
               aria-hidden="true"
               className={cx(
-                'flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-c-brass-ink shadow-[inset_-8px_-8px_0_rgba(0,0,0,0.25)]',
-                warning ? 'bg-s-play' : 'bg-c-brass',
+                'flex h-16 w-16 shrink-0 items-center justify-center rounded-full',
+                iconTone === 'felt'
+                  ? 'bg-c-felt text-c-text'
+                  : cx(
+                      'text-c-brass-ink shadow-[inset_-8px_-8px_0_rgba(0,0,0,0.25)]',
+                      warning ? 'bg-s-play' : 'bg-c-brass',
+                    ),
               )}
             >
               {icon}
             </span>
           ) : null}
           {lead ? (
-            <span className="font-num text-[72px] font-bold leading-[0.8]">{lead}</span>
+            <span
+              style={leadSize ? { fontSize: leadSize } : undefined}
+              className="font-num text-[72px] font-bold leading-[0.8]"
+            >
+              {lead}
+            </span>
           ) : null}
           <div className="flex min-w-0 flex-col gap-1.5">
             {kicker ? (
               <span
                 className={cx(
-                  'text-[17px] font-semibold',
+                  'text-[17px] rtl:leading-[1.8]',
+                  !kickerPlain && 'font-semibold',
                   warning ? 'text-c-danger-ink' : brass ? 'text-c-brass' : 'text-c-text-2',
                 )}
               >
@@ -113,17 +139,21 @@ export function CounterDialog({
             ) : null}
             <h2
               id={titleId}
+              style={typeof titleSize === 'number' ? { fontSize: titleSize } : undefined}
               className={cx(
                 'font-bold',
-                titleSize === 'lg' ? 'text-[32px]' : 'text-[26px]',
-                'leading-tight',
+                titleSize === 'lg' ? 'text-[32px]' : titleSize === 'md' ? 'text-[26px]' : '',
+                'leading-tight rtl:leading-[1.7]',
               )}
             >
               {title}
             </h2>
             {subtitle ? (
               <span
-                className={cx('text-c-text-2', titleSize === 'lg' ? 'text-[18px]' : 'text-[17px]')}
+                className={cx(
+                  'text-c-text-2 rtl:leading-[1.8]',
+                  titleSize === 'md' ? 'text-[17px]' : 'text-[18px]',
+                )}
               >
                 {subtitle}
               </span>
@@ -154,6 +184,7 @@ export function CounterDialog({
       aria-modal={inPlace ? undefined : true}
       aria-labelledby={titleId}
       tabIndex={-1}
+      style={width ? { maxWidth: width } : undefined}
       // A secondary button on this panel is one step lighter than the panel (see Button).
       className={cx(
         'dialog-in screen-text flex w-full flex-col gap-[22px] rounded-dialog bg-c-panel px-8 py-7 font-body text-c-text shadow-dialog-dark outline-none [--btn-secondary-bg:var(--c-raised)]',
