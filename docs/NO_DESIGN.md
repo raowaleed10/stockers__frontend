@@ -47,6 +47,12 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 30 | [Charge double? for a double frame](#30-charge-double-for-a-double-frame) | counter | P08 |
 | 31 | [Start a room: nobody picked yet](#31-start-a-room-nobody-picked-yet) | counter | P08 |
 | 32 | [Undo on the next-frame screen](#32-undo-on-the-next-frame-screen) | counter | P08 |
+| 33 | [After a payment: the note on the checkout list](#33-after-a-payment-the-note-on-the-checkout-list) | counter | P09 |
+| 34 | [Checkout: Owes from before](#34-checkout-owes-from-before) | counter | P09 |
+| 35 | [Checkout: search any player](#35-checkout-search-any-player) | counter | P09 |
+| 36 | [A bill that uses an advance](#36-a-bill-that-uses-an-advance) | counter | P09 |
+| 37 | [Part payment: paying more than the total](#37-part-payment-paying-more-than-the-total) | counter | P09 |
+| 38 | [Give a discount: changing or removing it](#38-give-a-discount-changing-or-removing-it) | counter | P09 |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -419,6 +425,75 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **Built from:** screens 17 and 18.
 
 ![Who lost, after Undo](no-design/next-frame-undone.png)
+
+## 33. After a payment: the note on the checkout list
+
+- **What:** after a bill is paid (Paid in full, Paid part or Put all on credit) the worker is taken back to the list, and a green
+  note at the top says what was done: who paid, how much, and what stays as credit or is kept as advance. The bill is gone from
+  "Waiting to pay" and the count and "Waiting tonight" have gone down. The note stays until the worker leaves the page.
+- **Where:** `/checkout?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`, tap Saad Hussain, then "Paid in full".
+- **Words:** "Saad Hussain paid Rs 430." and, when something is left, "Rs 300 stays as credit." or "Rs 150 is kept as advance."
+- **Built from:** the green box of screens 1 and 26.
+
+![The note after a payment](no-design/checkout-paid-note.png)
+
+## 34. Checkout: Owes from before
+
+- **What:** the second tab of screen 24 ("Owes from before") has no PNG. It lists everyone with old credit as the same cards: first
+  the bills waiting tonight that have old credit, then the other players who owe, oldest first. A card says "Owes Rs 950 from
+  before", with the age in amber when it is more than 15 days, and the amount he owes. A tap opens his bill, where he can pay it.
+- **Where:** `/checkout?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`, tap "Owes from before".
+- **Words:** "Owes from before", "Owes {{amount}} from before, {{days}} days", "Nobody owes from before." when the list is empty.
+- **Built from:** the cards of screen 24.
+
+![Owes from before](no-design/checkout-owes-before.png)
+
+## 35. Checkout: search any player
+
+- **What:** typing in "Search any player by name or phone" replaces the cards with the players found (names that start with the
+  text first), whether or not they have a bill tonight. A player with no bill shows what he owes, or what he holds in advance. A tap
+  opens his bill, which for a player with only old credit has no lines for tonight.
+- **Where:** `/checkout?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`, type "waq".
+- **Words:** "No player found." when nothing matches.
+- **Built from:** the cards of screen 24 and the search box of screen 8.
+
+![Search on the checkout list](no-design/checkout-search.png)
+
+## 36. A bill that uses an advance
+
+- **What:** screen 25 draws Bilal, who owes old credit. A player who holds an advance (Saad: Rs 200) gets a green box in the place of
+  the amber one: "Advance held", "Used against tonight’s bill" and "− Rs 200". The total is the charges less the advance (Rs 630
+  − Rs 200 = Rs 430). Nothing else on the page changes.
+- **Where:** `/checkout/saad?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`.
+- **Words:** "Advance held", "Used against tonight’s bill".
+- **Built from:** the old-credit box of screen 25 in the green of screen 26.
+
+![A bill that uses an advance](no-design/checkout-advance.png)
+
+## 37. Part payment: paying more than the total
+
+- **What:** screen 26 draws Rs 1,000 paid on a total of Rs 1,300, with Rs 300 staying as credit. When more is typed than the total
+  the third box says "Kept as advance" with the extra in green, and the button says "Rs 150 is kept as advance" (D26). The note
+  under the boxes already says so.
+- **Where:** `/checkout/kamran/part?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`, type 1500 on the keypad.
+- **Words:** "Kept as advance", "{{amount}} is kept as advance".
+- **Built from:** the boxes of screen 26.
+
+![Paying more than the total](no-design/checkout-part-advance.png)
+
+## 38. Give a discount: changing or removing it
+
+- **What:** screen 27 draws the amount, the reason and the note already filled in. It is money, so the dialog starts empty (the
+  button says "Apply discount" and stays off until the amount and a reason are given); "Apply Rs 50 discount" then says what it
+  will do. A discount is kept with the checkout and saved with the payment, with the worker's name. Opening the dialog again shows
+  the discount that was given, and a quiet "Remove discount" button takes it off. More than the bill is refused: "A discount cannot
+  be more than the bill, Rs 1,350."
+- **Where:** `/checkout/bilal?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`, "Give a discount", Rs 50, "Rounded the bill", Apply,
+  then "Give a discount" again.
+- **Words:** "Apply discount", "Remove discount", "A discount cannot be more than the bill, {{total}}."
+- **Built from:** screen 27.
+
+![Changing a discount](no-design/checkout-discount-edit.png)
 
 ## Approved screens that change a field or a word
 

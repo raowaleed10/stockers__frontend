@@ -132,6 +132,8 @@ export interface StatementLine {
   sheetId?: string;
   /** A canteen line: what was sold and how many. The name is stored as typed. */
   item?: { name: string; qty: number };
+  /** A frame or game that was charged double because it ran past its limit (Q2). Shown as "one charged double" at checkout. */
+  doubled?: boolean;
 }
 
 /** What a bill is made of, one part for each kind of charge (the "2 frames lost, 2 teas" of screen 3). */
@@ -140,6 +142,12 @@ export interface BillPart {
   kind: BillPartKind;
   /** Frames lost, halves of a double, games, or the quantity of a canteen item. */
   count: number;
+  /** What these charges add up to (Century Rs 630). */
+  amount: Rs;
+  /** How many of the frames, games or halves were charged double (Zubair: 2 frames, one charged double). */
+  doubled?: number;
+  /** A room: the line as it is on his statement ("Room 1, 1 h 40 min"), which the checkout list shows as it is. */
+  text?: string;
   /** The canteen item, as stored. Only on `canteen`. */
   item?: string;
 }
@@ -154,6 +162,8 @@ export interface WaitingBill {
   oldCredit: Rs;
   advance: Rs;
   total: Rs;
+  /** When the oldest unpaid charge of his old credit was made, for "Old credit Rs 1,100, 18 days" at checkout. */
+  oldestUnpaidAt?: ISO;
 }
 
 export interface PaymentMethod {

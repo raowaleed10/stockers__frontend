@@ -154,8 +154,21 @@ describe('the action bar (screen 3)', () => {
     expect(await screen.findByText(textIs('Backed up 9:00 PM'))).toBeInTheDocument();
   });
 
+  it('goes from Checkout to the checkout page, which has its own header and no bars', async () => {
+    const view = renderCounter('/');
+    await chip();
+    await userEvent.click(
+      within(screen.getByRole('contentinfo')).getByRole('button', { name: 'Checkout' }),
+    );
+    expect(wherePath(view)).toBe('/checkout');
+    expect(await screen.findByRole('heading', { name: 'Checkout' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Tables' })).toBeInTheDocument();
+    // The top bar and the action bar are not drawn on a checkout page (screen 24).
+    expect(screen.queryByRole('contentinfo')).toBeNull();
+    expect(screen.getAllByRole('banner')).toHaveLength(1);
+  });
+
   it.each([
-    ['Checkout', '/checkout'],
     ['Canteen', '/canteen'],
     ['Players', '/players'],
     ['Today’s totals', '/today'],

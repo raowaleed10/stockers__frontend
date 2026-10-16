@@ -156,6 +156,17 @@ All in `src/counter` unless it says `src/ui`.
 - **`src/ui` changes:** `CounterDialog` takes `width` (the panel's own max width in px: 1106, 1068, 1166, 966, 1066 on these screens), `headerAlign="end"` (a big amount at the end sits on the title's baseline), `kickerPlain`, `leadSize` (80 px on 21 to 23), `iconTone="felt"` (the flat green ball of screen 18) and a numeric `titleSize`; `MoneyText` has `size="total"` (52 px); `PersonCard` `large` draws a plain "Owes nothing" in the soft colour of the line beside it.
 - **`useGame(id, enabled)`** takes a flag so a screen that has no id yet does not ask.
 
+## As built in P09 (checkout)
+
+All in `src/counter` unless it says `src/ui`.
+
+- **`screens/checkout/`:** `CheckoutList` (24, with `PaidNote`), `BillPage` (25, draws an `<Outlet/>` for the discount), `PartPayment` (26), `DiscountDialog` (27), and `checkout.test.tsx`.
+- **`checkout/`:** `draft.ts` (`useCheckoutDraft`: the method, the discount, the payment lines and the line the keypad types into; in memory only; `DISCOUNT_REASONS`), `bill-line.ts` (`useBillLine`: the words under a name on a card), `request.ts` (`discountRequest`: the discount as the server takes it, the reason in English), `split-line.ts` (`splitLine`: "Frame 1, Table 1" over "8:31 PM, lost to Ali Raza").
+- **`components/`:** `PageHeader` (the back button, the title with an optional second line, the clock) and `page-routes.ts` (`isPageRoute`: `CounterFrame` draws no top bar and no action bar on a page route; later steps add the pages of the other action bar buttons).
+- **`locales/{en,ur}/checkout.json`:** the namespace `checkout`; the payment method words are `methods.<id>` and fall back to the name the owners typed.
+- **Data:** `BillPart.amount`, `.doubled` and `.text`, `StatementLine.doubled`, `WaitingBill.oldestUnpaidAt`; `docs/06`.
+- **Shared rules:** `paymentPreview`, `isValidDiscount` (`rules/checkout.ts`) and `formatMonthYear` (`rules/format.ts`).
+
 ## Rules for components
 - `ui` and `tiles` never fetch data and never read the clock directly (`TimerText` uses `useNow()`, which is allowed).
 - All text comes in through props or `t()`; no English hard-coded inside shared components.

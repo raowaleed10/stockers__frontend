@@ -143,6 +143,13 @@ export function formatDay(iso: ISO, long = false, lang: FormatLang = 'en'): stri
     : `${weekday.slice(0, 3)} ${t.getUTCDate()} ${month.slice(0, 3)}`;
 }
 
+/** `March 2026`; in Urdu `مارچ 2026`: "Player since" on a player's bill (screen 25). Digits stay Western. */
+export function formatMonthYear(iso: ISO, lang: FormatLang = 'en'): string {
+  const t = clubTime(iso);
+  const month = lang === 'ur' ? UR_MONTHS[t.getUTCMonth()] : MONTHS[t.getUTCMonth()];
+  return `${month} ${t.getUTCFullYear()}`;
+}
+
 /** `Thursday`; in Urdu `جمعرات`: the weekday alone, for "Last played Thursday". */
 export function formatWeekday(iso: ISO, lang: FormatLang = 'en'): string {
   const day = clubTime(iso).getUTCDay();

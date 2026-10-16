@@ -11,7 +11,11 @@ import type { BillPart, Rs, StatementLine, WaitingBill } from '../types';
  */
 export function billParts(lines: readonly StatementLine[]): BillPart[] {
   const counts = new Map<Exclude<BillPart['kind'], 'canteen'>, number>();
+  const amounts = new Map<BillPart['kind'], number>();
+  const doubled = new Map<BillPart['kind'], number>();
+  const roomText = new Map<BillPart['kind'], string>();
   const items = new Map<string, number>();
+  const itemAmounts = new Map<string, number>();
   for (const line of lines) {
     switch (line.kind) {
       case 'frame':
@@ -21,11 +25,15 @@ export function billParts(lines: readonly StatementLine[]): BillPart[] {
       case 'room':
       case 'damage':
         counts.set(line.kind, (counts.get(line.kind) ?? 0) + 1);
+        amounts.set(line.kind, (amounts.get(line.kind) ?? 0) + (line.charge ?? 0));
+        if (line.doubled) doubled.set(line.kind, (doubled.get(line.kind) ?? 0) + 1);
+        if (line.kind === 'room' && !roomText.has('room')) roomText.set('room', line.text);
         break;
       case 'canteen': {
         // A line from before items were stored has no name: it is still one sale.
         const name = line.item?.name ?? '';
         items.set(name, (items.get(name) ?? 0) + (line.item?.qty ?? 1));
+        itemAmounts.set(name, (itemAmounts.get(name) ?? 0) + (line.charge ?? 0));
         break;
       }
       default:
@@ -35,13 +43,27 @@ export function billParts(lines: readonly StatementLine[]): BillPart[] {
   const parts: BillPart[] = [];
   for (const kind of ['frame', 'game', 'double', 'century', 'room'] as const) {
     const count = counts.get(kind);
-    if (count) parts.push({ kind, count });
+    if (count) {
+      parts.push({
+        kind,
+        count,
+        amount: amounts.get(kind) ?? 0,
+        ...(doubled.get(kind) ? { doubled: doubled.get(kind) } : {}),
+        // Only when the whole bill's rooms are one, so the text names it.
+        ...(kind === 'room' && count === 1 ? { text: roomText.get('room') } : {}),
+      });
+    }
   }
   for (const [item, count] of items) {
-    parts.push({ kind: 'canteen', count, ...(item ? { item } : {}) });
+    parts.push({
+      kind: 'canteen',
+      count,
+      amount: itemAmounts.get(item) ?? 0,
+      ...(item ? { item } : {}),
+    });
   }
   const damage = counts.get('damage');
-  if (damage) parts.push({ kind: 'damage', count: damage });
+  if (damage) parts.push({ kind: 'damage', count: damage, amount: amounts.get('damage') ?? 0 });
   return parts;
 }
 
@@ -87,9 +109,28 @@ export function applyDiscount(total: Rs, discount: Discount | undefined): Rs {
   return total - discount.amount;
 }
 
+/** Whether a discount is allowed on this bill: whole rupees above 0, and not more than the bill (Q6). */
+export function isValidDiscount(total: Rs, amount: Rs): boolean {
+  return Number.isInteger(amount) && amount > 0 && amount <= Math.max(0, total);
+}
+
 export interface Payment {
   method: string;
   amount: Rs;
+}
+
+/**
+ * What the part payment page (screen 26) shows while the worker types: what is paid now, what stays as credit, and the
+ * extra kept as advance when he gives more than is due (D26). `due` is the bill after any discount. The same numbers
+ * `settleCheckout` checks when the payment is saved.
+ */
+export function paymentPreview(
+  due: Rs,
+  parts: readonly Payment[],
+): { paid: Rs; toCredit: Rs; advance: Rs } {
+  const paid = parts.reduce((sum, part) => sum + part.amount, 0);
+  const shortfall = due - paid;
+  return { paid, toCredit: Math.max(0, shortfall), advance: Math.max(0, -shortfall) };
 }
 
 export interface Settlement {

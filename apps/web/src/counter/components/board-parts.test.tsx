@@ -13,7 +13,7 @@ const bill = (extra: Partial<WaitingBill> = {}): WaitingBill => ({
   playerId: 'bilal',
   name: 'Bilal Ahmed',
   phoneTail: '•••• 4512',
-  parts: [{ kind: 'frame', count: 2 }],
+  parts: [{ kind: 'frame', count: 2, amount: 500 }],
   tonight: 600,
   oldCredit: 0,
   advance: 0,
@@ -55,7 +55,7 @@ describe('WaitingPanel', () => {
         bills={[
           bill({
             phoneTail: undefined,
-            parts: [{ kind: 'double', count: 1 }],
+            parts: [{ kind: 'double', count: 1, amount: 250 }],
             tonight: 250,
           }),
         ]}
@@ -99,9 +99,9 @@ describe('WaitingPanel', () => {
         bills={[
           bill({
             parts: [
-              { kind: 'frame', count: 2 },
-              { kind: 'canteen', count: 2, item: 'Tea' },
-              { kind: 'canteen', count: 1 },
+              { kind: 'frame', count: 2, amount: 500 },
+              { kind: 'canteen', count: 2, amount: 100, item: 'Tea' },
+              { kind: 'canteen', count: 1, amount: 50 },
             ],
           }),
         ]}

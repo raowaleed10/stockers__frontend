@@ -44,6 +44,9 @@ export function waitingBills(db: MockDb): WaitingBill[] {
       oldCredit: bill.oldCredit,
       advance: bill.advance,
       total: bill.total,
+      ...(bill.oldCredit > 0 && player.oldestUnpaidAt
+        ? { oldestUnpaidAt: player.oldestUnpaidAt }
+        : {}),
     });
   }
   // The seed lists them in the order the screens show; new bills follow.

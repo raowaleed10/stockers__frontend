@@ -252,6 +252,61 @@ const BUILT: Record<
     },
   },
   23: { window: true, scenario: 'roomEnd' },
+  // Screens 24 to 27 (P09): the checkout pages draw their own header, so the whole 1440 x 900 page is compared (27 is a dialog).
+  // Bilal's card has the brass border because his bill was opened last, as the PNG draws it.
+  24: {
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Bilal Ahmed/ }).click();
+      await page.getByRole('button', { name: 'Checkout' }).click();
+      await expect(page.getByRole('button', { name: /^Bilal Ahmed/ })).toHaveAttribute(
+        'aria-current',
+        'true',
+      );
+      await blur(page);
+    },
+  },
+  25: {},
+  // Screen 26 is reached as the PNG is: a Rs 50 discount, then Paid part with Rs 600 cash and Rs 400 on Easypaisa. The PNG's
+  // second line says "(regular player)", which is not one of the five reasons, so the sentence is left out.
+  26: {
+    route: '/checkout/bilal',
+    prepare: async (page) => {
+      await page.getByRole('button', { name: 'Give a discount' }).click();
+      const dialog = page.getByRole('dialog', { name: 'Give Bilal a discount' });
+      await dialog.getByLabel('Discount amount').fill('50');
+      await dialog.getByRole('button', { name: 'Rounded the bill' }).click();
+      await dialog.getByRole('button', { name: 'Apply Rs 50 discount' }).click();
+      await page.getByRole('button', { name: 'Paid part' }).click();
+      for (const digit of '600')
+        await page.getByRole('button', { name: digit, exact: true }).click();
+      await page.getByRole('button', { name: '+ Easypaisa' }).click();
+      for (const digit of '400')
+        await page.getByRole('button', { name: digit, exact: true }).click();
+      await expect(page.getByText('Typing the Easypaisa amount')).toBeVisible();
+      await blur(page);
+    },
+    masks: async (page) => {
+      const box = await page.getByText(/^Total Rs 1,300 after/).boundingBox();
+      return box ? [box] : [];
+    },
+  },
+  // Screen 27 draws 50, "Rounded the bill" and a note already filled in. Money starts empty on ours (nothing is chosen for
+  // the worker), so the places where the PNG shows that state are left out.
+  27: {
+    window: true,
+    masks: async (page) => {
+      const places = [
+        page.getByLabel('Discount amount'),
+        page.getByRole('group', { name: 'Reason (required)' }),
+        page.getByLabel('Note (optional)'),
+        page.getByText('Discount', { exact: true }).locator('..'),
+        page.getByText('New total').locator('..'),
+        page.getByRole('button', { name: /^Apply/ }),
+      ];
+      const boxes = await Promise.all(places.map((place) => place.boundingBox()));
+      return boxes.filter((box): box is Rect => box !== null);
+    },
+  },
   // Screen 16: the real board has tabs, a waiting list and the action bar that the PNG leaves out (P05 answer 1), so the
   // power-cut banner is compared, and the tiles are compared in tiles.counter.spec.ts.
   16: {

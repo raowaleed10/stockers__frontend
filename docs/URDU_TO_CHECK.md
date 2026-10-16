@@ -388,5 +388,112 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Ending: next / freeSub | Players are done | کھلاڑی ختم کر چکے | P08 |
 | Ending: next / wrong | Tapped the wrong player? | غلط کھلاڑی پر ٹیپ ہو گیا؟ | P08 |
 | Ending: next / undo | Undo, {{time}} left | واپس کریں، {{time}} باقی | P08 |
+| Checkout: loadFailed | The bills could not be loaded. | بل لوڈ نہیں ہو سکے۔ | P09 |
+| Checkout: notFound | Player not found | کھلاڑی نہیں ملا | P09 |
+| Checkout: list / back | Tables | ٹیبل | P09 |
+| Checkout: list / title | Checkout | چیک آؤٹ | P09 |
+| Checkout: list / search | Search any player by name or phone | کسی بھی کھلاڑی کو نام یا فون سے تلاش کریں | P09 |
+| Checkout: list / searchLabel | Search any player | کسی بھی کھلاڑی کو تلاش کریں | P09 |
+| Checkout: list / show | Show | دکھائیں | P09 |
+| Checkout: list / waiting | Waiting to pay ({{count}}) | ادائیگی باقی ({{count}}) | P09 |
+| Checkout: list / before | Owes from before | پہلے کا بقایا | P09 |
+| Checkout: list / nobody | Nobody is waiting to pay. | کسی کی ادائیگی باقی نہیں۔ | P09 |
+| Checkout: list / nobodyOwes | Nobody owes from before. | پہلے کا بقایا کسی پر نہیں۔ | P09 |
+| Checkout: list / noneFound | No player found. | کوئی کھلاڑی نہیں ملا۔ | P09 |
+| Checkout: list / leftNote | Anyone not checked out when the sheet closes is moved to credit and marked “Left without checkout”. | شیٹ بند ہونے تک جس کا چیک آؤٹ نہ ہوا ہو، وہ ادھار میں چلا جاتا ہے اور “بغیر چیک آؤٹ گیا” لکھا جاتا ہے۔ | P09 |
+| Checkout: list / waitingTonight | Waiting tonight {{amount}} | آج رات باقی {{amount}} | P09 |
+| Checkout: list / waitingPlain | Waiting to pay | ادائیگی باقی | P09 |
+| Checkout: paid / done | {{name}} paid {{amount}}. | {{name}} نے {{amount}} ادا کیے۔ | P09 |
+| Checkout: paid / credit | {{amount}} stays as credit. | {{amount}} ادھار میں رہے۔ | P09 |
+| Checkout: paid / advance | {{amount}} is kept as advance. | {{amount}} ایڈوانس رکھے گئے۔ | P09 |
+| Checkout: parts / frame_one | {{count}} frame | {{count}} فریم | P09 |
+| Checkout: parts / frame_other | {{count}} frames | {{count}} فریم | P09 |
+| Checkout: parts / game_one | {{count}} game | {{count}} گیم | P09 |
+| Checkout: parts / game_other | {{count}} games | {{count}} گیم | P09 |
+| Checkout: parts / doubled_one | one charged double | ایک ڈبل چارج | P09 |
+| Checkout: parts / doubled_other | {{count}} charged double | {{count}} ڈبل چارج | P09 |
+| Checkout: parts / double_one | Half a double | ڈبل کا آدھا | P09 |
+| Checkout: parts / double_other | {{count}} halves of a double | {{count}} ڈبل کے آدھے | P09 |
+| Checkout: parts / century_one | Century {{amount}} | سنچری {{amount}} | P09 |
+| Checkout: parts / century_other | {{count}} Centuries {{amount}} | {{count}} سنچریاں {{amount}} | P09 |
+| Checkout: parts / room_one | room | روم | P09 |
+| Checkout: parts / room_other | {{count}} rooms | {{count}} روم | P09 |
+| Checkout: parts / damage_one | damage charge | نقصان کا چارج | P09 |
+| Checkout: parts / damage_other | {{count}} damage charges | {{count}} نقصان کے چارج | P09 |
+| Checkout: parts / canteen_one | {{count}} canteen item | {{count}} کینٹین آئٹم | P09 |
+| Checkout: parts / canteen_other | {{count}} canteen items | {{count}} کینٹین آئٹم | P09 |
+| Checkout: card / withOld | {{parts}} tonight. Old credit {{amount}}. | {{parts}} آج رات۔ پرانا ادھار {{amount}}۔ | P09 |
+| Checkout: card / withOldDays | {{parts}} tonight. Old credit {{amount}}, {{days}} days. | {{parts}} آج رات۔ پرانا ادھار {{amount}}، {{days}} دن۔ | P09 |
+| Checkout: card / owes | Owes {{amount}} from before | پہلے کے {{amount}} باقی | P09 |
+| Checkout: card / owesDays | Owes {{amount}} from before, {{days}} days | پہلے کے {{amount}} باقی، {{days}} دن | P09 |
+| Checkout: card / withAdvance | {{parts}}. Advance {{advance}} used. | {{parts}}۔ ایڈوانس {{advance}} استعمال ہوا۔ | P09 |
+| Checkout: methods / cash | Cash | نقد | P09 |
+| Checkout: methods / bank | Bank transfer | بینک ٹرانسفر | P09 |
+| Checkout: methods / easypaisa | Easypaisa | ایزی پیسہ | P09 |
+| Checkout: methods / jazzcash | JazzCash | جاز کیش | P09 |
+| Checkout: bill / back | Checkout | چیک آؤٹ | P09 |
+| Checkout: bill / label | Bill | بل | P09 |
+| Checkout: bill / payment | Payment | ادائیگی | P09 |
+| Checkout: bill / since | Player since {{when}} | {{when}} سے کھلاڑی | P09 |
+| Checkout: bill / oldCredit | Old credit | پرانا ادھار | P09 |
+| Checkout: bill / unpaidSince_one | Unpaid since {{when}}, {{count}} day | {{when}} سے باقی، {{count}} دن | P09 |
+| Checkout: bill / unpaidSince_other | Unpaid since {{when}}, {{count}} days | {{when}} سے باقی، {{count}} دن | P09 |
+| Checkout: bill / advance | Advance held | رکھا ہوا ایڈوانس | P09 |
+| Checkout: bill / advanceUsed | Used against tonight’s bill | آج رات کے بل میں استعمال ہوا | P09 |
+| Checkout: bill / tonight | Tonight, sheet {{sheet}} | آج رات، شیٹ {{sheet}} | P09 |
+| Checkout: bill / tonightTotal | Tonight | آج رات | P09 |
+| Checkout: bill / discount | Discount ({{reason}}) | رعایت ({{reason}}) | P09 |
+| Checkout: bill / total | Total to pay | کل ادا کرنا ہے | P09 |
+| Checkout: bill / full | Paid in full | پوری ادائیگی | P09 |
+| Checkout: bill / fullSub | {{amount}} received now | {{amount}} ابھی وصول | P09 |
+| Checkout: bill / nothingToPay | Nothing to pay | کچھ ادا کرنا نہیں | P09 |
+| Checkout: bill / part | Paid part | کچھ ادائیگی | P09 |
+| Checkout: bill / partSub | The rest stays as credit | باقی ادھار میں رہے گا | P09 |
+| Checkout: bill / credit | Put all on credit | سب ادھار میں لکھیں | P09 |
+| Checkout: bill / creditSub | {{name}} will owe {{amount}} | {{name}} کے ذمے {{amount}} ہوں گے | P09 |
+| Checkout: bill / paidBy | Paid by | ادائیگی کا طریقہ | P09 |
+| Checkout: bill / twoWays | Paying two ways? Use Paid part and add the second method. | دو طرح ادا کر رہا ہے؟ کچھ ادائیگی چنیں اور دوسرا طریقہ شامل کریں۔ | P09 |
+| Checkout: bill / giveDiscount | Give a discount | رعایت دیں | P09 |
+| Checkout: part / back | Bill | بل | P09 |
+| Checkout: part / title | {{name}} pays part | {{name}} کی کچھ ادائیگی | P09 |
+| Checkout: part / subtitle | Total {{total}} after a {{discount}} discount ({{reason}}) | {{discount}} رعایت کے بعد کل {{total}} ({{reason}}) | P09 |
+| Checkout: part / subtitlePlain | Total {{total}} | کل {{total}} | P09 |
+| Checkout: part / payments | Payments | ادائیگیاں | P09 |
+| Checkout: part / received | Money received now | ابھی وصول ہونے والی رقم | P09 |
+| Checkout: part / typeInto | Type into {{method}} | {{method}} میں لکھیں | P09 |
+| Checkout: part / remove | Remove {{method}} line | {{method}} کی لائن ہٹائیں | P09 |
+| Checkout: part / addAnother | Add another: | ایک اور شامل کریں: | P09 |
+| Checkout: part / add | + {{method}} | + {{method}} | P09 |
+| Checkout: part / total | Total | کل | P09 |
+| Checkout: part / paidNow | Paid now | ابھی ادا | P09 |
+| Checkout: part / credit | Stays as credit | ادھار میں رہے گا | P09 |
+| Checkout: part / advance | Kept as advance | ایڈوانس رکھا گیا | P09 |
+| Checkout: part / note | If he gives more than the total, the extra is kept as advance for his next visit. | اگر وہ کل سے زیادہ دے تو اضافی رقم اگلی بار کے لیے ایڈوانس رکھی جاتی ہے۔ | P09 |
+| Checkout: part / keypad | Amount keypad | رقم کا کی پیڈ | P09 |
+| Checkout: part / typing | Typing the {{method}} amount | {{method}} کی رقم لکھ رہے ہیں | P09 |
+| Checkout: part / pick | Pick a line to type into | لکھنے کے لیے لائن چنیں | P09 |
+| Checkout: part / save | Save payment | ادائیگی محفوظ کریں | P09 |
+| Checkout: part / goesToCredit | {{amount}} goes on credit | {{amount}} ادھار میں جائیں گے | P09 |
+| Checkout: part / keptAdvance | {{amount}} is kept as advance | {{amount}} ایڈوانس رکھے جائیں گے | P09 |
+| Checkout: part / paidInFull | Paid in full | پوری ادائیگی | P09 |
+| Checkout: discount / title | Give {{name}} a discount | {{name}} کو رعایت دیں | P09 |
+| Checkout: discount / text | Owners see every discount with its reason. | مالکان ہر رعایت وجہ کے ساتھ دیکھتے ہیں۔ | P09 |
+| Checkout: discount / amount | Discount amount | رعایت کی رقم | P09 |
+| Checkout: discount / rs | Rs | روپے | P09 |
+| Checkout: discount / reason | Reason (required) | وجہ (ضروری) | P09 |
+| Checkout: discount / note | Note (optional) | نوٹ (اختیاری) | P09 |
+| Checkout: discount / reasons / rounded | Rounded the bill | بل گول کیا | P09 |
+| Checkout: discount / reasons / early | Frame ended early | فریم جلدی ختم ہوا | P09 |
+| Checkout: discount / reasons / table | Table problem | ٹیبل کا مسئلہ | P09 |
+| Checkout: discount / reasons / owner | Owner allowed | مالک نے اجازت دی | P09 |
+| Checkout: discount / reasons / other | Other | کوئی اور | P09 |
+| Checkout: discount / bill | Bill | بل | P09 |
+| Checkout: discount / row | Discount | رعایت | P09 |
+| Checkout: discount / newTotal | New total | نیا کل | P09 |
+| Checkout: discount / cancel | Cancel | منسوخ کریں | P09 |
+| Checkout: discount / apply | Apply {{amount}} discount | {{amount}} کی رعایت لگائیں | P09 |
+| Checkout: discount / applyNone | Apply discount | رعایت لگائیں | P09 |
+| Checkout: discount / remove | Remove discount | رعایت ہٹائیں | P09 |
+| Checkout: discount / tooMuch | A discount cannot be more than the bill, {{total}}. | رعایت بل سے زیادہ نہیں ہو سکتی، {{total}}۔ | P09 |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

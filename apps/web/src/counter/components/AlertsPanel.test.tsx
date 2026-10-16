@@ -78,7 +78,7 @@ describe('the bell opens the alerts panel', () => {
   });
 
   it('opens from a screen that is not a board over the first tab', async () => {
-    const view = renderCounter('/checkout');
+    const view = renderCounter('/canteen');
     await userEvent.click(await bell('Notifications, 3 new'));
     await panel();
     expect(wherePath(view)).toBe('/alerts');

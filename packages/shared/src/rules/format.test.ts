@@ -4,6 +4,7 @@ import {
   formatClock,
   formatDate,
   formatDay,
+  formatMonthYear,
   formatRs,
   formatSigned,
   formatSlot,
@@ -11,6 +12,22 @@ import {
   maskPhone,
   phoneTail,
 } from './format';
+
+describe('formatMonthYear (screen 25: "Player since March 2026")', () => {
+  it('writes the month and year', () => {
+    expect(formatMonthYear('2026-03-14T10:00:00+05:00')).toBe('March 2026');
+    expect(formatMonthYear('2026-12-31T23:30:00+05:00')).toBe('December 2026');
+  });
+
+  it('reads the club’s date, not the computer’s: 12:30 AM on 1 April is April', () => {
+    expect(formatMonthYear('2026-04-01T00:30:00+05:00')).toBe('April 2026');
+    expect(formatMonthYear('2026-03-31T19:30:00Z')).toBe('April 2026');
+  });
+
+  it('writes the Urdu month with Western digits', () => {
+    expect(formatMonthYear('2026-03-14T10:00:00+05:00', 'ur')).toBe('مارچ 2026');
+  });
+});
 
 describe('formatRs', () => {
   it('groups thousands in Western style', () => {

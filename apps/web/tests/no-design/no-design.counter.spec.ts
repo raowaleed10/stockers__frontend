@@ -296,6 +296,68 @@ const SHOTS: Shot[] = [
       await blur(page);
     },
   },
+  // P09: checkout
+  {
+    id: 'checkout-paid-note',
+    url: `/checkout?scenario=checkout&now=${encodeURIComponent('2026-10-03T22:20:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Saad Hussain/ }).click();
+      await page.getByRole('button', { name: /^Paid in full/ }).click();
+      await expect(page.getByText('Saad Hussain paid Rs 430.')).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'checkout-owes-before',
+    url: `/checkout?scenario=checkout&now=${encodeURIComponent('2026-10-03T22:20:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('radio', { name: 'Owes from before' }).click();
+      await expect(page.getByRole('button', { name: /^Waqas/ })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'checkout-search',
+    url: `/checkout?scenario=checkout&now=${encodeURIComponent('2026-10-03T22:20:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('searchbox', { name: 'Search any player' }).fill('waq');
+      await expect(page.getByRole('button', { name: /^Waqas/ })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'checkout-advance',
+    url: `/checkout/saad?scenario=checkout&now=${encodeURIComponent('2026-10-03T22:20:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByRole('region', { name: 'Bill' })).toContainText('Advance held');
+      await blur(page);
+    },
+  },
+  {
+    id: 'checkout-part-advance',
+    url: `/checkout/kamran/part?scenario=checkout&now=${encodeURIComponent('2026-10-03T22:22:00+05:00')}`,
+    prepare: async (page) => {
+      const pad = page.locator('main > section').nth(1);
+      for (const digit of '1500')
+        await pad.getByRole('button', { name: digit, exact: true }).click();
+      await expect(page.getByText('Kept as advance', { exact: true })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'checkout-discount-edit',
+    url: `/checkout/bilal?scenario=checkout&now=${encodeURIComponent('2026-10-03T22:21:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: 'Give a discount' }).click();
+      const dialog = page.getByRole('dialog', { name: 'Give Bilal a discount' });
+      await dialog.getByRole('button', { name: 'Rs 50' }).click();
+      await dialog.getByRole('button', { name: 'Rounded the bill' }).click();
+      await dialog.getByRole('button', { name: 'Apply Rs 50 discount' }).click();
+      await page.getByRole('button', { name: 'Give a discount' }).click();
+      await expect(page.getByRole('button', { name: 'Remove discount' })).toBeVisible();
+      await blur(page);
+    },
+  },
   // P07: a running table
   {
     id: 'panel-century',

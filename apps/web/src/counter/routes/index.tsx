@@ -4,6 +4,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { NotFound } from '@/ui/NotFound';
 import { AlertsPanel } from '../components/AlertsPanel';
 import { Board } from '../screens/Board';
+import { BillPage } from '../screens/checkout/BillPage';
+import { CheckoutList } from '../screens/checkout/CheckoutList';
+import { DiscountDialog } from '../screens/checkout/DiscountDialog';
+import { PartPayment } from '../screens/checkout/PartPayment';
 import { EndGame } from '../screens/end/EndGame';
 import { NextFrame } from '../screens/end/NextFrame';
 import { Overtime } from '../screens/end/Overtime';
@@ -33,7 +37,6 @@ const GamesPreview = import.meta.env.DEV ? lazy(() => import('../screens/dev/Gam
 
 /** The screens that later steps build. Each shows its name inside the real frame until then. */
 const LATER_SCREENS = [
-  { path: '/checkout', title: 'actions.checkout' },
   { path: '/canteen', title: 'actions.canteen' },
   { path: '/players', title: 'actions.players' },
   { path: '/today', title: 'actions.today' },
@@ -99,7 +102,12 @@ export function CounterRoutes() {
           <Route path="alerts" element={<AlertsPanel />} />
           {TABLE_ROUTES}
         </Route>
-        <Route path="/checkout/:playerId" element={<LaterScreen title="actions.checkout" />} />
+        {/* The checkout screens (24 to 27) are pages with their own header: the frame draws no bars on them. */}
+        <Route path="/checkout" element={<CheckoutList />} />
+        <Route path="/checkout/:playerId" element={<BillPage />}>
+          <Route path="discount" element={<DiscountDialog />} />
+        </Route>
+        <Route path="/checkout/:playerId/part" element={<PartPayment />} />
         {GamesPreview ? (
           <Route
             path="/dev/games-preview"

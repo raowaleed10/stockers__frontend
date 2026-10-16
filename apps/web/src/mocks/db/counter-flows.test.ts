@@ -104,8 +104,8 @@ describe('loading the seed', () => {
       total: 1100,
     });
     expect(bill?.parts).toEqual([
-      { kind: 'frame', count: 2 },
-      { kind: 'canteen', count: 2, item: 'Tea' },
+      { kind: 'frame', count: 2, amount: 500 },
+      { kind: 'canteen', count: 2, amount: 100, item: 'Tea' },
     ]);
     expect(db.tonightLines('bilal').map((l) => l.charge)).toEqual([250, 250, 100]);
   });
@@ -114,13 +114,13 @@ describe('loading the seed', () => {
     const parts = Object.fromEntries(waitingBills(make()).map((b) => [b.playerId, b.parts]));
     expect(parts).toEqual({
       bilal: [
-        { kind: 'frame', count: 2 },
-        { kind: 'canteen', count: 2, item: 'Tea' },
+        { kind: 'frame', count: 2, amount: 500 },
+        { kind: 'canteen', count: 2, amount: 100, item: 'Tea' },
       ],
-      zubair: [{ kind: 'frame', count: 1 }],
-      kamran: [{ kind: 'double', count: 1 }],
-      faisal: [{ kind: 'double', count: 1 }],
-      tariq: [{ kind: 'frame', count: 1 }],
+      zubair: [{ kind: 'frame', count: 1, amount: 200 }],
+      kamran: [{ kind: 'double', count: 1, amount: 250 }],
+      faisal: [{ kind: 'double', count: 1, amount: 250 }],
+      tariq: [{ kind: 'frame', count: 1, amount: 250 }],
     });
     // The seed's waiting rows have `lines`, not a ready-made English sentence.
     const rows = [
@@ -143,8 +143,8 @@ describe('loading the seed', () => {
     });
     const bill = waitingBills(db).find((b) => b.playerId === 'zubair');
     expect(bill?.parts).toEqual([
-      { kind: 'frame', count: 1 },
-      { kind: 'canteen', count: 3, item: 'Chips' },
+      { kind: 'frame', count: 1, amount: 200 },
+      { kind: 'canteen', count: 3, amount: 150, item: 'Chips' },
     ]);
     // The player keeps his place in the list.
     expect(waitingBills(db).map((b) => b.playerId)).toEqual([

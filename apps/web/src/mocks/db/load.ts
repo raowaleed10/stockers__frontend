@@ -503,9 +503,10 @@ function seedLedger(
     listed.forEach((line, index) => {
       db.postLine(row.playerId, {
         kind: line.kind,
-        text: textOf(line),
+        text: line.text ?? textOf(line),
         charge: line.charge,
         ...(line.item ? { item: line.item } : {}),
+        ...(line.doubled ? { doubled: true } : {}),
         by: actor,
         // One minute apart, so the lines keep the order the seed lists them in.
         at: toClubIso(toMs(tonightAt) + index * MINUTE_MS),

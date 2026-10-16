@@ -424,7 +424,7 @@
       "framesPlayed": 88,
       "centuryMinutes": 90,
       "spent": 18350,
-      "since": "2026-01-01T12:00:00+05:00"
+      "since": "2026-03-03T12:00:00+05:00"
     },
     {
       "id": "kamran",
@@ -1925,7 +1925,7 @@
           "oldCredit": 0,
           "tonight": 2500,
           "total": 2500,
-          "lines": [{ "kind": "room", "charge": 2500 }]
+          "lines": [{ "kind": "room", "charge": 2500, "text": "Room 1, 1 h 40 min" }]
         },
         {
           "playerId": "kamran",
@@ -1939,7 +1939,7 @@
           "oldCredit": -200,
           "tonight": 630,
           "total": 430,
-          "lines": [{ "kind": "century", "charge": 630 }]
+          "lines": [{ "kind": "century", "charge": 630, "text": "Century, Table 3, 42 min at Rs 15" }]
         },
         {
           "playerId": "zubair",
@@ -1948,7 +1948,7 @@
           "total": 600,
           "lines": [
             { "kind": "frame", "charge": 200 },
-            { "kind": "frame", "charge": 400 }
+            { "kind": "frame", "charge": 400, "doubled": true }
           ]
         },
         {

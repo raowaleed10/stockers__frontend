@@ -228,6 +228,8 @@ export class MockDb {
       sheetId?: string;
       /** A canteen sale: what was sold and how many. */
       item?: StatementLine['item'];
+      /** A frame or game charged double (Q2). */
+      doubled?: boolean;
     },
   ): StatementLine {
     const player = this.player(playerId);
@@ -245,6 +247,7 @@ export class MockDb {
       doneBy: input.by,
       ...(input.method !== undefined ? { method: input.method } : {}),
       ...(input.item ? { item: input.item } : {}),
+      ...(input.doubled ? { doubled: true } : {}),
       sheetId: input.sheetId ?? this.s.currentSheetId,
     };
     // A statement is in time order. A frame is posted when it ends but dated when it started, so it can

@@ -47,6 +47,7 @@ The backend owns the final numbers. The frontend still needs the same rules to s
 - **Payment:** the parts in several methods + credit = the bill. When paid > bill, the extra becomes **advance**.
 - **Discount** (Q6): whole rupees, more than 0, **not more than the bill total** (old credit plus tonight's charges, less any advance used), with a required reason and an optional note. The new total = total − discount. It is saved with the worker's name, on the statement and in Activity (screen 38).
 - **Rounding:** paisa rounds to the nearest rupee, only where division happens (rooms, custom splits).
+- **What the screens ask of the rules:** `isValidDiscount(total, amount)` (whole rupees above 0, not more than the bill) for the discount dialog (screen 27); `paymentPreview(due, parts)` for the three boxes of the part payment page (screen 26: paid now, stays as credit, kept as advance); `settleCheckout` checks the same payment when it is saved. Bilal: due 1,300, cash 600 + Easypaisa 400 → paid 1,000, credit 300. Kamran: due 1,350, cash 1,500 → advance 150.
 
 Worked examples (from the screens):
 

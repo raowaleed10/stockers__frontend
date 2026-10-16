@@ -1,5 +1,6 @@
 import type alerts from '@/counter/locales/en/alerts.json';
 import type board from '@/counter/locales/en/board.json';
+import type checkout from '@/counter/locales/en/checkout.json';
 import type end from '@/counter/locales/en/end.json';
 import type frame from '@/counter/locales/en/frame.json';
 import type lock from '@/counter/locales/en/lock.json';
@@ -22,6 +23,7 @@ declare module 'i18next' {
       common: typeof common;
       alerts: typeof alerts; // counter: the bell's side panel
       board: typeof board; // counter: the live board, its tabs, tiles and the waiting list
+      checkout: typeof checkout; // counter: the checkout list, a player's bill, the part payment and the discount
       end: typeof end; // counter: ending a frame, a double, a Century or a room, the next frame, starting a room
       frame: typeof frame; // counter: the top bar, the action bar and the sign-in time banner
       lock: typeof lock; // counter: the lock screen

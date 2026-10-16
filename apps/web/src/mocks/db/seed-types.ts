@@ -83,6 +83,10 @@ export interface SeedBillLine {
   >;
   charge: Rs;
   item?: { name: string; qty: number };
+  /** A frame that was charged double. */
+  doubled?: boolean;
+  /** The statement text, when the seed knows it better than its kind does ("Room 1, 1 h 40 min"). */
+  text?: string;
 }
 
 export interface SeedWaiting {

@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import type { StatementLine } from '../types';
-import { applyDiscount, billBreakdown, billParts, settleCheckout, waitingTotal } from './checkout';
+import {
+  applyDiscount,
+  billBreakdown,
+  billParts,
+  isValidDiscount,
+  paymentPreview,
+  settleCheckout,
+  waitingTotal,
+} from './checkout';
 
 const worker = { id: 'zain', name: 'Zain', role: 'worker' as const };
 let lineNo = 0;
@@ -21,10 +29,14 @@ function line(kind: StatementLine['kind'], extra: Partial<StatementLine> = {}): 
 describe('billParts', () => {
   it('Bilal at 9:42 PM: 2 frames lost and 2 teas', () => {
     expect(
-      billParts([line('frame'), line('frame'), line('canteen', { item: { name: 'Tea', qty: 2 } })]),
+      billParts([
+        line('frame', { charge: 250 }),
+        line('frame', { charge: 250 }),
+        line('canteen', { item: { name: 'Tea', qty: 2 }, charge: 100 }),
+      ]),
     ).toEqual([
-      { kind: 'frame', count: 2 },
-      { kind: 'canteen', count: 2, item: 'Tea' },
+      { kind: 'frame', count: 2, amount: 500 },
+      { kind: 'canteen', count: 2, amount: 100, item: 'Tea' },
     ]);
   });
 
@@ -32,11 +44,11 @@ describe('billParts', () => {
     expect(
       billParts([line('double'), line('century'), line('room'), line('game'), line('damage')]),
     ).toEqual([
-      { kind: 'game', count: 1 },
-      { kind: 'double', count: 1 },
-      { kind: 'century', count: 1 },
-      { kind: 'room', count: 1 },
-      { kind: 'damage', count: 1 },
+      { kind: 'game', count: 1, amount: 0 },
+      { kind: 'double', count: 1, amount: 0 },
+      { kind: 'century', count: 1, amount: 0 },
+      { kind: 'room', count: 1, amount: 0, text: 'room' },
+      { kind: 'damage', count: 1, amount: 0 },
     ]);
   });
 
@@ -48,8 +60,8 @@ describe('billParts', () => {
         line('canteen', { item: { name: 'Tea', qty: 1 } }),
       ]),
     ).toEqual([
-      { kind: 'canteen', count: 3, item: 'Tea' },
-      { kind: 'canteen', count: 1, item: 'Chips' },
+      { kind: 'canteen', count: 3, amount: 0, item: 'Tea' },
+      { kind: 'canteen', count: 1, amount: 0, item: 'Chips' },
     ]);
   });
 
@@ -69,11 +81,81 @@ describe('billParts', () => {
   });
 
   it('keeps a canteen line that has no item name as one sale with no name', () => {
-    expect(billParts([line('canteen')])).toEqual([{ kind: 'canteen', count: 1 }]);
+    expect(billParts([line('canteen')])).toEqual([{ kind: 'canteen', count: 1, amount: 0 }]);
   });
 
   it('is empty for no lines', () => {
     expect(billParts([])).toEqual([]);
+  });
+});
+
+describe('billParts for the checkout cards (screen 24)', () => {
+  it('Century Rs 630 carries its amount, and a frame charged double is counted: 2 frames, one charged double', () => {
+    expect(billParts([line('century', { charge: 630 })])).toEqual([
+      { kind: 'century', count: 1, amount: 630 },
+    ]);
+    expect(
+      billParts([line('frame', { charge: 200 }), line('frame', { charge: 400, doubled: true })]),
+    ).toEqual([{ kind: 'frame', count: 2, amount: 600, doubled: 1 }]);
+  });
+
+  it('a bill that is one room keeps the room’s own line ("Room 1, 1 h 40 min"); two rooms are just a count', () => {
+    expect(billParts([line('room', { charge: 2500, text: 'Room 1, 1 h 40 min' })])).toEqual([
+      { kind: 'room', count: 1, amount: 2500, text: 'Room 1, 1 h 40 min' },
+    ]);
+    expect(billParts([line('room', { charge: 1500 }), line('room', { charge: 1000 })])).toEqual([
+      { kind: 'room', count: 2, amount: 2500 },
+    ]);
+  });
+});
+
+describe('isValidDiscount (Q6)', () => {
+  it('is whole rupees above 0 and not more than the bill: Rs 1,350 allows Rs 1,350, not Rs 1,351', () => {
+    expect(isValidDiscount(1350, 50)).toBe(true);
+    expect(isValidDiscount(1350, 1350)).toBe(true);
+    expect(isValidDiscount(1350, 1351)).toBe(false);
+    expect(isValidDiscount(1350, 0)).toBe(false);
+    expect(isValidDiscount(1350, -5)).toBe(false);
+    expect(isValidDiscount(1350, 12.5)).toBe(false);
+  });
+
+  it('allows nothing on a bill of nothing, or one that is all advance', () => {
+    expect(isValidDiscount(0, 1)).toBe(false);
+    expect(isValidDiscount(-200, 1)).toBe(false);
+  });
+});
+
+describe('paymentPreview (screen 26)', () => {
+  const cash = (amount: number) => ({ method: 'cash', amount });
+  const easy = (amount: number) => ({ method: 'easypaisa', amount });
+
+  it('Bilal: Rs 1,300 after the discount, cash 600 and Easypaisa 400 is Rs 1,000 paid and Rs 300 on credit', () => {
+    expect(paymentPreview(1300, [cash(600), easy(400)])).toEqual({
+      paid: 1000,
+      toCredit: 300,
+      advance: 0,
+    });
+  });
+
+  it('paying the whole bill leaves nothing on credit, and paying more makes the extra advance', () => {
+    expect(paymentPreview(1300, [cash(1300)])).toEqual({ paid: 1300, toCredit: 0, advance: 0 });
+    expect(paymentPreview(1350, [cash(1500)])).toEqual({ paid: 1500, toCredit: 0, advance: 150 });
+  });
+
+  it('nothing typed yet is all credit', () => {
+    expect(paymentPreview(430, [])).toEqual({ paid: 0, toCredit: 430, advance: 0 });
+  });
+
+  it('agrees with settleCheckout, which checks the same payment when it is saved', () => {
+    const parts = [cash(600), easy(400)];
+    const preview = paymentPreview(1300, parts);
+    const settled = settleCheckout({
+      total: 1350,
+      parts,
+      toCredit: preview.toCredit,
+      discount: { amount: 50, reason: 'Rounded the bill' },
+    });
+    expect(settled).toMatchObject({ paid: 1000, toCredit: 300, advance: 0, due: 1300 });
   });
 });
 

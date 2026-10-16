@@ -574,6 +574,7 @@ function postFrameLines(
   game: Game,
   loserIds: string[],
   amounts: Record<string, Rs>,
+  doubled = false,
 ): StatementLine[] {
   const table = db.table(game.tableId);
   const winners = playersOf(game).filter((id) => !loserIds.includes(id));
@@ -591,6 +592,7 @@ function postFrameLines(
       by,
       at: game.startedAt,
       tonight: true,
+      ...(doubled ? { doubled: true } : {}),
     }),
   );
 }
@@ -647,7 +649,7 @@ export function endGame(
     amounts = { [loserIds[0]]: amount };
   }
 
-  const lines = postFrameLines(db, by, game, loserIds, amounts);
+  const lines = postFrameLines(db, by, game, loserIds, amounts, chargedDouble);
   finish(db, by, game, 'ended');
   game.result = {
     loserIds,
