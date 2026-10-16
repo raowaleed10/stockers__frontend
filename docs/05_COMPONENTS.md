@@ -117,6 +117,8 @@ All counter-only, so in `src/counter`, not `src/ui`.
 - **Urdu:** `rtl:` utilities carry screen 6's own spacing (tabs 12/4 px, panel 14/18 px, text 17/16/13 px, line height 1.7). The top bar (10 px) and the action bar (12/16 px, 19 and 17 px text) got the same `rtl:` overrides. Only the selected tab shows its count in Urdu.
 - **`/dev/games-preview`** (`screens/dev/GamesPreview.tsx`, development only) is screen 5: the tabs with none selected, `LookBanner`, and five sections, using the gallery's `SCREEN_5` samples and `Sample` (`src/dev/tiles/Sample.tsx`, moved out of `TilesPage`). Its three dev words are in `src/dev/locales/{en,ur}/preview.json`.
 - **`CounterFrame`** now gives a locked screen exactly the height of the screen (`h-screen overflow-hidden`), because a board taller than the screen scrolls and the lock must not.
+- **The time limit (D56, "P05 answers"):** `StatusPill` takes `limit` (minutes) and says "Over 20 min" for `overLimit`, "Over the limit" without it; `TileProps.limit` passes it to the pill; `TimerText` takes `limitMinutes` (default 30) for its `auto` red card; `BoardTile` reads the game's own limit with `gameLimit(game)` for the pill, the red card and the screen reader name. `TableStatus` `'over30'` is now `'overLimit'`.
+- **The bell (D57):** `components/alerts-path.ts` (`alertsPath`, `boardPathOf`). `CounterFrame` opens `/board/pool/alerts` from Pool; `AlertsPanel` closes back to the same tab.
 - **Shared rules added:** `boardTabs`, `SNOOKER_TAB`, `sessionStanding` (`rules/board.ts`); `billParts`, `waitingTotal` (`rules/checkout.ts`); `BillPart`, `WaitingBill.parts` and `StatementLine.item` (types).
 
 ## Rules for components

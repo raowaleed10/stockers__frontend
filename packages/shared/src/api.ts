@@ -216,7 +216,10 @@ export interface DamageRequest {
 export interface EndGameRequest {
   loserIds: string[];
   split?: Record<string, Rs>;
-  /** Over 30 minutes: charge double (Q2). */
+  /**
+   * Past the game's time limit: charge double (Q2, D56). Asked for every game charged per game (a single or double
+   * frame, pool, foosball, carrom, ludo, PlayStation); refused for a Century, a room, or a game still under its limit.
+   */
   chargeDouble?: boolean;
 }
 export interface EndGameResult {
@@ -375,7 +378,8 @@ export interface Dashboard {
     moneyInHand: Rs;
     tablesInUse: number;
     tablesTotal: number;
-    over30: number;
+    /** Games running past their own time limit right now (the red card). */
+    overLimit: number;
     drawerExpenses: Rs;
     drawerExpected: Rs;
   };
@@ -522,6 +526,8 @@ export interface Prices {
 }
 export interface TablePatch {
   price?: Rs | null;
+  /** The longest this table's games may run, in whole minutes, 5 to 180 (D56). Saved with the price; recorded in Activity. */
+  maxMinutes?: number;
   /** Give other tables of the same category the same price. */
   alsoTableIds?: string[];
   /** `null` puts the table back in order. */
@@ -529,6 +535,8 @@ export interface TablePatch {
 }
 export interface CategoryPatch {
   price?: Rs | null;
+  /** The same maximum time for every table of the game (not for rooms). */
+  maxMinutes?: number;
   centuryRate?: Rs;
 }
 export interface NewTableRequest {
@@ -537,6 +545,8 @@ export interface NewTableRequest {
   categoryName?: string;
   kind?: Table['kind'];
   price: Rs | null;
+  /** Whole minutes, 5 to 180. Left out, the table starts with the setting `rules.doubleAfterMin` (not for a room). */
+  maxMinutes?: number;
 }
 
 export interface OwnerCanteen {
@@ -619,6 +629,8 @@ export interface SettingsPatch {
   email?: Settings['email'];
   language?: Settings['language'];
   club?: Partial<Settings['club']>;
+  /** Screen 51: the starting maximum time for games added later (`doubleAfterMin`, 5 to 180 whole minutes). */
+  rules?: { doubleAfterMin?: number };
 }
 export interface OwnerAddressResult {
   /** The new private address, shown once. Every owner is signed out. */

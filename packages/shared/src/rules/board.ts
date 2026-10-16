@@ -3,7 +3,7 @@
 
 import type { BoardCategory, BoardTable } from '../api';
 import type { Game, Session, TableStatus } from '../types';
-import { elapsed, isOver30 } from './time';
+import { elapsed, gameLimit, isGameOverLimit } from './time';
 
 /** One tab of the board: a game type, or snooker tables and rooms together. */
 export interface BoardTab {
@@ -85,18 +85,20 @@ export function tableStatus(table: BoardTable, now: number): TableStatus {
   const game = table.game;
   if (!game) return 'free';
   if (game.status === 'paused') return 'paused';
-  // Only a frame turns into a red card at 30 minutes (Q2); a Century and a room run as long as they like.
-  const frame = game.type === 'single' || game.type === 'double';
-  return frame && isOver30(elapsed(game.startedAt, now, game.pausedMs, game.pausedAt))
-    ? 'over30'
+  // A game charged per game (a frame, or a game of pool, carrom and so on) turns into a red card when it runs to its
+  // own limit (Q2, D56). A Century and a room are charged by the minute and run as long as they like.
+  return isGameOverLimit(game, elapsed(game.startedAt, now, game.pausedMs, game.pausedAt))
+    ? 'overLimit'
     : 'playing';
 }
 
 export interface TableSummary {
   /** Tables with a game going. A paused table is still a game in progress, so it counts here. */
   playing: number;
-  /** Frames past 30 minutes (the red card). Not counted again in `playing`. */
-  over30: number;
+  /** Games past their own time limit (the red card). Not counted again in `playing`. */
+  overLimit: number;
+  /** The limits of those games in minutes, each once, smallest first: the lock screen says "over 30 min". */
+  overLimitMinutes: number[];
   free: number;
   outOfOrder: number;
 }
@@ -106,16 +108,28 @@ export interface TableSummary {
  * one. A table with no price is locked (D13), so it is left out.
  */
 export function summarizeTables(tables: readonly BoardTable[], now: number): TableSummary {
-  const summary: TableSummary = { playing: 0, over30: 0, free: 0, outOfOrder: 0 };
+  const summary: TableSummary = {
+    playing: 0,
+    overLimit: 0,
+    overLimitMinutes: [],
+    free: 0,
+    outOfOrder: 0,
+  };
   for (const table of tables) {
     switch (tableStatus(table, now)) {
       case 'playing':
       case 'paused':
         summary.playing += 1;
         break;
-      case 'over30':
-        summary.over30 += 1;
+      case 'overLimit': {
+        summary.overLimit += 1;
+        const limit = table.game ? gameLimit(table.game) : undefined;
+        if (limit !== undefined && !summary.overLimitMinutes.includes(limit)) {
+          summary.overLimitMinutes.push(limit);
+          summary.overLimitMinutes.sort((a, c) => a - c);
+        }
         break;
+      }
       case 'free':
         summary.free += 1;
         break;

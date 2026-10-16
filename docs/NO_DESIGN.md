@@ -26,6 +26,9 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 9 | [Foosball, carrom, ludo and PlayStation before a price is set](#9-foosball-carrom-ludo-and-playstation-before-a-price-is-set) | counter | P05 |
 | 10 | [The board when the tables cannot be loaded](#10-the-board-when-the-tables-cannot-be-loaded) | counter | P05 |
 | 11 | [Waiting to pay with nobody waiting](#11-waiting-to-pay-with-nobody-waiting) | counter | P05 |
+| 12 | [The pages of pool, carrom, foosball, ludo and PlayStation once prices are set](#12-the-pages-of-pool-carrom-foosball-ludo-and-playstation-once-prices-are-set) | counter | P05 answers |
+
+Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
 ## 1. Sign-in time banner
 
@@ -138,4 +141,58 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 - **Built from:** the panel of screen 3.
 
 ![Waiting to pay with nobody waiting](no-design/waiting-panel-empty.png)
+
+## 12. The pages of pool, carrom, foosball, ludo and PlayStation once prices are set
+
+- **What:** no PNG draws the real page of these games with prices set (screen 5 is a preview, with a heading for each game).
+  Once an owner has set the prices, `/board/<game>` shows that game's tiles in the grid of screen 5 under the tabs: no
+  heading (the selected tab already names the game), no amber box and no cards. A table that still has no price stays
+  locked with "Price not set". There is no waiting list on these tabs, as on screens 4 and 5.
+- **Where:** `/board/carrom`, `/board/pool`, `/board/foosball`, `/board/ludo`, `/board/playstation` after the prices are set
+  (the picture is made with Rs 50 on every carrom board).
+- **Words:** the ones on the tiles of screen 5: "Carrom", "Rs 50 a game", "Tap to start", "The loser pays the game".
+  Urdu: see `docs/URDU_TO_CHECK.md`.
+- **Built from:** the tiles and the grid of screen 5 and the tab bar of screen 3.
+
+![Carrom boards once the price is set](no-design/board-priced-carrom.png)
+
+## Approved screens that change a field or a word
+
+These are changes to screens the owners already approved. They are built in P15 and P16 (the owner screens), so there is no
+picture yet; each one is listed here so the owners see it with the rest of the batch. They come from the owners' answer of
+16 Oct 2026 (decision D56, `docs/02`).
+
+### Screen 45, Games and prices: "Max 30 min" next to each price
+
+- **Change:** every price that belongs to a game charged per game (a snooker table, pool, foosball, carrom, ludo, PlayStation)
+  also shows its maximum time, for example "Rs 250 a frame · Max 30 min". A room has none.
+- **Words:** "Max {{n}} min". Urdu: "زیادہ سے زیادہ {{n}} منٹ".
+
+### Screen 46, Change a price: a "Maximum time" field next to the price
+
+- **Change:** a number field "Maximum time" (whole minutes, 5 to 180) beside the price. "Also these tables" applies to both.
+  Saving it is written in Activity with the owner's name ("Maximum time changed: Table 4, 30 min to 20 min. Games already
+  started keep their limit."). A change applies to games started after it; a running game keeps the limit it started with.
+- **Words:** "Maximum time", "minutes", and the error "The maximum time is a whole number of minutes from 5 to 180."
+  Urdu: "زیادہ سے زیادہ وقت", "منٹ".
+
+### Screen 47, Add a game or table: the same field
+
+- **Change:** the new table gets a "Maximum time" field, filled in with the starting value from screen 51 (not for a room).
+
+### Screen 51, Settings: the old line becomes a starting value
+
+- **Change:** "Ask to charge double after 30 minutes" is now the starting maximum time for games added later (screen 47 fills
+  it in). Tables that exist keep their own. The number is changeable (5 to 180 whole minutes).
+- **Words:** the label becomes "Maximum time for new games" with the note "Each game's own maximum time is set with its
+  price." Urdu: "نئے کھیلوں کا زیادہ سے زیادہ وقت".
+
+### Screens 3 to 6, 16 and 34: the words for "over the limit"
+
+- **Change:** the red card, the pill and the "charge double?" choice now follow each game's own limit, not always 30
+  minutes. The pill says "Over 20 min" (Urdu "20 منٹ سے زیادہ"), and a table's screen reader name says "over 20 minutes".
+  The lock screen (34) says "1 over 30 min" when the games over their limit share one limit, and "2 over the limit"
+  (Urdu "حد سے زیادہ: 2") when they do not. A pill that is not told the limit says "Over the limit".
+- **Applies to:** a single frame, a double frame, and a game of pool, foosball, carrom, ludo and PlayStation. Not Century or
+  rooms, which are charged by the minute.
 

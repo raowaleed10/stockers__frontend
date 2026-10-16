@@ -69,7 +69,12 @@ export function TileContent() {
             {label[1]}
           </span>
         </span>
-        <StatusPill status={look.pill} label={pillLabel} className="tile-pill" />
+        <StatusPill
+          status={look.pill}
+          label={pillLabel}
+          limit={props.limit}
+          className="tile-pill"
+        />
       </span>
       {gameLine ? (
         <span className="tile-gt">

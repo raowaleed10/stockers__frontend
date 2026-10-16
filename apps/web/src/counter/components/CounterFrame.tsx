@@ -1,10 +1,11 @@
 import type { WorkerSession } from '@stockers/shared';
 import { useEffect, useRef } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { cx } from '@/ui/cx';
 import { useBoard } from '../api';
 import { useLockStore } from '../session/lock-store';
 import { useSwitchWorker } from '../session/use-leave-session';
+import { alertsPath } from './alerts-path';
 import { CounterActionBar } from './CounterActionBar';
 import { CounterTopBar } from './CounterTopBar';
 import { IdleLock } from './IdleLock';
@@ -18,6 +19,7 @@ import { SessionTiming } from './SessionTiming';
  */
 export function CounterFrame({ session }: { session: WorkerSession }) {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const board = useBoard();
   const locked = useLockStore((state) => state.locked);
   const lock = useLockStore((state) => state.lock);
@@ -51,7 +53,7 @@ export function CounterFrame({ session }: { session: WorkerSession }) {
           until={session.until}
           onLock={lock}
           onSwitchWorker={() => void switchWorker()}
-          onNotifications={go('/alerts')}
+          onNotifications={go(alertsPath(pathname))}
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <Outlet />

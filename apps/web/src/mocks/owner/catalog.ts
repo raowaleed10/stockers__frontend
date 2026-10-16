@@ -12,7 +12,7 @@ import type {
   Table,
   TablePatch,
 } from '@stockers/shared';
-import { formatRs } from '@stockers/shared';
+import { formatRs, isValidMaxMinutes } from '@stockers/shared';
 import type { MockDb } from '../db/db';
 import { fail } from '../db/errors';
 
@@ -25,6 +25,13 @@ const slug = (text: string) =>
 function checkPrice(price: number | null | undefined): void {
   if (price !== null && price !== undefined && (!Number.isInteger(price) || price < 0)) {
     fail('VALIDATION', 'The price is a whole number of rupees.');
+  }
+}
+
+/** The maximum time of a game is a whole number of minutes from 5 to 180 (D56). */
+function checkMaxMinutes(value: number | undefined): void {
+  if (value !== undefined && !isValidMaxMinutes(value)) {
+    fail('VALIDATION', 'The maximum time is a whole number of minutes from 5 to 180.');
   }
 }
 
@@ -59,6 +66,23 @@ function priceChanged(
   db.emit('board.changed');
 }
 
+function maxMinutesChanged(
+  db: MockDb,
+  by: PersonRef,
+  tables: Table[],
+  before: (number | undefined)[],
+  maxMinutes: number,
+) {
+  const names = tables.map((t) => t.name).join(', ');
+  const was = new Set(before.map((value) => (value === undefined ? 'no limit' : `${value} min`)));
+  db.logActivity(by, 'price-change', `Maximum time changed: ${names}`, {
+    detail: `${[...was].join(' and ')} to ${maxMinutes} min. Games already started keep their limit.`,
+    sheetId: null,
+  });
+  db.emit('price.changed', { tableIds: tables.map((t) => t.id) });
+  db.emit('board.changed');
+}
+
 /**
  * Sets the price of a table, and of other tables in the same category if asked, or puts a table out
  * of order or back (D5). A game already started keeps the price it started with.
@@ -67,19 +91,34 @@ export function patchTable(db: MockDb, by: PersonRef, id: string, patch: TablePa
   const table = db.table(id);
   const changed: Table[] = [table];
 
-  if (patch.price !== undefined) {
+  // The price and the maximum time are set together on the same tables (screen 46, with "also these tables").
+  if (patch.price !== undefined || patch.maxMinutes !== undefined) {
     checkPrice(patch.price);
+    checkMaxMinutes(patch.maxMinutes);
     const targets = [table, ...(patch.alsoTableIds ?? []).map((other) => db.table(other))];
     if (targets.some((t) => t.categoryId !== table.categoryId)) {
       fail('VALIDATION', 'Only tables of the same game can share a price.');
     }
     const unique = [...new Map(targets.map((t) => [t.id, t])).values()];
-    const before = unique.map((t) => t.price);
-    unique.forEach((t) => {
-      t.price = patch.price ?? null;
-    });
+    if (patch.maxMinutes !== undefined && unique.some((t) => t.kind === 'room')) {
+      fail('VALIDATION', 'A room is charged by the hour and has no maximum time.');
+    }
     changed.splice(0, changed.length, ...unique);
-    priceChanged(db, by, unique, before, patch.price ?? null);
+    if (patch.price !== undefined) {
+      const before = unique.map((t) => t.price);
+      unique.forEach((t) => {
+        t.price = patch.price ?? null;
+      });
+      priceChanged(db, by, unique, before, patch.price ?? null);
+    }
+    if (patch.maxMinutes !== undefined) {
+      const before = unique.map((t) => t.maxMinutes);
+      const limit = patch.maxMinutes;
+      unique.forEach((t) => {
+        t.maxMinutes = limit;
+      });
+      maxMinutesChanged(db, by, unique, before, limit);
+    }
   }
 
   if (patch.outOfOrder !== undefined) {
@@ -112,7 +151,18 @@ export function patchCategory(
     db.s.categories.find((c) => c.id === id) ?? fail('NOT_FOUND', 'That game was not found.');
   checkPrice(patch.price);
   checkPrice(patch.centuryRate);
+  checkMaxMinutes(patch.maxMinutes);
   const tables = db.s.tables.filter((t) => t.categoryId === id);
+  if (patch.maxMinutes !== undefined) {
+    if (category.kind === 'room')
+      fail('VALIDATION', 'A room is charged by the hour and has no maximum time.');
+    const before = tables.map((t) => t.maxMinutes);
+    const limit = patch.maxMinutes;
+    tables.forEach((t) => {
+      t.maxMinutes = limit;
+    });
+    maxMinutesChanged(db, by, tables, before, limit);
+  }
   if (patch.centuryRate !== undefined) {
     if (!category.centuryAllowed) fail('VALIDATION', 'Century is not played on this game.');
     category.centuryRate = patch.centuryRate;
@@ -137,6 +187,7 @@ function nextOf(last: Table): { id: string; name: string; number: string } {
 /** Adds a table to a game, or makes a new game with its first table (D4). */
 export function addTable(db: MockDb, request: NewTableRequest): Table {
   checkPrice(request.price);
+  checkMaxMinutes(request.maxMinutes);
   let category: Category | undefined;
   if (request.categoryId) {
     category = db.s.categories.find((c) => c.id === request.categoryId);
@@ -171,6 +222,10 @@ export function addTable(db: MockDb, request: NewTableRequest): Table {
     number: names.number,
     name: names.name,
     price: request.price,
+    // A game charged per game starts with a maximum time: the one asked for, or the setting of screen 51.
+    ...(category.kind === 'room'
+      ? {}
+      : { maxMinutes: request.maxMinutes ?? db.s.settings.rules.doubleAfterMin }),
   };
   db.s.tables.push(table);
   db.emit('price.changed', { tableIds: [table.id] });

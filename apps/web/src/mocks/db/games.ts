@@ -31,7 +31,8 @@ import {
   formatRs,
   frameCharge,
   gameCharge,
-  isOver30,
+  gameLimit,
+  isGameOverLimit,
   MINUTE_MS,
   overtimeOptions,
   roomCharge,
@@ -49,7 +50,10 @@ const TYPE_LABEL: Record<GameType, string> = {
 
 const OTHER_KINDS: Table['kind'][] = ['pool', 'foosball', 'carrom', 'ludo', 'playstation'];
 
-type GameFields = Pick<Game, 'type' | 'price' | 'playerIds' | 'sides' | 'underPlayerId'>;
+type GameFields = Pick<
+  Game,
+  'type' | 'price' | 'maxMinutes' | 'playerIds' | 'sides' | 'underPlayerId'
+>;
 
 function isActive(game: Game): boolean {
   return game.status === 'running' || game.status === 'paused';
@@ -82,6 +86,14 @@ function sidesOf(db: MockDb, sides: [string[], string[]] | undefined): [string[]
   return [[...sides[0]], [...sides[1]]];
 }
 
+/**
+ * The time limit a new game on this table starts with: the table's own (set with its price), or the starting value of
+ * the settings for a table that has none yet (D56). A game keeps it; a later change of the table does not move it.
+ */
+function startingLimit(db: MockDb, table: Table): number {
+  return table.maxMinutes ?? db.s.settings.rules.doubleAfterMin;
+}
+
 /** What a game needs to start on this table, checked against the table, the category and the players. */
 function gameFields(db: MockDb, table: Table, request: ChangeTypeRequest): GameFields {
   if (table.price === null) fail('PRICE_NOT_SET', `${table.name} has no price yet.`);
@@ -93,6 +105,7 @@ function gameFields(db: MockDb, table: Table, request: ChangeTypeRequest): GameF
       return {
         type: 'single',
         price: rule(() => frameCharge(table.price as Rs)),
+        maxMinutes: startingLimit(db, table),
         playerIds: twoPlayers(db, request.playerIds),
       };
     case 'double':
@@ -100,6 +113,7 @@ function gameFields(db: MockDb, table: Table, request: ChangeTypeRequest): GameF
       return {
         type: 'double',
         price: rule(() => doublePrice(table.price as Rs)),
+        maxMinutes: startingLimit(db, table),
         sides: sidesOf(db, request.sides),
       };
     case 'century': {
@@ -125,7 +139,12 @@ function gameFields(db: MockDb, table: Table, request: ChangeTypeRequest): GameF
       if (!OTHER_KINDS.includes(table.kind)) fail('VALIDATION', 'This is not a per-game table.');
       const price = gameCharge(table.price);
       if (price === null) return fail('PRICE_NOT_SET', `${table.name} has no price yet.`);
-      return { type: 'game', price, playerIds: twoPlayers(db, request.playerIds) };
+      return {
+        type: 'game',
+        price,
+        maxMinutes: startingLimit(db, table),
+        playerIds: twoPlayers(db, request.playerIds),
+      };
     }
   }
 }
@@ -220,6 +239,7 @@ export function changeGameType(
   delete game.playerIds;
   delete game.sides;
   delete game.underPlayerId;
+  delete game.maxMinutes;
   Object.assign(game, fields);
   if (game.sessionId) {
     db.s.sessions = db.s.sessions.filter((s) => s.id !== game.sessionId);
@@ -543,14 +563,18 @@ export function endGame(
   }
   const elapsedMs = elapsed(game.startedAt, db.now(), game.pausedMs, game.pausedAt);
 
-  // Over 30 minutes the worker chooses (Q2): the normal price, or double. It is the same for a single
-  // frame and a double frame; a double frame's price is doubled, then the losing side splits it.
+  // Past the game's own time limit the worker chooses (Q2, D56): the normal price, or double. It is the same for a
+  // single frame, a double frame and a game of pool, foosball, carrom, ludo or PlayStation; a double frame's price
+  // is doubled, then the losing side splits it.
   const chargedDouble = request.chargeDouble === true;
-  if (
-    chargedDouble &&
-    !((game.type === 'single' || game.type === 'double') && isOver30(elapsedMs))
-  ) {
-    fail('VALIDATION', 'A frame is charged double only after 30 minutes.');
+  if (chargedDouble && !isGameOverLimit(game, elapsedMs)) {
+    const limit = gameLimit(game);
+    fail(
+      'VALIDATION',
+      limit === undefined
+        ? 'A Century or a room is charged by the minute, never double.'
+        : `A game is charged double only after ${limit} minutes.`,
+    );
   }
   const normalAmount: Rs = game.price;
   let amount: Rs;
@@ -606,7 +630,7 @@ export function endGame(
   if (chargedDouble) {
     const payers = loserIds.map((l) => playerName(db, l)).join(' and ');
     db.logActivity(by, 'double-charge', `Charged double on ${table.name}`, {
-      detail: `Frame ran ${Math.floor(elapsedMs / MINUTE_MS)} minutes. ${payers} paid ${formatRs(amount)} instead of ${formatRs(normalAmount)}.`,
+      detail: `${game.type === 'game' ? 'Game' : 'Frame'} ran ${Math.floor(elapsedMs / MINUTE_MS)} minutes, over its limit of ${gameLimit(game)}. ${payers} paid ${formatRs(amount)} instead of ${formatRs(normalAmount)}.`,
       amount: amount - normalAmount,
     });
   }

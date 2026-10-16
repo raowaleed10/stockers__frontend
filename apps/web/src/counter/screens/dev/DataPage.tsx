@@ -1,5 +1,12 @@
 import type { PublicWorker } from '@stockers/shared';
-import { formatClock, formatRs, formatSlot, tableStatus, toClubIso } from '@stockers/shared';
+import {
+  formatClock,
+  formatRs,
+  formatSlot,
+  gameLimit,
+  tableStatus,
+  toClubIso,
+} from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
 import { useNow } from '@/lib/clock';
 import { isApiError } from '@/lib/api-client';
@@ -166,7 +173,11 @@ export default function DataPage() {
                     <th scope="row" className="py-2 text-start font-semibold">
                       {table.name}
                     </th>
-                    <td className="py-2">{t(`status.${status}`, { ns: 'common' })}</td>
+                    <td className="py-2">
+                      {status === 'overLimit' && game
+                        ? t('status.overMinutes', { ns: 'common', n: gameLimit(game) })
+                        : t(`status.${status}`, { ns: 'common' })}
+                    </td>
                     <td className="py-2">
                       {game ? (
                         <>

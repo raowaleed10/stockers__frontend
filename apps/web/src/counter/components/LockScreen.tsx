@@ -135,9 +135,12 @@ export function LockScreen({ session }: { session: WorkerSession }) {
               {summary.playing > 0 ? (
                 <Pill tone="play">{t('playing', { n: summary.playing })}</Pill>
               ) : null}
-              {summary.over30 > 0 ? (
+              {summary.overLimit > 0 ? (
                 <Pill tone="play" card>
-                  {t('over30', { n: summary.over30 })}
+                  {/* Games have their own limits: one limit is named, several are "over the limit". */}
+                  {summary.overLimitMinutes.length === 1
+                    ? t('overLimit', { n: summary.overLimit, limit: summary.overLimitMinutes[0] })
+                    : t('overMixed', { n: summary.overLimit })}
                 </Pill>
               ) : null}
               {summary.free > 0 ? <Pill tone="free">{t('free', { n: summary.free })}</Pill> : null}

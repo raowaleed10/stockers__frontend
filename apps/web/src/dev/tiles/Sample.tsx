@@ -41,7 +41,7 @@ export function Sample({ sample, className }: { sample: TileSample; className?: 
       as={resume ? 'div' : 'button'}
       timer={
         timer ? (
-          <FrozenTimer text={timer} yellow={frozenTimer} redCard={sample.status === 'over30'} />
+          <FrozenTimer text={timer} yellow={frozenTimer} redCard={sample.status === 'overLimit'} />
         ) : undefined
       }
       trailing={

@@ -85,5 +85,10 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Waiting to pay: a canteen sale with no item name | 2 canteen items | 2 کینٹین آئٹم | P05 |
 | The board while it loads | Loading the tables… | ٹیبلز کھل رہے ہیں… | P05 |
 | The board when it cannot load | Could not load the tables. | ٹیبلز نہیں کھل سکے۔ | P05 |
+| The pill of a game over its limit, when it is not told the limit | Over the limit | حد سے زیادہ | P05 answers |
+| The pill of a game over its limit (the game's own number) | Over 20 min | 20 منٹ سے زیادہ | P05 answers |
+| Screen reader name of a table over its limit | Table 4, over 20 minutes | ٹیبل 4، 20 منٹ سے زیادہ | P05 answers |
+| Lock screen, tables over their limits that differ | 2 over the limit | حد سے زیادہ: 2 | P05 answers |
+| Lock screen, one limit shared | 1 over 30 min | 30 منٹ سے زیادہ: 1 | P05 answers |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

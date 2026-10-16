@@ -12,7 +12,7 @@ import type {
   Worker,
   WorkerPatch,
 } from '@stockers/shared';
-import { formatRs, formatSlot, slotEndAfter, toClubIso } from '@stockers/shared';
+import { formatRs, formatSlot, isValidMaxMinutes, slotEndAfter, toClubIso } from '@stockers/shared';
 import { sweepWorkers } from '../db/auth';
 import type { MockDb } from '../db/db';
 import { fail } from '../db/errors';
@@ -272,6 +272,14 @@ export function patchSettings(db: MockDb, by: PersonRef, patch: SettingsPatch): 
   if (patch.language) {
     settings.language = { ...settings.language, ...patch.language };
     changed.push('language');
+  }
+  if (patch.rules?.doubleAfterMin !== undefined) {
+    if (!isValidMaxMinutes(patch.rules.doubleAfterMin)) {
+      fail('VALIDATION', 'The maximum time is a whole number of minutes from 5 to 180.');
+    }
+    // The starting value for games added later; the tables that exist keep their own (D56).
+    settings.rules.doubleAfterMin = patch.rules.doubleAfterMin;
+    changed.push('the starting maximum time of a game');
   }
   if (patch.club) {
     if (patch.club.name !== undefined && !patch.club.name.trim())

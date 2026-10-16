@@ -20,7 +20,8 @@
   "status": {
     "free": "خالی",
     "playing": "کھیل جاری",
-    "over30": "30 منٹ سے زیادہ",
+    "overLimit": "حد سے زیادہ",
+    "overMinutes": "{{n}} منٹ سے زیادہ",
     "paused": "رکا ہوا",
     "outOfOrder": "خراب",
     "noPrice": "قیمت مقرر نہیں"

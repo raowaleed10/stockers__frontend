@@ -29,11 +29,11 @@ function contrast(a: string, b: string): number {
   return (light + 0.05) / (dark + 0.05);
 }
 
-const STATUSES: TableStatus[] = ['free', 'playing', 'over30', 'paused', 'outOfOrder', 'noPrice'];
+const STATUSES: TableStatus[] = ['free', 'playing', 'overLimit', 'paused', 'outOfOrder', 'noPrice'];
 const WORDS: Record<TableStatus, string> = {
   free: 'Free',
   playing: 'Playing',
-  over30: 'Over 30 min',
+  overLimit: 'Over the limit',
   paused: 'Paused',
   outOfOrder: 'Out of order',
   noPrice: 'Price not set',

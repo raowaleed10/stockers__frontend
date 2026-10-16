@@ -61,13 +61,44 @@ describe('tableStatus', () => {
         NOW,
       );
     expect(at(30 * MIN - 1000)).toBe('playing');
-    expect(at(30 * MIN)).toBe('over30');
+    expect(at(30 * MIN)).toBe('overLimit');
   });
 
   it('applies to a double frame too, but never to a Century or a room', () => {
-    expect(tableStatus(table('5', { game: game('double', 31) }), NOW)).toBe('over30');
+    expect(tableStatus(table('5', { game: game('double', 31) }), NOW)).toBe('overLimit');
     expect(tableStatus(table('3', { game: game('century', 42) }), NOW)).toBe('playing');
     expect(tableStatus(table('r1', { game: game('room', 100) }), NOW)).toBe('playing');
+  });
+
+  it('uses the limit the game started with, not always 30 minutes (D56)', () => {
+    const limited = (minutes: number, maxMinutes: number) =>
+      tableStatus(table('1', { game: game('single', minutes, { maxMinutes }) }), NOW);
+    expect(limited(19, 20)).toBe('playing');
+    expect(limited(20, 20)).toBe('overLimit');
+    expect(limited(34, 45)).toBe('playing');
+    expect(limited(45, 45)).toBe('overLimit');
+  });
+
+  it('applies to a game of pool, foosball, carrom, ludo and PlayStation as well (D56)', () => {
+    for (const kind of ['pool', 'foosball', 'carrom', 'ludo', 'playstation'] as const) {
+      const at = (minutes: number) =>
+        tableStatus(
+          table('x', { kind, categoryId: kind, game: game('game', minutes, { maxMinutes: 30 }) }),
+          NOW,
+        );
+      expect(at(29), kind).toBe('playing');
+      expect(at(31), kind).toBe('overLimit');
+    }
+  });
+
+  it('gives a game with no limit saved (older data) the default of 30 minutes', () => {
+    expect(tableStatus(table('1', { game: game('single', 31) }), NOW)).toBe('overLimit');
+  });
+
+  it('keeps the limit a game started with when the table’s limit changes later', () => {
+    // The table now says 20, but this frame started under 45: it is not over the limit at 34 minutes.
+    const running = table('1', { maxMinutes: 20, game: game('single', 34, { maxMinutes: 45 }) });
+    expect(tableStatus(running, NOW)).toBe('playing');
   });
 
   it('is paused for a paused game, and the paused minutes are not counted', () => {
@@ -144,6 +175,22 @@ describe('boardTabs', () => {
   });
 });
 
+describe('summarizeTables with different limits', () => {
+  it('lists each limit once, smallest first, so the lock screen can say "over 20 min"', () => {
+    const tables = [
+      table('1', { game: game('single', 25, { maxMinutes: 20 }) }),
+      table('2', { game: game('single', 35, { maxMinutes: 30 }) }),
+      table('3', { game: game('single', 40, { maxMinutes: 30 }) }),
+      table('4', { game: game('single', 10, { maxMinutes: 20 }) }),
+    ];
+    expect(summarizeTables(tables, NOW)).toMatchObject({
+      playing: 1,
+      overLimit: 3,
+      overLimitMinutes: [20, 30],
+    });
+  });
+});
+
 describe('sessionStanding', () => {
   const session = (frames: Session['frames']): Session => ({
     id: 'sess-t1',
@@ -203,15 +250,16 @@ describe('summarizeTables', () => {
   it('gives screen 34 at 9:42 PM: 5 playing (paused counts), 1 over 30 min, 2 free, 1 out of order', () => {
     expect(summarizeTables(SCREEN_3, NOW)).toEqual({
       playing: 5,
-      over30: 1,
+      overLimit: 1,
+      overLimitMinutes: [30],
       free: 2,
       outOfOrder: 1,
     });
   });
 
   it('counts each table once: the four numbers add up to the tables that can be used', () => {
-    const { playing, over30, free, outOfOrder } = summarizeTables(SCREEN_3, NOW);
-    expect(playing + over30 + free + outOfOrder).toBe(SCREEN_3.length);
+    const { playing, overLimit, free, outOfOrder } = summarizeTables(SCREEN_3, NOW);
+    expect(playing + overLimit + free + outOfOrder).toBe(SCREEN_3.length);
   });
 
   it('leaves out tables with no price (they are locked)', () => {
@@ -220,12 +268,18 @@ describe('summarizeTables', () => {
   });
 
   it('is all zeros for no tables', () => {
-    expect(summarizeTables([], NOW)).toEqual({ playing: 0, over30: 0, free: 0, outOfOrder: 0 });
+    expect(summarizeTables([], NOW)).toEqual({
+      playing: 0,
+      overLimit: 0,
+      overLimitMinutes: [],
+      free: 0,
+      outOfOrder: 0,
+    });
   });
 
-  it('moves a table from playing to over 30 as the clock passes 30 minutes', () => {
+  it('moves a table from playing to over the limit as the clock passes 30 minutes', () => {
     const tables = [table('4', { game: game('single', 29) })];
     expect(summarizeTables(tables, NOW).playing).toBe(1);
-    expect(summarizeTables(tables, NOW + 2 * MIN)).toMatchObject({ playing: 0, over30: 1 });
+    expect(summarizeTables(tables, NOW + 2 * MIN)).toMatchObject({ playing: 0, overLimit: 1 });
   });
 });

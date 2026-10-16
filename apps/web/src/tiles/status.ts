@@ -21,7 +21,7 @@ export interface StatusLook {
 export const STATUS_LOOK: Record<TileStatus, StatusLook> = {
   free: { ring: 'free', cloth: 'normal', pill: 'free', locked: false, covered: false },
   playing: { ring: 'play', cloth: 'lit', pill: 'playing', locked: false, covered: false },
-  over30: { ring: 'over', cloth: 'lit', pill: 'over30', locked: false, covered: false },
+  overLimit: { ring: 'over', cloth: 'lit', pill: 'overLimit', locked: false, covered: false },
   paused: { ring: 'pause', cloth: 'dim', pill: 'paused', locked: false, covered: false },
   outOfOrder: { ring: 'ooo', cloth: 'normal', pill: 'outOfOrder', locked: false, covered: true },
   noPrice: { ring: 'none', cloth: 'dim', pill: 'noPrice', locked: true, covered: false },

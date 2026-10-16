@@ -1,4 +1,4 @@
-import { elapsed, formatTimer, isOver30 } from '@stockers/shared';
+import { DEFAULT_MAX_MINUTES, elapsed, formatTimer, isOverLimit } from '@stockers/shared';
 import { useNow } from '@/lib/clock';
 import { cx } from './cx';
 
@@ -16,6 +16,8 @@ export interface TimerTextProps {
    * red card at 30:00 (decision Q2).
    */
   variant?: 'plain' | 'redCard' | 'auto';
+  /** The game's time limit in minutes, for `auto`. A game that has none uses `plain`. Default 30. */
+  limitMinutes?: number;
   /** `tile` is the 40 px timer on a table; `inherit` takes the size from the page. */
   size?: 'tile' | 'inherit';
   className?: string;
@@ -28,6 +30,7 @@ export function TimerText({
   pausedAt,
   endedAt,
   variant = 'auto',
+  limitMinutes = DEFAULT_MAX_MINUTES,
   size = 'tile',
   className,
 }: TimerTextProps) {
@@ -36,7 +39,7 @@ export function TimerText({
   const now = useNow(frozen ? 60_000 : 1000);
   const measuredTo = endedAt === undefined ? now : Date.parse(endedAt);
   const ms = elapsed(startedAt, measuredTo, pausedMs, endedAt === undefined ? pausedAt : undefined);
-  const redCard = variant === 'redCard' || (variant === 'auto' && isOver30(ms));
+  const redCard = variant === 'redCard' || (variant === 'auto' && isOverLimit(ms, limitMinutes));
 
   return (
     <span

@@ -4,29 +4,19 @@ Claude Code updates this file at the end of every step. The developer reads it b
 
 ## Steps
 
-| Step | What | Status | Notes |
+The work now goes in eight sessions, with one commit per step (CLAUDE.md, "Working rules from P06 on"). Each prompt is in `prompts/`.
+
+| Session | Steps | Status | Notes |
 |---|---|---|---|
-| P00 | Install everything and set up the project | ☑ | Done 12 Oct 2026. Follow-up done the same day (new location, audit notes, owner deep links). See the log and the questions below. |
-| P01 | Design system and shared UI | ☑ | Done 12 Oct 2026, after the language-file split (see Decisions). 26 components in `src/ui`, `format.ts` and `time.ts` in shared, and `/dev/kit` in both apps. Open questions and differences are below. |
-| P02 | Table tiles | ☑ | Done 12 Oct 2026, straight after "P01 answers". Eight tiles, `GameTile`, `/dev/tiles`, and a crop test against the PNGs. Questions and differences are below. |
-| P03 | Data, rules and mock API | ☑ | Done 13 Oct 2026, answers applied the same day ("P03 answers"). Six rule files and the shared API types, a typed client with hooks for both apps, the mock server, the live events, and `/dev/data` in both apps. Differences are below. |
-| P04 | Counter shell, worker sign-in, lock | ☑ | Done 15 Oct 2026, answers applied the same day ("P04 answers"). Sign-in (screens 1, 2), the counter frame (top bar, action bar, banner), the route guard, the end-of-time sign-out, the lock (screen 34), the bell's alerts panel, the Urdu clock, and `docs/NO_DESIGN.md`. Screen 3's frame is built and compared; its board is P05. Differences are below. |
-| P05 | Live board | ☑ | Done 16 Oct 2026. The board (`/`, `/board/:category`), the game tabs, "Waiting to pay", the pool and other locked boards, `/dev/games-preview`, the Urdu board, and the bell panel over the finished board. Questions and differences are below. |
-| P06 | Start a game | ☐ |  |
-| P07 | Running game | ☐ |  |
-| P08 | Ending games and rooms | ☐ |  |
-| P09 | Checkout | ☐ |  |
-| P10 | Canteen, drawer expense, today, close sheet | ☐ |  |
-| P11 | Owner shell and sign-in | ☐ |  |
-| P12 | Dashboard, reports, activity | ☐ |  |
-| P13 | Sheets | ☐ |  |
-| P14 | Players | ☐ |  |
-| P15 | Prices and games | ☐ |  |
-| P16 | Canteen, expenses, workers, settings | ☐ |  |
-| P17 | Owner phone | ☐ |  |
-| P18 | Urdu everywhere | ☐ |  |
-| P19 | Visual check and accessibility | ☐ |  |
-| P20 | Handover | ☐ |  |
+| Done | P00 to P05 | ☑ | One commit each, with their answers (see the Log): P00 project and tools, P01 design system, P02 table tiles, P03 data, rules and mock API, P04 counter frame, sign-in and lock, P05 live board (answers applied 16 Oct 2026 in "P05 answers and faster workflow"). |
+| S1 | P06 Start a game + P07 Running game | ☐ | |
+| S2 | P08 Ending games and rooms + P09 Checkout | ☐ | |
+| S3 | P10 Canteen, drawer expense, today, close sheet | ☐ | |
+| S4 | P11 Owner shell and sign-in + P12 Dashboard, reports, activity | ☐ | |
+| S5 | P13 Sheets + P14 Players | ☐ | |
+| S6 | P15 Prices and games + P16 Canteen, expenses, workers, settings | ☐ | P15 and P16 build the owner side of the maximum time of a game (D56): "Max 30 min" on screen 45, the "Maximum time" field on screens 46 and 47, the starting value on screen 51. The rule, the data and the API are built already (see "What P05 answers added"). |
+| S7 | P17 Owner phone + P18 Urdu everywhere | ☐ | |
+| S8 | P19 Visual check and accessibility + P20 Handover | ☐ | |
 
 ## Screens
 
@@ -234,16 +224,24 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 | 1 | Screens 4 and 5 draw a shorter action bar (no Expense, no Pause all, no "Backed up"); screens 3 and 6, the docs and P04 draw all seven buttons | Full bar everywhere | Done. The bar is the same on every board page, including `/board/pool` and `/dev/games-preview`. The visual tests of screens 4 and 5 leave the action bar out; the rest of those pages is 3.6 % and 2.4 % different. |
 | 2 | Screen 6 draws names, the waiting list's "what for" lines and the out-of-order note in Urdu script; the data holds them in English | Names, canteen item names and typed notes show as stored. Do not store the "what for" line as an English sentence: build it from the bill's lines, so frames, doubles, Century and rooms are Urdu words and canteen items keep their stored name. Words the app builds ("Marked by Adil at 4:15 PM") are translated | Done. `WaitingBill.summary` is gone; it is `parts` (`billParts(lines)` in shared). The seed has no sentence about a bill any more: a waiting row has `lines` that add up to `tonight`, and canteen lines carry `item: { name, qty }`. The Urdu board writes "2 فریم ہارے، 2 Tea", "ڈبل کا آدھا", "1 فریم ہارا"; the note title "Cloth change" and the names stay as stored; "عادل نے شام 4:15 بجے لگایا" is built by the app. The names are masked in the visual test of screen 6 (listed under "Differences"). |
 
-**From P05: questions for the developer (please answer before P06)**
+**From P05: answered by the developer on 16 Oct 2026 (done in "P05 answers and faster workflow")**
 
-| # | Question | What I did meanwhile |
-|---|---|---|
-| 1 | **Red card on per-game tables.** Screen 5 draws the red card and "Over 30 min" on Pool table 3 (32:40) and Foosball table 3 (31:15). `tableStatus` and `docs/07` §2 turn only a single or double frame red at 30 minutes (Q2 is written about frames). | Kept the rule: a pool, carrom, foosball, ludo or PlayStation game never turns red. `/dev/games-preview` shows the PNG's red tiles because its samples are fixed. This only matters once an owner sets prices (P15). Tell me if "other games" should go red too: it is one line in `tableStatus` and its tests. |
-| 2 | **Waiting list on the other tabs.** Screens 4 and 5 draw no waiting list on Pool or on the other games. | The list is on the snooker and rooms tab only. A worker on the Pool tab reaches the same list through Checkout. |
-| 3 | **Phone tail in Urdu.** Screen 6 leaves "•••• 4512" off the waiting rows; the English screen and `docs/04` §7 have it. | Kept it in Urdu too, so the rows say the same in both languages. |
-| 4 | **The bell from the Pool tab.** The bell goes to `/alerts`, which is a child of the snooker board (P04), so from the Pool tab the panel opens over the snooker board. | Left as P04 built it. Making it open over the board you are on means a child route under `/board/:category` and a small change in the frame and in the panel's close button. |
-| 5 | **The real priced pages for carrom, foosball, ludo and PlayStation.** No PNG draws them; screen 5 is a preview with section headings. | Once prices are set, `/board/carrom` and the others show that game's grid (the tile widths of screen 5, gap 26) under the tabs, with no section heading and no banner. Nothing to see until P15 can set a price. |
-| 6 | **Urdu words.** 26 new rows in `docs/URDU_TO_CHECK.md` (the banners and cards of the locked boards, the waiting-list words for games, rooms, damage and Century in the plural, the board's loading and error words). | Listed for the owners. |
+| # | Question | Answer | Result |
+|---|---|---|---|
+| 1 | Red card on per-game tables | Yes, follow screen 5. The red card and the "charge double?" choice apply to every game charged per game: single frame, double frame, pool, foosball, carrom, ludo, PlayStation. Not Century or rooms | Done, and made data-driven by the answer to question 2 (below). `tableStatus` and `endGame` use it; screen 5's red tiles are now what the rules give. |
+| 2 | (new, from the developer) A maximum time for every game charged per game | Each has its own `maxMinutes` (whole minutes, 5 to 180) stored with its price card. Snooker frames 30; pool, foosball, carrom, ludo and PlayStation start at 30. Screen 45 shows "Max 30 min"; screen 46 gets a "Maximum time" field, recorded in Activity with the owner's name; screen 51's "Ask to charge double after 30 minutes" becomes the starting value for games added later (screen 47). The counter uses `isOverLimit(elapsedMs, maxMinutes)` and every label shows the game's own number in English and Urdu. A change applies to games started after it | Rule, data, API and counter side done (details under "What P05 answers added"). The owner screens come in P15 and P16; their field changes are in `docs/NO_DESIGN.md` ("Approved screens that change a field or a word"), and the decision is D56 in `docs/02`. |
+| 3 | Waiting list only on the snooker and rooms tab | Keep it. Checkout is always in the action bar | Kept. |
+| 4 | Phone tail in Urdu | Keep it | Kept. |
+| 5 | Bell from another tab | It opens over the tab you are on; closing returns to the same tab | Done (D57). `/alerts` is a child of every board tab: `/board/pool/alerts`; closing and Escape go back to `/board/pool`. From a screen that is not a board it opens over the first tab. |
+| 6 | Priced game pages with no heading | Keep them, and put them in `docs/NO_DESIGN.md` | Done: section 12, with a picture (`board-priced-carrom.png`). |
+| 7 | Urdu words | Keep the list; the owners check it in one batch after P18 | Kept (31 P05 rows in `docs/URDU_TO_CHECK.md`). |
+
+**From P05 answers: DEFAULT, needs answer** (money, charging and time rules: I picked the safer default and kept going)
+
+- **DEFAULT, needs answer: the limit is stored on each table**, as the price is, so Table 4 can differ from Table 5. Screen 46 changes one table and "also these tables" the same way it does for the price; a whole game's price card can set every table of that game at once. Say if the owners want one limit for a whole game instead.
+- **DEFAULT, needs answer: a game with no saved limit (older data) gets 30**; a table added without one takes the starting value of screen 51. A new game on a table that has no limit takes that starting value too.
+- **DEFAULT, needs answer: changing a game's type in its first 5 minutes** (single to Century and back): a Century has no limit; a frame changed back takes the table's limit as it is then.
+- **DEFAULT, needs answer: the lock screen with different limits.** One limit shared by the games that are over: "1 over 30 min". Different limits: "2 over the limit" (Urdu "حد سے زیادہ: 2"). New words, listed in `docs/URDU_TO_CHECK.md`.
 
 **From P05: for information (no answer needed)**
 
@@ -278,6 +276,8 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 - **15 Oct 2026, the bell and the Urdu clock (P04 answers):** the counter's bell opens a side panel (counter alerts only, D54); the Urdu time of day is صبح 4:00 AM to 11:59 AM, دوپہر 12:00 PM to 3:59 PM, شام 4:00 PM to 6:59 PM, رات 7:00 PM to 3:59 AM, with the owners' weekdays and months (D55). Anything built without an approved PNG is listed in `docs/NO_DESIGN.md` with its route and a screenshot.
 
 - **16 Oct 2026, the live board (P05):** the board is a layout route with the panel's `<Outlet/>` inside a `relative` box, and the board behind a panel is `inert`; the full action bar is on every board page; names and typed notes show as stored, while every word the app builds, and the waiting list's "what for" line (built from the bill's lines, `billParts`), is translated; no waiting list on the other tabs; the red card stays for a single or double frame; Urdu pages use the Nastaliq stack (`.font-body` in Urdu).
+
+- **16 Oct 2026, the maximum time of a game (D56) and the bell (D57):** the red card, the pill and the "charge double?" choice follow each game's own limit (5 to 180 whole minutes, stored with its price, copied to the game when it starts, 30 until the owners set it) for every game charged per game and never for Century or rooms; the bell opens over the tab you are on.
 
 ## Carried to P20
 
@@ -398,6 +398,17 @@ Urdu, checked in the kit: nothing is clipped, dates and times keep their order (
 - **Proved on purpose, then undone:** the waiting total adding only the first bill (4 tests failed), the timer never turning into the red card (2 failed), a tab showing the wrong count (4 failed), and the board not being a `relative` box so the panel covers the bars (the e2e test failed). Every changed file was checked back to what it was.
 - **Heads-up for every counter screen:** a role query over the whole page is slow now that the board is behind most screens; in a test, look inside the dialog (`within(dialog)`). A new Urdu word goes in `board.json` or the screen's own file and in `docs/URDU_TO_CHECK.md`; a piece with no PNG goes in `docs/NO_DESIGN.md` with a picture.
 
+## What P05 answers added (read before P06, P07 and P15)
+
+- **The rule (shared):** `isOverLimit(elapsedMs, maxMinutes)`, `isGameOverLimit(game, elapsedMs)`, `gameLimit(game)`, `hasTimeLimit(type)`, `isValidMaxMinutes(n)` and `DEFAULT_MAX_MINUTES = 30` (`rules/time.ts`); `isOver30` and `OVER30_MS` are gone. `TableStatus` `'over30'` is now **`'overLimit'`** everywhere (tiles, pills, summaries, the dashboard count `overLimit`). `summarizeTables` gives `overLimit` and `overLimitMinutes` (each limit once).
+- **The data:** `Table.maxMinutes` and `Game.maxMinutes` (copied to the game when it starts and never changed), `Settings.rules.doubleAfterMin` is now a number (the starting value). Every table except a room has 30 in the seed, and the running single and double frames have it. `PATCH /tables/:id`, `PATCH /categories/:id`, `POST /tables` and `PATCH /settings` take it (5 to 180 whole minutes, not for a room, recorded in Activity with the owner's name). `POST /games/:id/end` accepts `chargeDouble` for any game over its own limit, and says `A game is charged double only after 20 minutes.` otherwise.
+- **The counter:** the pill, the aria name ("Table 4, over 20 minutes"), the red card and the lock screen follow each game's number; `StatusPill` takes `limit`, `TileProps` takes `limit`, `TimerText` takes `limitMinutes`.
+- **The bell:** `components/alerts-path.ts` (`alertsPath`, `boardPathOf`); `/board/:category/alerts` is a route.
+- **Tests:** Vitest 581 in web (20 new: the limit on the board, in Urdu, for pool and never for Century or rooms; the bell over another tab; the lock with different limits; the mock's start, end and owner API; the pills and tiles) and 199 in shared (8 new: `isOverLimit` at its edges, `hasTimeLimit`, `gameLimit`, `isValidMaxMinutes`, the status for a limit of 20 and 45, a game that keeps its limit, mixed limits). Playwright e2e 144 (2 new: the bell over Pool and Escape). Visual 50, with the same pixels as before (3.7, 3.6, 2.4, 3.6 % and 0.8 % for screen 34).
+- **Proved on purpose, then undone (a time rule):** every game going red at 30 minutes whatever its limit (4 tests failed), the limit off by one second (3 failed), only a frame being charged double (2 failed), a new game not copying its table's limit (2 failed), and the tile saying 30 whatever the limit (3 failed). Every file was checked back to what it was.
+- **Two slow tests made cheap at the cause** (no limit raised, nothing retried): the lock test and the sign-in test now find the keypad and the dots without a page-wide role query (1.7 s to 0.6 s and 1.3 s to 0.7 s alone).
+- **Workflow:** `CLAUDE.md` has "Working rules from P06 on (speed)". The no-design screenshots are made once at the end of a session (12 now).
+
 ## Log
 
 | Date | Step | What was done | Tests |
@@ -414,3 +425,4 @@ Urdu, checked in the kit: nothing is clipped, dates and times keep their order (
 | 2026-10-15 | P04 | Built the sign-in page (screens 1 and 2, with the deep link), the counter frame (top bar, worker chip with Switch worker, action bar, sign-in time banner), the route guard, the end-of-time check, the idle lock and the lock screen (screen 34); `GET /club-status` (type, mock, hook, doc); `tableStatus` and `summarizeTables` in shared; `Keypad keys="lock"`, `PinDots shake`; the counter language files in English and Urdu; new tokens; a general image compare with masks, `screens.counter.spec.ts` and `frame.counter.spec.ts`. Docs 03, 04, 05, 06, 08, 11 and `URDU_TO_CHECK.md`. Fixed along the way: the focus ring that showed on a deep link and on the lock's first key, the Urdu word of the language switch (15 px), three dev sample words that collided with real counter words in `check:bundles`, Urdu pills that put two numbers side by side. | Vitest: 480 in web, 134 in shared. Playwright: 102 e2e (38 new) and 46 visual (5 new). typecheck, lint, build and check:bundles pass. Three deliberate breaks each failed tests. |
 | 2026-10-15 | P04 answers | Applied the developer's four answers: the bell's alerts panel (`/alerts`, `AlertsPanel`, `SidePanel` `actions`, `CounterAlert.amount`); `docs/NO_DESIGN.md` with eight sections, their screenshots, `npm run shots:no-design`, the doc test and the rule in `CLAUDE.md`; screen 34's clock confirmed as a design slip; the Urdu clock (day-part words by club time, weekdays, months, slot form) in the shared formatter with 40 tests, `useFormat()`, and the counter screens moved onto it. Docs 02 (D54, D55), 03, 05, 06, 09, 11 and `URDU_TO_CHECK.md` (13 new rows). Fixed along the way: a flaky first test per file (the page is drawn once before a file's tests), alert text from data keeping its full stops inside an Urdu page. | Vitest: 514 in web, 174 in shared. Playwright: 112 e2e (10 new), 46 visual, 8 screenshots. typecheck, lint, build and check:bundles pass. |
 | 2026-10-16 | P05 | Built the live board at `/` and `/board/:category` (tabs, tiles from the data with live timers and amounts, "Waiting to pay"), the locked boards of screen 4 (and the same pattern for foosball, carrom, ludo and PlayStation), `/dev/games-preview` (screen 5) and the Urdu board (screen 6). Shared rules `boardTabs`, `sessionStanding`, `billParts`, `waitingTotal`; the waiting list's "what for" line is built from the bill's lines (`WaitingBill.parts`, `StatementLine.item`, the seed's `lines`); `board.json` in English and Urdu; the placeholder routes where a tap goes. Docs 03, 05, 06, 07, `NO_DESIGN.md` (3 new pieces) and `URDU_TO_CHECK.md` (26 rows). Found and fixed along the way: the Urdu counter pages drew in a system font instead of Nastaliq, the 30 px of width the design HTML's content-box sizing gives the tile row and the panel, the lock screen scrolling behind a taller board, a test slowed by a page-wide role query, two dev labels inside real words. | Vitest: 561 in web, 191 in shared. Playwright: 142 e2e (30 new) and 50 visual (4 new), 11 screenshots. typecheck, lint, build and check:bundles pass. Four deliberate breaks each failed tests. |
+| 2026-10-16 | P05 answers and faster workflow | Applied the developer's answers: the red card and "charge double?" for every game charged per game, with a maximum time for each (`maxMinutes`, D56): the shared rule, `Table`, `Game` and settings fields, the seed, the mock (start, end, owner price, game and settings patches with their Activity lines), and the counter side (pill, aria name, red card, lock screen, in English and Urdu); the bell opens over the tab you are on (D57); the priced pages of the other games in `docs/NO_DESIGN.md` (section 12) with the changes to screens 45, 46, 47, 51 and the over-limit words; `docs/02` (D56, D57), 03, 04, 06, 07, 09. `CLAUDE.md` has the new working rules; this file has the session plan S1 to S8. | Vitest: 581 in web, 199 in shared. Playwright: 144 e2e and 50 visual, 12 screenshots. typecheck, lint, build and check:bundles pass. Five deliberate breaks of the time rule each failed tests. |

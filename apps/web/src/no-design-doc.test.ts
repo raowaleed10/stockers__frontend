@@ -43,12 +43,25 @@ describe('docs/NO_DESIGN.md', () => {
   });
 
   it('gives every section a place to see it and its words', () => {
-    const parts = doc.split(/^## \d+\. /m).slice(1);
+    // Each numbered section ends where the next `##` heading starts.
+    const parts = doc
+      .split(/^## (?=\d+\. )/m)
+      .slice(1)
+      .map((part) => part.split(/^## /m)[0] ?? '');
     for (const part of parts) {
       expect(part).toMatch(/\*\*Where:\*\*/);
       expect(part).toMatch(/\*\*Words:\*\*/);
       expect(part).toMatch(/\*\*What:\*\*/);
     }
+  });
+
+  it('lists the approved screens that change (the maximum time of a game), with their words', () => {
+    const changes = doc.split(/^## Approved screens that change a field or a word/m)[1] ?? '';
+    for (const screen of ['Screen 45', 'Screen 46', 'Screen 47', 'Screen 51']) {
+      expect(changes, `${screen} is not listed`).toContain(`### ${screen}`);
+    }
+    expect(changes).toContain('Max {{n}} min');
+    expect(changes).toContain('Maximum time');
   });
 
   it('lists every section in the table at the top', () => {

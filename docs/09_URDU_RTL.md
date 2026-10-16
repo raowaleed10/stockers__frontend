@@ -69,7 +69,7 @@ The owners' portal has words the workers must not be able to read: profit, salar
 | Rs 250 a frame | فریم 250 روپے |
 | Playing | کھیل جاری |
 | Free | خالی |
-| Over 30 min | 30 منٹ سے زیادہ |
+| Over 30 min (the number is the game's own limit: "Over 20 min") | 30 منٹ سے زیادہ ("20 منٹ سے زیادہ") |
 | Paused | رکا ہوا |
 | Out of order | خراب |
 | Single frame | سنگل فریم |

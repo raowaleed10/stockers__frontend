@@ -50,7 +50,7 @@ test.describe('the live board at 9:42 PM (screen 3)', () => {
       'playing',
       'free',
       'playing',
-      'over30',
+      'overLimit',
       'playing',
       'paused',
       'outOfOrder',
@@ -304,6 +304,34 @@ test.describe('the bell panel over the finished board', () => {
         .locator('[aria-label="Table 1, playing"]')
         .evaluate((el) => el.closest('[inert]') === null),
     ).toBe(true);
+  });
+});
+
+test.describe('the bell panel over another tab', () => {
+  test('opens over the tab you are on, and closing goes back to it', async ({ page }) => {
+    await open(page, `/board/pool?now=${LATER}`);
+    await page.getByRole('button', { name: 'Notifications, 3 new' }).click();
+    const panel = page.getByRole('dialog', { name: 'Alerts' });
+    await expect(panel).toBeVisible();
+    await expect(page).toHaveURL(/\/board\/pool\/alerts$/);
+    // The pool board is the one behind it.
+    await expect(page.locator('[aria-label="Pool table 1, price not set"]')).toBeVisible();
+    await expect(page.locator('[aria-label="Table 1, playing"]')).toHaveCount(0);
+    await panel.getByRole('button', { name: 'Close panel' }).click();
+    await expect(panel).toHaveCount(0);
+    await expect(page).toHaveURL(/\/board\/pool$/);
+    await expect(
+      page
+        .getByRole('navigation', { name: 'Game categories' })
+        .getByRole('button', { name: /^Pool/ }),
+    ).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('Escape closes it back to the same tab', async ({ page }) => {
+    await open(page, `/board/pool/alerts?now=${LATER}`);
+    await expect(page.getByRole('dialog', { name: 'Alerts' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page).toHaveURL(/\/board\/pool$/);
   });
 });
 

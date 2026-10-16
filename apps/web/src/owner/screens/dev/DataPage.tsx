@@ -1,12 +1,11 @@
-import type { BoardTable } from '@stockers/shared';
 import {
   clubDayNumber,
-  elapsed,
   formatClock,
   formatDate,
   formatRs,
   formatSlot,
-  isOver30,
+  gameLimit,
+  tableStatus,
   toClubIso,
 } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
@@ -24,18 +23,6 @@ const EVENT_WORD = {
   'not-your-time': 'notYourTime',
   'pin-lockout': 'pinLockout',
 } as const;
-
-type RowStatus = 'free' | 'playing' | 'over30' | 'paused' | 'outOfOrder' | 'noPrice';
-
-function statusOf(table: BoardTable, now: number): RowStatus {
-  if (table.outOfOrder) return 'outOfOrder';
-  if (table.price === null) return 'noPrice';
-  const game = table.game;
-  if (!game) return 'free';
-  if (game.status === 'paused') return 'paused';
-  const ms = elapsed(game.startedAt, now, game.pausedMs, game.pausedAt);
-  return (game.type === 'single' || game.type === 'double') && isOver30(ms) ? 'over30' : 'playing';
-}
 
 /**
  * Development only (route `/dev/data` under the owner base path): the workers and the live tables,
@@ -179,7 +166,7 @@ export default function DataPage() {
             </thead>
             <tbody>
               {(live.data?.tables ?? []).map((table) => {
-                const status = statusOf(table, now);
+                const status = tableStatus(table, now);
                 const game = table.game;
                 const players = game?.playerIds ?? [];
                 return (
@@ -187,7 +174,11 @@ export default function DataPage() {
                     <th scope="row" className="py-2 text-start font-semibold">
                       {table.name}
                     </th>
-                    <td className="py-2">{t(`status.${status}`, { ns: 'common' })}</td>
+                    <td className="py-2">
+                      {status === 'overLimit' && game
+                        ? t('status.overMinutes', { ns: 'common', n: gameLimit(game) })
+                        : t(`status.${status}`, { ns: 'common' })}
+                    </td>
                     <td className="py-2">
                       {game
                         ? `${

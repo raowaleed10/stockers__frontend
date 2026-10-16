@@ -56,7 +56,10 @@ export function doubleCharge(
   return { total, split: { ...split } };
 }
 
-/** At the end of a frame over 30 minutes the worker chooses (Q2): the normal price or double. */
+/**
+ * At the end of a game charged per game that ran past its time limit the worker chooses (Q2, D56): the normal
+ * price or double. `isGameOverLimit` says when the choice is asked.
+ */
 export function overtimeOptions(price: Rs): { normal: Rs; double: Rs } {
   return { normal: frameCharge(price), double: doublePrice(price) };
 }

@@ -35,7 +35,7 @@
   "state": {
     "free": "free",
     "playing": "playing",
-    "over30": "over 30 minutes",
+    "overLimit": "over {{n}} minutes",
     "paused": "paused",
     "outOfOrder": "out of order",
     "noPrice": "price not set"

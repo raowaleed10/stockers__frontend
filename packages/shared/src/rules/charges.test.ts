@@ -88,7 +88,7 @@ describe('overtimeOptions', () => {
   });
 });
 
-describe('a double frame over 30 minutes (Q2)', () => {
+describe('a double frame over its limit (Q2, D56)', () => {
   it('offers the normal double price or double that: Table 5 is Rs 400 or Rs 800', () => {
     expect(overtimeOptions(400)).toEqual({ normal: 400, double: 800 });
   });

@@ -66,7 +66,7 @@ Numbers use tabular figures (`font-variant-numeric: tabular-nums`) wherever they
 |---|---|---|---|---|
 | Free | 6 px green `#48C07F` | green dot, "Free" | cloth normal | balls or coins set up; "Tap to start a game" in `#BFF0CF` |
 | Playing | 6 px red `#F0574F` | red dot, "Playing" | cloth lit (brighter centre) | timer and amount so far |
-| Over 30 min | 8 px red with a red glow | small red card, "Over 30 min" | cloth lit | **timer on a solid red card** `#D92D20`, white text, 2 px darker bottom edge |
+| Over its limit | 8 px red with a red glow | small red card, "Over 30 min" (the game's own number: "Over 20 min"; D56) | cloth lit | **timer on a solid red card** `#D92D20`, white text, 2 px darker bottom edge |
 | Paused | 6 px yellow `#F2C14E` | yellow dot, "Paused" | cloth faded | timer stays; Resume button on the power-cut board |
 | Out of order | 3 px dashed grey `#9AA0A6`, offset 3 | grey dot, "Out of order" | striped grey cover over the cloth of a snooker, room or pool table; a ludo board (and so the other games) keeps its picture, with only the dashed ring and the note *(corrected in P02 from screen 5)* | note, for example "Cloth change, marked by Adil at 4:15 PM" |
 | Price not set | none | brass dot, "Price not set" | faded | disabled, "Locked until an owner sets the price" |

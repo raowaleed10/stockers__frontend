@@ -28,6 +28,8 @@ interface Shot {
   clip?: Clip;
   /** Answers the page's own calls differently, to reach a state the mock never gives. */
   fetchOverride?: { match: string; status: number; body?: unknown };
+  /** Sets a price on every table of these kinds in the board's answer, as if an owner had set it (P15 builds that). */
+  priceKinds?: Record<string, number>;
 }
 
 const key = (page: Page, digit: string) => page.getByRole('button', { name: digit, exact: true });
@@ -129,6 +131,15 @@ const SHOTS: Shot[] = [
     },
   },
   {
+    id: 'board-priced-carrom',
+    url: `/board/carrom?now=${encodeURIComponent('2026-10-03T21:44:00+05:00')}`,
+    priceKinds: { carrom: 50 },
+    prepare: async (page) => {
+      await expect(page.getByRole('button', { name: 'Carrom board 1, free' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
     id: 'board-error',
     url: `/?now=${NIGHT}`,
     fetchOverride: { match: '/api/counter/board', status: 500 },
@@ -182,6 +193,32 @@ test.describe('screenshots for docs/NO_DESIGN.md', () => {
           },
           { match, status, body },
         );
+      }
+      if (shot.priceKinds) {
+        // The page asks for the board; the answer gets the prices, so the tiles show as they do once prices are set.
+        await page.addInitScript((kinds) => {
+          const original = window.fetch.bind(window);
+          window.fetch = async (input, init) => {
+            const response = await original(input, init);
+            const url =
+              typeof input === 'string'
+                ? input
+                : input instanceof Request
+                  ? input.url
+                  : String(input);
+            if (!url.includes('/api/counter/board')) return response;
+            const board = (await response.clone().json()) as {
+              tables: { kind: string; price: number | null }[];
+            };
+            for (const table of board.tables) {
+              if (table.kind in kinds) table.price = kinds[table.kind]!;
+            }
+            return new Response(JSON.stringify(board), {
+              status: response.status,
+              headers: { 'Content-Type': 'application/json' },
+            });
+          };
+        }, shot.priceKinds);
       }
       await page.goto(shot.url);
       await page.waitForSelector('[data-app="counter"]', { timeout: 30_000 });

@@ -16,7 +16,7 @@ import { TimerText } from '@/ui/TimerText';
 import { Toggle } from '@/ui/Toggle';
 import type { Theme } from '@/ui/theme';
 
-const STATUSES: TableStatus[] = ['free', 'playing', 'over30', 'paused', 'outOfOrder', 'noPrice'];
+const STATUSES: TableStatus[] = ['free', 'playing', 'overLimit', 'paused', 'outOfOrder', 'noPrice'];
 
 export function ButtonDemo({ theme }: { theme: Theme }) {
   const { t } = useTranslation('kit');
@@ -116,7 +116,12 @@ export function StatusPillDemo({ theme }: { theme: Theme }) {
       }
     >
       {STATUSES.map((status) => (
-        <StatusPill key={status} status={status} tone={theme === 'counter' ? 'dark' : 'light'} />
+        <StatusPill
+          key={status}
+          status={status}
+          limit={status === 'overLimit' ? 30 : undefined}
+          tone={theme === 'counter' ? 'dark' : 'light'}
+        />
       ))}
     </div>
   );

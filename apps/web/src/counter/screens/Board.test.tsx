@@ -321,6 +321,56 @@ describe('the bell panel over the finished board', () => {
   });
 });
 
+describe('the time limit of each game (D56)', () => {
+  const person = () => api.db.workerPerson(api.db.s.workers.find((w) => w.id === 'zain')!);
+
+  it('a frame is over its limit at that game’s own number, not always 30', async () => {
+    // Table 1 is 18:42 in; give its frame a limit of 15 minutes.
+    api.db.game('g-t1-3').maxMinutes = 15;
+    renderCounter('/');
+    const t1 = await tile('Table 1, over 15 minutes');
+    expect(t1).toHaveTextContent('Over 15 min');
+    expect(within(t1).getByRole('timer').className).toContain('bg-s-card');
+    // Table 4 keeps 30 and is over it too; Table 5 (22:10) is not over 30.
+    expect(await tile('Table 4, over 30 minutes')).toHaveTextContent('Over 30 min');
+    expect(await tile('Table 5, playing')).not.toHaveTextContent('Over');
+  });
+
+  it('a game of pool turns into the red card at its own limit', async () => {
+    api.db.table('po1').price = 150;
+    api.db.table('po1').maxMinutes = 20;
+    const game = startGame(api.db, person(), {
+      tableId: 'po1',
+      type: 'game',
+      playerIds: ['imran', 'naveed'],
+    });
+    game.startedAt = new Date(clock.now() - 25 * 60_000).toISOString();
+    renderCounter('/board/pool');
+    const pool = await tile('Pool table 1, over 20 minutes');
+    expect(pool).toHaveTextContent('Over 20 min');
+    expect(pool).toHaveTextContent('Single game');
+    expect(within(pool).getByRole('timer').className).toContain('bg-s-card');
+    expect(pool).toHaveTextContent('Rs 150');
+  });
+
+  it('says the limit in Urdu too', async () => {
+    api.db.game('g-t1-3').maxMinutes = 15;
+    setLanguage('ur');
+    renderCounter('/');
+    const t1 = await tile('ٹیبل 1، 15 منٹ سے زیادہ');
+    expect(t1).toHaveTextContent('15 منٹ سے زیادہ');
+  });
+
+  it('never turns a Century or a room into a red card, however long it runs', async () => {
+    clock.setStart(Date.parse('2026-10-03T23:00:00+05:00'));
+    renderCounter('/');
+    const century = await tile('Table 3, playing');
+    expect(within(century).getByRole('timer').className).not.toContain('bg-s-card');
+    const room = await tile('Room 1, playing');
+    expect(within(room).getByRole('timer').className).not.toContain('bg-s-card');
+  });
+});
+
 describe('the clock on the board', () => {
   it('turns Table 4 into the red card at 30:00 without a reload', async () => {
     // Table 4 started at 9:07:50 PM. At 9:37:48 PM it has been playing for 29:58.

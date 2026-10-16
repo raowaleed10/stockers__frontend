@@ -62,7 +62,10 @@ export function CounterRoutes() {
         {/* `/` is the snooker and rooms tab (docs/03). */}
         <Route path="/board/snooker" element={<Navigate to="/" replace />} />
         <Route path="/board/room" element={<Navigate to="/" replace />} />
-        <Route path="/board/:category" element={<Board />} />
+        <Route path="/board/:category" element={<Board />}>
+          {/* The bell opens over the tab you are on, so the panel is a child of every tab. */}
+          <Route path="alerts" element={<AlertsPanel />} />
+        </Route>
         <Route path="/table/:id/start" element={<TableScreen what="start" />} />
         <Route path="/table/:id" element={<TableScreen what="running" />} />
         <Route path="/room/:id/start" element={<TableScreen what="room" />} />

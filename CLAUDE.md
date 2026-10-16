@@ -8,6 +8,18 @@ Stockers is a snooker club at Mian Plaza, owned by Aqil Farooq and Adil Farooq. 
 
 The backend is built later. Until then all data comes from a mock API (MSW) loaded from `mock/seed.json`.
 
+## Working rules from P06 on (speed)
+
+1. Don't wait for plan approval. Write a short plan (5 to 10 lines) in PROGRESS.md and start building.
+2. Decide look and layout yourself: the approved PNG wins. If there's no PNG, reuse the nearest approved pattern, add it to docs/NO_DESIGN.md, and continue. Seed slips: fix the seed to match the PNG and note it.
+3. Only money and charging rules, who can do what, privacy, or anything that changes what the owners agreed need me. Don't stop for these: pick the safer default, mark it "DEFAULT, needs answer" in PROGRESS.md, and list the questions at the end of your report.
+4. While building, run only the tests for what you touch. At the end of each step run the full checks once (typecheck, lint, unit, e2e, visual, build, bundle check). Deliberate-break checks only for money and time rules.
+5. One commit per step. When a prompt names two steps, commit the first, then go straight into the second in the same session.
+6. Regenerate docs/no-design screenshots once per session, at the end, not after every change.
+7. Keep the final report short: what works, routes to open, pixel differences, questions.
+
+These rules replace rule 13 below ("One prompt per conversation") and the "plan first" line of the prompts from P06 on.
+
 ## Where the truth is
 
 | Question | Look in |
@@ -69,7 +81,7 @@ npm run shots:no-design  # screenshots for docs/NO_DESIGN.md (needs npm run dev)
    - Red: playing.
    - Yellow: paused.
    - Grey dashed: out of order.
-   - Over 30 minutes: a red ring plus a solid red "red card" timer.
+   - Over the game's own time limit (30 minutes unless the owners set another, decision D56): a red ring plus a solid red "red card" timer. It covers every game charged per game (single and double frames, pool, foosball, carrom, ludo, PlayStation), never Century or rooms.
    - Pool, foosball, carrom, ludo and PlayStation without a price: shown, but locked.
 6. **Money.**
    - Whole rupees as integers.
@@ -93,7 +105,7 @@ npm run shots:no-design  # screenshots for docs/NO_DESIGN.md (needs npm run dev)
     - bookings, receipts or printing, WhatsApp;
     - credit limits or warnings, player self-service;
     - tournaments, member or time-of-day prices, Century scores.
-13. **Small steps.** One prompt per conversation. When you finish a step:
+13. **Small steps.** (Until P05: one prompt per conversation. From P06 on, see "Working rules from P06 on" above.) When you finish a step:
     1. Run typecheck, lint and tests (and visual tests from P05 on).
     2. Update `PROGRESS.md`: what you built, which screens, what is left, any question for the developer.
     3. Then say you are done.

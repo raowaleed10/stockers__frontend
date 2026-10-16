@@ -124,7 +124,7 @@ export interface SeedAggregates {
     moneyInHand: Rs;
     tablesInUse: number;
     tablesTotal: number;
-    over30: number;
+    overLimit: number;
     drawerExpenses: Rs;
     drawerExpected: Rs;
     // Screen 31's counts and the discounts so far.

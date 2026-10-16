@@ -2,6 +2,7 @@ import {
   chargeForGame,
   doublePrice,
   formatRs,
+  gameLimit,
   sessionStanding,
   tableStatus,
   type BoardCategory,
@@ -46,6 +47,8 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
 
   const status = tableStatus(table, now);
   const { game } = table;
+  // The limit this game started with (a frame or a game); a Century and a room have none.
+  const limit = game ? gameLimit(game) : undefined;
   const name = (id: string | undefined) => (id ? (players[id]?.name ?? '') : '');
   const money = (value: number) => formatRs(value, lang);
 
@@ -65,8 +68,9 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
     label: [t(`kind.${kind}`), priceLabel],
     ariaLabel: t('named', {
       name: t(`nameOf.${kind}`, { number: table.number.replace(/^R/i, '') }),
-      state: t(`state.${status}`),
+      state: t(`state.${status}`, { n: limit }),
     }),
+    limit,
     className,
   };
 
@@ -139,7 +143,7 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
         startedAt={game.startedAt}
         pausedMs={game.pausedMs}
         pausedAt={game.pausedAt}
-        variant={status === 'over30' ? 'redCard' : 'plain'}
+        variant={status === 'overLimit' ? 'redCard' : 'plain'}
       />
     );
     props.amount = chargeForGame(game, now);
@@ -174,7 +178,7 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
   if (status === 'free') {
     props.onPress = () =>
       navigate(kind === 'room' ? `/room/${table.id}/start` : `/table/${table.id}/start`);
-  } else if (status === 'playing' || status === 'over30' || status === 'paused') {
+  } else if (status === 'playing' || status === 'overLimit' || status === 'paused') {
     props.onPress = () => navigate(`/table/${table.id}`);
   }
 

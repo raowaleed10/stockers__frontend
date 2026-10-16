@@ -19,7 +19,7 @@ const STATUSES = Object.keys(STATUS_LOOK) as TileStatus[];
 const PILL: Record<TileStatus, string> = {
   free: 'Free',
   playing: 'Playing',
-  over30: 'Over 30 min',
+  overLimit: 'Over the limit',
   paused: 'Paused',
   outOfOrder: 'Out of order',
   noPrice: 'Price not set',
@@ -28,7 +28,7 @@ const PILL: Record<TileStatus, string> = {
 const RING: Record<TileStatus, string> = {
   free: 'tile-ring-free',
   playing: 'tile-ring-play',
-  over30: 'tile-ring-over',
+  overLimit: 'tile-ring-over',
   paused: 'tile-ring-pause',
   outOfOrder: 'tile-ring-ooo',
   noPrice: 'tile-ring-none',
@@ -107,9 +107,21 @@ function frozenTimer(minutes: number, seconds: number) {
   );
 }
 
+describe('the words of a game over its limit', () => {
+  it('say the limit of that game, in English and Urdu (D56)', async () => {
+    const { rerender } = render(<GameTile kind="pool" {...base('overLimit', { limit: 20 })} />);
+    expect(screen.getByText('Over 20 min')).toBeInTheDocument();
+    rerender(<GameTile kind="snooker" {...base('overLimit', { limit: 45 })} />);
+    expect(screen.getByText('Over 45 min')).toBeInTheDocument();
+    await i18n.changeLanguage('ur');
+    rerender(<GameTile kind="pool" {...base('overLimit', { limit: 20 })} />);
+    expect(screen.getByText('20 منٹ سے زیادہ')).toBeInTheDocument();
+  });
+});
+
 describe('the red card timer', () => {
   it('is used from 30 minutes on a frame', () => {
-    render(<GameTile kind="snooker" {...base('over30', { timer: frozenTimer(34, 10) })} />);
+    render(<GameTile kind="snooker" {...base('overLimit', { timer: frozenTimer(34, 10) })} />);
     const timer = screen.getByRole('timer');
     expect(timer).toHaveTextContent('34:10');
     expect(timer.className).toContain('bg-s-card');
@@ -122,8 +134,8 @@ describe('the red card timer', () => {
     expect(timer.className).not.toContain('bg-s-card');
   });
 
-  it('shows the small red card in the pill and the wide ring when over 30', () => {
-    const { container } = render(<GameTile kind="pool" {...base('over30')} />);
+  it('shows the small red card in the pill and the wide ring when over the limit', () => {
+    const { container } = render(<GameTile kind="pool" {...base('overLimit')} />);
     expect(container.querySelector('.-rotate-12')).not.toBeNull();
     expect(container.querySelector('.tile-ring-over')).not.toBeNull();
   });
@@ -422,7 +434,7 @@ describe('MiniTable', () => {
   it.each([
     ['free', 'tile-mini-free'],
     ['playing', 'tile-mini-lit'],
-    ['over30', 'tile-mini-lit'],
+    ['overLimit', 'tile-mini-lit'],
     ['paused', 'tile-mini-dim'],
     ['outOfOrder', 'tile-mini-cover'],
   ] as const)('%s uses the cloth %s', (status, cloth) => {

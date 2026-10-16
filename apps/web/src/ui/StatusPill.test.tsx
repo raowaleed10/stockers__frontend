@@ -7,7 +7,7 @@ import { StatusPill } from './StatusPill';
 const WORDS: Record<TableStatus, string> = {
   free: 'Free',
   playing: 'Playing',
-  over30: 'Over 30 min',
+  overLimit: 'Over the limit',
   paused: 'Paused',
   outOfOrder: 'Out of order',
   noPrice: 'Price not set',
@@ -29,7 +29,7 @@ describe('StatusPill', () => {
       <>
         <StatusPill status="free" />
         <StatusPill status="playing" />
-        <StatusPill status="over30" />
+        <StatusPill status="overLimit" limit={30} />
         <StatusPill status="paused" />
         <StatusPill status="outOfOrder" />
       </>,
@@ -39,14 +39,29 @@ describe('StatusPill', () => {
     }
   });
 
+  it('says the limit of the game it is for: "Over 20 min", in Urdu "20 منٹ سے زیادہ" (D56)', async () => {
+    const { rerender } = render(<StatusPill status="overLimit" limit={20} />);
+    expect(screen.getByText('Over 20 min')).toBeInTheDocument();
+    rerender(<StatusPill status="overLimit" limit={45} />);
+    expect(screen.getByText('Over 45 min')).toBeInTheDocument();
+    await i18n.changeLanguage('ur');
+    rerender(<StatusPill status="overLimit" limit={20} />);
+    expect(screen.getByText('20 منٹ سے زیادہ')).toBeInTheDocument();
+  });
+
+  it('says "Over the limit" when it is not told the limit', () => {
+    render(<StatusPill status="overLimit" />);
+    expect(screen.getByText('Over the limit')).toBeInTheDocument();
+  });
+
   it('can be given its own words', () => {
     render(<StatusPill status="paused" label="Power cut" />);
     expect(screen.getByText('Power cut')).toBeInTheDocument();
     expect(screen.queryByText('Paused')).not.toBeInTheDocument();
   });
 
-  it('marks over 30 minutes with a red card and the other states with a round dot', () => {
-    const { container, rerender } = render(<StatusPill status="over30" />);
+  it('marks over the limit with a red card and the other states with a round dot', () => {
+    const { container, rerender } = render(<StatusPill status="overLimit" />);
     expect(container.querySelector('.-rotate-12')).toBeInTheDocument();
     rerender(<StatusPill status="playing" />);
     expect(container.querySelector('.-rotate-12')).not.toBeInTheDocument();

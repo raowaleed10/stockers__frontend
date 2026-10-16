@@ -1,18 +1,17 @@
 import type { BoardResponse, Dashboard, Reports, ReportsQuery } from '@stockers/shared';
-import { isOver30, elapsed, sheetProfit, sheetReceived, toClubIso } from '@stockers/shared';
+import { elapsed, isGameOverLimit, sheetProfit, sheetReceived, toClubIso } from '@stockers/shared';
 import { ownerNotifications, ownerUnread, readAllOwnerNotifications } from '../db/alerts';
 import { board } from '../db/board';
 import type { MockDb } from '../db/db';
 
 const sum = (values: number[]) => values.reduce((total, value) => total + value, 0);
 
-/** Frames that have run past 30 minutes right now (the red card), not Century or rooms. */
-function framesOver30(db: MockDb): number {
+/** Games that have run past their own time limit right now (the red card), not Century or rooms. */
+function gamesOverLimit(db: MockDb): number {
   return db.s.games.filter(
     (game) =>
       (game.status === 'running' || game.status === 'paused') &&
-      (game.type === 'single' || game.type === 'double') &&
-      isOver30(elapsed(game.startedAt, db.now(), game.pausedMs, game.pausedAt)),
+      isGameOverLimit(game, elapsed(game.startedAt, db.now(), game.pausedMs, game.pausedAt)),
   ).length;
 }
 
@@ -46,7 +45,7 @@ export function dashboard(db: MockDb): Dashboard {
       moneyInHand: today.moneyInHand,
       tablesInUse: priced.filter((t) => db.activeGameOn(t.id)).length,
       tablesTotal: priced.length,
-      over30: framesOver30(db),
+      overLimit: gamesOverLimit(db),
       drawerExpenses: today.drawerExpenses,
       drawerExpected: today.cashReceived - today.drawerExpenses,
     },

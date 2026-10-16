@@ -22,7 +22,9 @@ afterEach(() => resetCounterState());
 
 const user = () => userEvent.setup({ delay: null });
 const card = (name: RegExp) => screen.findByRole('button', { name });
-const key = (digit: string) => screen.getByRole('button', { name: digit });
+// A key is found by its text: a role query checks the accessible name of every element, and 20 of them under a busy
+// test run made this test slow enough to hit its limit.
+const key = (digit: string) => screen.getByText(digit, { selector: 'button' });
 
 async function type(digits: string) {
   const u = user();
@@ -104,12 +106,12 @@ describe('screen 1: who is working?', () => {
     for (let attempt = 0; attempt < 5; attempt += 1) {
       await type('9999');
       await waitFor(() =>
-        expect(screen.getByRole('img', { name: '0 of 4 digits entered' })).toBeInTheDocument(),
+        expect(screen.getByLabelText('0 of 4 digits entered')).toBeInTheDocument(),
       );
     }
     expect(await screen.findByText('Wait 5 minutes')).toBeInTheDocument();
     await type('2');
-    expect(screen.getByRole('img', { name: '0 of 4 digits entered' })).toBeInTheDocument();
+    expect(screen.getByLabelText('0 of 4 digits entered')).toBeInTheDocument();
   });
 });
 

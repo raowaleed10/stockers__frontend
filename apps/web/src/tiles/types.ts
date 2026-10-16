@@ -12,6 +12,8 @@ export interface TileProps {
   label: [string, string];
   /** Replaces the words of the status pill, for example text that is already translated. */
   pillLabel?: string;
+  /** The game's time limit in minutes, for the pill of a game that is over it: "Over 30 min". */
+  limit?: number;
   /** "Single frame" with a detail such as "Frame 3, Ali leads 2–0". */
   gameLine?: { main: string; detail?: string };
   /** "Ali Raza vs Bilal Ahmed", or "Under Saad Hussain". A list of names, such as ludo, is just `a`. */
@@ -34,7 +36,7 @@ export interface TileProps {
   /** `div` when the tile contains its own buttons: a button cannot sit inside a button. */
   as?: 'button' | 'div';
   onPress?: () => void;
-  /** "Table 4, over 30 minutes" */
+  /** "Table 4, over 30 minutes" (the limit of that game) */
   ariaLabel: string;
   /** Layout from the page: the flex or grid size of the tile. */
   className?: string;

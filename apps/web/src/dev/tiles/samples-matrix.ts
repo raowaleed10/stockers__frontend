@@ -23,7 +23,7 @@ export const KINDS: TableKind[] = [
 export const STATUSES: TileStatus[] = [
   'free',
   'playing',
-  'over30',
+  'overLimit',
   'paused',
   'outOfOrder',
   'noPrice',
@@ -206,12 +206,13 @@ export function matrixSample(lang: GalleryLang, kind: TableKind, status: TileSta
       sample.cta = w.cta;
       break;
     case 'playing':
-    case 'over30':
+    case 'overLimit':
     case 'paused':
       sample.gameLine =
         status === 'paused' ? { main: w.game, detail: PAUSED[lang] } : { main: w.game };
       sample.players = w.players;
-      sample.timer = status === 'over30' ? '32:40' : kind === 'room' ? '1:12:05' : '11:05';
+      if (status === 'overLimit') sample.limit = 30;
+      sample.timer = status === 'overLimit' ? '32:40' : kind === 'room' ? '1:12:05' : '11:05';
       sample.amount = AMOUNT[kind];
       break;
     case 'outOfOrder':

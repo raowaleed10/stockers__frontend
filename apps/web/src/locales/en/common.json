@@ -20,7 +20,8 @@
   "status": {
     "free": "Free",
     "playing": "Playing",
-    "over30": "Over 30 min",
+    "overLimit": "Over the limit",
+    "overMinutes": "Over {{n}} min",
     "paused": "Paused",
     "outOfOrder": "Out of order",
     "noPrice": "Price not set"

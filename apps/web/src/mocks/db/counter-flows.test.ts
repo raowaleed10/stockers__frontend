@@ -10,6 +10,7 @@ import type { MockDb } from './db';
 import { MockApiError } from './errors';
 import {
   cancelGame,
+  changeGameType,
   damageCharge,
   discardGame,
   disputeGame,
@@ -629,7 +630,7 @@ describe('ending a frame', () => {
     const error = refusal(() =>
       endGame(db, actor(db), 'g-t1-3', { loserIds: ['bilal'], chargeDouble: true }),
     );
-    expect(error.body.message).toBe('A frame is charged double only after 30 minutes.');
+    expect(error.body.message).toBe('A game is charged double only after 30 minutes.');
   });
 
   it('Table 4 at 34:10 can be charged double: Rs 400, and the owners see it (screen 19)', () => {
@@ -640,7 +641,8 @@ describe('ending a frame', () => {
     expect(db.s.activity[0]).toMatchObject({
       type: 'double-charge',
       title: 'Charged double on Table 4',
-      detail: 'Frame ran 34 minutes. Zubair Khan paid Rs 400 instead of Rs 200.',
+      detail:
+        'Frame ran 34 minutes, over its limit of 30. Zubair Khan paid Rs 400 instead of Rs 200.',
       amount: 200,
     });
   });
@@ -1283,7 +1285,7 @@ describe('statements show when a frame started (screens 11, 17, 18, 25)', () => 
   });
 });
 
-describe('over 30 minutes also applies to a double frame (Q2, screens 19 and 20)', () => {
+describe('over the time limit also applies to a double frame (Q2, D56, screens 19 and 20)', () => {
   const T5_MIN_31 = '2026-10-03T21:51:00+05:00'; // Table 5 started 9:19:50 PM
 
   it('charge double doubles the double-frame price, and the losing side splits it', () => {
@@ -1305,7 +1307,8 @@ describe('over 30 minutes also applies to a double frame (Q2, screens 19 and 20)
     expect(db.s.activity[0]).toMatchObject({
       type: 'double-charge',
       title: 'Charged double on Table 5',
-      detail: 'Frame ran 31 minutes. Imran Shah and Naveed Akhtar paid Rs 800 instead of Rs 400.',
+      detail:
+        'Frame ran 31 minutes, over its limit of 30. Imran Shah and Naveed Akhtar paid Rs 800 instead of Rs 400.',
       amount: 400,
       by: { name: 'Zain' },
     });
@@ -1360,22 +1363,95 @@ describe('over 30 minutes also applies to a double frame (Q2, screens 19 and 20)
       refusal(() =>
         endGame(db, actor(db), 'g-t5-d', { loserIds: ['imran', 'naveed'], chargeDouble: true }),
       ).body.message,
-    ).toBe('A frame is charged double only after 30 minutes.');
+    ).toBe('A game is charged double only after 30 minutes.');
   });
 
-  it('is not for a per-game table: only a frame can be charged double', () => {
+  it('is for a game of pool, foosball, carrom, ludo and PlayStation too, with the limit of its table (D56)', () => {
     const db = make();
     const by = actor(db);
     db.table('po1').price = 300;
+    db.table('po1').maxMinutes = 20;
     const game = startGame(db, by, {
       tableId: 'po1',
       type: 'game',
       playerIds: ['imran', 'naveed'],
     });
-    clock += 31 * 60_000;
+    expect(game.maxMinutes).toBe(20);
+    clock += 19 * 60_000;
     expect(
-      refusal(() => endGame(db, by, game.id, { loserIds: ['naveed'], chargeDouble: true })).status,
-    ).toBe(400);
+      refusal(() => endGame(db, by, game.id, { loserIds: ['naveed'], chargeDouble: true })).body
+        .message,
+    ).toBe('A game is charged double only after 20 minutes.');
+    clock += 2 * 60_000;
+    const result = endGame(db, by, game.id, { loserIds: ['naveed'], chargeDouble: true });
+    expect(result.amount).toBe(600);
+    expect(result.lines.map((l) => [l.playerId, l.charge])).toEqual([['naveed', 600]]);
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'double-charge',
+      detail: expect.stringContaining('over its limit of 20'),
+    });
+  });
+
+  it('a game starts with the limit of its table, or the starting value of the settings when the table has none', () => {
+    const db = make();
+    const by = actor(db);
+    db.table('t2').maxMinutes = 45;
+    const own = startGame(db, by, {
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['imran', 'naveed'],
+    });
+    expect(own.maxMinutes).toBe(45);
+    delete db.table('t6').maxMinutes;
+    db.s.settings.rules.doubleAfterMin = 25;
+    db.s.games = db.s.games.filter((g) => g.tableId !== 't6');
+    const fallback = startGame(db, by, {
+      tableId: 't6',
+      type: 'single',
+      playerIds: ['zubair', 'saad'],
+    });
+    expect(fallback.maxMinutes).toBe(25);
+  });
+
+  it('a running game keeps the limit it started with when the owners change the table (D56)', () => {
+    const db = make();
+    const by = actor(db);
+    // Table 4's frame is 34 minutes in and started under a limit of 45. The owners now say 10 for the table:
+    // the running frame is not over its own limit, so it cannot be charged double.
+    db.game('g-t4-1').maxMinutes = 45;
+    db.table('t4').maxMinutes = 10;
+    expect(
+      refusal(() => endGame(db, by, 'g-t4-1', { loserIds: ['zubair'], chargeDouble: true })).body
+        .message,
+    ).toBe('A game is charged double only after 45 minutes.');
+    // The next game on that table starts under the new limit.
+    db.s.games = db.s.games.filter((g) => g.id !== 'g-t4-1');
+    const next = startGame(db, by, {
+      tableId: 't4',
+      type: 'single',
+      playerIds: ['zubair', 'saad'],
+    });
+    expect(next.maxMinutes).toBe(10);
+  });
+
+  it('a Century and a room have no limit, and a frame changed into a Century loses it', () => {
+    const db = make();
+    expect(db.game('g-t3-c').maxMinutes).toBeUndefined();
+    expect(db.game('g-r1').maxMinutes).toBeUndefined();
+    const by = actor(db);
+    const frame = startGame(db, by, {
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['imran', 'naveed'],
+    });
+    expect(frame.maxMinutes).toBe(30);
+    const century = changeGameType(db, by, frame.id, { type: 'century', underPlayerId: 'imran' });
+    expect(century.maxMinutes).toBeUndefined();
+    const back = changeGameType(db, by, frame.id, {
+      type: 'single',
+      playerIds: ['imran', 'naveed'],
+    });
+    expect(back.maxMinutes).toBe(30);
   });
 });
 

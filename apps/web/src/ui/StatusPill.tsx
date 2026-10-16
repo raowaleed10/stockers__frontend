@@ -6,6 +6,8 @@ export interface StatusPillProps {
   status: TableStatus;
   /** Replaces the default words, for example a text that is already translated. */
   label?: string;
+  /** The time limit of the game in minutes: "Over 30 min". Without it the pill says "Over the limit". */
+  limit?: number;
   /** `dark` sits on a table or the counter; `light` sits on the owner's light pages. */
   tone?: 'dark' | 'light';
   className?: string;
@@ -14,7 +16,7 @@ export interface StatusPillProps {
 const DOT: Record<TableStatus, string> = {
   free: 'bg-s-free',
   playing: 'bg-s-play',
-  over30: 'bg-s-play',
+  overLimit: 'bg-s-play',
   paused: 'bg-s-pause',
   outOfOrder: 'bg-s-ooo',
   noPrice: 'bg-s-noprice',
@@ -26,7 +28,7 @@ const DOT: Record<TableStatus, string> = {
 const LIGHT: Record<TableStatus, string> = {
   free: 'bg-o-green-tint text-sl-free-ink',
   playing: 'bg-o-red-tint text-sl-play',
-  over30: 'bg-o-red-tint text-sl-play',
+  overLimit: 'bg-o-red-tint text-sl-play',
   paused: 'bg-o-amber-tint text-sl-pause-ink',
   outOfOrder: 'bg-o-grey-tint text-sl-ooo-ink',
   noPrice: 'bg-o-amber-tint text-o-amber-ink',
@@ -34,11 +36,15 @@ const LIGHT: Record<TableStatus, string> = {
 
 /**
  * The status of a table, always in words so colour is never the only signal (golden rule 11). The dark pill
- * adds a marker: a round dot, or a small red card for over 30 minutes. The light pill is words on a tint.
+ * adds a marker: a round dot, or a small red card for over the time limit. The light pill is words on a tint.
  */
-export function StatusPill({ status, label, tone = 'dark', className }: StatusPillProps) {
+export function StatusPill({ status, label, limit, tone = 'dark', className }: StatusPillProps) {
   const { t } = useTranslation();
-  const text = label ?? t(`status.${status}`);
+  const text =
+    label ??
+    (status === 'overLimit' && limit !== undefined
+      ? t('status.overMinutes', { n: limit })
+      : t(`status.${status}`));
 
   if (tone === 'light') {
     return (
@@ -55,7 +61,7 @@ export function StatusPill({ status, label, tone = 'dark', className }: StatusPi
   }
 
   const marker =
-    status === 'over30' ? (
+    status === 'overLimit' ? (
       <span
         aria-hidden="true"
         className="h-[14px] w-[10px] shrink-0 -rotate-12 rounded-[2px] bg-s-play shadow-[0_1px_2px_rgba(0,0,0,0.4)]"

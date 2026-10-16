@@ -145,6 +145,7 @@
       "kind": "snooker",
       "number": "1",
       "name": "Table 1",
+      "maxMinutes": 30,
       "price": 250
     },
     {
@@ -153,6 +154,7 @@
       "kind": "snooker",
       "number": "2",
       "name": "Table 2",
+      "maxMinutes": 30,
       "price": 250
     },
     {
@@ -161,6 +163,7 @@
       "kind": "snooker",
       "number": "3",
       "name": "Table 3",
+      "maxMinutes": 30,
       "price": 250
     },
     {
@@ -169,6 +172,7 @@
       "kind": "snooker",
       "number": "4",
       "name": "Table 4",
+      "maxMinutes": 30,
       "price": 200
     },
     {
@@ -177,6 +181,7 @@
       "kind": "snooker",
       "number": "5",
       "name": "Table 5",
+      "maxMinutes": 30,
       "price": 200
     },
     {
@@ -185,6 +190,7 @@
       "kind": "snooker",
       "number": "6",
       "name": "Table 6",
+      "maxMinutes": 30,
       "price": 250
     },
     {
@@ -193,6 +199,7 @@
       "kind": "snooker",
       "number": "7",
       "name": "Table 7",
+      "maxMinutes": 30,
       "price": 200,
       "outOfOrder": {
         "note": "Cloth change",
@@ -226,6 +233,7 @@
       "kind": "pool",
       "number": "1",
       "name": "Pool table 1",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -234,6 +242,7 @@
       "kind": "pool",
       "number": "2",
       "name": "Pool table 2",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -242,6 +251,7 @@
       "kind": "pool",
       "number": "3",
       "name": "Pool table 3",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -250,6 +260,7 @@
       "kind": "pool",
       "number": "4",
       "name": "Pool table 4",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -258,6 +269,7 @@
       "kind": "foosball",
       "number": "1",
       "name": "Foosball 1",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -266,6 +278,7 @@
       "kind": "foosball",
       "number": "2",
       "name": "Foosball 2",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -274,6 +287,7 @@
       "kind": "foosball",
       "number": "3",
       "name": "Foosball 3",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -282,6 +296,7 @@
       "kind": "carrom",
       "number": "1",
       "name": "Carrom 1",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -290,6 +305,7 @@
       "kind": "carrom",
       "number": "2",
       "name": "Carrom 2",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -298,6 +314,7 @@
       "kind": "carrom",
       "number": "3",
       "name": "Carrom 3",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -306,6 +323,7 @@
       "kind": "ludo",
       "number": "1",
       "name": "Ludo 1",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -314,6 +332,7 @@
       "kind": "ludo",
       "number": "2",
       "name": "Ludo 2",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -322,6 +341,7 @@
       "kind": "ludo",
       "number": "3",
       "name": "Ludo 3",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -330,6 +350,7 @@
       "kind": "ludo",
       "number": "4",
       "name": "Ludo 4",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -338,6 +359,7 @@
       "kind": "playstation",
       "number": "1",
       "name": "PlayStation 1",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -346,6 +368,7 @@
       "kind": "playstation",
       "number": "2",
       "name": "PlayStation 2",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -354,6 +377,7 @@
       "kind": "playstation",
       "number": "3",
       "name": "PlayStation 3",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -362,6 +386,7 @@
       "kind": "playstation",
       "number": "4",
       "name": "PlayStation 4",
+      "maxMinutes": 30,
       "price": null
     },
     {
@@ -370,6 +395,7 @@
       "kind": "playstation",
       "number": "5",
       "name": "PlayStation 5",
+      "maxMinutes": 30,
       "price": null
     }
   ],
@@ -757,6 +783,7 @@
       "tableId": "t1",
       "sheetId": "s48",
       "type": "single",
+      "maxMinutes": 30,
       "status": "running",
       "startedAt": "2026-10-03T21:23:18+05:00",
       "startedBy": {
@@ -794,6 +821,7 @@
       "tableId": "t4",
       "sheetId": "s48",
       "type": "single",
+      "maxMinutes": 30,
       "status": "running",
       "startedAt": "2026-10-03T21:07:50+05:00",
       "startedBy": {
@@ -813,6 +841,7 @@
       "tableId": "t5",
       "sheetId": "s48",
       "type": "double",
+      "maxMinutes": 30,
       "status": "running",
       "startedAt": "2026-10-03T21:19:50+05:00",
       "startedBy": {
@@ -838,6 +867,7 @@
       "tableId": "t6",
       "sheetId": "s48",
       "type": "single",
+      "maxMinutes": 30,
       "status": "paused",
       "startedAt": "2026-10-03T21:26:56+05:00",
       "startedBy": {
@@ -1549,7 +1579,7 @@
       "moneyInHand": 25600,
       "tablesInUse": 6,
       "tablesTotal": 9,
-      "over30": 1,
+      "overLimit": 1,
       "drawerExpenses": 500,
       "drawerExpected": 17950,
       "doubles": 6,

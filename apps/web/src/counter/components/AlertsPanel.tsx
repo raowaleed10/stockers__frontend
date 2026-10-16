@@ -1,6 +1,6 @@
 import { clubDayNumber, type CounterAlert } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { clock } from '@/lib/clock';
 import { useFormat } from '@/lib/use-format';
 import { Button } from '@/ui/Button';
@@ -9,6 +9,7 @@ import { EmptyState } from '@/ui/EmptyState';
 import { MoneyText } from '@/ui/MoneyText';
 import { SidePanel } from '@/ui/SidePanel';
 import { useAlerts, useReadAllAlerts } from '../api';
+import { boardPathOf } from './alerts-path';
 
 // The bar at the start of a row says what kind of alert it is, as the bars of screen 58 do.
 const BAR: Record<CounterAlert['kind'], string> = {
@@ -62,12 +63,13 @@ function AlertRow({ alert }: { alert: CounterAlert }) {
 
 /**
  * The bell's panel (no approved screen; docs/NO_DESIGN.md): the counter's own alerts in the counter side panel
- * of screen 11, with "Mark all read" in the header. Closing it goes back to the board. These are the counter's
+ * of screen 11, with "Mark all read" in the header. Closing it goes back to the board it was opened over (the tab you were on). These are the counter's
  * alerts only (`GET /alerts`), never the owners' notifications.
  */
 export function AlertsPanel() {
   const { t } = useTranslation('alerts');
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const alerts = useAlerts();
   const readAll = useReadAllAlerts();
   const unread = alerts.data?.unread ?? 0;
@@ -79,7 +81,7 @@ export function AlertsPanel() {
       <div className="absolute inset-y-0 end-0 z-20 flex w-[560px] max-w-full" data-testid="alerts">
         <SidePanel
           title={t('title')}
-          onClose={() => navigate('/')}
+          onClose={() => navigate(boardPathOf(pathname))}
           className="h-full overflow-y-auto"
           actions={
             <Button

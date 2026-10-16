@@ -56,7 +56,8 @@ export const SCREEN_3: TileSample[] = [
   {
     id: 's03-4',
     kind: 'snooker',
-    status: 'over30',
+    status: 'overLimit',
+    limit: 30,
     number: '4',
     label: ['Table', 'Rs 200 a frame'],
     ariaLabel: 'Table 4, over 30 minutes',
@@ -222,7 +223,8 @@ export const SCREEN_5: TileSample[] = [
   {
     id: 's05-3',
     kind: 'pool',
-    status: 'over30',
+    status: 'overLimit',
+    limit: 30,
     number: '3',
     label: ['Pool table', 'Rs 150 a game'],
     ariaLabel: 'Pool table 3, over 30 min',
@@ -333,7 +335,8 @@ export const SCREEN_5: TileSample[] = [
   {
     id: 's05-10',
     kind: 'foosball',
-    status: 'over30',
+    status: 'overLimit',
+    limit: 30,
     number: '3',
     label: ['Foosball', 'Rs 50 a game'],
     ariaLabel: 'Foosball table 3, over 30 min',
@@ -529,7 +532,8 @@ export const SCREEN_6_UR: TileSample[] = [
   {
     id: 's06-4',
     kind: 'snooker',
-    status: 'over30',
+    status: 'overLimit',
+    limit: 30,
     number: '4',
     label: ['ٹیبل', 'فریم 200 روپے'],
     ariaLabel: 'ٹیبل 4، 30 منٹ سے زیادہ',

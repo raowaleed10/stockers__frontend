@@ -73,6 +73,15 @@ describe('screen 34: the lock screen', () => {
     expect(within(dialog).getByText('1 out of order')).toBeInTheDocument();
   });
 
+  it('names the limit when the games over their limit share one, and says "over the limit" when they do not (D56)', async () => {
+    // Table 1 (18:42 in) is given a limit of 15 minutes. Table 4 (34:10) keeps 30. Two tables are over, with two limits.
+    api.db.game('g-t1-3').maxMinutes = 15;
+    renderCounter('/');
+    const dialog = await lockDialog();
+    expect(await within(dialog).findByText('2 over the limit')).toBeInTheDocument();
+    expect(within(dialog).getByText('4 playing')).toBeInTheDocument();
+  });
+
   it('puts the page behind it out of reach: inert and hidden from screen readers', async () => {
     renderCounter('/');
     await lockDialog();

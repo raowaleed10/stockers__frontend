@@ -101,7 +101,7 @@ function Matrix({ lang }: { lang: GalleryLang }) {
 const PHONE_ROWS: { number: string; status: TableStatus; room?: boolean; words: string }[] = [
   { number: '1', status: 'playing', words: 'Table 1' },
   { number: '2', status: 'free', words: 'Table 2' },
-  { number: '4', status: 'over30', words: 'Table 4' },
+  { number: '4', status: 'overLimit', words: 'Table 4' },
   { number: '6', status: 'paused', words: 'Table 6' },
   { number: '7', status: 'outOfOrder', words: 'Table 7' },
   { number: 'R1', status: 'playing', room: true, words: 'Room 1' },

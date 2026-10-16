@@ -28,7 +28,8 @@ describe('shared types', () => {
   });
 
   it('fixes the counter rules to the owners numbers', () => {
-    expectTypeOf<Settings['rules']['doubleAfterMin']>().toEqualTypeOf<30>();
+    // The starting maximum time of a game is a setting now (D56): any whole number of minutes.
+    expectTypeOf<Settings['rules']['doubleAfterMin']>().toEqualTypeOf<number>();
     expectTypeOf<Settings['rules']['lockAfterMin']>().toEqualTypeOf<5>();
   });
 });

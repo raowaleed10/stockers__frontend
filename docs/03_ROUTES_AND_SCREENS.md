@@ -86,7 +86,7 @@ Image: `design/screens/<file>.png` · HTML: `design/html/<file>.html`
 | owner `/live` (desktop) | read-only live board for owners | screen 3 without the action bar and without tap actions |
 | owner `/alerts` (desktop) | notifications | screen 58 content in a desktop card |
 | counter `/checkout`, `/canteen`, `/players`, `/today`, `/expense`, `/close-sheet` | the action bar's screens, until their steps are built | placeholder with the button's name, inside the real frame (P04) |
-| counter `/alerts` | the bell's side panel with the counter's alerts, over the board | the counter side panel of screen 11 and the rows of screen 58; no PNG of its own (`docs/NO_DESIGN.md` §3). It is a child route of the board, so the board must draw an `<Outlet/>` |
+| counter `/alerts` | the bell's side panel with the counter's alerts, over the board | the counter side panel of screen 11 and the rows of screen 58; no PNG of its own (`docs/NO_DESIGN.md` §3). It is a child route of **every** board tab (`/board/pool/alerts` over Pool), so the bell opens over the tab you are on and closing returns to it (D57); from a screen that is not a board it opens over the first tab. The board must draw an `<Outlet/>` |
 | counter `/pause-all` | **temporary.** Pause all is an action (screen 16), not a screen | placeholder, so the button goes somewhere; **P07** replaces it with the action and removes the route (P05 did not build it) |
 | counter `/sign-in?worker=<id>` | picks that worker; for a worker who is "Not now" it opens on screen 2 | P04 (test and demo link) |
 | any unknown path | "Page not found" | plain page, same look for every app; never mentions owners |

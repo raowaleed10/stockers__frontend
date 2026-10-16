@@ -61,7 +61,7 @@ describe('dashboard and reports (screens 36, 37, 53)', () => {
       moneyInHand: 25600,
       tablesInUse: 6,
       tablesTotal: 9,
-      over30: 1,
+      overLimit: 1,
       drawerExpected: 17950,
     });
     expect(d.month).toMatchObject({
@@ -449,6 +449,101 @@ describe('prices and games (screens 45 to 47, 57)', () => {
     ).toBe(400);
     expect((await refused(owner.patchTable('t1', { price: 12.5 }))).status).toBe(400);
     expect((await refused(owner.patchTable('t1', { price: -1 }))).status).toBe(400);
+  });
+
+  it('sets the maximum time of a game with its price, and records it with the owner’s name (D56)', async () => {
+    api.load({ app: 'owner' });
+    const prices = await owner.getPrices();
+    // Screen 45 shows "Max 30 min" next to each price; a room has none.
+    expect(
+      prices.categories.find((c) => c.id === 'snooker')?.tables.map((t) => t.maxMinutes),
+    ).toEqual([30, 30, 30, 30, 30, 30, 30]);
+    expect(prices.categories.find((c) => c.id === 'pool')?.tables.map((t) => t.maxMinutes)).toEqual(
+      [30, 30, 30, 30],
+    );
+    expect(prices.categories.find((c) => c.id === 'room')?.tables.map((t) => t.maxMinutes)).toEqual(
+      [undefined, undefined],
+    );
+
+    const tables = await owner.patchTable('t4', { maxMinutes: 20, alsoTableIds: ['t5'] });
+    expect(tables.map((t) => [t.id, t.maxMinutes, t.price])).toEqual([
+      ['t4', 20, 200],
+      ['t5', 20, 200],
+    ]);
+    expect((await owner.getActivity()).events[0]).toMatchObject({
+      type: 'price-change',
+      title: 'Maximum time changed: Table 4, Table 5',
+      detail: '30 min to 20 min. Games already started keep their limit.',
+      by: { name: 'Aqil Farooq' },
+    });
+  });
+
+  it('keeps the limit a running game started with, and gives a new game the new one (D56)', async () => {
+    api.load({ app: 'owner' });
+    await owner.patchTable('t4', { maxMinutes: 20 });
+    await owner.patchTable('t2', { maxMinutes: 25 });
+    await asZain();
+    const board = await counter.getBoard();
+    expect(board.tables.find((t) => t.id === 't4')).toMatchObject({
+      maxMinutes: 20,
+      game: { maxMinutes: 30 },
+    });
+    const game = await counter.startGame({
+      tableId: 't2',
+      type: 'single',
+      playerIds: ['imran', 'naveed'],
+    });
+    expect(game.maxMinutes).toBe(25);
+  });
+
+  it('accepts 5 to 180 whole minutes and refuses anything else, and a room has none', async () => {
+    api.load({ app: 'owner' });
+    for (const bad of [4, 181, 0, -30, 30.5]) {
+      const error = await refused(owner.patchTable('t4', { maxMinutes: bad }));
+      expect([error.status, error.code], String(bad)).toEqual([400, 'VALIDATION']);
+    }
+    expect((await owner.patchTable('t4', { maxMinutes: 5 }))[0].maxMinutes).toBe(5);
+    expect((await owner.patchTable('t4', { maxMinutes: 180 }))[0].maxMinutes).toBe(180);
+    expect((await refused(owner.patchTable('r1', { maxMinutes: 30 }))).status).toBe(400);
+    expect((await refused(owner.patchCategory('room', { maxMinutes: 30 }))).status).toBe(400);
+  });
+
+  it('sets the maximum time of a whole game at once', async () => {
+    api.load({ app: 'owner' });
+    const card = await owner.patchCategory('pool', { maxMinutes: 45 });
+    expect(card.tables.map((t) => t.maxMinutes)).toEqual([45, 45, 45, 45]);
+    await owner.patchCategory('pool', { price: 300 });
+    await asZain();
+    const game = await counter.startGame({
+      tableId: 'po1',
+      type: 'game',
+      playerIds: ['imran', 'naveed'],
+    });
+    expect(game.maxMinutes).toBe(45);
+  });
+
+  it('gives a table added later the starting value of screen 51, unless the owner types one (D56)', async () => {
+    api.load({ app: 'owner' });
+    expect((await owner.addTable({ categoryId: 'pool', price: null })).maxMinutes).toBe(30);
+    await owner.patchSettings({ rules: { doubleAfterMin: 25 } });
+    expect((await owner.getSettings()).rules.doubleAfterMin).toBe(25);
+    expect((await owner.getActivity()).events[0]).toMatchObject({
+      type: 'settings-change',
+      title: 'Settings changed: the starting maximum time of a game',
+      by: { name: 'Aqil Farooq' },
+    });
+    expect((await owner.addTable({ categoryId: 'pool', price: null })).maxMinutes).toBe(25);
+    expect(
+      (await owner.addTable({ categoryId: 'pool', price: null, maxMinutes: 60 })).maxMinutes,
+    ).toBe(60);
+    expect((await owner.addTable({ categoryId: 'room', price: 1500 })).maxMinutes).toBeUndefined();
+    // The tables that exist keep their own.
+    const prices = await owner.getPrices();
+    expect(prices.categories.find((c) => c.id === 'snooker')?.tables[0]?.maxMinutes).toBe(30);
+    expect((await refused(owner.patchSettings({ rules: { doubleAfterMin: 4 } }))).status).toBe(400);
+    expect((await refused(owner.patchSettings({ rules: { doubleAfterMin: 181 } }))).status).toBe(
+      400,
+    );
   });
 
   it('puts a table out of order with a note, and back (screen 16)', async () => {

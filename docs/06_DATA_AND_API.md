@@ -19,6 +19,7 @@ export type TableKind = 'snooker' | 'room' | 'pool' | 'foosball' | 'carrom' | 'l
 export interface Category { id: string; name: string; kind: TableKind; pricing: 'frame' | 'hour' | 'game'; centuryAllowed: boolean; order: number }
 export interface Table { id: string; categoryId: string; kind: TableKind; number: string; name: string;
   price: Rs | null;                       // per frame / per hour / per game; null = price not set (locked)
+  maxMinutes?: number;                    // 5 to 180 whole minutes: the red card and "charge double?" (D56). Not on a room
   outOfOrder?: { note: string; by: PersonRef; at: ISO } }
 
 export type GameType = 'single' | 'double' | 'century' | 'room' | 'game';
@@ -28,6 +29,7 @@ export interface Game {
   startedAt: ISO; startedBy: PersonRef; endedAt?: ISO; endedBy?: PersonRef;
   pausedAt?: ISO; pausedMs: number;      // total paused time, not charged
   price: Rs;                             // frame / game price, or Century rate per minute, or room hourly
+  maxMinutes?: number;                   // the limit this game started with (a frame or a game); never changes (D56)
   playerIds?: [string, string];          // single
   sides?: [string[], string[]];          // double (1–2 players per side)
   underPlayerId?: string;                // century / room
@@ -76,7 +78,7 @@ export interface AppNotification { id: string; at: ISO; kind: 'sheet-closed' | '
   title: string; text: string; amount?: Rs; read: boolean }
 
 export interface Settings { paymentMethods: PaymentMethod[];
-  rules: { doubleAfterMin: 30; lockAfterMin: 5; undoWindowSec: 120; changeTypeWindowMin: 5; oldCreditDays: 15; roomMinMinutes: 60; slotWarningMin: 10 };
+  rules: { doubleAfterMin: number /* the starting maximum time for new games, 5 to 180 (D56) */; lockAfterMin: 5; undoWindowSec: 120; changeTypeWindowMin: 5; oldCreditDays: 15; roomMinMinutes: 60; slotWarningMin: 10 };
   alerts: Record<AppNotification['kind'], boolean>; email: { aqil?: string; adil?: string };
   language: { counter: 'en' | 'ur'; owner: 'en' | 'ur' }; club: { name: string; address: string; logo?: string; domain?: string } }
 ```
@@ -119,7 +121,7 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `GET /activity?type=&by=&from=&to=` · `POST /activity/:id/decide` `{payer}` | 38 |
 | `GET /sheets/folders` · `GET /sheets?month=` · `GET /sheets/:id` · `PATCH /sheets/:id/entries/:entryId` `{value, reason}` · `GET /sheets/:id/export?format=pdf|xlsx` | 39–42, 55 |
 | `GET /players?filter=` · `GET /players/:id` · `POST /players/:id/payments` · `POST /players/:id/opening-balance` · `PATCH /players/:id` · `PATCH /statement-lines/:id` | 43, 44, 56 |
-| `GET /prices` · `PATCH /tables/:id` `{price, alsoTableIds?, outOfOrder?}` · `PATCH /categories/:id` `{price}` · `POST /tables` | 45–47, 57 |
+| `GET /prices` · `PATCH /tables/:id` `{price?, maxMinutes?, alsoTableIds?, outOfOrder?}` · `PATCH /categories/:id` `{price?, maxMinutes?, centuryRate?}` · `POST /tables` `{…, maxMinutes?}` · `PATCH /settings` `{rules?: {doubleAfterMin}}` | 45–47, 57 |
 | `GET /canteen` · `POST /canteen/items` · `POST /canteen/stock` | 48 |
 | `GET /expenses?month=` · `POST /expenses` · `PATCH /expenses/:id` · `DELETE /expenses/:id` | 49 |
 | `GET /workers` · `POST /workers` · `PATCH /workers/:id` `{slot?, enabled?}` · `POST /workers/:id/pin` | → each worker with `lastSignIn`, `signedIn`, `signsOutAt` and `sessionEvents` (sign-in, sign-out, automatic sign-out, "Not your time", PIN lockout; newest first). A change of time, a PIN or turning sign-in off is saved in Activity; sign-ins are not. | 50 |
@@ -198,3 +200,10 @@ Code: `apps/web/src/mocks` (`db/` is the store, `counter/` and `owner/` are the 
 - The seed lists individual sheets only for 46 to 48 (and 49 after close). Other months have a folder and no sheets. Sheets 46 and 47 have only `earned`.
 - The owner PDF and Excel downloads are stand-in text files until P13.
 - The dashboard's player counts (41 owing, 312 players) are the seed's; the player list holds the 21 seed players.
+
+## The maximum time of a game (D56)
+
+- **Where it lives:** `Table.maxMinutes` (5 to 180 whole minutes), set with the price. A game charged per game (a single or double frame, a game of pool, foosball, carrom, ludo, PlayStation) copies it to `Game.maxMinutes` when it starts and keeps it. Rooms and Century have none.
+- **Who sets it:** the owners, on screen 46 (with the price, and "also these tables"), on a whole game's price card, and when adding a table (screen 47; left empty it takes `Settings.rules.doubleAfterMin`, which screen 51 sets). A value outside 5 to 180, or not a whole number, or on a room, is a 400 `VALIDATION`. Each save is in Activity (`price-change`, "Maximum time changed: Table 4", "30 min to 20 min. Games already started keep their limit.") with the owner's name; a change of the starting value is a `settings-change`.
+- **What the counter does:** `tableStatus` says `overLimit` at `maxMinutes`:00 (`isGameOverLimit`); the pill, the red card, the table's name for a screen reader and the lock screen say that game's number; `POST /games/:id/end` accepts `chargeDouble` for any game that is over its own limit (a single frame, a double frame, a game) and refuses it under the limit (`A game is charged double only after 20 minutes.`) and for Century and rooms. A game saved without a limit (older data) gets 30 (`DEFAULT_MAX_MINUTES`).
+- **The seed:** every table except a room has `maxMinutes: 30`; Tables 1, 4, 5 and 6's running games have it too. `aggregates.today.overLimit` replaces `over30`; `Dashboard.today.overLimit` counts the games over their own limit right now.

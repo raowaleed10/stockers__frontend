@@ -38,11 +38,17 @@ export interface Table {
   number: string;
   name: string;
   price: Rs | null; // per frame / per hour / per game; null = price not set (locked)
+  /**
+   * The longest a game charged per game may run before the red card and the "charge double?" choice, in whole
+   * minutes (5 to 180). It is set with the price (docs/02 D56). Not on a room, which is charged by the hour.
+   * A change applies to games started after it.
+   */
+  maxMinutes?: number;
   outOfOrder?: { note: string; by: PersonRef; at: ISO };
 }
 
 /** How a table is shown (decision D7): the ring, the pill text and the surface all follow this. */
-export type TableStatus = 'free' | 'playing' | 'over30' | 'paused' | 'outOfOrder' | 'noPrice';
+export type TableStatus = 'free' | 'playing' | 'overLimit' | 'paused' | 'outOfOrder' | 'noPrice';
 
 export type GameType = 'single' | 'double' | 'century' | 'room' | 'game';
 export type GameStatus = 'running' | 'paused' | 'ended' | 'discarded' | 'dispute' | 'cancelled';
@@ -58,6 +64,8 @@ export interface Game {
   endedBy?: PersonRef;
   pausedAt?: ISO;
   pausedMs: number; // total paused time, not charged
+  /** The time limit this game started with (a single or double frame, or a game); a change of the table's limit does not move it. */
+  maxMinutes?: number;
   price: Rs; // frame / game price, or Century rate per minute, or room hourly
   playerIds?: [string, string]; // single
   sides?: [string[], string[]]; // double (1–2 players per side)
@@ -265,7 +273,8 @@ export interface AppNotification {
 export interface Settings {
   paymentMethods: PaymentMethod[];
   rules: {
-    doubleAfterMin: 30;
+    /** The starting maximum time (minutes) for games added later; each table's own `maxMinutes` is what counts (D56). */
+    doubleAfterMin: number;
     lockAfterMin: 5;
     undoWindowSec: 120;
     changeTypeWindowMin: 5;

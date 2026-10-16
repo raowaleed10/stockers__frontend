@@ -53,6 +53,37 @@ describe('the bell opens the alerts panel', () => {
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 
+  it('opens over the tab you are on, and closing goes back to that tab', async () => {
+    const view = renderCounter('/board/pool');
+    await userEvent.click(await bell('Notifications, 3 new'));
+    const dialog = await panel();
+    expect(wherePath(view)).toBe('/board/pool/alerts');
+    // The pool board is the one behind it, not the snooker board.
+    expect(
+      screen.getByRole('button', { name: 'Pool table 1, price not set', hidden: true }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Table 1, playing', hidden: true })).toBeNull();
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Close panel' }));
+    await waitFor(() => expect(wherePath(view)).toBe('/board/pool'));
+    expect(
+      await screen.findByRole('button', { name: 'Pool table 1, price not set' }),
+    ).toBeInTheDocument();
+  });
+
+  it('Escape closes it back to the tab it was opened over', async () => {
+    const view = renderCounter('/board/pool/alerts');
+    await panel();
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(wherePath(view)).toBe('/board/pool'));
+  });
+
+  it('opens from a screen that is not a board over the first tab', async () => {
+    const view = renderCounter('/checkout');
+    await userEvent.click(await bell('Notifications, 3 new'));
+    await panel();
+    expect(wherePath(view)).toBe('/alerts');
+  });
+
   it('opens straight from the address /alerts', async () => {
     renderCounter('/alerts');
     expect(await panel()).toBeInTheDocument();
