@@ -77,7 +77,7 @@
     "centuryNote": "Any number of players. Charged by the minute under one player.",
     "centuryRate": "Rs 15 a minute",
     "rate": "Century rate for this game",
-    "rateHint": "Starts at the owners’ price. Change it here if needed.",
+    "rateHint": "Kit sample: a hint under a field.",
     "markOut": "Mark out of order",
     "cancel": "Cancel",
     "next": "Next: pick players",

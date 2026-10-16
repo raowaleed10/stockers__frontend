@@ -85,6 +85,11 @@ export interface SheetSummary {
 
 export interface PlayerWithTail extends Player {
   phoneTail?: string;
+  /**
+   * When he last played: the start of his latest frame, game, Century or room on his statement. The counter says it
+   * ("Last played Thursday"). Not there for a player who has not played yet.
+   */
+  lastPlayedAt?: ISO;
 }
 
 /** A player and his statement, oldest line first. */
@@ -239,6 +244,11 @@ export interface StartRoomRequest {
 export interface NewPlayerRequest {
   name: string;
   phone?: string;
+}
+
+/** The note a worker writes when he marks a free table out of order (screen 7). Required. */
+export interface OutOfOrderRequest {
+  note: string;
 }
 
 export interface CheckoutList {

@@ -60,11 +60,11 @@ beforeEach(() => {
 });
 
 describe('loading the seed', () => {
-  it.each([undefined, 'paused', 'checkout', 'closing', 'closed', 'empty'] as const)(
+  it.each([undefined, 'paused', 'checkout', 'closing', 'closed', 'empty', 'newGame'] as const)(
     'loads scenario %s, and every balance equals the sum of that player’s statement',
     (scenario) => {
       const db = make({ scenario: scenario ?? null });
-      expect(db.s.players).toHaveLength(21);
+      expect(db.s.players).toHaveLength(22);
       for (const player of db.s.players) {
         expect(statementBalance(db.statement(player.id)), player.name).toBe(player.balance);
       }

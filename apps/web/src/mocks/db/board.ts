@@ -1,5 +1,7 @@
 import type {
   BoardCategory,
+  PersonRef,
+  Table,
   ClubStatus,
   BoardResponse,
   BoardTable,
@@ -127,4 +129,26 @@ export function board(db: MockDb, requested?: string): BoardResponse {
     backedUpAt: backedUpAt(db),
     pausedAll: db.s.pauseAll !== null,
   };
+}
+
+/**
+ * `POST /tables/:id/out-of-order` (screen 7's "Mark out of order"): a worker puts a free table out of order with a note.
+ * Putting it back is the owners' (`PATCH /tables/:id` with `outOfOrder: null`). The counter's bell gets an alert.
+ */
+export function markOutOfOrder(db: MockDb, by: PersonRef, tableId: string, note: string): Table {
+  const table = db.table(tableId);
+  const text = note?.trim();
+  if (!text) fail('NOTE_REQUIRED', 'Write why it is out of order.');
+  if (table.outOfOrder) fail('TABLE_OUT_OF_ORDER', `${table.name} is already out of order.`);
+  if (db.activeGameOn(table.id))
+    fail('TABLE_BUSY', `${table.name} has a game running. End it first.`);
+  table.outOfOrder = { note: text, by, at: db.nowIso() };
+  db.counterAlert(
+    'out-of-order',
+    `${table.name} marked out of order by ${by.name.split(' ')[0]}`,
+    text,
+  );
+  db.history(by, `Marked ${table.name} out of order: ${text}`);
+  db.emit('board.changed', { tableId: table.id });
+  return table;
 }

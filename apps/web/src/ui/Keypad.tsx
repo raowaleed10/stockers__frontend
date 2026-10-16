@@ -23,6 +23,11 @@ export type KeypadProps = KeypadBase &
         onClear?: undefined;
       }
     | {
+        /** The phone pad of "Add a new player" (screen 10): 72 px keys, an empty corner where Clear would be. */
+        keys: 'phone';
+        onClear?: undefined;
+      }
+    | {
         /**
          * The lock screen (34): 80 px keys on the panel colour, and "Switch worker" where Clear is.
          * Screen 34 draws 80 px, not the 76 of screen 1 (docs/04 §7).
@@ -45,7 +50,7 @@ const SIDE_KEY =
 export function Keypad(props: KeypadProps) {
   const { onDigit, onDelete, keys = 'pin', className } = props;
   const { t } = useTranslation();
-  const amount = keys === 'amount';
+  const amount = keys === 'amount' || keys === 'phone';
   const lock = keys === 'lock';
   const keyLook = amount
     ? 'min-h-[72px] rounded-[14px] border-c-line-2 bg-c-raised text-[34px]'
@@ -71,7 +76,9 @@ export function Keypad(props: KeypadProps) {
           {digit}
         </button>
       ))}
-      {amount ? (
+      {props.keys === 'phone' ? (
+        <div aria-hidden="true" />
+      ) : amount ? (
         <button
           type="button"
           className={cx(KEY, keyLook, 'text-[30px]')}

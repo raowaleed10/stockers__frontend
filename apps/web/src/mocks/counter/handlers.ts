@@ -11,6 +11,7 @@ import type {
   EndGameRequest,
   MoveGameRequest,
   NewPlayerRequest,
+  OutOfOrderRequest,
   PersonRef,
   ReplacePlayerRequest,
   SignInRequest,
@@ -28,7 +29,7 @@ import {
   workerUnlock,
 } from '../db/auth';
 import { counterAlerts, readAllCounterAlerts } from '../db/alerts';
-import { board, clubStatus } from '../db/board';
+import { board, clubStatus, markOutOfOrder } from '../db/board';
 import { canteenSale, counterCanteenItems } from '../db/canteen';
 import { checkout, checkoutBill, checkoutList } from '../db/checkout';
 import type { MockDb } from '../db/db';
@@ -53,7 +54,7 @@ import {
   startRoom,
   undoGame,
 } from '../db/games';
-import { createPlayer, searchPlayers, statementOf } from '../db/players';
+import { createPlayer, recentPlayers, searchPlayers, statementOf } from '../db/players';
 import { closePreview, closeSheet, drawerExpense, todayTotals } from '../db/sheet';
 import { endpoint, type Call } from '../http';
 
@@ -199,7 +200,18 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
       asWorker<StartRoomRequest>((db, by, c) => startRoom(db, by, c.param('tableId'), c.body)),
     ),
 
+    http.post(
+      `${B}/tables/:id/out-of-order`,
+      asWorker<OutOfOrderRequest>((db, by, c) =>
+        markOutOfOrder(db, by, c.param('id'), c.body.note),
+      ),
+    ),
+
     // Players
+    http.get(
+      `${B}/players/recent`,
+      asWorker((db) => recentPlayers(db, 8, true)),
+    ),
     http.get(
       `${B}/players`,
       asWorker((db, _by, { query }) => searchPlayers(db, query.get('q') ?? undefined, true)),

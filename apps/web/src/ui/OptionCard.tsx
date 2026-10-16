@@ -66,27 +66,29 @@ export function OptionCard({
       {...rest}
     >
       <span className="flex w-full items-center justify-between gap-3">
-        <span className="flex min-w-0 items-center gap-2.5">
-          <span
-            className={cx(
-              priceLayout ? 'text-[22px] font-semibold' : 'text-[26px] font-bold leading-tight',
-              priceLayout && danger && 'text-c-danger-ink',
-            )}
-          >
-            {title}
-          </span>
-          {badge ? (
-            <span className="rounded-full bg-c-brass px-2.5 py-0.5 text-[14px] font-bold text-c-brass-ink">
-              {badge}
-            </span>
-          ) : null}
+        <span
+          className={cx(
+            priceLayout ? 'text-[22px] font-semibold' : 'text-[26px] font-bold leading-tight',
+            priceLayout && danger && 'text-c-danger-ink',
+          )}
+        >
+          {title}
         </span>
-        {selected ? (
-          <span
-            aria-hidden="true"
-            className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-c-brass text-c-brass-ink"
-          >
-            <Check size={18} strokeWidth={3} />
+        {badge || selected ? (
+          <span className="flex shrink-0 items-center gap-2.5">
+            {badge ? (
+              <span className="rounded-full bg-c-raised-2 px-2.5 py-1 text-[14px] font-bold leading-none text-c-brass">
+                {badge}
+              </span>
+            ) : null}
+            {selected ? (
+              <span
+                aria-hidden="true"
+                className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full bg-c-brass text-c-brass-ink"
+              >
+                <Check size={18} strokeWidth={3} />
+              </span>
+            ) : null}
           </span>
         ) : null}
       </span>

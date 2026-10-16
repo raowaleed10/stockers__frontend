@@ -159,6 +159,78 @@ const SHOTS: Shot[] = [
     },
     clip: { x: 1040, y: 150, width: 400, height: 260 },
   },
+  // P06: starting a game
+  {
+    id: 'start-out-of-order-note',
+    url: `/table/t2/start/out-of-order?now=${NIGHT}`,
+    prepare: async (page) => {
+      await page.getByLabel('Note (required)').fill('Cloth change');
+      await blur(page);
+    },
+  },
+  {
+    id: 'start-table-cannot-start',
+    url: `/table/t7/start?now=${NIGHT}`,
+    prepare: async (page) => {
+      await expect(page.getByRole('dialog', { name: 'Table 7 is out of order' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'start-pool-players',
+    url: `/board/pool/table/po1/start/players?now=${NIGHT}`,
+    priceKinds: { pool: 300 },
+    prepare: async (page) => {
+      await expect(
+        page.getByRole('dialog', { name: 'Who is playing on Pool table 1?' }),
+      ).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'start-century-players',
+    url: `/table/t2/start?now=${NIGHT}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Century/ }).click();
+      await page.getByRole('button', { name: 'Next: pick players' }).click();
+      const search = page.getByRole('searchbox', { name: 'Search players by name or phone' });
+      await search.fill('saad');
+      await page
+        .getByRole('list', { name: 'Search results' })
+        .getByRole('button', { name: /^Saad Hussain/ })
+        .click();
+      await blur(page);
+    },
+  },
+  {
+    id: 'start-search-empty',
+    url: `/table/t2/start/players?now=${encodeURIComponent('2026-10-03T21:46:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByText('Search or tap a name').last()).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'new-player-whole-number',
+    url: `/players/new?for=t2&now=${NIGHT}`,
+    prepare: async (page) => {
+      await page.getByLabel('Full name').fill('Ali Shahzad');
+      for (const digit of '030281') await key(page, digit).click();
+      await page.getByRole('button', { name: 'Add player' }).click();
+      await expect(page.getByRole('alert')).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'change-type-players',
+    url: `/table/t2/change-type?scenario=newGame&now=${encodeURIComponent('2026-10-03T21:53:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Century/ }).click();
+      await page.getByRole('button', { name: 'Change to Century' }).click();
+      await expect(page.getByRole('dialog', { name: 'Who is playing on Table 2?' })).toBeVisible();
+      await blur(page);
+    },
+  },
 ];
 
 test.describe('screenshots for docs/NO_DESIGN.md', () => {

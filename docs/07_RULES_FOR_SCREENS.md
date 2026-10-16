@@ -29,6 +29,15 @@ The backend owns the final numbers. The frontend still needs the same rules to s
 | Undo within 2 minutes with no reason (D16) | `canUndo(startedAt, now)` | 1:42 left → true |
 | Change game type within 5 minutes (D17) | `canChangeType(startedAt, now)` | started 9:50, now 9:53 → true, "2 minutes left" |
 
+## 2a. Finding a player at the counter (`players.ts`), new on 16 Oct (P06)
+
+| Rule | Function | Worked examples (tests) |
+|---|---|---|
+| Results in the order the counter shows them: names that start with the text first, free players before the ones playing, those in the order of their tables, then alphabetical (screen 8) | `rankPlayerResults(players, query, busyOrder)` | "ali": Ali Akbar, Ali Haider, Ali Shah (free), Ali Raza (Table 1), Ali Hassan (Room 1), then Rizwan Ali, Hamid Ali |
+| How long ago he last played, in the steps the counter says it: today, yesterday, a weekday within six days, a date after that. Club days, so 12:05 AM is a new day | `lastPlayedWhen(at, now)` | 2 Oct 11:59 PM at 3 Oct → yesterday; 1 Oct → weekday "Thursday"; 26 Sep → date "26 Sep" (7 days) |
+| Saved names that look like the one typed in "Add a new player": one starts with the other ("Ali Shahzad" and "Ali Shah"), or they are a letter or two apart. Nothing for fewer than three letters. Closest first | `similarPlayers(players, typed, limit)` | "Ali Shahzad" → Ali Shahid (2 away), Ali Shah (3 away); "Bilaal Ahmed" → Bilal Ahmed; "al" → nothing |
+| A double frame needs three or four players, one or two on each side: two players are a single frame (D9, screen 7: "two against two, or one against two") | in `StartDouble` (the button stays off) | A against B with 1 and 1: Start is off; 2 and 1: on |
+
 ## 3. Money at checkout (`checkout.ts`)
 
 - **Bill total** = old credit + tonight's charges − advance held (D23, D26).

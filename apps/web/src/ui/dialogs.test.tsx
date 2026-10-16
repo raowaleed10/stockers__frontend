@@ -105,6 +105,75 @@ describe('CounterDialog', () => {
   });
 });
 
+describe('CounterDialog: back, aside and a second column (screens 8, 9 and 10)', () => {
+  it('has a Back button before the title and no ×, and Back is called', async () => {
+    const onBack = vi.fn();
+    const onClose = vi.fn();
+    render(
+      <CounterDialog
+        title="Who is playing?"
+        back={{ label: 'Back to game type', onBack }}
+        onClose={onClose}
+      />,
+    );
+    const dialog = screen.getByRole('dialog', { name: 'Who is playing?' });
+    expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Back to game type' }));
+    expect(onBack).toHaveBeenCalledTimes(1);
+    // Escape still closes it.
+    await userEvent.keyboard('{Escape}');
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(dialog).toBeInTheDocument();
+  });
+
+  it('puts "Step 2 of 2" at the end of the header in place of the ×', () => {
+    render(<CounterDialog title="Who is playing?" aside="Step 2 of 2" onClose={() => {}} />);
+    expect(screen.getByText('Step 2 of 2')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+  });
+
+  it('keeps the × when neither Back nor aside is given, and when showClose says so', () => {
+    const { unmount } = render(<CounterDialog title="A" onClose={() => {}} />);
+    expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
+    unmount();
+    render(
+      <CounterDialog
+        title="B"
+        back={{ label: 'Back', onBack: () => {} }}
+        showClose
+        onClose={() => {}}
+      />,
+    );
+    expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
+  });
+
+  it('draws the second column beside the header and the buttons, not under them', () => {
+    render(
+      <CounterDialog
+        size="form"
+        title="Add a new player"
+        side={<p>Phone keypad</p>}
+        actions={<button>Add player</button>}
+        onClose={() => {}}
+      >
+        <p>Full name</p>
+      </CounterDialog>,
+    );
+    const dialog = screen.getByRole('dialog', { name: 'Add a new player' });
+    const heading = screen.getByRole('heading', { name: 'Add a new player' });
+    const side = screen.getByText('Phone keypad').parentElement as HTMLElement;
+    expect(side.parentElement).toBe(heading.closest('header')?.parentElement?.parentElement);
+    expect(dialog.className).toContain('max-w-[1166px]');
+  });
+
+  it('wears the design text and font itself, because a dialog is drawn outside the frame', () => {
+    render(<CounterDialog title="A" onClose={() => {}} />);
+    const dialog = screen.getByRole('dialog', { name: 'A' });
+    expect(dialog.className).toContain('screen-text');
+    expect(dialog.className).toContain('font-body');
+  });
+});
+
 describe('SidePanel', () => {
   it('is a dialog named by its title that closes on Escape and with its button', async () => {
     const onClose = vi.fn();

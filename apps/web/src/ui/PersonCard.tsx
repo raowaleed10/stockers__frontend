@@ -77,7 +77,9 @@ export function PersonCard({
         <>
           <span className="flex min-w-0 flex-wrap items-baseline gap-x-3.5">
             <span className="text-[20px] font-semibold">{name}</span>
-            <span className="text-[16px] text-c-text-2">{phoneTail}</span>
+            <bdi dir="ltr" className="text-[16px] text-c-text-2">
+              {phoneTail}
+            </bdi>
           </span>
           <span className="text-[15px] text-c-text-2">{statusText ?? note}</span>
         </>
@@ -85,14 +87,18 @@ export function PersonCard({
       {variant === 'tile' ? (
         <>
           <span className="text-[18px] font-semibold">{name}</span>
-          <span className="text-[14px] text-c-text-2">{phoneTail}</span>
+          <bdi dir="ltr" className="text-start text-[14px] text-c-text-2">
+            {phoneTail}
+          </bdi>
         </>
       ) : null}
       {variant === 'large' ? (
         <>
           <span className="flex flex-col gap-1">
             <span className="text-[34px] font-bold leading-tight">{name}</span>
-            <span className="text-[18px] text-c-text-2">{phoneTail}</span>
+            <bdi dir="ltr" className="text-start text-[18px] text-c-text-2">
+              {phoneTail}
+            </bdi>
           </span>
           <span className="flex w-full justify-between gap-3 text-[18px] text-c-text-3">
             <span>{note}</span>

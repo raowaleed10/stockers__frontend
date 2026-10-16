@@ -18,6 +18,16 @@ The work now goes in eight sessions, with one commit per step (CLAUDE.md, "Worki
 | S7 | P17 Owner phone + P18 Urdu everywhere | ☐ | |
 | S8 | P19 Visual check and accessibility + P20 Handover | ☐ | |
 
+## Plan for S1: P06 Start a game, then P07 Running game (written 16 Oct 2026, built without waiting)
+
+1. **One route plumbing for every table screen.** Start, change type, the running-game panel, move, stop and damage are child routes of the board (like the bell), at `/table/:id/...` over the first tab and `/board/:category/table/:id/...` over another tab, so closing returns to the tab you were on (D57). `components/table-paths.ts` writes both.
+2. **A small draft store for the start flow** (`start/draft.ts`, Zustand): type, Century rate, the players picked, the two sides. It survives the trip to "Add a new player" (`/players/new?for=t2`) and back, and is cleared when the flow ends.
+3. **Shared pieces:** `TypeCards` (3 option cards and the Century rate stepper, screens 7 and 12), `PlayerSearch` (search box, ranked results with tags, "Add “Ali” as a new player", screens 8, 9 and later 13), `PlayerSlot`, and `Keypad keys="phone"` (screen 10).
+4. **Data additions:** `lastPlayedAt` on a counter player ("Last played Thursday"), `GET /players/recent` ("Played here recently"), `POST /tables/:id/out-of-order` (the "Mark out of order" button of screen 7; putting a table back stays with the owners).
+5. **Per-game tables** (pool, foosball, carrom, ludo, PlayStation) skip the type step and go straight to the two-player screen; rooms stay a placeholder until P08.
+6. **P07** then builds the table panel (11), move and replace (13), stop (14) with the Undo toast, damage (15), and the real Pause all and Resume all with the power-cut board (16), each with its mock event and `doneBy`.
+7. Tests: unit for the shared rules and each screen, e2e for the flows on Table 2 and Table 1, visual for screens 7 to 16. Full checks once at the end of each step; one commit each.
+
 ## Screens
 
 Tick a screen when it matches its PNG at the design size and its visual test passes.
@@ -30,12 +40,12 @@ Tick a screen when it matches its PNG at the design size and its visual test pas
 | 4 | Pool tables before a price is set | counter | `/board/pool` | ☑ | ☑ | ☑ |
 | 5 | Pool, carrom, foosball, ludo and PlayStation | counter | `/dev/games-preview` | ☑ | ☑ | ☑ |
 | 6 | Live board in Urdu | counter | `/?lang=ur` | ☑ | ☑ | ☑ |
-| 7 | Start a game: choose the type | counter | `/table/t2/start` | ☐ | ☐ | ☐ |
-| 8 | Start a game: pick the players | counter | `/table/t2/start/players` | ☐ | ☐ | ☐ |
-| 9 | Double frame: pick the two sides | counter | `/table/t2/start/double` | ☐ | ☐ | ☐ |
-| 10 | Add a new player | counter | `/players/new?for=t2` | ☐ | ☐ | ☐ |
+| 7 | Start a game: choose the type | counter | `/table/t2/start` | ☑ | ☑ | ☑ |
+| 8 | Start a game: pick the players | counter | `/table/t2/start/players` | ☑ | ☑ | ☑ |
+| 9 | Double frame: pick the two sides | counter | `/table/t2/start/double` | ☑ | ☑ | ☑ |
+| 10 | Add a new player | counter | `/players/new?for=t2` | ☑ | ☑ | ☑ |
 | 11 | A game that is running | counter | `/table/t1` | ☐ | ☐ | ☐ |
-| 12 | Change the game type | counter | `/table/t2/change-type` | ☐ | ☐ | ☐ |
+| 12 | Change the game type | counter | `/table/t2/change-type` | ☑ | ☑ | ☑ |
 | 13 | Move to another table, or swap a player | counter | `/table/t1/move` | ☐ | ☐ | ☐ |
 | 14 | Stop a frame without the normal charge | counter | `/table/t6/stop` | ☐ | ☐ | ☐ |
 | 15 | Damage charge | counter | `/table/t1/damage` | ☐ | ☐ | ☐ |
@@ -245,6 +255,24 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 | 3 | Changing a game's type in its first 5 minutes | Approved: Century has no limit, and a frame changed back takes the table's current limit | Kept as built. P06 builds the change-type screen (12) on this rule. In D56 |
 | 4 | The lock screen with different limits | Approved: "1 over 30 min" when the limits match, "2 over the limit" when they differ | Kept as built. In D56 |
 
+**From P06: DEFAULT, needs answer** (who can do what, and who is charged: I picked the safer default and kept going)
+
+- **DEFAULT, needs answer: a worker can mark a free table out of order, and only an owner can put it back.** Screen 7 has the "Mark out of order" button, so marking is the workers'. The counter has no "back in order" button and no approved screen for it; an owner does it in Games and prices (`PATCH /tables/:id`). The risk: a worker marks the wrong table and has to ask an owner. Say if a worker should be able to put a table back (a button on the grey tile, or on screen 7).
+- **DEFAULT, needs answer: a double frame needs three or four players** (one or two on each side). Two players are a single frame: "Start double frame" stays off. D9 and screen 7 say "two against two, or one against two", never one against one.
+- **DEFAULT, needs answer: changing the type goes on to the players.** "Change to Century" on screen 12 cannot know who pays for the Century (or who is on which side of a double), so it opens the players screen with the game's own players already in the slots (Player 1 is where the first one is), and the last button does the change. The game keeps its start time. The PNG shows one tap; the safer default is to ask, because a wrong guess would charge the wrong person. Say if the owners want one tap with "the first player pays".
+- **DEFAULT, needs answer: a player who is playing on a table can be picked for another game.** The tag "Playing on Table 1" is plain information, never a warning (the P06 prompt and D21). Nothing stops it.
+
+**From P06: for information (no answer needed)**
+
+- **Seed changes, to match the screens:** Hamid Ali's number now ends 5047 (screen 8 draws 5047; it was 6645); a new player, **Ali Shah** (0300 5524470, ends 4470, as on screen 10); Ali Akbar has a statement (a frame on Thursday 1 Oct, paid that night) so the counter can say "Last played Thursday"; and a scenario `newGame` (9:53 PM, a single frame on Table 2 started at 9:50 for Ahmed Nawaz and Ali Akbar, **added** to the night's games with the new `addGames`), for screens 12 and 14. The player count is 22 now (two tests updated).
+- **The search rule is "a name that starts, or has a word that starts, with the text"** ("ali" finds Hamid Ali, not Shoaib Malik). Screen 8 says "4 found"; the seed has seven. It is a design slip (Hamid Ali is on the same screen). The count in the visual test is left out.
+- **API additions the backend must copy** (`docs/06`): `GET /players/recent`, `POST /tables/:id/out-of-order`, `lastPlayedAt` on a player, the search rule.
+- **A bug I found and fixed on the way: a dialog was drawn in a portal outside the frame, so it had the browser's line height and the wrong font.** `CounterDialog` now carries `screen-text font-body` itself. This also explains why dialogs were 35 px too high: the designs centre a dialog below the 70 px bar, so the scrim has 70 px of top padding.
+- **The board refreshes before a start dialog has closed.** After a game starts, the live event reached the dialog first and a "this table is in use" redirect sent it to the running game. The redirects now wait for the write to finish (`isSuccess`). The same is written in `docs/05` for P07.
+- **A phone number keeps its digit order in Urdu** (`PersonCard` wraps it in `<bdi dir="ltr">`); the rate stepper keeps minus on the left and plus on the right.
+- **New token:** `--c-info-text` (`#D6E4FB`, the sentence of the blue note on screen 9).
+- **Words:** 87 new rows in `docs/URDU_TO_CHECK.md`; seven new pieces in `docs/NO_DESIGN.md` (13 to 19) with pictures.
+
 **From P05: for information (no answer needed)**
 
 - **A bug I found and fixed: Urdu text on the counter drew in a system font, not Noto Nastaliq.** The frame, the sign-in page and the lock screen use `font-body` (Barlow, then `system-ui`), so Arabic script fell to the system font. `html[lang='ur'] .font-body` now takes the Urdu stack (`base.css`). Latin letters and digits still come from Barlow. This is also why the Urdu board was 18 px too tall in my first comparison and why P02 saw the Urdu design HTML 27 px taller: the Urdu pages are now exactly 1440 × 1040. The Urdu sign-in and lock pages changed look (Nastaliq now); I looked at both at 1440 × 900 and nothing moved.
@@ -294,13 +322,16 @@ None. Question 2 was answered and closed at the start of P01 (see the table abov
 
 ## Differences from the designs that could not be fixed
 
-(Screen number, what is different, why.) Since P05, `test:visual` compares screens 1 to 6 and 34 with their PNGs (and the two bars of screen 3, and the tiles); the rows for screens 7, 19, 25 and others come from comparing `/dev/kit` crops with the PNGs by eye at the design size (kit opened at 2400 px so the dialogs reach their real width).
+(Screen number, what is different, why.) Since P06, `test:visual` compares screens 1 to 10, 12 and 34 with their PNGs (and the two bars of screen 3, and the tiles); the rows for screens 7, 19, 25 and others come from comparing `/dev/kit` crops with the PNGs by eye at the design size (kit opened at 2400 px so the dialogs reach their real width).
 
 | Screen | Difference | Why |
 |---|---|---|
-| 7 | The "Century rate" row in the kit is a labelled number box, not the − / Rs 15 a minute / + control of the PNG | That control belongs to the Start a game screen (P06); the kit shows the building blocks |
+| 7, 8, 9, 10, 12 | 2.9 %, 4.6 %, 4.6 %, 2.3 % and 3.4 % of the pixels differ (budget 6 %). The window is compared (1440 × 900), not the page: the board behind a dialog is taller than the screen | The PNGs draw the page behind a dialog as a bare header at 55 %; a real dialog dims the whole live page with one 92 % layer, so the board shows faintly and the header is nearly hidden |
+| 8 | The count says "7 found", the PNG "4 found" (left out of the comparison). Ali Shah, who is on screen 10, is free and comes before Ali Raza and Ali Hassan, so the third and fourth rows differ | The seed has seven names that start a word with "ali"; the PNG's 4 cannot be true on the same screen as Hamid Ali |
+| 8 | "Played here recently" lists Faisal, Tariq, Zubair, Hamid, Ali Raza, Bilal, Kamran and Imran; the PNG lists Bilal, Usman, Zubair, Kamran, Imran, Naveed, Hamid, Faisal | Ours are the last eight to play, latest first; the PNG's order has no rule |
+| 10 | One similar name (Ali Shah); the PNG has two (Ali Shah, Ali Haider). "Add player" is drawn ready with a partial number, as in the PNG, and says what is missing when tapped | Ali Haider is not similar to Ali Shahzad by the rule (docs/NO_DESIGN.md) |
 | 7 | "Mark out of order" uses the standard outline button (`#6B5640` border, ivory text); the PNG has `#5A4A3C` and `#CDBFAE` | One outline button for screens 3, 7 and 25 |
-| 7, 19 | The dimmed page behind a dialog is one 92 % dark layer, not a separately dimmed header | A real dialog sits over a live page; the header cannot be dimmed on its own |
+| 19 | The dimmed page behind a dialog is one 92 % dark layer, not a separately dimmed header | A real dialog sits over a live page; the header cannot be dimmed on its own |
 | 43 | Stat card numbers are 40 px, the PNG has 42 px (49 has 40) | One `md` size, `text-o-stat` from the preset |
 | 36, 43, 53 | Urdu amounts show `1,350 روپے` with the number in Barlow Condensed and the word in Nastaliq; these screens have no approved Urdu PNG except screen 6 | Per `docs/09` |
 | – | Toast and the counter `danger` button have no approved screen | Toast follows the Undo button of screen 18; `danger` follows the red option of screen 19 |
@@ -411,6 +442,15 @@ Urdu, checked in the kit: nothing is clipped, dates and times keep their order (
 - **Two slow tests made cheap at the cause** (no limit raised, nothing retried): the lock test and the sign-in test now find the keypad and the dots without a page-wide role query (1.7 s to 0.6 s and 1.3 s to 0.7 s alone).
 - **Workflow:** `CLAUDE.md` has "Working rules from P06 on (speed)". The no-design screenshots are made once at the end of a session (12 now).
 
+## What P06 left in place (read before P07)
+
+- **Routes to open (`npm run dev`):** `http://localhost:5173/table/t2/start` (screen 7), `/table/t2/start/players` (screen 8), `/table/t2/start/double` (screen 9), `/players/new?for=t2` (screen 10), `/table/t2/change-type?scenario=newGame` (screen 12, at 9:53 PM), `/table/t2/start/out-of-order`, `/table/t7/start` (out of order), `/board/pool/table/po1/start` (no price), and from the board: tap Table 2 → Single frame → Next → two players → Start game. Add `&lang=ur` for Urdu.
+- **Where things are:** `src/counter/screens/start/` (`StartType`, `StartPlayers`, `StartDouble`, `NewPlayer`, `OutOfOrder`, `ChangeType`, `TableGate`), `src/counter/start/` (`draft.ts`, `TypeCards`, `PlayerSearch`, `PlayerSlot`, `player-parts.ts`, `use-table.ts`, `use-close.ts`), `components/table-paths.ts`, `locales/{en,ur}/start.json`, `packages/shared/src/rules/players.ts`, `mocks/db/{players,board}.ts`. The list with props is in `docs/05` "As built in P06".
+- **For P07: the table panel and its screens go in `TABLE_ROUTES`** (`routes/index.tsx`), with `tablePath` for every link, `useCloseTable` for closing and `TableGate` for the table. `/table/:id` is a placeholder dialog until then. After a write, wait for `isSuccess` before a "table is in use" redirect (see "for information" above). The Undo toast of screen 14 can be found from the data (the game this worker started in the last 2 minutes), so it survives a reload; the `newGame` scenario at 9:50:18 PM gives "Undo for 1:42 more".
+- **Tests:** Vitest 652 in web (new: `start.test.tsx` 40 for the five screens, the pool flow, the Urdu words and the guards, `start-flow.test.ts` 15 for the search, `lastPlayedAt`, recents and the out-of-order call, `draft.test.ts` 8, five new for `CounterDialog`, two for the phone `Keypad`) and 210 in shared (11 new in `players.test.ts`). Playwright e2e 30 new in `start.counter.spec.ts` (the flows on Table 2, a double with three players, a new player with no phone, change type at 3 and 6 minutes, Escape and Tab inside a dialog, and axe, 56 px and no sideways scroll on five screens in English and Urdu, and the mirror). Visual 5 new (screens 7, 8, 9, 10, 12 in `screens.counter.spec.ts`; a built entry can now say its own scenario, its moment, and `window: true` to compare the 1440 × 900 window instead of the page): 55 in all.
+- **Proved on purpose, then undone:** a double frame allowed with two players (the test with one player on each side failed), the change-type window ignored (the test at 6 minutes failed), and the Century rate chosen on screen 7 not sent (the test of the rate failed). Every file was checked back to what it was.
+- **Two e2e tests failed once in a full run and passed alone** (`signin.counter.spec.ts` "at 23:00 he is signed out" and the Urdu type step of `start.counter.spec.ts`: the dialog was not visible within 5 s). Neither failed in two earlier full runs of the start spec; I did not find a cause, so I am noting it rather than raising a limit. If it comes back, keep the whole log.
+
 ## Log
 
 | Date | Step | What was done | Tests |
@@ -429,3 +469,4 @@ Urdu, checked in the kit: nothing is clipped, dates and times keep their order (
 | 2026-10-16 | P05 | Built the live board at `/` and `/board/:category` (tabs, tiles from the data with live timers and amounts, "Waiting to pay"), the locked boards of screen 4 (and the same pattern for foosball, carrom, ludo and PlayStation), `/dev/games-preview` (screen 5) and the Urdu board (screen 6). Shared rules `boardTabs`, `sessionStanding`, `billParts`, `waitingTotal`; the waiting list's "what for" line is built from the bill's lines (`WaitingBill.parts`, `StatementLine.item`, the seed's `lines`); `board.json` in English and Urdu; the placeholder routes where a tap goes. Docs 03, 05, 06, 07, `NO_DESIGN.md` (3 new pieces) and `URDU_TO_CHECK.md` (26 rows). Found and fixed along the way: the Urdu counter pages drew in a system font instead of Nastaliq, the 30 px of width the design HTML's content-box sizing gives the tile row and the panel, the lock screen scrolling behind a taller board, a test slowed by a page-wide role query, two dev labels inside real words. | Vitest: 561 in web, 191 in shared. Playwright: 142 e2e (30 new) and 50 visual (4 new), 11 screenshots. typecheck, lint, build and check:bundles pass. Four deliberate breaks each failed tests. |
 | 2026-10-16 | P05 answers and faster workflow | Applied the developer's answers: the red card and "charge double?" for every game charged per game, with a maximum time for each (`maxMinutes`, D56): the shared rule, `Table`, `Game` and settings fields, the seed, the mock (start, end, owner price, game and settings patches with their Activity lines), and the counter side (pill, aria name, red card, lock screen, in English and Urdu); the bell opens over the tab you are on (D57); the priced pages of the other games in `docs/NO_DESIGN.md` (section 12) with the changes to screens 45, 46, 47, 51 and the over-limit words; `docs/02` (D56, D57), 03, 04, 06, 07, 09. `CLAUDE.md` has the new working rules; this file has the session plan S1 to S8. | Vitest: 581 in web, 199 in shared. Playwright: 144 e2e and 50 visual, 12 screenshots. typecheck, lint, build and check:bundles pass. Five deliberate breaks of the time rule each failed tests. |
 | 2026-10-16 | P05 defaults approved | Marked the four "DEFAULT, needs answer" items from P05 as answered (limit stored per table with a whole-game set-all in P15, no saved limit gives 30, change type in 5 minutes, lock screen wording) in this file and in D56 of `docs/02`. No code changed. | None needed (documents only). |
+| 2026-10-16 | P06 | Built the start flow: screen 7 (type, Century rate, Mark out of order with a note), 8 (two players or one for a Century, search with tags, "Played here recently"), 9 (two sides, three or four players), 10 (new player on the phone keypad, similar names, no phone allowed), 12 (change the type in 5 minutes, then who plays). Child routes of the board with the tab you were on (`tablePath`), a draft store, per-game tables straight to the players. Shared `players.ts` rules, `lastPlayedAt`, `GET /players/recent`, `POST /tables/:id/out-of-order`, the `newGame` scenario, seed fixes (Ali Shah, Hamid's number, Ali Akbar's statement). `CounterDialog` back, aside, side, form size, the 70 px top offset and its own text style; `Keypad` phone; `OptionCard` badge. Docs 02 (D58), 03, 05, 06, 07, `NO_DESIGN.md` (13 to 19 with pictures), `URDU_TO_CHECK.md` (87 rows). Fixed along the way: dialogs had the wrong line height and sat 35 px high, a start dialog redirected itself when the board refreshed, Urdu phone numbers read backwards, a kit sample word collided with a real word in `check:bundles`. | Vitest: 652 in web, 210 in shared. Playwright: 172 e2e passed in the full run (30 new), 2 failed once and passed alone; 55 visual (5 new). typecheck, lint, build and check:bundles pass. Three deliberate breaks each failed tests. |

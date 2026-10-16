@@ -30,6 +30,8 @@ const preset: Partial<Config> = {
           'on-felt': v('c-on-felt'), 'pill-free-bg': v('c-pill-free-bg'), 'pill-ooo-bg': v('c-pill-ooo-bg'),
           // added in P05 (see tokens.css)
           'note-line': v('c-note-line'),
+          // added in P06 (see tokens.css)
+          'info-text': v('c-info-text'),
         },
         s: {
           free: v('s-free'), play: v('s-play'), over: v('s-over'), card: v('s-card'),

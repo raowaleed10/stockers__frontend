@@ -290,10 +290,15 @@ describe('addresses', () => {
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
   });
 
-  it('/table/t2/start, /table/t1 and /room/r2/start are inside the frame until P06 and P07', async () => {
+  it('/table/t2/start opens its dialog over the real board, inside the frame', async () => {
     renderCounter('/table/t2/start');
-    expect(await screen.findByRole('button', { name: /Signed in: Zain/ })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Tap to start a game (t2)' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: /Signed in: Zain/, hidden: true }),
+    ).toBeInTheDocument();
+    expect(await screen.findByRole('dialog', { name: 'Table 2 is free' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Table 1, playing', hidden: true }),
+    ).toBeInTheDocument();
   });
 });
 

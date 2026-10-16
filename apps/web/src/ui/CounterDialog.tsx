@@ -1,4 +1,4 @@
-import { X } from 'lucide-react';
+import { ChevronLeft, X } from 'lucide-react';
 import { useId, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -20,8 +20,14 @@ export interface CounterDialogProps {
   tone?: 'normal' | 'warning';
   /** `lg` is the 32 px title of a warning dialog. */
   titleSize?: 'md' | 'lg';
-  /** `lg` is the wide dialog for two columns (screens 8, 9). */
-  size?: 'md' | 'lg';
+  /** `lg` is the wide dialog for two columns (screens 8, 9); `form` is the one with a keypad beside it (screen 10). */
+  size?: 'md' | 'form' | 'lg';
+  /** A round Back button before the title (screens 8, 9). The dialog then has no × unless `showClose` says so. */
+  back?: { label: string; onBack: () => void };
+  /** A short text at the end of the header, in place of the × (screen 8: "Step 2 of 2"). */
+  aside?: ReactNode;
+  /** A second column beside the header, the body and the buttons (screen 10: the phone keypad). */
+  side?: ReactNode;
   /** The row of buttons at the bottom. Put a flexible spacer between the groups. */
   actions?: ReactNode;
   /** Escape and the close button call this. */
@@ -43,9 +49,12 @@ export function CounterDialog({
   tone = 'normal',
   titleSize = 'md',
   size = 'md',
+  back,
+  aside,
+  side,
   actions,
   onClose,
-  showClose = true,
+  showClose = back || aside ? false : true,
   static: inPlace = false,
   children,
 }: CounterDialogProps) {
@@ -54,22 +63,28 @@ export function CounterDialog({
   const ref = useDialog<HTMLElement>(onClose, !inPlace);
   const warning = tone === 'warning';
 
-  const panel = (
-    <section
-      ref={ref}
-      role="dialog"
-      aria-modal={inPlace ? undefined : true}
-      aria-labelledby={titleId}
-      tabIndex={-1}
-      // A secondary button on this panel is one step lighter than the panel (see Button).
-      className={cx(
-        'dialog-in flex w-full flex-col gap-[22px] rounded-dialog bg-c-panel px-8 py-7 text-c-text shadow-dialog-dark outline-none [--btn-secondary-bg:var(--c-raised)]',
-        size === 'lg' ? 'max-w-[1240px]' : 'max-w-[1046px]',
-        warning ? 'border-2 border-c-danger-line' : 'border border-c-line-2',
-      )}
-    >
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div className={cx('flex gap-[18px]', lead ? 'items-end' : 'items-start')}>
+  const content = (
+    <>
+      <header
+        className={cx(
+          'flex flex-wrap justify-between gap-4',
+          back || aside ? 'items-center' : 'items-start',
+        )}
+      >
+        <div
+          className={cx(
+            'flex gap-[18px]',
+            back ? 'items-center' : lead ? 'items-end' : 'items-start',
+          )}
+        >
+          {back ? (
+            <IconButton
+              theme="counter"
+              label={back.label}
+              icon={<ChevronLeft size={24} strokeWidth={2.2} />}
+              onClick={back.onBack}
+            />
+          ) : null}
           {icon ? (
             <span
               aria-hidden="true"
@@ -114,6 +129,7 @@ export function CounterDialog({
             ) : null}
           </div>
         </div>
+        {aside ? <span className="text-[16px] text-c-text-2">{aside}</span> : null}
         {showClose ? (
           <IconButton
             theme="counter"
@@ -127,13 +143,40 @@ export function CounterDialog({
       {children}
 
       {actions ? <div className="flex flex-wrap items-center gap-3 pt-1">{actions}</div> : null}
+    </>
+  );
+
+  const panel = (
+    <section
+      ref={ref}
+      role="dialog"
+      aria-modal={inPlace ? undefined : true}
+      aria-labelledby={titleId}
+      tabIndex={-1}
+      // A secondary button on this panel is one step lighter than the panel (see Button).
+      className={cx(
+        'dialog-in screen-text flex w-full flex-col gap-[22px] rounded-dialog bg-c-panel px-8 py-7 font-body text-c-text shadow-dialog-dark outline-none [--btn-secondary-bg:var(--c-raised)]',
+        size === 'lg' ? 'max-w-[1240px]' : size === 'form' ? 'max-w-[1166px]' : 'max-w-[1046px]',
+        warning ? 'border-2 border-c-danger-line' : 'border border-c-line-2',
+      )}
+    >
+      {side ? (
+        <div className="flex flex-wrap gap-7">
+          <div className="flex min-w-0 flex-[3_1_460px] flex-col gap-[18px]">{content}</div>
+          <div className="flex min-w-0 flex-[2_1_300px] flex-col">{side}</div>
+        </div>
+      ) : (
+        content
+      )}
     </section>
   );
 
   if (inPlace) return panel;
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-c-scrim p-6">
-      {panel}
+    // The designs centre a dialog in the page below the 70 px top bar (screens 7 to 15), so the padding on top is the
+    // bar's, and the dialog sits in what is left. A dialog taller than that scrolls.
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-c-scrim pt-[70px]">
+      <div className="flex min-h-full items-center justify-center p-6">{panel}</div>
     </div>,
     document.body,
   );

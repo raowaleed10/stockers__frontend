@@ -104,7 +104,8 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `POST /games/:id/next` | same players, next frame | 18 |
 | `POST /games/:id/end-century` | → minutes, amount | 21 |
 | `POST /rooms/:tableId/start` · `POST /games/:id/end-room` | `{underPlayerId, hourly}` | 22, 23 |
-| `GET /players?q=` · `POST /players` `{name, phone?}` · `GET /players/:id/statement` | | 8, 10, 30 |
+| `GET /players?q=` · `GET /players/recent` · `POST /players` `{name, phone?}` · `GET /players/:id/statement` | `?q=` matches a name or nickname that starts with the text or has a word that does ("ali" finds Ali Raza and Hamid Ali, not Malik), or three or more digits of the phone number. Each player carries `lastPlayedAt` (the start of his latest frame, game, Century or room, or of the game he is in; nothing if he has not played), which the counter writes as "Last played Thursday". `GET /players/recent` is the last eight to play, the latest first, for "Played here recently" (added in P06: the backend must implement it). A player made with `POST /players` needs only a name (Q18); a phone number, if given, has at least 10 digits | 8, 10, 30 |
+| `POST /tables/:id/out-of-order` `{note}` | A worker marks a **free** table out of order with a note (screen 7). Answers the table. `NOTE_REQUIRED` with no note, `TABLE_BUSY` if a game is running, `TABLE_OUT_OF_ORDER` if it already is. The counter's bell gets an alert ("Table 2 marked out of order by Zain"). **Putting it back in order is the owners'** (`PATCH /tables/:id` with `outOfOrder: null`); the counter has no call for it (added in P06: the backend must implement it) | 7 |
 | `GET /checkout` · `GET /checkout/:playerId` · `POST /checkout/:playerId` | `CheckoutRequest` | 24–27 |
 | `GET /canteen/items` · `POST /canteen/sales` | `{playerId|null, items, payNow?}` | 28 |
 | `POST /expenses/drawer` | `{category, amount, note}` → new expected drawer cash | 29 |
@@ -151,6 +152,7 @@ Every write returns the saved record including `doneBy`. Errors use `{code, mess
 | `closing` | 3:40 AM Sun | Shabir is signed in (since 2:04 AM); one Century on Table 2; Waqas (old credit 950) and Shoaib (250) not checked out, Rs 450 and Rs 250 tonight; close numbers from `sheets[s48].final` | 32 |
 | `closed` | 3:45 AM Sun | Sheet 48 closed, sheet 49 open, the Century moved, Waqas and Shoaib moved to credit | 33, 38–44, 55, 56 |
 | `empty` | any | No games, no bills, no activity | empty states |
+| `newGame` | 9:53 PM | Zain started a single frame on Table 2 at 9:50 PM for Ahmed Nawaz and Ali Akbar, **added** to the night's own games (`addGames`; the others stay): inside the 5 minutes to change the type, and at 9:50 the 2 minutes to undo | 12, 14 |
 
 - `design/screens.json` gives every screen its `now` (the demo clock the design shows) and, where needed, its `scenario`. Visual tests open `route?now=<now>&scenario=<scenario>`.
 - Small number differences against the PNGs are fine. Layout, copy and states must match.

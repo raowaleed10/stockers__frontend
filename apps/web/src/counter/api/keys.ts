@@ -8,6 +8,7 @@ export const counterKeys = {
   game: (id: string) => ['game', id] as const,
   players: (q?: string) => ['players', q ?? ''] as const,
   player: (id: string) => ['player', id] as const,
+  recent: ['recent'] as const,
   statement: (id: string) => ['statement', id] as const,
   checkout: () => ['checkout'] as const,
   checkoutBill: (playerId: string) => ['checkout', playerId] as const,

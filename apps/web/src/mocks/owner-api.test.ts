@@ -317,7 +317,7 @@ describe('players and credit (screens 43, 44, 56)', () => {
   it('counts who owes, who holds an advance and who owes old credit', async () => {
     api.load({ app: 'owner' });
     const all = await owner.getPlayers();
-    expect(all.counts).toEqual({ all: 21, owe: 10, advance: 1, old: 4 });
+    expect(all.counts).toEqual({ all: 22, owe: 10, advance: 1, old: 4 });
     expect(all.totals).toEqual({ credit: 48300, olderThan15Days: 12500, advanceHeld: 3400 });
     expect((await owner.getPlayers('old')).players.map((p) => p.id).sort()).toEqual([
       'ali-haider',

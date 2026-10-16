@@ -23,6 +23,10 @@ export const useBoard = (category?: string) =>
 export const useGame = (id: string) =>
   useQuery({ queryKey: keys.game(id), queryFn: () => calls.getGame(id) });
 
+/** Who played here lately, for the "Played here recently" chips (screen 8). */
+export const useRecentPlayers = () =>
+  useQuery({ queryKey: keys.recent, queryFn: calls.recentPlayers });
+
 export const usePlayers = (q?: string) =>
   useQuery({ queryKey: keys.players(q), queryFn: () => calls.searchPlayers(q) });
 
@@ -100,6 +104,10 @@ export const useStartRoom = () =>
   );
 export const useEndRoom = () => useAction(calls.endRoom);
 
+export const useMarkOutOfOrder = () =>
+  useAction((v: { tableId: string; request: Parameters<typeof calls.markOutOfOrder>[1] }) =>
+    calls.markOutOfOrder(v.tableId, v.request),
+  );
 export const useCreatePlayer = () => useAction(calls.createPlayer, [['players']]);
 export const usePayCheckout = () =>
   useAction((v: { playerId: string; request: Parameters<typeof calls.payCheckout>[1] }) =>

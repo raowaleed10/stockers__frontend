@@ -1,9 +1,17 @@
 import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { CounterDialog } from '@/ui/CounterDialog';
 import { NotFound } from '@/ui/NotFound';
 import { AlertsPanel } from '../components/AlertsPanel';
 import { Board } from '../screens/Board';
+import { ChangeType } from '../screens/start/ChangeType';
+import { NewPlayer } from '../screens/start/NewPlayer';
+import { OutOfOrder } from '../screens/start/OutOfOrder';
+import { StartDouble } from '../screens/start/StartDouble';
+import { StartPlayers } from '../screens/start/StartPlayers';
+import { StartType } from '../screens/start/StartType';
+import { useCloseTable } from '../start/use-close';
 import { PagePlaceholder } from '../screens/PagePlaceholder';
 import { SignIn } from '../screens/SignIn';
 import { RequireWorker } from '../session/RequireWorker';
@@ -33,21 +41,46 @@ function LaterScreen({ title }: { title: (typeof LATER_SCREENS)[number]['title']
 }
 
 /**
- * What a tap on a table opens: P06 builds starting a game and a room, P07 builds the running game. Each shows its
- * name inside the real frame until then, like the screens above. (They become child routes of the board, so the
- * panel draws over it, as the alerts do.)
+ * What a tap on a running table (P07) or a free room (P08) opens, until those steps build it: its name inside a
+ * dialog over the board, with a way out.
  */
-function TableScreen({ what }: { what: 'start' | 'room' | 'running' }) {
+function TableScreen({ what }: { what: 'room' | 'running' }) {
   const { t } = useTranslation('board');
+  const close = useCloseTable();
   const { id } = useParams<{ id: string }>();
-  const title =
-    what === 'start'
-      ? t('cta.startGame')
-      : what === 'room'
-        ? t('cta.startRoom')
-        : t('state.playing');
-  return <PagePlaceholder title={`${title} (${id ?? ''})`} />;
+  return (
+    <CounterDialog
+      title={`${what === 'room' ? t('cta.startRoom') : t('state.playing')} (${id ?? ''})`}
+      onClose={close}
+    />
+  );
 }
+
+/**
+ * The screens that open over a board, for one table (docs/03, screens 7 to 12). They are children of both `/` and
+ * `/board/:category`, so they open over the tab you are on and closing returns to it (D57). `players/new` is the
+ * "Add a new player" of screen 10.
+ */
+const TABLE_ROUTES = [
+  <Route key="start" path="table/:id/start" element={<StartType />} />,
+  <Route key="start-players" path="table/:id/start/players" element={<StartPlayers />} />,
+  <Route key="start-double" path="table/:id/start/double" element={<StartDouble />} />,
+  <Route key="start-ooo" path="table/:id/start/out-of-order" element={<OutOfOrder />} />,
+  <Route key="change" path="table/:id/change-type" element={<ChangeType />} />,
+  <Route
+    key="change-players"
+    path="table/:id/change-type/players"
+    element={<StartPlayers mode="change" />}
+  />,
+  <Route
+    key="change-double"
+    path="table/:id/change-type/double"
+    element={<StartDouble mode="change" />}
+  />,
+  <Route key="running" path="table/:id" element={<TableScreen what="running" />} />,
+  <Route key="room" path="room/:id/start" element={<TableScreen what="room" />} />,
+  <Route key="new-player" path="players/new" element={<NewPlayer />} />,
+];
 
 export function CounterRoutes() {
   return (
@@ -58,6 +91,7 @@ export function CounterRoutes() {
         {/* The board is a layout route: panels such as the bell's alerts are its children and draw over it. */}
         <Route path="/" element={<Board />}>
           <Route path="alerts" element={<AlertsPanel />} />
+          {TABLE_ROUTES}
         </Route>
         {/* `/` is the snooker and rooms tab (docs/03). */}
         <Route path="/board/snooker" element={<Navigate to="/" replace />} />
@@ -65,10 +99,8 @@ export function CounterRoutes() {
         <Route path="/board/:category" element={<Board />}>
           {/* The bell opens over the tab you are on, so the panel is a child of every tab. */}
           <Route path="alerts" element={<AlertsPanel />} />
+          {TABLE_ROUTES}
         </Route>
-        <Route path="/table/:id/start" element={<TableScreen what="start" />} />
-        <Route path="/table/:id" element={<TableScreen what="running" />} />
-        <Route path="/room/:id/start" element={<TableScreen what="room" />} />
         <Route path="/checkout/:playerId" element={<LaterScreen title="actions.checkout" />} />
         {GamesPreview ? (
           <Route

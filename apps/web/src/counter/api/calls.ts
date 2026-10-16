@@ -26,6 +26,7 @@ import type {
   GameView,
   MoveGameRequest,
   NewPlayerRequest,
+  OutOfOrderRequest,
   PlayerStatement,
   PlayerWithTail,
   PublicWorker,
@@ -34,6 +35,7 @@ import type {
   StartGameRequest,
   StartRoomRequest,
   StatementLine,
+  Table,
   TodayTotals,
   UnlockRequest,
   WorkerSession,
@@ -86,7 +88,12 @@ export const startRoom = (tableId: string, request: StartRoomRequest) =>
   api.post<Game>(`/rooms/${tableId}/start`, request);
 export const endRoom = (id: string) => api.post<EndGameResult>(`/games/${id}/end-room`);
 
+// Tables
+export const markOutOfOrder = (tableId: string, request: OutOfOrderRequest) =>
+  api.post<Table>(`/tables/${tableId}/out-of-order`, request);
+
 // Players
+export const recentPlayers = () => api.get<PlayerWithTail[]>('/players/recent');
 export const searchPlayers = (q?: string) => api.get<PlayerWithTail[]>('/players', { q });
 export const createPlayer = (request: NewPlayerRequest) =>
   api.post<PlayerWithTail>('/players', request);

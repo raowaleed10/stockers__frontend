@@ -3,6 +3,7 @@ import type board from '@/counter/locales/en/board.json';
 import type frame from '@/counter/locales/en/frame.json';
 import type lock from '@/counter/locales/en/lock.json';
 import type signin from '@/counter/locales/en/signin.json';
+import type start from '@/counter/locales/en/start.json';
 import type data from '@/dev/locales/en/data.json';
 import type kit from '@/dev/locales/en/kit.json';
 import type preview from '@/dev/locales/en/preview.json';
@@ -22,6 +23,7 @@ declare module 'i18next' {
       frame: typeof frame; // counter: the top bar, the action bar and the sign-in time banner
       lock: typeof lock; // counter: the lock screen
       signin: typeof signin; // counter: the sign-in page
+      start: typeof start; // counter: starting a game, adding a player, changing the type
       data: typeof data; // dev-only: the /dev/data page
       kit: typeof kit; // dev-only: the /dev/kit page
       preview: typeof preview; // dev-only: the /dev/games-preview page

@@ -27,6 +27,13 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 10 | [The board when the tables cannot be loaded](#10-the-board-when-the-tables-cannot-be-loaded) | counter | P05 |
 | 11 | [Waiting to pay with nobody waiting](#11-waiting-to-pay-with-nobody-waiting) | counter | P05 |
 | 12 | [The pages of pool, carrom, foosball, ludo and PlayStation once prices are set](#12-the-pages-of-pool-carrom-foosball-ludo-and-playstation-once-prices-are-set) | counter | P05 answers |
+| 13 | [Mark out of order: the note](#13-mark-out-of-order-the-note) | counter | P06 |
+| 14 | [A table that cannot be started](#14-a-table-that-cannot-be-started) | counter | P06 |
+| 15 | [Starting pool, foosball, carrom, ludo and PlayStation](#15-starting-pool-foosball-carrom-ludo-and-playstation) | counter | P06 |
+| 16 | [Starting a Century: one player](#16-starting-a-century-one-player) | counter | P06 |
+| 17 | [The players screen before anything is typed](#17-the-players-screen-before-anything-is-typed) | counter | P06 |
+| 18 | [Add a new player: the number is not whole](#18-add-a-new-player-the-number-is-not-whole) | counter | P06 |
+| 19 | [Change the game type: who plays after the change](#19-change-the-game-type-who-plays-after-the-change) | counter | P06 |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -156,6 +163,86 @@ Below the numbered pieces there are also [the approved screens that change](#app
 
 ![Carrom boards once the price is set](no-design/board-priced-carrom.png)
 
+## 13. Mark out of order: the note
+
+- **What:** the "Mark out of order" button of screen 7 asks for a note before it does anything. The table then turns grey with the note
+  on the board, and the counter's bell gets an alert. Only a free table can be marked. A worker cannot put it back: an owner does that in
+  Games and prices (DEFAULT, needs answer: it is a question of who can do what).
+- **Where:** `/table/t2/start/out-of-order` (from "Mark out of order" on `/table/t2/start`).
+- **Words:** "Mark Table 2 out of order", "Write why, for example “Cloth change”. Everyone sees it on the table.", "Note (required)",
+  "Mark out of order", "Cancel". Urdu: see `docs/URDU_TO_CHECK.md`.
+- **Built from:** the dialog of screen 7 with the round brass ball and wrench of screen 15, and the note box of screens 14 and 15.
+
+![The note for Mark out of order](no-design/start-out-of-order-note.png)
+
+## 14. A table that cannot be started
+
+- **What:** a table with no price, or one that is out of order, cannot start a game. Its start dialog says why and has one way out. The
+  board does not open this dialog by a tap (those tiles do nothing), so it is only reached by the address.
+- **Where:** `/table/t7/start` (Table 7 is out of order); a pool table with no price: `/board/pool/table/po1/start`.
+- **Words:** "Table 7 is out of order" with the note under it, or "Pool table 1 has no price yet" with "Locked until an owner sets the
+  price" (the words of screen 4), and "Cancel".
+- **Built from:** the dialog of screen 7.
+
+![Table 7 cannot be started](no-design/start-table-cannot-start.png)
+
+## 15. Starting pool, foosball, carrom, ludo and PlayStation
+
+- **What:** these games have one kind of game, so there is no type step: the tap opens the two players straight away (screen 8), with
+  "Game, Rs 300. The loser pays." under the title, no Back button and no "Step 2 of 2". Closing goes back to the tab you were on.
+- **Where:** `/board/pool/table/po1/start/players` once an owner has set the price (the picture is made with Rs 300 on every pool table).
+- **Words:** "Who is playing on Pool table 1?", "Game, Rs 300. The loser pays.", then the words of screen 8.
+- **Built from:** screen 8.
+
+![Starting a game of pool](no-design/start-pool-players.png)
+
+## 16. Starting a Century: one player
+
+- **What:** a Century is charged under one player (D11), so the players screen has one slot instead of two and Start is ready once he is
+  picked. The title line says the rate chosen on screen 7.
+- **Where:** `/table/t2/start`, pick Century, "Next: pick players".
+- **Words:** "Century, Rs 15 a minute. Charged under one player." and "Player 1".
+- **Built from:** screen 8.
+
+![Starting a Century](no-design/start-century-players.png)
+
+## 17. The players screen before anything is typed
+
+- **What:** screen 8 is drawn with a search typed in. Before that, the box says what it is for, the list under it is empty (the
+  space is kept, so the dialog does not move when the first letter is typed), and the players who played here recently are on the end
+  side. Each result also has one plain line at its end, the first that applies: where he is playing ("Playing on Table 1", "In Room 1"),
+  what he owes ("Owes Rs 1,200"), or when he last played ("Last played today", "Last played yesterday", "Last played Thursday" within
+  six days, then "Last played 24 Sep"). It is information, never a warning. The count says "7 found" where screen 8 draws "4 found": the
+  seed has seven names that start a word with "ali", counting Hamid Ali and Rizwan Ali.
+- **Where:** `/table/t2/start/players`.
+- **Words:** "Search players by name or phone" (the box), "Search or tap a name" (the empty slot), "{{count}} found", "Last played today",
+  "Last played yesterday", "Last played {{day}}".
+- **Built from:** screen 8.
+
+![The players screen with nothing typed](no-design/start-search-empty.png)
+
+## 18. Add a new player: the number is not whole
+
+- **What:** screen 10 draws "Add player" ready with "0302 81" typed, which is not a whole number. Tapping it then saves nothing and says
+  what is missing under the phone box. A name with no number at all uses "Skip phone for now". Whole means 10 or 11 digits.
+- **Where:** `/players/new?for=t2`, type a name and six digits, tap "Add player".
+- **Words:** "Type the whole number, or tap “Skip phone for now”." Urdu: see `docs/URDU_TO_CHECK.md`.
+- **Built from:** the red line of the PIN pad (screen 1) and the dialog of screen 10.
+
+![A phone number that is not whole yet](no-design/new-player-whole-number.png)
+
+## 19. Change the game type: who plays after the change
+
+- **What:** on screen 12 "Change to Century" cannot know who pays for the Century, or who is on which side of a double, so it goes on to
+  the players (screen 8 or 9) with the game's own players already in the slots; the last button says "Change to Century" again and
+  does the change. The game keeps its start time and counts from there. Back returns to the three choices. (DEFAULT, needs answer: a
+  question of who is charged.)
+- **Where:** `/table/t2/change-type?scenario=newGame` at 9:53 PM, pick Century, "Change to Century".
+- **Words:** "Who is playing on Table 2?", "Change to Century", "Change to Double frame", "Back to game type".
+- **Built from:** screens 8 and 9.
+
+![Who plays after the type changes](no-design/change-type-players.png)
+
 ## Approved screens that change a field or a word
 
 These are changes to screens the owners already approved. They are built in P15 and P16 (the owner screens), so there is no
@@ -196,3 +283,20 @@ picture yet; each one is listed here so the owners see it with the rest of the b
 - **Applies to:** a single frame, a double frame, and a game of pool, foosball, carrom, ludo and PlayStation. Not Century or
   rooms, which are charged by the minute.
 
+### Screen 8, Start a game: pick the players: the count and the order
+
+- **Change:** the PNG says "4 found" and lists Ali Akbar, Ali Haider, Ali Raza and Ali Hassan. With the seed there are seven names that
+  start a word with "ali" (Ali Shah, who is on screen 10, Hamid Ali and Rizwan Ali too), so the count is 7 and the list scrolls inside
+  four rows, with "Add “ali” as a new player" always under it. The four of the PNG are the first four apart from Ali Shah, who is free
+  and comes before the two who are playing. A new seed name, Ali Shah, and Hamid Ali's number (5047 as drawn) were added to the seed to
+  match the screens.
+
+### Screen 10, Add a new player: similar names
+
+- **Change:** the PNG shows two similar names for "Ali Shahzad" (Ali Shah and Ali Haider). The rule is: a saved name that starts with the
+  typed one, that the typed one starts with, or that is a letter or two away. It gives Ali Shah only; Ali Haider is not similar.
+
+### Screen 7, Start a game: choose the type: the Century rate row
+
+- **Change:** the rate row is always there (so the dialog keeps its height) but its minus, plus and number work only while Century is
+  picked. A frame is picked to begin with.

@@ -121,6 +121,18 @@ All counter-only, so in `src/counter`, not `src/ui`.
 - **The bell (D57):** `components/alerts-path.ts` (`alertsPath`, `boardPathOf`). `CounterFrame` opens `/board/pool/alerts` from Pool; `AlertsPanel` closes back to the same tab.
 - **Shared rules added:** `boardTabs`, `SNOOKER_TAB`, `sessionStanding` (`rules/board.ts`); `billParts`, `waitingTotal` (`rules/checkout.ts`); `BillPart`, `WaitingBill.parts` and `StatementLine.item` (types).
 
+### As built in P06 (starting a game)
+
+All in `src/counter` unless it says `src/ui`.
+
+- **`screens/start/`:** `StartType` (screen 7), `StartPlayers` (screen 8, and with `mode="change"` the players of a game that changes type), `StartDouble` (screen 9, same two modes), `NewPlayer` (screen 10), `OutOfOrder` (the note for "Mark out of order"), `ChangeType` (screen 12), and `TableGate` (finds the table in the club-wide board, `['board', 'all']`, and draws nothing while it loads, a retry if it fails, "Page not found" for a table that does not exist).
+- **`start/`:** `draft.ts` (Zustand: type, Century rate, players, sides, the active side, where "Add a new player" goes back to; `begin(tableId)` keeps the draft for the same table and starts a clean one for another; `load` fills it from a running game), `TypeCards` (three `OptionCard`s and the rate row), `PlayerSearch` (box, results, "Add “Ali” as a new player"), `PlayerSlot`, `player-parts.ts` (`toPicked`, `showPhone`, `usePlayerNote`), `use-table.ts`, `use-close.ts`.
+- **`components/table-paths.ts`:** `tablePath(pathname, id, rest)`, `roomPath`, `newPlayerPath` and `boardOfTableScreen` write the addresses with the tab you are on, like `alerts-path.ts`. `BoardTile` uses them. The routes are the `TABLE_ROUTES` list in `routes/index.tsx`, shared by `/` and `/board/:category`.
+- **`src/ui` changes:** `CounterDialog` takes `back` (a round Back button before the title, no ×), `aside` (text at the end of the header, in place of the ×: "Step 2 of 2"), `side` (a second column beside the header, body and buttons: the keypad of screen 10) and `size="form"` (1166 px). It now draws `screen-text font-body` itself, because it is in a portal outside the frame, and centres in the page below a 70 px bar (the designs of screens 7 to 15 do). `Keypad` has `keys="phone"` (72 px keys, an empty corner, 0 and Delete). `OptionCard` puts its badge ("Now") beside the tick at the end of the title row, on the darker `c-raised-2` ground as on screen 12.
+- **Shared rules:** `rankPlayerResults`, `lastPlayedWhen`, `similarPlayers` (`rules/players.ts`) and `formatWeekday` (`rules/format.ts`), `docs/07` §2a.
+- **New token:** `--c-info-text` (`#D6E4FB`, the sentence of the blue note on screen 9).
+- **Heads-up for P07:** the table panel (`/table/:id`, screen 11) and its screens (13, 14, 15) go in `TABLE_ROUTES`. Use `tablePath` for every link, `useCloseTable` (clears the start draft and goes back to the board) for closing, and `TableGate` for the table. After a write the board refreshes before the screen has closed: a redirect that says "this table is in use now" must wait for the write to finish (`mutation.isSuccess`), or it fights the close.
+
 ## Rules for components
 - `ui` and `tiles` never fetch data and never read the clock directly (`TimerText` uses `useNow()`, which is allowed).
 - All text comes in through props or `t()`; no English hard-coded inside shared components.

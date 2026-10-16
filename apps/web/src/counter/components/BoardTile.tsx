@@ -12,11 +12,12 @@ import {
   type TableKind,
 } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useNow } from '@/lib/clock';
 import { useFormat } from '@/lib/use-format';
 import { GameTile, type TileProps } from '@/tiles';
 import { TimerText } from '@/ui/TimerText';
+import { roomPath, tablePath } from './table-paths';
 
 const MINUTE = 60_000;
 
@@ -43,6 +44,7 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
   const lang: FormatLang = i18n.language === 'ur' ? 'ur' : 'en';
   const format = useFormat();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const now = useNow(1000);
 
   const status = tableStatus(table, now);
@@ -177,9 +179,13 @@ export function BoardTile({ table, category, players, className }: BoardTileProp
   // What a tap does: start on a free table, open what is running. The tile itself ignores a tap when it is out of order.
   if (status === 'free') {
     props.onPress = () =>
-      navigate(kind === 'room' ? `/room/${table.id}/start` : `/table/${table.id}/start`);
+      navigate(
+        kind === 'room'
+          ? roomPath(pathname, table.id, '/start')
+          : tablePath(pathname, table.id, '/start'),
+      );
   } else if (status === 'playing' || status === 'overLimit' || status === 'paused') {
-    props.onPress = () => navigate(`/table/${table.id}`);
+    props.onPress = () => navigate(tablePath(pathname, table.id));
   }
 
   return <GameTile kind={kind} {...props} />;

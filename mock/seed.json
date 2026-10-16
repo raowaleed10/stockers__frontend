@@ -522,7 +522,7 @@
     {
       "id": "hamid",
       "name": "Hamid Ali",
-      "phone": "0321 8826645",
+      "phone": "0321 8825047",
       "balance": 0,
       "oldestUnpaidAt": null,
       "visits": 12,
@@ -674,6 +674,19 @@
       "centuryMinutes": 0,
       "spent": 2800,
       "since": "2026-08-01T12:00:00+05:00"
+    },
+    {
+      "id": "ali-shah",
+      "name": "Ali Shah",
+      "phone": "0300 5524470",
+      "balance": 0,
+      "oldestUnpaidAt": null,
+      "visits": 4,
+      "framesWon": 3,
+      "framesPlayed": 8,
+      "centuryMinutes": 0,
+      "spent": 1600,
+      "since": "2026-09-05T12:00:00+05:00"
     }
   ],
   "sheets": [
@@ -966,6 +979,25 @@
     }
   ],
   "statementExamples": {
+    "ali-akbar": [
+      {
+        "at": "2026-10-01T21:30:00+05:00",
+        "kind": "frame",
+        "text": "Frame, Table 3, lost to Hamid",
+        "charge": 250,
+        "balance": 250,
+        "doneBy": { "id": "zain", "name": "Zain", "role": "worker" }
+      },
+      {
+        "at": "2026-10-01T22:40:00+05:00",
+        "kind": "payment",
+        "text": "Payment, cash",
+        "paid": 250,
+        "balance": 0,
+        "doneBy": { "id": "zain", "name": "Zain", "role": "worker" },
+        "method": "cash"
+      }
+    ],
     "kamran": [
       {
         "at": "2026-09-04T21:15:00+05:00",
@@ -1805,6 +1837,25 @@
     ]
   },
   "scenarios": {
+    "newGame": {
+      "now": "2026-10-03T21:53:00+05:00",
+      "note": "Zain started Table 2 at 9:50 PM for Ahmed Nawaz and Ali Akbar: inside the 2 minutes to undo at 9:51, and the 5 minutes to change the type until 9:55 (screens 12 and 14). Added to the night's own games.",
+      "addGames": [
+        {
+          "id": "g-t2-n",
+          "tableId": "t2",
+          "sheetId": "s48",
+          "type": "single",
+          "maxMinutes": 30,
+          "status": "running",
+          "startedAt": "2026-10-03T21:50:00+05:00",
+          "startedBy": { "id": "zain", "name": "Zain", "role": "worker" },
+          "pausedMs": 0,
+          "price": 250,
+          "playerIds": ["ahmed-nawaz", "ali-akbar"]
+        }
+      ]
+    },
     "paused": {
       "now": "2026-10-03T22:01:00+05:00",
       "note": "Power cut. Zain pressed Pause all at 9:58 PM; every running game is paused (screen 16).",

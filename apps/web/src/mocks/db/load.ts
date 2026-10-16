@@ -186,7 +186,7 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
       sheetExtras[sheet.id] = { byTable: sheet.final.byTable, canteen: sheet.final.canteen };
   }
 
-  const games = (night?.games ?? raw.games).map(toGame);
+  const games = [...(night?.games ?? raw.games), ...(own?.addGames ?? [])].map(toGame);
   const state: DbState = {
     scenario: scenarioName,
     owners,

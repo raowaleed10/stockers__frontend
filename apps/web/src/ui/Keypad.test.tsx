@@ -64,6 +64,31 @@ describe('Keypad (amount)', () => {
   });
 });
 
+describe('Keypad (phone, screen 10)', () => {
+  it('has the digits 0 to 9 and Delete, an empty corner, and no "00" and no Clear', async () => {
+    const onDigit = vi.fn();
+    const onDelete = vi.fn();
+    render(<Keypad keys="phone" onDigit={onDigit} onDelete={onDelete} />);
+    for (const digit of '0123456789') {
+      expect(screen.getByRole('button', { name: digit })).toBeInTheDocument();
+    }
+    expect(screen.getAllByRole('button')).toHaveLength(11);
+    expect(screen.queryByRole('button', { name: '00' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: '7' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Delete last digit' }));
+    expect(onDigit.mock.calls).toEqual([['7']]);
+    expect(onDelete).toHaveBeenCalledTimes(1);
+  });
+
+  it('draws 72 px keys like the amount pad, 1-2-3 from the left', () => {
+    render(<Keypad keys="phone" onDigit={() => {}} onDelete={() => {}} />);
+    const one = screen.getByRole('button', { name: '1' });
+    expect(one.className).toContain('min-h-[72px]');
+    expect(one.parentElement).toHaveAttribute('dir', 'ltr');
+  });
+});
+
 describe('Keypad (lock screen)', () => {
   it('has Switch worker where Clear is, and no Clear or "00"', async () => {
     const onSwitch = vi.fn();

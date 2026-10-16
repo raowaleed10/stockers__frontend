@@ -44,6 +44,15 @@ const BUILT: Record<
   {
     prepare?: (page: Page) => Promise<void>;
     masks?: (page: Page) => Promise<Rect[]>;
+    /** The seed's scenario that gives the screen its state (a game that is already running, for instance). */
+    scenario?: string;
+    /** A moment other than the one in design/screens.json: the PNG's clock is whole minutes, its countdowns are not. */
+    now?: string;
+    /**
+     * A dialog covers the whole screen, so what a person sees is the 1440 x 900 window, not the page behind it (the
+     * board is taller than the screen and scrolls). The picture is taken of the window.
+     */
+    window?: boolean;
   }
 > = {
   3: {},
@@ -75,6 +84,64 @@ const BUILT: Record<
     },
   },
   2: {},
+  // Screens 7 to 12 are dialogs over the board. The PNG draws the header at 55 % behind them; a real dialog dims the whole
+  // page with one layer (docs: Differences), so the comparison covers the dialog and a thin dark band for the page.
+  7: {
+    window: true,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Century/ }).click();
+      await blur(page);
+    },
+  },
+  8: {
+    window: true,
+    prepare: async (page) => {
+      const search = page.getByRole('searchbox', { name: 'Search players by name or phone' });
+      await search.fill('ahmed');
+      await page.getByRole('button', { name: /^Ahmed Nawaz/ }).click();
+      await search.fill('ali');
+      await page.getByRole('button', { name: /^Ali Akbar/ }).waitFor();
+      await blur(page);
+    },
+    // "4 found" is a count the PNG got wrong for this seed ("ali" is also in Hamid Ali and Rizwan Ali).
+    masks: async (page) => {
+      const box = await page.getByRole('status').boundingBox();
+      return box ? [box] : [];
+    },
+  },
+  9: {
+    window: true,
+    prepare: async (page) => {
+      const search = page.getByRole('searchbox', { name: /^Search a name or phone for side/ });
+      for (const [typed, who] of [
+        ['ahmed', /^Ahmed Nawaz/],
+        ['ali ak', /^Ali Akbar/],
+        ['imran', /^Imran Shah/],
+      ] as const) {
+        await search.fill(typed);
+        await page.getByRole('button', { name: who }).click();
+      }
+      await blur(page);
+    },
+  },
+  10: {
+    window: true,
+    prepare: async (page) => {
+      await page.getByLabel('Full name').fill('Ali Shahzad');
+      for (const digit of '030281') {
+        await page.getByRole('button', { name: digit, exact: true }).click();
+      }
+      await blur(page);
+    },
+  },
+  12: {
+    window: true,
+    scenario: 'newGame',
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Century/ }).click();
+      await blur(page);
+    },
+  },
   34: {
     masks: async (page) => {
       const box = await page.getByTestId('big-clock').boundingBox();
@@ -82,6 +149,10 @@ const BUILT: Record<
     },
   },
 };
+
+/** What a tap leaves behind: focus on the control. The PNG shows the screen, not a focus ring. */
+const blur = (page: Page) =>
+  page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
 
 /** The action bar's box, to leave it out of a comparison. */
 async function actionBar(page: Page): Promise<Rect[]> {
@@ -92,8 +163,10 @@ async function actionBar(page: Page): Promise<Rect[]> {
 /** The route of the design with the demo clock added. Some routes show more than the path ("/  (= /board/snooker)"). */
 function urlOf(screen: ScreenEntry): string {
   const route = screen.route.split(/\s/)[0];
-  const query = [`now=${encodeURIComponent(screen.now)}`];
-  if (screen.scenario) query.push(`scenario=${screen.scenario}`);
+  const built = BUILT[screen.n];
+  const query = [`now=${encodeURIComponent(built?.now ?? screen.now)}`];
+  const scenario = built?.scenario ?? screen.scenario;
+  if (scenario) query.push(`scenario=${scenario}`);
   return route + (route.includes('?') ? '&' : '?') + query.join('&');
 }
 
@@ -128,7 +201,7 @@ test.describe('counter screens against their PNGs', () => {
 
       const masks = (await BUILT[screen.n].masks?.(page)) ?? [];
       const png = readFileSync(path.join(REPO, 'design/screens', `${screen.file}.png`));
-      const shot = await page.screenshot({ fullPage: true });
+      const shot = await page.screenshot({ fullPage: !BUILT[screen.n].window });
       const result = await comparePngs(scratch, shot, png, { masks });
       const picture = `${String(screen.n).padStart(2, '0')}-${screen.file}`;
       saveComparison('screens', picture, result);

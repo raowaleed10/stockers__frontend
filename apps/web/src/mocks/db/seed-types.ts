@@ -20,7 +20,7 @@ import type {
 
 /** The shape of `mock/seed.json`, as far as the mock needs it. */
 
-export type ScenarioName = 'paused' | 'checkout' | 'closing' | 'closed' | 'empty';
+export type ScenarioName = 'paused' | 'checkout' | 'closing' | 'closed' | 'empty' | 'newGame';
 
 export interface SeedPlayer {
   id: string;
@@ -180,6 +180,8 @@ export interface SeedScenario {
   /** When the worker who is signed in in this scenario signed in. */
   signedInSince?: ISO;
   games?: (Omit<Game, 'price'> & { price?: Rs; rate?: Rs })[];
+  /** Games added to the night's own games (the others stay), for a moment that needs one more game running. */
+  addGames?: (Omit<Game, 'price'> & { price?: Rs; rate?: Rs })[];
   waiting?: SeedWaiting[];
   waitingTotal?: Rs;
   movesToCreditTotal?: Rs;

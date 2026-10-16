@@ -90,5 +90,92 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Screen reader name of a table over its limit | Table 4, over 20 minutes | ٹیبل 4، 20 منٹ سے زیادہ | P05 answers |
 | Lock screen, tables over their limits that differ | 2 over the limit | حد سے زیادہ: 2 | P05 answers |
 | Lock screen, one limit shared | 1 over 30 min | 30 منٹ سے زیادہ: 1 | P05 answers |
+| Start screens, while the table loads | Loading the table… | ٹیبل لوڈ ہو رہا ہے… | P06 |
+| Start screens, when the table cannot load | Could not load this table. | یہ ٹیبل لوڈ نہیں ہو سکا۔ | P06 |
+| Start screens, retry | Try again | دوبارہ کوشش کریں | P06 |
+| Cancel button | Cancel | منسوخ کریں | P06 |
+| Back button (screen reader name) | Back to game type | گیم کی قسم پر واپس | P06 |
+| Screen 8, step | Step {{n}} of {{total}} | مرحلہ {{n}} از {{total}} | P06 |
+| Screen 7, title | {{name}} is free | {{name}} خالی ہے | P06 |
+| Screen 7, line under the title | What are they playing? | وہ کیا کھیل رہے ہیں؟ | P06 |
+| Start a game: types / single / title | Single frame | سنگل فریم | P06 |
+| Start a game: types / single / text | Two players. When the frame ends, the loser pays. | دو کھلاڑی۔ فریم ختم ہونے پر ہارنے والا ادا کرتا ہے۔ | P06 |
+| Start a game: types / double / title | Double frame | ڈبل فریم | P06 |
+| Start a game: types / double / text | Two against two, or one against two. The losing side splits it. | دو کے مقابلے میں دو، یا ایک کے مقابلے میں دو۔ ہارنے والی طرف مل کر ادا کرتی ہے۔ | P06 |
+| Start a game: types / century / title | Century | سنچری | P06 |
+| Start a game: types / century / text | Any number of players. Charged by the minute under one player. | کتنے بھی کھلاڑی۔ ایک کھلاڑی کے نام پر منٹ کے حساب سے چارج ہوتا ہے۔ | P06 |
+| Start a game: rate / label | Century rate for this game | اس گیم کا سنچری ریٹ | P06 |
+| Start a game: rate / note | Starts at the owners’ price. Change it here if needed. Whole minutes are charged. | مالکان کی قیمت سے شروع ہوتا ہے۔ ضرورت ہو تو یہاں بدلیں۔ پورے منٹ چارج ہوتے ہیں۔ | P06 |
+| Start a game: rate / noteRunning | Counts from {{time}}, when the game started. Whole minutes are charged. | {{time}} سے گنتی ہو رہی ہے، جب گیم شروع ہوا تھا۔ پورے منٹ چارج ہوتے ہیں۔ | P06 |
+| Start a game: rate / perMinute | {{price}} a minute | {{price}} فی منٹ | P06 |
+| Start a game: rate / rs | Rs | روپے | P06 |
+| Start a game: rate / unit | a minute | فی منٹ | P06 |
+| Start a game: rate / lower | Lower rate by 1 rupee | ریٹ 1 روپیہ کم کریں | P06 |
+| Start a game: rate / raise | Raise rate by 1 rupee | ریٹ 1 روپیہ بڑھائیں | P06 |
+| Start a game: next | Next: pick players | آگے: کھلاڑی چنیں | P06 |
+| Start a game: outOfOrder / button | Mark out of order | خراب لگائیں | P06 |
+| Start a game: outOfOrder / title | Mark {{name}} out of order | {{name}} کو خراب لگائیں | P06 |
+| Start a game: outOfOrder / text | Write why, for example “Cloth change”. Everyone sees it on the table. | وجہ لکھیں، مثلاً “کپڑا بدلنا ہے”۔ سب کو ٹیبل پر نظر آئے گی۔ | P06 |
+| Start a game: outOfOrder / note | Note (required) | نوٹ (ضروری) | P06 |
+| Start a game: outOfOrder / confirm | Mark out of order | خراب لگائیں | P06 |
+| Start a game: outOfOrder / is | {{name}} is out of order | {{name}} خراب ہے | P06 |
+| Start a game: outOfOrder / noPrice | {{name}} has no price yet | {{name}} کی ابھی قیمت نہیں لگی | P06 |
+| Start a game: players / title | Who is playing on {{name}}? | {{name}} پر کون کھیل رہا ہے؟ | P06 |
+| Start a game: players / single | Single frame, {{price}}. The loser pays. | سنگل فریم، {{price}}۔ ہارنے والا ادا کرتا ہے۔ | P06 |
+| Start a game: players / century | Century, {{price}} a minute. Charged under one player. | سنچری، {{price}} فی منٹ۔ ایک کھلاڑی کے نام پر چارج ہوتا ہے۔ | P06 |
+| Start a game: players / game | Game, {{price}}. The loser pays. | گیم، {{price}}۔ ہارنے والا ادا کرتا ہے۔ | P06 |
+| Start a game: players / player | Player {{n}} | کھلاڑی {{n}} | P06 |
+| Start a game: players / emptySlot | Search or tap a name | تلاش کریں یا نام پر ٹیپ کریں | P06 |
+| Start a game: players / remove | Remove {{name}} | {{name}} کو ہٹائیں | P06 |
+| Start a game: players / search | Search players by name or phone | نام یا فون سے کھلاڑی تلاش کریں | P06 |
+| Start a game: players / found | {{count}} found | {{count}} ملے | P06 |
+| Start a game: players / results | Search results | تلاش کے نتائج | P06 |
+| Start a game: players / addNew | Add “{{name}}” as a new player | “{{name}}” کو نیا کھلاڑی بنائیں | P06 |
+| Start a game: players / recent | Played here recently | حال ہی میں یہاں کھیلے | P06 |
+| Start a game: players / recentNote | Same name? Check the last digits of the phone number. | ایک جیسا نام؟ فون نمبر کے آخری ہندسے دیکھیں۔ | P06 |
+| Start a game: players / startTime | The start time is filled in when you tap Start. | شروع کا وقت اسٹارٹ دباتے ہی بھر جاتا ہے۔ | P06 |
+| Start a game: players / start | Start game | گیم شروع کریں | P06 |
+| Start a game: tags / lastPlayedToday | Last played today | آخری بار آج کھیلے | P06 |
+| Start a game: tags / lastPlayedYesterday | Last played yesterday | آخری بار کل کھیلے | P06 |
+| Start a game: tags / lastPlayedOn | Last played {{when}} | آخری بار {{when}} کو کھیلے | P06 |
+| Start a game: tags / owes | Owes {{amount}} | {{amount}} باقی | P06 |
+| Start a game: tags / playingOn | Playing on {{name}} | {{name}} پر کھیل رہا ہے | P06 |
+| Start a game: tags / inRoom | In {{name}} | {{name}} میں ہے | P06 |
+| Start a game: double / title | Double frame on {{name}} | {{name}} پر ڈبل فریم | P06 |
+| Start a game: double / text | {{price}} for the frame. The losing side splits it. | فریم کے {{price}}۔ ہارنے والی طرف مل کر ادا کرتی ہے۔ | P06 |
+| Start a game: double / side | Side {{letter}} | سائیڈ {{letter}} | P06 |
+| Start a game: double / vs | vs | بمقابلہ | P06 |
+| Start a game: double / addPlayer | Add a player | کھلاڑی شامل کریں | P06 |
+| Start a game: double / addSecond | Add a second player, or leave empty | دوسرا کھلاڑی شامل کریں، یا خالی چھوڑ دیں | P06 |
+| Start a game: double / search | Search a name or phone for side {{letter}} | سائیڈ {{letter}} کے لیے نام یا فون تلاش کریں | P06 |
+| Start a game: double / noteAlone | Three players count as a double. If {{name}} plays alone and loses, he pays the full {{price}}. You can change the split when the frame ends. | تین کھلاڑی ڈبل شمار ہوتے ہیں۔ اگر {{name}} اکیلا کھیلے اور ہار جائے تو وہ پورے {{price}} دے گا۔ فریم ختم ہونے پر آپ تقسیم بدل سکتے ہیں۔ | P06 |
+| Start a game: double / note | Three players count as a double. If a player is alone on his side and loses, he pays the full {{price}}. You can change the split when the frame ends. | تین کھلاڑی ڈبل شمار ہوتے ہیں۔ اگر کوئی کھلاڑی اپنی سائیڈ پر اکیلا ہو اور ہار جائے تو وہ پورے {{price}} دے گا۔ فریم ختم ہونے پر آپ تقسیم بدل سکتے ہیں۔ | P06 |
+| Start a game: double / start | Start double frame | ڈبل فریم شروع کریں | P06 |
+| Start a game: newPlayer / title | Add a new player | نیا کھلاڑی شامل کریں | P06 |
+| Start a game: newPlayer / text | Their account is made now, so games and payments go under their name. | اکاؤنٹ ابھی بن جاتا ہے، تاکہ گیمز اور ادائیگیاں ان کے نام پر جائیں۔ | P06 |
+| Start a game: newPlayer / name | Full name | پورا نام | P06 |
+| Start a game: newPlayer / phone | Phone number | فون نمبر | P06 |
+| Start a game: newPlayer / later | (can be added later) | (بعد میں بھی شامل ہو سکتا ہے) | P06 |
+| Start a game: newPlayer / keypad | Phone keypad | فون کیپیڈ | P06 |
+| Start a game: newPlayer / partial | Type the whole number, or tap “Skip phone for now”. | پورا نمبر لکھیں، یا “ابھی فون چھوڑیں” دبائیں۔ | P06 |
+| Start a game: newPlayer / similar | Similar names already saved | ملتے جلتے نام پہلے سے محفوظ ہیں | P06 |
+| Start a game: newPlayer / similarText | Is it one of these? Tap to use them instead. | کیا یہ ان میں سے کوئی ہے؟ ان کو چننے کے لیے ٹیپ کریں۔ | P06 |
+| Start a game: newPlayer / skip | Skip phone for now | ابھی فون چھوڑیں | P06 |
+| Start a game: newPlayer / add | Add player | کھلاڑی شامل کریں | P06 |
+| Start a game: change / title | Change the game on {{name}} | {{name}} پر گیم بدلیں | P06 |
+| Start a game: change / subtitle | Started {{ago}} as {{what}}: {{who}}. You can change it until {{time}}. | {{ago}} {{what}} کے طور پر شروع ہوا: {{who}}۔ آپ اسے {{time}} تک بدل سکتے ہیں۔ | P06 |
+| Start a game: change / ago_one | {{count}} minute ago | {{count}} منٹ پہلے | P06 |
+| Start a game: change / ago_other | {{count}} minutes ago | {{count}} منٹ پہلے | P06 |
+| Start a game: change / agoNow | less than a minute ago | ایک منٹ سے بھی کم پہلے | P06 |
+| Start a game: change / as / single | a single frame | سنگل فریم | P06 |
+| Start a game: change / as / double | a double frame | ڈبل فریم | P06 |
+| Start a game: change / as / century | a Century | سنچری | P06 |
+| Start a game: change / as / game | a game | گیم | P06 |
+| Start a game: change / now | Now | ابھی | P06 |
+| Start a game: change / left_one | {{count}} minute left to change. After that, end or discard the frame first. | بدلنے کے لیے {{count}} منٹ باقی۔ اس کے بعد پہلے فریم ختم یا منسوخ کریں۔ | P06 |
+| Start a game: change / left_other | {{count}} minutes left to change. After that, end or discard the frame first. | بدلنے کے لیے {{count}} منٹ باقی۔ اس کے بعد پہلے فریم ختم یا منسوخ کریں۔ | P06 |
+| Start a game: change / to | Change to {{type}} | {{type}} میں بدلیں | P06 |
+| Start a game: change / tooLate | The 5 minutes to change this game are over. End or discard the frame first. | اس گیم کو بدلنے کے 5 منٹ ختم ہو گئے۔ پہلے فریم ختم یا منسوخ کریں۔ | P06 |
+| Start a game: change / ended | This game is no longer running. | یہ گیم اب نہیں چل رہا۔ | P06 |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

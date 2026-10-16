@@ -143,6 +143,12 @@ export function formatDay(iso: ISO, long = false, lang: FormatLang = 'en'): stri
     : `${weekday.slice(0, 3)} ${t.getUTCDate()} ${month.slice(0, 3)}`;
 }
 
+/** `Thursday`; in Urdu `جمعرات`: the weekday alone, for "Last played Thursday". */
+export function formatWeekday(iso: ISO, lang: FormatLang = 'en'): string {
+  const day = clubTime(iso).getUTCDay();
+  return lang === 'ur' ? UR_WEEKDAYS[day] : WEEKDAYS[day];
+}
+
 /** `3 Oct`: the day and month with no weekday, for the "When" column of a list (screens 30, 49). Urdu: `3 اکتوبر`. */
 export function formatDate(iso: ISO, lang: FormatLang = 'en'): string {
   const t = clubTime(iso);

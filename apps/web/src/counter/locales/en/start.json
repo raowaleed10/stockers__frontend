@@ -1,0 +1,113 @@
+{
+  "loading": "Loading the table…",
+  "loadFailed": "Could not load this table.",
+  "retry": "Try again",
+  "cancel": "Cancel",
+  "backToType": "Back to game type",
+  "step": "Step {{n}} of {{total}}",
+  "free": "{{name}} is free",
+  "choose": "What are they playing?",
+  "types": {
+    "single": {
+      "title": "Single frame",
+      "text": "Two players. When the frame ends, the loser pays."
+    },
+    "double": {
+      "title": "Double frame",
+      "text": "Two against two, or one against two. The losing side splits it."
+    },
+    "century": {
+      "title": "Century",
+      "text": "Any number of players. Charged by the minute under one player."
+    }
+  },
+  "rate": {
+    "label": "Century rate for this game",
+    "note": "Starts at the owners’ price. Change it here if needed. Whole minutes are charged.",
+    "noteRunning": "Counts from <when>{{time}}</when>, when the game started. Whole minutes are charged.",
+    "perMinute": "{{price}} a minute",
+    "rs": "Rs",
+    "unit": "a minute",
+    "lower": "Lower rate by 1 rupee",
+    "raise": "Raise rate by 1 rupee"
+  },
+  "next": "Next: pick players",
+  "outOfOrder": {
+    "button": "Mark out of order",
+    "title": "Mark {{name}} out of order",
+    "text": "Write why, for example “Cloth change”. Everyone sees it on the table.",
+    "note": "Note (required)",
+    "confirm": "Mark out of order",
+    "is": "{{name}} is out of order",
+    "noPrice": "{{name}} has no price yet"
+  },
+  "players": {
+    "title": "Who is playing on {{name}}?",
+    "single": "Single frame, {{price}}. The loser pays.",
+    "century": "Century, {{price}} a minute. Charged under one player.",
+    "game": "Game, {{price}}. The loser pays.",
+    "player": "Player {{n}}",
+    "emptySlot": "Search or tap a name",
+    "remove": "Remove {{name}}",
+    "search": "Search players by name or phone",
+    "found": "{{count}} found",
+    "results": "Search results",
+    "addNew": "Add “{{name}}” as a new player",
+    "recent": "Played here recently",
+    "recentNote": "Same name? Check the last digits of the phone number.",
+    "startTime": "The start time is filled in when you tap Start.",
+    "start": "Start game"
+  },
+  "tags": {
+    "lastPlayedToday": "Last played today",
+    "lastPlayedYesterday": "Last played yesterday",
+    "lastPlayedOn": "Last played {{when}}",
+    "owes": "Owes {{amount}}",
+    "playingOn": "Playing on {{name}}",
+    "inRoom": "In {{name}}"
+  },
+  "double": {
+    "title": "Double frame on {{name}}",
+    "text": "{{price}} for the frame. The losing side splits it.",
+    "side": "Side {{letter}}",
+    "vs": "vs",
+    "addPlayer": "Add a player",
+    "addSecond": "Add a second player, or leave empty",
+    "search": "Search a name or phone for side {{letter}}",
+    "noteAlone": "Three players count as a double. If {{name}} plays alone and loses, he pays the full {{price}}. You can change the split when the frame ends.",
+    "note": "Three players count as a double. If a player is alone on his side and loses, he pays the full {{price}}. You can change the split when the frame ends.",
+    "start": "Start double frame"
+  },
+  "newPlayer": {
+    "title": "Add a new player",
+    "text": "Their account is made now, so games and payments go under their name.",
+    "name": "Full name",
+    "phone": "Phone number",
+    "later": "(can be added later)",
+    "keypad": "Phone keypad",
+    "partial": "Type the whole number, or tap “Skip phone for now”.",
+    "similar": "Similar names already saved",
+    "similarText": "Is it one of these? Tap to use them instead.",
+    "skip": "Skip phone for now",
+    "add": "Add player"
+  },
+  "change": {
+    "title": "Change the game on {{name}}",
+    "subtitle": "Started {{ago}} as {{what}}: <name>{{who}}</name>. You can change it until <when>{{time}}</when>.",
+    "ago_one": "{{count}} minute ago",
+    "ago_other": "{{count}} minutes ago",
+    "agoNow": "less than a minute ago",
+    "as": {
+      "single": "a single frame",
+      "double": "a double frame",
+      "century": "a Century",
+      "game": "a game"
+    },
+    "now": "Now",
+    "left_one": "{{count}} minute left to change. After that, end or discard the frame first.",
+    "left_other": "{{count}} minutes left to change. After that, end or discard the frame first.",
+    "to": "Change to {{type}}",
+    "tooLate": "The 5 minutes to change this game are over. End or discard the frame first.",
+    "ended": "This game is no longer running."
+  }
+}
