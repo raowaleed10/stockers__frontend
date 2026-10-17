@@ -85,6 +85,11 @@ test.describe('the drawer expense and the day', () => {
     await expect(dialog).toContainText('Rs 21,750');
     await expect(dialog).toContainText('Rs 21,250');
     await dialog.getByRole('button', { name: 'Take Rs 500 from the drawer' }).click();
+    // It asks once (D65).
+    await page
+      .getByRole('dialog', { name: 'Take Rs 500 from the drawer for Food?' })
+      .getByRole('button', { name: 'Yes' })
+      .click();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.getByText('Rs 500 taken from the drawer: Dinner for staff.')).toBeVisible();
 

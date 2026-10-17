@@ -206,8 +206,22 @@ export interface CanteenSale {
   doneBy: PersonRef;
 }
 
+/**
+ * The owners' expense types. `food`, `petrol`, `tea-milk` and `cleaning` are the counter's own chips (screen 29) and stay
+ * separate on the owner side (D65); `cleaning-tea` ("Cleaning and tea") is what an owner picks in the Add expense form.
+ */
 export type ExpenseCategory =
-  'staff' | 'bills' | 'generator' | 'repairs' | 'cleaning-tea' | 'rent' | 'food-petrol' | 'other';
+  | 'staff'
+  | 'bills'
+  | 'generator'
+  | 'repairs'
+  | 'cleaning-tea'
+  | 'rent'
+  | 'food'
+  | 'petrol'
+  | 'tea-milk'
+  | 'cleaning'
+  | 'other';
 export interface Expense {
   id: string;
   at: ISO;

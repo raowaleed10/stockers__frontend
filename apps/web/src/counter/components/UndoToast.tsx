@@ -6,7 +6,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useNow } from '@/lib/clock';
 import { useFormat } from '@/lib/use-format';
 import { cx } from '@/ui/cx';
-import { useBoard, useMe, useUndoable, useUndoCheckout, useUndoEnd, useUndoGame } from '../api';
+import {
+  useBoard,
+  useMe,
+  useUndoable,
+  useUndoCanteenSale,
+  useUndoCheckout,
+  useUndoDrawerExpense,
+  useUndoEnd,
+  useUndoGame,
+} from '../api';
 import { useLockStore } from '../session/lock-store';
 import { useNote } from './note-store';
 import { RichText } from './RichText';
@@ -21,14 +30,21 @@ const DONE_FOR_MS = 4000;
 const ROOM_BASE = 110;
 const ROOM_EACH = 84;
 
-type Done = { kind: 'game'; table: string } | { kind: 'payment'; name: string };
+type Done =
+  | { kind: 'game'; table: string }
+  | { kind: 'payment'; name: string }
+  | { kind: 'reopened'; type: 'century' | 'room'; table: string }
+  | { kind: 'sale' }
+  | { kind: 'expense'; amount: number };
 
 /**
  * The cream Undo toast, for the 2 minutes after the signed-in worker did something money can follow (D16, D63):
  *  - "Game started on Table 2 for Ahmed Nawaz and Ali Akbar. Undo for 1:42 more" (screen 14): a game started by mistake;
  *  - "Rs 250 added to Bilal Ahmed’s bill. Undo for 1:12 more": a frame he charged, also after the next frame has started
  *    (Undo opens "Who lost this frame?" again for that frame);
- *  - "Payment saved: Bilal Ahmed paid Rs 1,000. Undo for 1:50 more": a payment he took.
+ *  - "Payment saved: Bilal Ahmed paid Rs 1,000. Undo for 1:50 more": a payment he took;
+ *  - the same for a double frame, a game, a Century or a room he ended (D65: a Century or a room goes back to running, the
+ *    others ask who lost again), a canteen sale he made, and cash he took from the drawer (D65).
  * They are found from the data, not remembered by the screen that did it, so they are still there after a reload and on
  * any screen. Each is the signed-in worker's own, and goes when the 2 minutes are up. After Undo of a game or a payment
  * it says what happened for a moment.
@@ -37,6 +53,8 @@ export function UndoToast() {
   const { t } = useTranslation('table');
   const { t: tBoard } = useTranslation('board');
   const { t: tCheckout } = useTranslation('checkout');
+  const { t: tCanteen } = useTranslation('canteen');
+  const { t: tExpense } = useTranslation('expense');
   const { lang } = useFormat();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -47,6 +65,8 @@ export function UndoToast() {
   const undoGame = useUndoGame();
   const undoEnd = useUndoEnd();
   const undoPayment = useUndoCheckout();
+  const undoSale = useUndoCanteenSale();
+  const undoExpense = useUndoDrawerExpense();
   const now = useNow(1000);
   const [done, setDone] = useState<Done | null>(null);
   const note = useNote((state) => state.message);
@@ -72,6 +92,10 @@ export function UndoToast() {
     charge !== null && charge !== undefined && canUndo(charge.endedAt, now) && !onOwnScreen;
   const payment = undoable.data?.payment;
   const paymentShown = payment !== null && payment !== undefined && canUndo(payment.at, now);
+  const sale = undoable.data?.sale;
+  const saleShown = sale !== null && sale !== undefined && canUndo(sale.at, now);
+  const expense = undoable.data?.expense;
+  const expenseShown = expense !== null && expense !== undefined && canUndo(expense.at, now);
 
   // The "undone" message goes by itself after a few seconds.
   useEffect(() => {
@@ -93,6 +117,8 @@ export function UndoToast() {
     (candidate?.game ? 1 : 0) +
     (chargeShown ? 1 : 0) +
     (paymentShown ? 1 : 0) +
+    (saleShown ? 1 : 0) +
+    (expenseShown ? 1 : 0) +
     (doneShown ? 1 : 0) +
     (note ? 1 : 0);
   const visible = !locked && count > 0;
@@ -128,6 +154,29 @@ export function UndoToast() {
       ? (last ?? '')
       : `${names.slice(0, -1).join(t('undo.comma'))}${t('undo.and')}${last}`;
 
+  const joinNames = (list: string[]) => {
+    const end = list.at(-1);
+    return list.length <= 1
+      ? (end ?? '')
+      : `${list.slice(0, -1).join(t('undo.comma'))}${t('undo.and')}${end}`;
+  };
+  const doneText = (item: Done) => {
+    switch (item.kind) {
+      case 'game':
+        return t('undo.done', { table: item.table });
+      case 'payment':
+        return tCheckout('undo.done', { name: item.name });
+      case 'reopened':
+        return t(item.type === 'century' ? 'undo.reopenedCentury' : 'undo.reopenedRoom', {
+          table: item.table,
+        });
+      case 'sale':
+        return tCanteen('undone');
+      case 'expense':
+        return tExpense('undone', { amount: formatRs(item.amount, lang) });
+    }
+  };
+
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-[75px] z-[60] flex flex-col items-center gap-3 px-6">
       {note ? (
@@ -138,11 +187,7 @@ export function UndoToast() {
 
       {done && doneShown ? (
         <Card>
-          <span className="min-w-0 flex-1 text-[19px] font-semibold">
-            {done.kind === 'game'
-              ? t('undo.done', { table: done.table })
-              : tCheckout('undo.done', { name: done.name })}
-          </span>
+          <span className="min-w-0 flex-1 text-[19px] font-semibold">{doneText(done)}</span>
         </Card>
       ) : null}
 
@@ -172,11 +217,19 @@ export function UndoToast() {
       {chargeShown && charge ? (
         <Card>
           <span className="min-w-0 flex-[1_1_300px] text-[19px] font-semibold">
-            <RichText
-              ns="end"
-              i18nKey="next.title"
-              values={{ amount: formatRs(charge.amount, lang), name: charge.name }}
-            />
+            {charge.names.length > 1 ? (
+              <RichText
+                ns="table"
+                i18nKey="undo.charged"
+                values={{ amount: formatRs(charge.amount, lang), names: joinNames(charge.names) }}
+              />
+            ) : (
+              <RichText
+                ns="end"
+                i18nKey="next.title"
+                values={{ amount: formatRs(charge.amount, lang), name: joinNames(charge.names) }}
+              />
+            )}
             {chargeTable ? (
               <span className="ms-2 text-[16px] font-normal text-c-toast-muted">
                 {tableOf(chargeTable)}
@@ -189,7 +242,14 @@ export function UndoToast() {
             onClick={() =>
               undoEnd.mutate(charge.gameId, {
                 onSuccess: () =>
-                  navigate(tablePath(pathname, charge.tableId, `/correct/${charge.gameId}`)),
+                  charge.type === 'century' || charge.type === 'room'
+                    ? // Nobody to choose: the game is running again where it stopped.
+                      setDone({
+                        kind: 'reopened',
+                        type: charge.type,
+                        table: chargeTable ? tableOf(chargeTable) : '',
+                      })
+                    : navigate(tablePath(pathname, charge.tableId, `/correct/${charge.gameId}`)),
               })
             }
           >
@@ -218,6 +278,49 @@ export function UndoToast() {
             onClick={() =>
               undoPayment.mutate(payment.playerId, {
                 onSuccess: () => setDone({ kind: 'payment', name: payment.name }),
+              })
+            }
+          >
+            {t('undo.button')}
+          </UndoButton>
+        </Card>
+      ) : null}
+
+      {saleShown && sale ? (
+        <Card>
+          <span className="min-w-0 flex-[1_1_300px] text-[19px] font-semibold">
+            {sale.playerName
+              ? tCanteen('done', { amount: formatRs(sale.total, lang), name: sale.playerName })
+              : tCanteen('doneCash', {
+                  amount: formatRs(sale.total, lang),
+                  method: sale.method
+                    ? tCheckout(`methods.${sale.method}` as never, { defaultValue: sale.method })
+                    : '',
+                })}
+          </span>
+          <Left>{t('undo.left', { time: clockLeft(undoSecondsLeft(sale.at, now)) })}</Left>
+          <UndoButton
+            disabled={undoSale.isPending}
+            onClick={() =>
+              undoSale.mutate(sale.saleId, { onSuccess: () => setDone({ kind: 'sale' }) })
+            }
+          >
+            {t('undo.button')}
+          </UndoButton>
+        </Card>
+      ) : null}
+
+      {expenseShown && expense ? (
+        <Card>
+          <span className="min-w-0 flex-[1_1_300px] text-[19px] font-semibold">
+            {tExpense('done', { amount: formatRs(expense.amount, lang), what: expense.what })}
+          </span>
+          <Left>{t('undo.left', { time: clockLeft(undoSecondsLeft(expense.at, now)) })}</Left>
+          <UndoButton
+            disabled={undoExpense.isPending}
+            onClick={() =>
+              undoExpense.mutate(expense.expenseId, {
+                onSuccess: () => setDone({ kind: 'expense', amount: expense.amount }),
               })
             }
           >

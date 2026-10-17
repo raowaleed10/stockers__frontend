@@ -255,12 +255,17 @@ export interface CorrectEndRequest extends Partial<EndGameRequest> {
   discard?: DiscardRequest;
 }
 
-/** A frame the signed-in worker charged less than 2 minutes ago and can still take back. */
+/**
+ * A frame, a double frame, a game, a Century or a room the signed-in worker ended less than 2 minutes ago and can still
+ * take back (D63, D65). Undo of a frame, a double or a game opens "Who lost?" again; a Century or a room has nobody to
+ * choose, so Undo puts it back running.
+ */
 export interface UndoableCharge {
   gameId: string;
   tableId: string;
-  /** The player charged. */
-  name: string;
+  type: GameType;
+  /** The players charged (one, or the two of a double that were charged). */
+  names: string[];
   amount: Rs;
   endedAt: ISO;
 }
@@ -272,10 +277,29 @@ export interface UndoablePayment {
   toCredit: Rs;
   at: ISO;
 }
+/** A canteen sale the signed-in worker made less than 2 minutes ago (D65). */
+export interface UndoableSale {
+  saleId: string;
+  at: ISO;
+  total: Rs;
+  /** The player whose bill it went on, or null for a cash sale. */
+  playerName: string | null;
+  /** The id of the method a cash sale was taken in (`cash`, `easypaisa`); the counter writes its name. */
+  method?: string;
+}
+/** Cash the signed-in worker took from the drawer less than 2 minutes ago (D65). */
+export interface UndoableExpense {
+  expenseId: string;
+  at: ISO;
+  amount: Rs;
+  what: string;
+}
 /** `GET /undoable`: what the signed-in worker can still undo. The counter hides each one when its 2 minutes are up. */
 export interface UndoableActions {
   charge: UndoableCharge | null;
   payment: UndoablePayment | null;
+  sale: UndoableSale | null;
+  expense: UndoableExpense | null;
 }
 export interface GamesResult {
   games: Game[];

@@ -18,7 +18,6 @@ import { Segmented } from '@/ui/Segmented';
 import { focusRing } from '@/ui/theme';
 import { useCanteenItems, usePlayers, useSellCanteen, useToday } from '../../api';
 import { PageHeader } from '../../components/PageHeader';
-import { useNote } from '../../components/note-store';
 import { PlayerSearch } from '../../start/PlayerSearch';
 import { useBusyPlayers } from '../../start/use-busy-players';
 import { firstName } from '../table/game-info';
@@ -114,7 +113,6 @@ export function Canteen() {
   const today = useToday();
   const busy = useBusyPlayers();
   const sell = useSellCanteen();
-  const say = useNote((note) => note.say);
 
   const [type, setType] = useState<ItemType>('all');
   const [mode, setMode] = useState<Mode>('player');
@@ -163,8 +161,8 @@ export function Canteen() {
   };
 
   const ready = lines.length > 0 && (mode === 'cash' || player !== undefined);
-  const done = (message: string) => {
-    say(message);
+  // No question and no note here: the cream Undo toast says what was sold and keeps the Undo for 2 minutes (D65).
+  const done = () => {
     setOrder({});
     setPlayerId(null);
     setQuery('');
@@ -174,16 +172,9 @@ export function Canteen() {
     if (!ready) return;
     const request = lines.map(({ item, qty }) => ({ itemId: item.id, qty }));
     if (mode === 'player' && player) {
-      sell.mutate(
-        { playerId: player.id, items: request },
-        { onSuccess: () => done(t('done', { amount: money(total), name: player.name })) },
-      );
+      sell.mutate({ playerId: player.id, items: request }, { onSuccess: done });
     } else {
-      const chosen = methods.find((m) => m.id === method)?.name ?? method;
-      sell.mutate(
-        { playerId: null, items: request, payNow: method },
-        { onSuccess: () => done(t('doneCash', { amount: money(total), method: chosen })) },
-      );
+      sell.mutate({ playerId: null, items: request, payNow: method }, { onSuccess: done });
     }
   };
 

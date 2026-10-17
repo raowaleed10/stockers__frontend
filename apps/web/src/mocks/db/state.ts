@@ -96,6 +96,19 @@ export interface CheckoutUndo {
   discountEventId?: string;
 }
 
+/** What a canteen sale changed, so the worker who made it can undo it for 2 minutes (D65). By sale id. */
+export interface CanteenUndo {
+  by: PersonRef;
+  at: ISO;
+  sheetId: string;
+  /** The statement lines the sale posted (what was sold, and the payment of a sale with a name). */
+  lineIds: string[];
+  /** What the items cost to buy, which the owners' profit took off (never shown to the counter). */
+  cost: Rs;
+  /** The money taken now, with the method, or none when it went on a bill. */
+  received?: { method: string; amount: Rs };
+}
+
 export interface DbState {
   scenario: ScenarioName | null;
   owners: Owner[];
@@ -137,6 +150,10 @@ export interface DbState {
   disputes: Record<string, DisputeInfo>;
   /** The latest payment of each player that can still be undone (D63), by player id. */
   checkoutUndo: Record<string, CheckoutUndo>;
+  /** The canteen sales that can still be undone (D65), by sale id. */
+  canteenUndo: Record<string, CanteenUndo>;
+  /** The ids of the drawer expenses made at the counter in this session, which the worker can still undo (D65). */
+  drawerUndo: Set<string>;
   /** What the last close of a sheet did, for "Sheet 48 is closed" (screen 33). */
   lastClose: CloseSheetResult | null;
   settings: OwnerSettings;

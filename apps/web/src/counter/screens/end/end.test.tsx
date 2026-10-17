@@ -467,12 +467,34 @@ describe('screen 20: which side lost?', () => {
     const { view, d } = await open();
     await userEvent.click(within(d).getByRole('button', { name: /Imran Shah and Naveed Akhtar/ }));
     await userEvent.click(within(d).getByRole('radio', { name: 'One pays all' }));
+    // Nobody is picked until the worker taps who pays (D65), the same rule as damage and discount.
+    expect(within(d).getByRole('button', { name: 'Naveed pays' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    expect(within(d).getByRole('button', { name: 'Imran pays' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+    expect(within(d).getByRole('button', { name: 'Choose who pays' })).toBeDisabled();
+    expect(within(d).queryByRole('alert')).toBeNull();
     await userEvent.click(within(d).getByRole('button', { name: 'Naveed pays' }));
     expect(within(d).getByRole('button', { name: 'Charge Naveed' })).toBeEnabled();
     await userEvent.click(within(d).getByRole('button', { name: 'Charge Naveed' }));
     await waitFor(() => expect(wherePath(view)).toBe('/'));
     expect(lines('naveed').find((l) => l.kind === 'double')).toMatchObject({ charge: 400 });
     expect(lines('imran').find((l) => l.kind === 'double')).toBeUndefined();
+  });
+
+  it('going back to Half each and to One pays all again clears who was picked', async () => {
+    const { d } = await open();
+    await userEvent.click(within(d).getByRole('button', { name: /Imran Shah and Naveed Akhtar/ }));
+    await userEvent.click(within(d).getByRole('radio', { name: 'One pays all' }));
+    await userEvent.click(within(d).getByRole('button', { name: 'Imran pays' }));
+    expect(within(d).getByRole('button', { name: 'Charge Imran' })).toBeEnabled();
+    await userEvent.click(within(d).getByRole('radio', { name: 'Half each' }));
+    await userEvent.click(within(d).getByRole('radio', { name: 'One pays all' }));
+    expect(within(d).getByRole('button', { name: 'Choose who pays' })).toBeDisabled();
   });
 
   it('Custom: changing one share changes the other, so they always add up to Rs 400', async () => {
@@ -609,6 +631,38 @@ describe('screen 22: start a room', () => {
     expect(within(d).getByRole('button', { name: 'Start Room 2' })).toBeDisabled();
   });
 
+  it('the price of an hour is Rs 100 to Rs 10,000: the buttons stop there and a typed price outside it cannot start', async () => {
+    const { d } = await open();
+    const price = within(d).getByLabelText('Price for one hour');
+    const start = within(d).getByRole('button', { name: 'Start Room 2' });
+    // The buttons stop at Rs 10,000 and at Rs 100.
+    await userEvent.clear(price);
+    await userEvent.type(price, '9950');
+    await userEvent.click(within(d).getByRole('button', { name: 'Raise by 100 rupees' }));
+    expect(price).toHaveValue('10,000');
+    expect(within(d).getByRole('button', { name: 'Raise by 100 rupees' })).toBeDisabled();
+    await userEvent.clear(price);
+    await userEvent.type(price, '150');
+    await userEvent.click(within(d).getByRole('button', { name: 'Lower by 100 rupees' }));
+    expect(price).toHaveValue('100');
+    expect(within(d).getByRole('button', { name: 'Lower by 100 rupees' })).toBeDisabled();
+    expect(within(d).queryByRole('alert')).toBeNull();
+
+    // A typed price outside the range says so and cannot start, whoever is picked.
+    for (const typed of ['50', '10001']) {
+      await userEvent.clear(price);
+      await userEvent.type(price, typed);
+      expect(
+        within(d).getByText('The price of an hour is from Rs 100 to Rs 10,000.'),
+      ).toBeInTheDocument();
+      expect(start).toBeDisabled();
+    }
+    await userEvent.clear(price);
+    expect(
+      within(d).getByText('The price of an hour is from Rs 100 to Rs 10,000.'),
+    ).toBeInTheDocument();
+  });
+
   it('pick Danish Iqbal, change the price by 100 with the buttons, and Start Room 2 starts it under him', async () => {
     const { view, d } = await open();
     const search = within(d).getByRole('searchbox', {
@@ -737,6 +791,74 @@ describe('screen 23: end a room', () => {
     );
     await waitFor(() => expect(wherePath(view)).toBe('/'));
     expect(gameOn('r1')?.status).toBe('running');
+  });
+});
+
+/** The cream toast of the games that go back to the board (D65). */
+const toastWith = (text: string) =>
+  waitFor(() => {
+    const found = screen.getAllByRole('status').find((el) => el.textContent?.includes(text));
+    expect(found).toBeDefined();
+    return found as HTMLElement;
+  });
+
+describe('Undo after a double, a Century and a room (D65)', () => {
+  it('a double: the toast names both players, and Undo asks which side lost again', async () => {
+    at('2026-10-03T21:47:00+05:00');
+    const view = renderCounter('/table/t5/end');
+    const d = await dialog('Which side lost?');
+    await userEvent.click(within(d).getByRole('button', { name: /Imran Shah and Naveed Akhtar/ }));
+    await userEvent.click(within(d).getByRole('button', { name: 'Charge Imran and Naveed' }));
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+
+    const toast = await toastWith('Rs 400 charged to Imran Shah and Naveed Akhtar');
+    expect(toast).toHaveTextContent('Table 5');
+    expect(toast).toHaveTextContent(/Undo for (2:00|1:5\d) more/);
+    await userEvent.click(within(toast).getByRole('button', { name: /Undo/ }));
+    await waitFor(() => expect(wherePath(view)).toBe('/table/t5/correct/g-t5-d'));
+    const again = await dialog('Which side lost?');
+    // The first charge stands until the other side is chosen.
+    expect(lines('imran').some((l) => l.kind === 'double')).toBe(true);
+    expect(within(again).getByRole('button', { name: 'Keep it as it is' })).toBeInTheDocument();
+    await userEvent.click(within(again).getByRole('button', { name: /Kamran Iqbal and Faisal/ }));
+    await userEvent.click(within(again).getByRole('button', { name: 'Charge Kamran and Faisal' }));
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+    expect(lines('imran').some((l) => l.kind === 'double')).toBe(false);
+    expect(lines('kamran').find((l) => l.kind === 'double')).toMatchObject({ charge: 200 });
+    expect(lines('faisal').find((l) => l.kind === 'double')).toMatchObject({ charge: 200 });
+  });
+
+  it('a Century: the toast says Rs 630 on Saad’s bill, and Undo puts the Century back running', async () => {
+    at('2026-10-03T21:47:30+05:00');
+    const view = renderCounter('/table/t3/end');
+    const d = await dialog('End Century for Saad Hussain?');
+    const before = tonight('saad');
+    await userEvent.click(within(d).getByRole('button', { name: 'End and charge Rs 630' }));
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+    expect(gameOn('t3')).toBeUndefined();
+
+    const toast = await toastWith('Rs 630 added to Saad Hussain’s bill');
+    expect(toast).toHaveTextContent(/Undo for (2:00|1:5\d) more/);
+    await userEvent.click(within(toast).getByRole('button', { name: /Undo/ }));
+    expect(await screen.findByText('Century on Table 3 is running again.')).toBeInTheDocument();
+    expect(gameOn('t3')).toMatchObject({ id: 'g-t3-c', status: 'running' });
+    expect(tonight('saad')).toBe(before);
+    expect(wherePath(view)).toBe('/');
+  });
+
+  it('a room: the toast says Rs 2,500 on Ali Hassan’s bill, and Undo puts the room back running', async () => {
+    at('2026-10-03T22:09:55+05:00');
+    const view = renderCounter('/room/r1/end');
+    const d = await dialog('End Room 1 for Ali Hassan?');
+    const before = tonight('ali-hassan');
+    await userEvent.click(within(d).getByRole('button', { name: 'End and charge Rs 2,500' }));
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+
+    const toast = await toastWith('Rs 2,500 added to Ali Hassan’s bill');
+    await userEvent.click(within(toast).getByRole('button', { name: /Undo/ }));
+    expect(await screen.findByText('Room 1 is running again.')).toBeInTheDocument();
+    expect(gameOn('r1')).toMatchObject({ id: 'g-r1', status: 'running' });
+    expect(tonight('ali-hassan')).toBe(before);
   });
 });
 

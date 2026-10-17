@@ -14,6 +14,7 @@ import { useCorrectEnd, useGame } from '../../api';
 import { boardOfTableScreen, tablePath } from '../../components/table-paths';
 import { useCloseTable } from '../../start/use-close';
 import { TableGate, type TableContext } from '../start/TableGate';
+import { EndDouble } from './EndDouble';
 import { OvertimeStep } from './Overtime';
 import { WhoLost } from './WhoLost';
 
@@ -48,6 +49,9 @@ function CorrectStep({ gameId, step, ...context }: TableContext & { gameId: stri
   if (!current) return <Navigate to={boardOfTableScreen(pathname)} replace />;
   if (step === 'overtime') return <OvertimeStep {...context} correcting={current} />;
   if (step === 'stop') return <CorrectDiscard {...context} view={current} />;
+  if (current.game.type === 'double') {
+    return <EndDouble {...context} game={current.game} correcting />;
+  }
   return <WhoLost {...context} game={current.game} correcting />;
 }
 

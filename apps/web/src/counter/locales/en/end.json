@@ -55,6 +55,7 @@
     "pays": "{{name}} pays",
     "mismatch": "The amounts add up to {{sum}}, not {{total}}.",
     "charge": "Charge {{names}}",
+    "choosePayer": "Choose who pays",
     "rs": "Rs"
   },
   "century": {
@@ -82,6 +83,7 @@
     "priceNote": "Starts at {{amount}}. Change it if the owners agreed a different price.",
     "lower": "Lower by 100 rupees",
     "raise": "Raise by 100 rupees",
+    "hourlyRange": "The price of an hour is from {{min}} to {{max}}.",
     "first": "First hour (minimum)",
     "afterEvery": "After that, every minute",
     "example": "Example, {{duration}}",

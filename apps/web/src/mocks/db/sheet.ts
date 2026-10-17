@@ -9,8 +9,10 @@ import type {
   PersonRef,
   Sheet,
   TodayTotals,
+  UndoableExpense,
 } from '@stockers/shared';
 import {
+  canUndo,
   closeNoteRequired,
   drawerDifference,
   elapsed,
@@ -26,10 +28,15 @@ import type { MockDb } from './db';
 import { fail } from './errors';
 import type { TodayState } from './state';
 
-/** What the counter lets a worker take from the drawer (screen 29), and the words the owners see. */
+/**
+ * What the counter lets a worker take from the drawer (screen 29), and the words the owners see. Every chip of the counter is
+ * its own category on the owner side (D65).
+ */
 const DRAWER_CATEGORIES: Partial<Record<ExpenseCategory, string>> = {
-  'food-petrol': 'food or petrol',
-  'cleaning-tea': 'tea, milk or cleaning',
+  food: 'food',
+  petrol: 'petrol',
+  'tea-milk': 'tea and milk',
+  cleaning: 'cleaning',
   repairs: 'repairs',
   other: 'other',
 };
@@ -100,6 +107,7 @@ export function drawerExpense(
     sheetId: db.s.currentSheetId,
   };
   db.s.expenses.unshift(expense);
+  db.s.drawerUndo.add(expense.id);
   const { today } = db.s;
   today.drawerExpenses += request.amount;
   today.expensesPaidToday += request.amount;
@@ -373,4 +381,57 @@ export function closeSheet(
 /** `GET /sheets/last-close` (screen 33): what the last close did. Nothing has been closed yet on a fresh night. */
 export function lastClose(db: MockDb): CloseSheetResult {
   return db.s.lastClose ?? fail('NOT_FOUND', 'No sheet has been closed yet.');
+}
+
+/**
+ * Takes cash from the drawer back (D65): the worker who took it can undo it for 2 minutes while the sheet is open. The drawer
+ * should hold the amount again, and Activity keeps the first line and adds "Expense from the drawer undone" with his name.
+ */
+export function undoDrawerExpense(db: MockDb, by: PersonRef, id: string): UndoableExpense {
+  const expense = db.s.expenses.find((e) => e.id === id);
+  if (!expense) fail('NOT_FOUND', 'There is no expense to undo.');
+  if (expense.source !== 'counter' || expense.paidFrom !== 'drawer') {
+    fail('NOT_ALLOWED', 'Only cash taken from the drawer at the counter can be undone here.');
+  }
+  if (expense.doneBy.id !== by.id) {
+    const name = expense.doneBy.name.split(' ')[0];
+    fail('NOT_ALLOWED', `${name} took this cash, so only ${name} can undo it.`);
+  }
+  if (expense.sheetId !== db.s.currentSheetId || !canUndo(expense.at, db.now())) {
+    fail('UNDO_EXPIRED', 'It is more than 2 minutes since the cash was taken.');
+  }
+  db.s.expenses = db.s.expenses.filter((e) => e.id !== id);
+  db.s.drawerUndo.delete(id);
+  const { today } = db.s;
+  today.drawerExpenses -= expense.amount;
+  today.expensesPaidToday -= expense.amount;
+  today.moneyInHand += expense.amount;
+  db.s.deltas.expenses -= expense.amount;
+  db.logActivity(by, 'undo', 'Expense from the drawer undone', {
+    detail: `“${expense.what}”. ${formatRs(expense.amount)} is back in the cash the drawer should have.`,
+    amount: expense.amount,
+  });
+  db.history(
+    by,
+    `Put ${formatRs(expense.amount)} back in the drawer: ${expense.what}`,
+    expense.amount,
+  );
+  db.emit('board.changed');
+  return { expenseId: expense.id, at: expense.at, amount: expense.amount, what: expense.what };
+}
+
+/** `GET /undoable` (expenses): the cash this worker took from the drawer less than 2 minutes ago, the latest first. */
+export function undoableExpense(db: MockDb, by: PersonRef): UndoableExpense | null {
+  const expense = db.s.expenses
+    .filter(
+      (e) =>
+        db.s.drawerUndo.has(e.id) &&
+        e.doneBy.id === by.id &&
+        e.sheetId === db.s.currentSheetId &&
+        canUndo(e.at, db.now()),
+    )
+    .sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0];
+  return expense
+    ? { expenseId: expense.id, at: expense.at, amount: expense.amount, what: expense.what }
+    : null;
 }

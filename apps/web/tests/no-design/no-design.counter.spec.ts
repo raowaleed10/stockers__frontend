@@ -261,7 +261,7 @@ const SHOTS: Shot[] = [
     prepare: async (page) => {
       await page.getByRole('button', { name: /Imran Shah.*Naveed Akhtar/ }).click();
       await page.getByRole('radio', { name: 'One pays all' }).click();
-      await page.getByRole('button', { name: 'Naveed pays' }).click();
+      await expect(page.getByRole('button', { name: 'Choose who pays' })).toBeDisabled();
       await blur(page);
     },
   },
@@ -449,10 +449,67 @@ const SHOTS: Shot[] = [
       await dialog.getByLabel('Note (required)').fill('Dinner for staff');
       await dialog.getByRole('button', { name: '500', exact: true }).click();
       await dialog.getByRole('button', { name: 'Take Rs 500 from the drawer' }).click();
+      await page
+        .getByRole('dialog', { name: 'Take Rs 500 from the drawer for Food?' })
+        .getByRole('button', { name: 'Yes' })
+        .click();
       await expect(page.getByText('Rs 500 taken from the drawer: Dinner for staff.')).toBeVisible();
       await blur(page);
     },
     clip: { x: 0, y: 700, width: 1440, height: 200 },
+  },
+  {
+    id: 'expense-confirm',
+    url: `/expense?now=${encodeURIComponent('2026-10-03T20:15:00+05:00')}`,
+    prepare: async (page) => {
+      const dialog = page.getByRole('dialog', { name: 'Expense from the drawer' });
+      await dialog.getByRole('button', { name: 'Food' }).click();
+      await dialog.getByLabel('Note (required)').fill('Dinner for staff');
+      await dialog.getByRole('button', { name: '500', exact: true }).click();
+      await dialog.getByRole('button', { name: 'Take Rs 500 from the drawer' }).click();
+      await expect(
+        page.getByRole('dialog', { name: 'Take Rs 500 from the drawer for Food?' }),
+      ).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'undo-sale-toast',
+    url: `/canteen?now=${encodeURIComponent('2026-10-03T21:55:00+05:00')}`,
+    prepare: async (page) => {
+      const order = page.getByRole('complementary', { name: 'Order' });
+      await order.getByRole('searchbox').fill('usman');
+      await order.getByRole('button', { name: /^Usman Tariq/ }).click();
+      await page.getByRole('button', { name: /^Cold drink,/ }).click();
+      await page.getByRole('button', { name: /^Cold drink,/ }).click();
+      await page.getByRole('button', { name: /^Chips,/ }).click();
+      await order.getByRole('button', { name: 'Add Rs 300 to Usman’s bill' }).click();
+      await expect(page.getByText('Rs 300 added to Usman Tariq’s bill.')).toBeVisible();
+      await blur(page);
+    },
+    clip: { x: 0, y: 700, width: 1440, height: 200 },
+  },
+  {
+    id: 'undo-century-toast',
+    url: `/table/t3/end?now=${encodeURIComponent('2026-10-03T21:47:30+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: 'End and charge Rs 630' }).click();
+      await expect(page.getByText('Rs 630 added to Saad Hussain’s bill')).toBeVisible();
+      await blur(page);
+    },
+    clip: { x: 0, y: 700, width: 1440, height: 200 },
+  },
+  {
+    id: 'room-start-price-range',
+    url: `/room/r2/start?now=${encodeURIComponent('2026-10-03T21:52:00+05:00')}`,
+    prepare: async (page) => {
+      const dialog = page.getByRole('dialog', { name: 'Start Room 2' });
+      await dialog.getByLabel('Price for one hour').fill('50');
+      await expect(
+        dialog.getByText('The price of an hour is from Rs 100 to Rs 10,000.'),
+      ).toBeVisible();
+      await blur(page);
+    },
   },
   {
     id: 'players-none-picked',

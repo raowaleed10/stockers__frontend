@@ -40,6 +40,8 @@ import type {
   Table,
   TodayTotals,
   UndoableActions,
+  UndoableExpense,
+  UndoableSale,
   UndoablePayment,
   UnlockRequest,
   WorkerSession,
@@ -126,6 +128,10 @@ export const sellCanteen = (request: CanteenSaleRequest) =>
   api.post<CanteenSale>('/canteen/sales', request);
 export const addDrawerExpense = (request: DrawerExpenseRequest) =>
   api.post<DrawerExpenseResult>('/expenses/drawer', request);
+export const undoCanteenSale = (saleId: string) =>
+  api.post<UndoableSale>(`/canteen/sales/${saleId}/undo`);
+export const undoDrawerExpense = (expenseId: string) =>
+  api.post<UndoableExpense>(`/expenses/drawer/${expenseId}/undo`);
 export const getToday = () => api.get<TodayTotals>('/today');
 export const getClosePreview = () => api.get<ClosePreview>('/sheets/current/close-preview');
 export const getLastClose = () => api.get<CloseSheetResult>('/sheets/last-close');

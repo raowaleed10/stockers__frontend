@@ -224,6 +224,8 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
       ]),
     ),
     checkoutUndo: {},
+    canteenUndo: {},
+    drawerUndo: new Set(),
     lastClose: null,
     settings: {
       ...raw.settings,

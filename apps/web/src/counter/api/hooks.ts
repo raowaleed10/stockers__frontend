@@ -132,4 +132,6 @@ export const usePayCheckout = () =>
 export const useUndoCheckout = () => useAction(calls.undoCheckout);
 export const useSellCanteen = () => useAction(calls.sellCanteen);
 export const useAddDrawerExpense = () => useAction(calls.addDrawerExpense);
+export const useUndoCanteenSale = () => useAction(calls.undoCanteenSale);
+export const useUndoDrawerExpense = () => useAction(calls.undoDrawerExpense);
 export const useCloseSheet = () => useAction(calls.closeSheet);

@@ -10,18 +10,18 @@ import { cx } from '@/ui/cx';
 import { TextArea } from '@/ui/inputs';
 import { focusRing, focusWithinRing } from '@/ui/theme';
 import { useAddDrawerExpense, useMe, useToday } from '../../api';
-import { useNote } from '../../components/note-store';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { boardOfTableScreen } from '../../components/table-paths';
 
 /**
  * What the counter offers for an expense from the drawer (screen 29), and the owners' category each one is saved under.
- * Food and petrol are one owner category, and so are tea and milk and cleaning (`docs/06`, D53).
+ * Every chip is its own category on the owner side (D65), shown in Expenses as paid from "Drawer cash".
  */
 const KINDS = [
-  { id: 'food', category: 'food-petrol' },
-  { id: 'petrol', category: 'food-petrol' },
-  { id: 'tea', category: 'cleaning-tea' },
-  { id: 'cleaning', category: 'cleaning-tea' },
+  { id: 'food', category: 'food' },
+  { id: 'petrol', category: 'petrol' },
+  { id: 'tea', category: 'tea-milk' },
+  { id: 'cleaning', category: 'cleaning' },
   { id: 'repairs', category: 'repairs' },
   { id: 'other', category: 'other' },
 ] as const satisfies readonly { id: string; category: ExpenseCategory }[];
@@ -66,6 +66,7 @@ function Choice({
  * Screen 29, `/expense`: "Expense from the drawer", a dialog over the board. A worker takes cash from the drawer for food,
  * petrol, tea and milk, cleaning, repairs or something else, with a required note and the amount. It comes off the cash the
  * drawer should have (it shows before and after), and the owners see it in Expenses and Activity with his name (D53).
+ * Taking the cash asks once ("Take Rs 500 from the drawer for Food?"), then the cream Undo toast keeps it for 2 minutes (D65).
  */
 export function ExpenseDialog() {
   const { t } = useTranslation('expense');
@@ -75,12 +76,12 @@ export function ExpenseDialog() {
   const me = useMe();
   const today = useToday();
   const add = useAddDrawerExpense();
-  const say = useNote((state) => state.say);
   const noteId = useId();
   const amountId = useId();
   const [kind, setKind] = useState<Kind | null>(null);
   const [amount, setAmount] = useState<number | null>(null);
   const [note, setNote] = useState('');
+  const [asking, setAsking] = useState(false);
 
   const close = () => navigate(boardOfTableScreen(pathname));
   const money = (value: number) => formatRs(value, lang);
@@ -91,16 +92,23 @@ export function ExpenseDialog() {
   const take = () => {
     const picked = KINDS.find((option) => option.id === kind);
     if (!picked || amount === null || !valid) return;
-    add.mutate(
-      { category: picked.category, amount, note: note.trim() },
-      {
-        onSuccess: () => {
-          say(t('done', { amount: money(amount), what: note.trim() }));
-          close();
-        },
-      },
-    );
+    add.mutate({ category: picked.category, amount, note: note.trim() }, { onSuccess: close });
   };
+
+  if (asking && kind !== null && amount !== null) {
+    return (
+      <ConfirmDialog
+        title={t('confirm.title', { amount: money(amount), what: t(`kinds.${kind}`) })}
+        subtitle={t('confirm.sub', { note: note.trim() })}
+        yes={t('confirm.yes')}
+        no={t('confirm.no')}
+        pending={add.isPending}
+        error={add.error?.message}
+        onYes={take}
+        onNo={() => setAsking(false)}
+      />
+    );
+  }
 
   return (
     <CounterDialog
@@ -125,7 +133,7 @@ export function ExpenseDialog() {
             size="counter-main"
             className="px-[30px] text-[19px]"
             disabled={!ready || add.isPending}
-            onClick={take}
+            onClick={() => setAsking(true)}
           >
             {valid ? t('take', { amount: money(amount) }) : t('takeNone')}
           </Button>

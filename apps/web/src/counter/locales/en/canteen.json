@@ -47,5 +47,6 @@
   "cash": "Take {{amount}} now ({{method}})",
   "note": "It is paid at checkout with his games. For a cash sale, the money is taken now.",
   "done": "{{amount}} added to {{name}}’s bill.",
-  "doneCash": "{{amount}} taken for the canteen, {{method}}."
+  "doneCash": "{{amount}} taken for the canteen, {{method}}.",
+  "undone": "Canteen sale undone."
 }

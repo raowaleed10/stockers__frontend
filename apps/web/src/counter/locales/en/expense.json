@@ -22,5 +22,12 @@
   "cancel": "Cancel",
   "take": "Take {{amount}} from the drawer",
   "takeNone": "Take cash from the drawer",
-  "done": "{{amount}} taken from the drawer: {{what}}."
+  "done": "{{amount}} taken from the drawer: {{what}}.",
+  "undone": "{{amount}} put back in the drawer.",
+  "confirm": {
+    "title": "Take {{amount}} from the drawer for {{what}}?",
+    "sub": "“{{note}}”. You can undo it for 2 minutes.",
+    "yes": "Yes",
+    "no": "No"
+  }
 }

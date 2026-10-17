@@ -36,6 +36,7 @@ import {
   gameCharge,
   gameLimit,
   isGameOverLimit,
+  isValidRoomHourly,
   MINUTE_MS,
   overtimeOptions,
   roomCharge,
@@ -791,6 +792,7 @@ function isCharged(game: Game): boolean {
  */
 export function undoEnd(db: MockDb, by: PersonRef, id: string): Game {
   const game = db.game(id);
+  if (game.type === 'century' || game.type === 'room') return reopenTimed(db, by, game);
   if (!isCharged(game) || !game.endedAt) fail('GAME_NOT_RUNNING', 'That frame is not charged.');
   if (game.endedBy?.id !== by.id) {
     const name = game.endedBy?.name.split(' ')[0] ?? 'Another worker';
@@ -801,6 +803,62 @@ export function undoEnd(db: MockDb, by: PersonRef, id: string): Game {
   }
   game.correction = { at: db.nowIso() };
   changed(db, game);
+  return game;
+}
+
+/**
+ * Undo after a Century or a room was ended (D65). They have nobody to choose, so the charge comes off the player's bill and
+ * the game runs again where it stopped: the time since it ended does not count. The worker who ended it, for 2 minutes,
+ * and only while the table is still free.
+ */
+function reopenTimed(db: MockDb, by: PersonRef, game: Game): Game {
+  const result = game.result;
+  const playerId = game.underPlayerId;
+  if (game.status !== 'ended' || !result || !game.endedAt || !playerId) {
+    fail('GAME_NOT_RUNNING', 'That game is not charged.');
+  }
+  if (game.endedBy?.id !== by.id) {
+    const name = game.endedBy?.name.split(' ')[0] ?? 'Another worker';
+    fail('NOT_ALLOWED', `${name} ended this game, so only ${name} can undo it.`);
+  }
+  if (game.sheetId !== db.s.currentSheetId || !canUndo(game.endedAt, db.now())) {
+    fail('UNDO_EXPIRED', 'It is more than 2 minutes since the game was ended.');
+  }
+  const table = db.table(game.tableId);
+  if (db.activeGameOn(table.id)) {
+    fail('TABLE_BUSY', `${table.name} is in use now, so this game cannot be put back.`);
+  }
+
+  const player = db.player(playerId);
+  for (const lineId of result.lineIds ?? []) db.removeLine(playerId, lineId);
+  const minutes = result.minutes ?? 0;
+  player.spent -= result.amount;
+  const { today } = db.s;
+  if (game.type === 'century') {
+    player.centuryMinutes -= minutes;
+    today.centuryMinutes -= minutes;
+    today.centuryGames -= 1;
+  } else {
+    today.rooms -= 1;
+    today.roomMinutes -= minutes;
+  }
+  today.earned -= result.amount;
+  db.s.deltas.earned -= result.amount;
+
+  game.pausedMs += Math.max(0, db.now() - Date.parse(game.endedAt));
+  game.status = 'running';
+  delete game.endedAt;
+  delete game.endedBy;
+  delete game.result;
+
+  const what = game.type === 'century' ? 'Century' : 'Room';
+  db.logActivity(by, 'undo', `${what} undone on ${table.name}`, {
+    detail: `${formatRs(result.amount)} taken off ${player.name}’s bill. The game is running again.`,
+    amount: result.amount,
+  });
+  db.history(by, `Undid the end of ${table.name}: ${player.name}`, result.amount);
+  changed(db, game);
+  db.emit('waiting.changed');
   return game;
 }
 
@@ -911,24 +969,36 @@ export function correctEnd(
   return { game, amount: 0, lines: [] };
 }
 
-/** `GET /undoable` (charges): the frame this worker charged less than 2 minutes ago, the latest first. */
+/** A Century or a room that has been charged: Undo puts it back running (D65). */
+function isTimedCharged(game: Game): boolean {
+  return (
+    game.status === 'ended' &&
+    game.result !== undefined &&
+    game.endedAt !== undefined &&
+    (game.type === 'century' || game.type === 'room')
+  );
+}
+
+/**
+ * `GET /undoable` (charges): the frame, double frame, game, Century or room this worker ended less than 2 minutes ago, the
+ * latest first.
+ */
 export function undoableCharge(db: MockDb, by: PersonRef): UndoableCharge | null {
   const game = db.s.games
     .filter(
       (g) =>
-        g.type === 'single' &&
-        isCharged(g) &&
+        (isCharged(g) || isTimedCharged(g)) &&
         g.endedBy?.id === by.id &&
         g.sheetId === db.s.currentSheetId &&
         canUndo(g.endedAt as string, db.now()),
     )
     .sort((a, b) => Date.parse(b.endedAt ?? '') - Date.parse(a.endedAt ?? ''))[0];
-  const loserId = game?.result?.loserIds[0];
-  if (!game || !game.result || !game.endedAt || !loserId) return null;
+  if (!game || !game.result || !game.endedAt || game.result.loserIds.length === 0) return null;
   return {
     gameId: game.id,
     tableId: game.tableId,
-    name: playerName(db, loserId),
+    type: game.type,
+    names: game.result.loserIds.map((id) => playerName(db, id)),
     amount: game.result.amount,
     endedAt: game.endedAt,
   };
@@ -951,7 +1021,7 @@ export function endCentury(db: MockDb, by: PersonRef, id: string): EndGameResult
     tonight: true,
   });
   finish(db, by, game, 'ended');
-  game.result = { loserIds: [game.underPlayerId], amount, minutes };
+  game.result = { loserIds: [game.underPlayerId], amount, minutes, lineIds: [line.id] };
   const player = db.player(game.underPlayerId);
   player.centuryMinutes += minutes;
   player.spent += amount;
@@ -973,6 +1043,12 @@ export function startRoom(
 ): Game {
   const table = db.table(tableId);
   if (table.kind !== 'room') fail('VALIDATION', 'That is not a room.');
+  if (!isValidRoomHourly(request.hourly)) {
+    fail(
+      'VALIDATION',
+      'The price of an hour is a whole number of rupees from Rs 100 to Rs 10,000.',
+    );
+  }
   return startGame(db, by, {
     tableId,
     type: 'room',
@@ -1007,7 +1083,7 @@ export function endRoom(db: MockDb, by: PersonRef, id: string): EndGameResult {
     tonight: true,
   });
   finish(db, by, game, 'ended');
-  game.result = { loserIds: [game.underPlayerId], amount, minutes };
+  game.result = { loserIds: [game.underPlayerId], amount, minutes, lineIds: [line.id] };
   db.player(game.underPlayerId).spent += amount;
   db.s.today.rooms += 1;
   db.s.today.roomMinutes += minutes;

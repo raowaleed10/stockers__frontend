@@ -139,6 +139,9 @@
     "left": "واپس کرنے کے لیے {{time}} باقی",
     "button": "واپس کریں",
     "done": "{{table}} پر گیم واپس کر دیا گیا۔",
+    "charged": "{{amount}} <name>{{names}}</name> سے چارج کیے گئے",
+    "reopenedCentury": "{{table}} پر سنچری دوبارہ چل رہی ہے۔",
+    "reopenedRoom": "{{table}} دوبارہ چل رہا ہے۔",
     "and": " اور ",
     "comma": "، "
   },

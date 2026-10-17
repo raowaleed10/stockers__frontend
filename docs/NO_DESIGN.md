@@ -60,13 +60,17 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 43 | [Canteen: nobody picked yet](#43-canteen-nobody-picked-yet) | counter | P10 |
 | 44 | [Canteen: a cash sale](#44-canteen-a-cash-sale) | counter | P10 |
 | 45 | [Expense from the drawer: nothing picked yet](#45-expense-from-the-drawer-nothing-picked-yet) | counter | P10 |
-| 46 | [Expense from the drawer: the note after it is saved](#46-expense-from-the-drawer-the-note-after-it-is-saved) | counter | P10 |
+| 46 | [Expense from the drawer: the Undo toast after it is saved](#46-expense-from-the-drawer-the-undo-toast-after-it-is-saved) | counter | P10 |
 | 47 | [Players: nobody picked yet](#47-players-nobody-picked-yet) | counter | P10 |
 | 48 | [Players: Advance](#48-players-advance) | counter | P10 |
 | 49 | [Today’s totals: nobody waiting to pay](#49-todays-totals-nobody-waiting-to-pay) | counter | P10 |
 | 50 | [Close sheet: a note is needed](#50-close-sheet-a-note-is-needed) | counter | P10 |
 | 51 | [Close sheet: the confirm sheet](#51-close-sheet-the-confirm-sheet) | counter | P10 |
 | 52 | [Sheet closed: nothing moved](#52-sheet-closed-nothing-moved) | counter | P10 |
+| 53 | [The Undo toast after a double, a game, a Century or a room](#53-the-undo-toast-after-a-double-a-game-a-century-or-a-room) | counter | P10 answers |
+| 54 | [The Undo toast after a canteen sale](#54-the-undo-toast-after-a-canteen-sale) | counter | P10 answers |
+| 55 | [Expense from the drawer: it asks once](#55-expense-from-the-drawer-it-asks-once) | counter | P10 answers |
+| 56 | [Start a room: the price of an hour has a range](#56-start-a-room-the-price-of-an-hour-has-a-range) | counter | P10 answers |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -397,9 +401,11 @@ Below the numbered pieces there are also [the approved screens that change](#app
   "Choose the side that lost" and stays off. After it, the split box offers three choices. **Half each** shows what each pays as
   words. **One pays all** makes each player's row a button: the one tapped pays the whole price ("Charge Naveed") and the other pays
   nothing. **Custom** makes the two amounts fields; typing in one sets the other to what is left, so they always add up to the price
-  (the server refuses a split that does not, D9). A side with one player has no split to choose: he pays all of it.
+  (the server refuses a split that does not, D9). **Nobody is picked until the worker taps who pays** (answered 17 Oct 2026, D65:
+  the same rule as damage and discount): the button says "Choose who pays" and stays off, and neither row is marked. Switching to
+  Half each or Custom and back clears the choice. A side with one player has no split to choose: he pays all of it.
 - **Where:** `/table/t5/end?now=2026-10-03T21:47:00%2B05:00`, tap "Side B", then "One pays all".
-- **Words:** "Choose the side that lost", "One pays all", "Naveed pays", "Charge Naveed", "The amounts add up to Rs 390, not Rs 400."
+- **Words:** "Choose the side that lost", "One pays all", "Choose who pays", "Naveed pays", "Charge Naveed", "The amounts add up to Rs 390, not Rs 400."
 - **Built from:** screen 20.
 
 ![One pays all](no-design/end-double-one-pays-all.png)
@@ -436,7 +442,7 @@ Below the numbered pieces there are also [the approved screens that change](#app
   away leave the first charge. Only the worker who charged the frame can do it, for 2 minutes, **also after Next frame has started**:
   it changes only the finished frame and never touches the running one (§42 is the toast that offers it then). He has 2 minutes from
   tapping Undo to choose. A frame that ran over its limit asks "Charge double?" again, judged at the minute it ended. Activity shows
-  "Frame undone on Table 1" with his name. A Century, a room or a double frame has no Undo on screen 18.
+  "Frame undone on Table 1" with his name. A Century, a room or a double frame has no screen 18; it has the Undo toast instead (§53).
 - **Where:** `/table/t1/end?now=2026-10-03T21:51:00%2B05:00`, tap Bilal Ahmed, then "Undo". The picture is the screen it opens.
 - **Words:** "Undo, 1:56 left" (the words of screen 18); under the two cards "Rs 250 is on Bilal Ahmed’s bill now. Tap who lost, or keep
   it as it is."; the quiet button "Keep it as it is" (screen 17 says "Keep playing").
@@ -583,7 +589,8 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **What:** screen 28 draws only the player half of "Charge to". With "Cash sale, no name" (Q10) the player card is replaced by the
   payment methods the owners have on ("Money taken now": Cash, Bank transfer, Easypaisa, JazzCash, Cash first), and the big button
   takes the money now: "Take Rs 120 now (Easypaisa)". The money goes in the drawer (cash) or the online totals, the sale has no name,
-  and the order is empty again for the next customer.
+  and the order is empty again for the next customer. It asks nothing; the cream Undo toast of §54 keeps it for 2 minutes
+  (answered 17 Oct 2026, D65).
 - **Where:** `/canteen?now=2026-10-03T21:55:00%2B05:00`, tap Coffee, then "Cash sale, no name" and Easypaisa.
 - **Words:** "Money taken now", "Take Rs 120 now (Easypaisa)", "Rs 120 taken for the canteen, Easypaisa."
 - **Built from:** the "Paid by" choices of screen 25 and screen 28.
@@ -603,13 +610,15 @@ Below the numbered pieces there are also [the approved screens that change](#app
 
 ![The expense dialog, nothing picked](no-design/expense-empty.png)
 
-## 46. Expense from the drawer: the note after it is saved
+## 46. Expense from the drawer: the Undo toast after it is saved
 
-- **What:** after "Take Rs 500 from the drawer" the dialog closes and the cream toast area says what was done for four seconds, so the
-  worker knows it was saved: "Rs 500 taken from the drawer: Dinner for staff." The same note is used after a canteen sale. It is
-  saved with his name and the owners see it in Expenses and Activity (D53).
-- **Where:** `/?now=2026-10-03T20:15:00%2B05:00`, Expense, Food, a note, Rs 500, "Take Rs 500 from the drawer".
-- **Words:** "Rs 500 taken from the drawer: Dinner for staff.", "Rs 300 added to Usman Tariq’s bill.", "Rs 120 taken for the canteen, Cash."
+- **What:** after "Yes" on the question of §55 the dialog closes and the cream toast says what was done, with "Undo for 1:59 more" and an
+  Undo button for 2 minutes, for the worker who took the cash. It is saved with his name and the owners see it in Expenses
+  (paid from "Drawer cash") and Activity (D53). Undo puts the cash back in the drawer: the expected cash goes back, the expense
+  is removed, and Activity keeps the first line and adds "Expense from the drawer undone" with his name; the toast then says
+  "Rs 500 put back in the drawer." for a moment. (Before 17 Oct 2026 this was a plain note for four seconds.)
+- **Where:** `/?now=2026-10-03T20:15:00%2B05:00`, Expense, Food, a note, Rs 500, "Take Rs 500 from the drawer", Yes.
+- **Words:** "Rs 500 taken from the drawer: Dinner for staff.", "Undo for 1:59 more", "Undo", "Rs 500 put back in the drawer."
 - **Built from:** the cream toast of screen 14 (§25).
 
 ![The note after an expense](no-design/expense-saved-note.png)
@@ -664,8 +673,8 @@ Below the numbered pieces there are also [the approved screens that change](#app
 
 - **What:** "Close sheet 48" asks once before it closes (money actions ask once, D63). The sheet says how much was counted and
   whether the cash is short, extra or matches, how many players move to credit and how much, and how many games move to the next
-  sheet, with a big **No** and a big **Yes, close it**. DEFAULT, needs answer: the owners were promised that money actions ask once; closing moves
-  bills to credit, so it asks the same way. No (or Escape) changes nothing.
+  sheet, with a big **No** and a big **Yes, close it**. The owners approved it on 17 Oct 2026 (D65): money actions ask once, and
+  closing moves bills to credit. No (or Escape) changes nothing.
 - **Where:** `/close-sheet?scenario=closing&now=2026-10-04T03:40:00%2B05:00`, count 21,550, a note, "Close sheet 48".
 - **Words:** "Close sheet 48 with Rs 21,550 counted?", "The cash is Rs 200 short.", "2 players left without checkout move to credit (Rs 700).",
   "1 game still running moves to sheet 49.", "Yes, close it", "No".
@@ -685,6 +694,58 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **Built from:** screen 33.
 
 ![Sheet closed, nothing moved](no-design/closed-nothing.png)
+
+## 53. The Undo toast after a double, a game, a Century or a room
+
+- **What:** a frame that is charged has screen 18 with its Undo. A double frame, a game of pool and the others, a Century and a room go
+  back to the board when they end (D61), and now each leaves the same cream 2-minute Undo toast, for the worker who ended it
+  (answered 17 Oct 2026, D65). It says what was charged ("Rs 630 added to Saad Hussain’s bill", the table's name beside it, or
+  "Rs 400 charged to Imran Shah and Naveed Akhtar" for a double), "Undo for 1:59 more" and an Undo button. **Undo of a double or a
+  game** asks who lost again (§32). **Undo of a Century or a room** has nobody to choose: it takes the charge off the bill and the
+  game runs again where it stopped, and the time since it ended does not count; it needs the table to be free still. The toast
+  then says "Century on Table 3 is running again." or "Room 1 is running again." for a moment. DEFAULT, needs answer: what Undo does for a
+  Century and a room (the owners asked for the toast, not for what it does).
+- **Where:** `/table/t3/end?now=2026-10-03T21:47:30%2B05:00`, "End and charge Rs 630".
+- **Words:** "Rs 630 added to Saad Hussain’s bill", "Rs 400 charged to Imran Shah and Naveed Akhtar", "Undo for 1:59 more", "Undo",
+  "Century on Table 3 is running again.", "Room 1 is running again."
+- **Built from:** the toast of §42.
+
+![The toast after a Century](no-design/undo-century-toast.png)
+
+## 54. The Undo toast after a canteen sale
+
+- **What:** "Add Rs 300 to Usman’s bill" and "Take Rs 120 now" ask nothing (answered 17 Oct 2026, D65), but the cream 2-minute Undo
+  toast keeps them: "Rs 300 added to Usman Tariq’s bill." or "Rs 120 taken for the canteen, Easypaisa.", "Undo for 1:59 more" and
+  Undo. Undo puts the items back in stock, takes the lines off his bill (or the money out of the drawer or the online totals) and
+  writes "Canteen sale undone" in Activity with the worker's name; the toast then says "Canteen sale undone." (This replaces the
+  four-second note of §43 and §44.)
+- **Where:** `/canteen?now=2026-10-03T21:55:00%2B05:00`, search "usman", tap Cold drink twice and Chips, "Add Rs 300 to Usman’s bill".
+- **Words:** "Rs 300 added to Usman Tariq’s bill.", "Rs 120 taken for the canteen, Easypaisa.", "Undo for 1:59 more", "Undo", "Canteen sale undone."
+- **Built from:** the toast of §42.
+
+![The toast after a canteen sale](no-design/undo-sale-toast.png)
+
+## 55. Expense from the drawer: it asks once
+
+- **What:** "Take Rs 500 from the drawer" opens a sheet before anything is saved (money actions ask once; answered 17 Oct 2026, D65). It
+  says the amount and what for in one sentence and repeats the note, with a big **Yes** and a big **No**. Yes saves it and shows the
+  toast of §46; No (or Escape) goes back to the form with everything still typed, and nothing is saved.
+- **Where:** `/expense?now=2026-10-03T20:15:00%2B05:00`, Food, a note, Rs 500, "Take Rs 500 from the drawer".
+- **Words:** "Take Rs 500 from the drawer for Food?", "“Dinner for staff”. You can undo it for 2 minutes.", "Yes", "No".
+- **Built from:** the confirm sheet of §39.
+
+![The question before cash is taken](no-design/expense-confirm.png)
+
+## 56. Start a room: the price of an hour has a range
+
+- **What:** screen 22 draws Rs 1,500 and the + and − buttons. The price is whole rupees from Rs 100 to Rs 10,000 (answered 17 Oct 2026,
+  D65). The buttons stop at both ends. A price typed outside the range (or left empty) shows a red line under the price, and
+  "Start Room 2" stays off until it is right. The three boxes under it keep the owners' price while the typed one is wrong.
+- **Where:** `/room/r2/start?now=2026-10-03T21:52:00%2B05:00`, type 50 in "Price for one hour".
+- **Words:** "The price of an hour is from Rs 100 to Rs 10,000."
+- **Built from:** the red lines of screens 25 and 26.
+
+![A room price outside the range](no-design/room-start-price-range.png)
 
 ## Approved screens that change a field or a word
 
@@ -760,3 +821,12 @@ picture yet; each one is listed here so the owners see it with the rest of the b
 
 - **Change:** none to the screen. The PNG leaves out the tabs, the waiting list and the action bar of the live board (the developer
   chose the full bar everywhere in P05), so the visual test compares the banner and the tiles, not the whole page.
+
+### Screen 49, Expenses: the counter's categories stay separate
+
+- **Change:** an expense a worker took from the drawer on the counter keeps the chip he tapped as its type: **Food**, **Petrol**,
+  **Tea and milk**, **Cleaning**, **Repairs** or **Other**, paid from "Drawer cash" with his name (answered 17 Oct 2026, D65).
+  The PNG shows Dinner for staff as "Food and petrol" and merges "Cleaning and tea"; the type column and the list "Where it went"
+  show the counter's own names instead, and nothing is merged. The types an owner picks in "Add an expense" are unchanged (Staff
+  salaries, Bills, Generator, Repairs and supplies, Cleaning and tea, Rent, Other).
+- **Words:** "Food", "Petrol", "Tea and milk", "Cleaning". Urdu: "کھانا", "پیٹرول", "چائے اور دودھ", "صفائی".

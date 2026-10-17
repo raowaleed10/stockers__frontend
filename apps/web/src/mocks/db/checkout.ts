@@ -48,6 +48,15 @@ export function receiveMoney(db: MockDb, method: string, amount: number): void {
   today.moneyInHand += amount;
 }
 
+/** Takes money back out of the drawer or the online totals (an undone cash sale). */
+export function returnMoney(db: MockDb, method: string, amount: number): void {
+  if (amount <= 0) return;
+  const today = db.s.today;
+  if (method === 'cash') today.cashReceived -= amount;
+  else today.online[method] = (today.online[method] ?? 0) - amount;
+  today.moneyInHand -= amount;
+}
+
 /** Pays a bill: the parts in several methods, the rest to credit, an optional discount (D23, Q6). */
 export function checkout(
   db: MockDb,

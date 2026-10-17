@@ -718,5 +718,15 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Sheet closed / movedType / single | {{table}}, single frame | {{table}}، سنگل فریم | P10 |
 | Sheet closed / movedType / double | {{table}}, double frame | {{table}}، ڈبل فریم | P10 |
 | Sheet closed / movedType / game | {{table}}, game | {{table}}، گیم | P10 |
+| Undo toast / Century is running again | Century on {{table}} is running again. | {{table}} پر سنچری دوبارہ چل رہی ہے۔ | P10 answers |
+| Undo toast / room is running again | {{table}} is running again. | {{table}} دوبارہ چل رہا ہے۔ | P10 answers |
+| Undo toast / a double or a game charged to two players | {{amount}} charged to {{names}} | {{amount}} {{names}} سے چارج کیے گئے | P10 answers |
+| Undo toast / canteen sale undone | Canteen sale undone. | کینٹین کی فروخت واپس لے لی گئی۔ | P10 answers |
+| Undo toast / drawer cash undone | {{amount}} put back in the drawer. | {{amount}} واپس دراز میں رکھ دیے گئے۔ | P10 answers |
+| Expense / confirm sheet title | Take {{amount}} from the drawer for {{what}}? | {{what}} کے لیے دراز سے {{amount}} لیں؟ | P10 answers |
+| Expense / confirm sheet, under the title | “{{note}}”. You can undo it for 2 minutes. | “{{note}}”۔ آپ اسے 2 منٹ تک واپس لے سکتے ہیں۔ | P10 answers |
+| Expense / confirm sheet, Yes · No | Yes · No | ہاں · نہیں | P10 answers |
+| End a double / one pays all, before anybody is picked | Choose who pays | جو ادا کرے اسے چنیں | P10 answers |
+| Start a room / the price is outside the range | The price of an hour is from {{min}} to {{max}}. | ایک گھنٹے کی قیمت {{min}} سے {{max}} تک ہے۔ | P10 answers |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

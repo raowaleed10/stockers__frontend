@@ -1,4 +1,11 @@
-import { formatAmount, formatRs, roomPreview } from '@stockers/shared';
+import {
+  formatAmount,
+  formatRs,
+  isValidRoomHourly,
+  ROOM_HOURLY_MAX,
+  ROOM_HOURLY_MIN,
+  roomPreview,
+} from '@stockers/shared';
 import { useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -19,12 +26,12 @@ import { TableGate, type TableContext } from '../start/TableGate';
 /** The price of an hour when the owners have not set one (decision Q8). */
 const FALLBACK_HOURLY = 1500;
 const STEP = 100;
-const MAX_DIGITS = 6;
+const MAX_DIGITS = 5;
 
 /**
  * Screen 22, `/room/:id/start`: "Start Room 2". The room is under one player and the whole bill goes to him; the price of
  * an hour starts at the owners' price (Rs 1,500) and the worker can change it with the steppers (100 at a time) or by
- * typing; the three boxes under it show the first hour, the price of a minute after it, and an example. The start time is
+ * typing, from Rs 100 to Rs 10,000 (D65); the three boxes under it show the first hour, the price of a minute after it, and an example. The start time is
  * filled in when he taps Start.
  */
 export function RoomStart() {
@@ -65,11 +72,12 @@ function RoomStep({ table, category }: TableContext) {
   const name = tBoard(`nameOf.${table.kind}`, { number: table.number.replace(/^R/i, '') });
   const player = draft.players[0];
   const price = hourly ?? owners;
-  const preview = roomPreview(price, category?.minMinutes ?? 60);
+  const priceOk = isValidRoomHourly(price);
+  const preview = roomPreview(priceOk ? price : owners, category?.minMinutes ?? 60);
   const money = (value: number) => formatRs(value, lang);
 
   const submit = () => {
-    if (!player || price <= 0) return;
+    if (!player || !priceOk) return;
     start.mutate(
       { tableId: table.id, request: { underPlayerId: player.id, hourly: price } },
       {
@@ -108,7 +116,7 @@ function RoomStep({ table, category }: TableContext) {
             variant="primary"
             size="counter-main"
             className="px-[34px] text-[20px]"
-            disabled={!player || price <= 0 || start.isPending}
+            disabled={!player || !priceOk || start.isPending}
             onClick={submit}
           >
             {t('room.start', { name })}
@@ -170,8 +178,8 @@ function RoomStep({ table, category }: TableContext) {
           <button
             type="button"
             aria-label={t('room.lower')}
-            disabled={price <= STEP}
-            onClick={() => setHourly(Math.max(STEP, price - STEP))}
+            disabled={price <= ROOM_HOURLY_MIN}
+            onClick={() => setHourly(Math.max(ROOM_HOURLY_MIN, price - STEP))}
             className={cx(stepper, focusRing.counter)}
           >
             −
@@ -193,13 +201,20 @@ function RoomStep({ table, category }: TableContext) {
           <button
             type="button"
             aria-label={t('room.raise')}
-            onClick={() => setHourly(price + STEP)}
+            disabled={price >= ROOM_HOURLY_MAX}
+            onClick={() => setHourly(Math.min(ROOM_HOURLY_MAX, price + STEP))}
             className={cx(stepper, focusRing.counter)}
           >
             +
           </button>
         </div>
       </div>
+
+      {priceOk ? null : (
+        <p role="alert" className="m-0 text-[17px] text-c-danger-ink">
+          {t('room.hourlyRange', { min: money(ROOM_HOURLY_MIN), max: money(ROOM_HOURLY_MAX) })}
+        </p>
+      )}
 
       <div className="flex flex-wrap gap-3">
         {[

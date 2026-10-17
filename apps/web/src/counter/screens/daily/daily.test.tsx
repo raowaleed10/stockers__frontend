@@ -38,6 +38,12 @@ afterEach(() => resetCounterState());
 
 const button = (name: string | RegExp) => screen.findByRole('button', { name });
 const dialog = (name: string | RegExp) => screen.findByRole('dialog', { name });
+/** "Take Rs 500 from the drawer" asks once (D65): answer Yes on the sheet that follows. */
+const takeFromDrawer = async (d: HTMLElement, amount: string) => {
+  await userEvent.click(within(d).getByRole('button', { name: `Take ${amount} from the drawer` }));
+  const sure = await dialog(new RegExp(`^Take ${amount} from the drawer for `));
+  await userEvent.click(within(sure).getByRole('button', { name: 'Yes' }));
+};
 
 describe('screen 28: canteen sale', () => {
   it('lists the items with their stock: made fresh, N left, low, sold out', async () => {
@@ -164,6 +170,59 @@ describe('screen 28: canteen sale', () => {
     });
   });
 
+  it('"Add to bill" asks nothing, and the cream toast keeps Undo for 2 minutes: Undo takes the items off the bill and back into stock (D65)', async () => {
+    renderCounter('/canteen');
+    const aside = await screen.findByRole('complementary', { name: 'Order' });
+    await userEvent.type(within(aside).getByRole('searchbox'), 'usman');
+    await userEvent.click(await within(aside).findByRole('button', { name: /^Usman Tariq/ }));
+    await userEvent.click(await button(/^Chips,/));
+    const before = api.db.tonightLines('usman-t').length;
+    await userEvent.click(within(aside).getByRole('button', { name: 'Add Rs 60 to Usman’s bill' }));
+    // No question: the sale is made at once.
+    expect(screen.queryByRole('dialog')).toBeNull();
+    const toast = await waitFor(() => {
+      const found = screen
+        .getAllByRole('status')
+        .find((el) => el.textContent?.includes('Rs 60 added to Usman Tariq’s bill.'));
+      expect(found).toBeDefined();
+      return found as HTMLElement;
+    });
+    expect(toast).toHaveTextContent(/Undo for (2:00|1:5\d) more/);
+    expect(api.db.tonightLines('usman-t')).toHaveLength(before + 1);
+    expect(api.db.s.canteenItems.find((item) => item.id === 'chips')?.stock).toBe(2);
+
+    await userEvent.click(within(toast).getByRole('button', { name: /Undo/ }));
+    expect(await screen.findByText('Canteen sale undone.')).toBeInTheDocument();
+    expect(api.db.tonightLines('usman-t')).toHaveLength(before);
+    expect(api.db.s.canteenItems.find((item) => item.id === 'chips')?.stock).toBe(3);
+    expect(api.db.s.activity[0]).toMatchObject({
+      type: 'undo',
+      title: 'Canteen sale undone',
+      by: { name: 'Zain' },
+    });
+  });
+
+  it('a cash sale has the same Undo toast, and Undo takes the money back out of the totals', async () => {
+    renderCounter('/canteen');
+    const aside = await screen.findByRole('complementary', { name: 'Order' });
+    await userEvent.click(await button(/^Coffee,/));
+    await userEvent.click(within(aside).getByRole('radio', { name: 'Cash sale, no name' }));
+    const cash = api.db.s.today.cashReceived;
+    await userEvent.click(within(aside).getByRole('button', { name: 'Take Rs 120 now (Cash)' }));
+    expect(screen.queryByRole('dialog')).toBeNull();
+    const toast = await waitFor(() => {
+      const found = screen
+        .getAllByRole('status')
+        .find((el) => el.textContent?.includes('Rs 120 taken for the canteen, Cash.'));
+      expect(found).toBeDefined();
+      return found as HTMLElement;
+    });
+    expect(api.db.s.today.cashReceived).toBe(cash + 120);
+    await userEvent.click(within(toast).getByRole('button', { name: /Undo/ }));
+    expect(await screen.findByText('Canteen sale undone.')).toBeInTheDocument();
+    expect(api.db.s.today.cashReceived).toBe(cash);
+  });
+
   it('a name that is not on the list is added from the search and comes back picked', async () => {
     const view = renderCounter('/canteen');
     const aside = await screen.findByRole('complementary', { name: 'Order' });
@@ -247,7 +306,7 @@ describe('screen 29: expense from the drawer', () => {
     expect(take()).toBeDisabled(); // no amount
     await userEvent.type(within(d).getByLabelText('Amount'), '500');
     expect(within(d).getByRole('button', { name: 'Take Rs 500 from the drawer' })).toBeEnabled();
-    await userEvent.click(take());
+    await takeFromDrawer(d, 'Rs 500');
 
     await waitFor(() => expect(wherePath(view)).toBe('/'));
     expect(
@@ -255,7 +314,7 @@ describe('screen 29: expense from the drawer', () => {
     ).toBeInTheDocument();
     expect(api.db.s.expenses[0]).toMatchObject({
       amount: 500,
-      category: 'food-petrol',
+      category: 'food',
       what: 'Dinner for staff',
       paidFrom: 'drawer',
       source: 'counter',
@@ -281,15 +340,74 @@ describe('screen 29: expense from the drawer', () => {
     expect(within(d).getByRole('button', { name: /^Take / })).toBeDisabled(); // the note is still empty
   });
 
-  it('Petrol and Food are one owner category, Tea and milk and Cleaning too', async () => {
-    const { d } = await open();
-    await userEvent.click(within(d).getByRole('button', { name: 'Tea and milk' }));
-    await userEvent.type(within(d).getByLabelText('Note (required)'), 'Milk for the canteen');
+  it.each([
+    ['Food', 'food'],
+    ['Petrol', 'petrol'],
+    ['Tea and milk', 'tea-milk'],
+    ['Cleaning', 'cleaning'],
+    ['Repairs', 'repairs'],
+    ['Other', 'other'],
+  ])('the %s chip is saved as its own owner category, %s (D65)', async (chip, category) => {
+    const { view, d } = await open();
+    await userEvent.click(within(d).getByRole('button', { name: chip }));
+    await userEvent.type(within(d).getByLabelText('Note (required)'), `For ${chip}`);
     await userEvent.click(within(d).getByRole('button', { name: '200' }));
-    await userEvent.click(within(d).getByRole('button', { name: 'Take Rs 200 from the drawer' }));
+    await takeFromDrawer(d, 'Rs 200');
     await waitFor(() =>
-      expect(api.db.s.expenses[0]).toMatchObject({ category: 'cleaning-tea', amount: 200 }),
+      expect(api.db.s.expenses[0]).toMatchObject({ category, amount: 200, paidFrom: 'drawer' }),
     );
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+  });
+
+  it('asks once: "Take Rs 500 from the drawer for Food?", No leaves the form as it was and saves nothing', async () => {
+    const { view, d } = await open();
+    const before = api.db.s.expenses.length;
+    await userEvent.click(within(d).getByRole('button', { name: 'Food' }));
+    await userEvent.type(within(d).getByLabelText('Note (required)'), 'Dinner for staff');
+    await userEvent.click(within(d).getByRole('button', { name: '500' }));
+    await userEvent.click(within(d).getByRole('button', { name: 'Take Rs 500 from the drawer' }));
+
+    const sure = await dialog('Take Rs 500 from the drawer for Food?');
+    expect(sure).toHaveTextContent('“Dinner for staff”. You can undo it for 2 minutes.');
+    await userEvent.click(within(sure).getByRole('button', { name: 'No' }));
+    expect(api.db.s.expenses).toHaveLength(before);
+    // The form is back with what was typed, and the path did not move.
+    const again = await dialog('Expense from the drawer');
+    expect(within(again).getByLabelText('Note (required)')).toHaveValue('Dinner for staff');
+    expect(within(again).getByRole('button', { name: 'Food' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    expect(wherePath(view)).toBe('/expense');
+  });
+
+  it('after Yes the cream toast keeps Undo for 2 minutes, and Undo puts the cash back in the drawer (D65)', async () => {
+    const { view, d } = await open();
+    const expensesBefore = api.db.s.expenses.length;
+    await userEvent.click(within(d).getByRole('button', { name: 'Food' }));
+    await userEvent.type(within(d).getByLabelText('Note (required)'), 'Dinner for staff');
+    await userEvent.click(within(d).getByRole('button', { name: '500' }));
+    await takeFromDrawer(d, 'Rs 500');
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+
+    const toast = await waitFor(() => {
+      const found = screen
+        .getAllByRole('status')
+        .find((el) => el.textContent?.includes('Rs 500 taken from the drawer: Dinner for staff.'));
+      expect(found).toBeDefined();
+      return found as HTMLElement;
+    });
+    expect(toast).toHaveTextContent(/Undo for (2:00|1:5\d) more/);
+    expect(api.db.s.today.drawerExpenses).toBe(1000);
+    await userEvent.click(within(toast).getByRole('button', { name: /Undo/ }));
+    expect(await screen.findByText('Rs 500 put back in the drawer.')).toBeInTheDocument();
+    expect(api.db.s.today.drawerExpenses).toBe(500);
+    expect(api.db.s.expenses).toHaveLength(expensesBefore);
+    expect(api.db.s.activity[0]).toMatchObject({
+      type: 'undo',
+      title: 'Expense from the drawer undone',
+      by: { name: 'Zain' },
+    });
   });
 
   it('Cancel and Escape close it and save nothing, and over Pool it returns to Pool', async () => {
@@ -473,7 +591,7 @@ describe('screen 31: today’s totals', () => {
     await userEvent.click(within(d).getByRole('button', { name: 'Other' }));
     await userEvent.type(within(d).getByLabelText('Note (required)'), 'Gas cylinder');
     await userEvent.click(within(d).getByRole('button', { name: '500' }));
-    await userEvent.click(within(d).getByRole('button', { name: 'Take Rs 500 from the drawer' }));
+    await takeFromDrawer(d, 'Rs 500');
     await waitFor(() => expect(wherePath(view)).toBe('/'));
     view.unmount();
 
@@ -641,7 +759,7 @@ describe('screens 32 and 33: close the sheet', () => {
     await userEvent.click(within(d).getByRole('button', { name: 'Food' }));
     await userEvent.type(within(d).getByLabelText('Note (required)'), 'Dinner for staff');
     await userEvent.click(within(d).getByRole('button', { name: '500' }));
-    await userEvent.click(within(d).getByRole('button', { name: 'Take Rs 500 from the drawer' }));
+    await takeFromDrawer(d, 'Rs 500');
     await waitFor(() => expect(wherePath(view)).toBe('/'));
     view.unmount();
 

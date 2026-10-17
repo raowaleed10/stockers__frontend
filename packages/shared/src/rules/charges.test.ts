@@ -11,7 +11,10 @@ import {
   doublePrice,
   frameCharge,
   gameCharge,
+  isValidRoomHourly,
   overtimeOptions,
+  ROOM_HOURLY_MAX,
+  ROOM_HOURLY_MIN,
   roomBreakdown,
   roomCharge,
   roomPreview,
@@ -360,5 +363,16 @@ describe('a clock set before the event', () => {
     expect(undoSecondsLeft('2026-10-03T21:50:00+05:00', '2026-10-03T20:15:00+05:00')).toBe(0);
     expect(canUndo('2026-10-03T21:50:00+05:00', '2026-10-03T20:15:00+05:00')).toBe(false);
     expect(changeTypeMinutesLeft('2026-10-03T21:50:00+05:00', '2026-10-03T20:15:00+05:00')).toBe(0);
+  });
+});
+
+describe('the price of a room’s hour (D65)', () => {
+  it('is a whole number of rupees from Rs 100 to Rs 10,000', () => {
+    expect([ROOM_HOURLY_MIN, ROOM_HOURLY_MAX]).toEqual([100, 10_000]);
+    for (const ok of [100, 101, 1500, 9999, 10_000])
+      expect(isValidRoomHourly(ok), String(ok)).toBe(true);
+    for (const bad of [0, 99, 10_001, -100, 1500.5, Number.NaN, Infinity]) {
+      expect(isValidRoomHourly(bad), String(bad)).toBe(false);
+    }
   });
 });

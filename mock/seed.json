@@ -1215,7 +1215,7 @@
       "id": "e8",
       "at": "2026-10-03T20:15:00+05:00",
       "what": "Dinner for staff",
-      "category": "food-petrol",
+      "category": "food",
       "amount": 500,
       "paidFrom": "drawer",
       "source": "counter",

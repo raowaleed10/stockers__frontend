@@ -229,6 +229,14 @@ export interface RoomPreview {
 
 export const ROOM_EXAMPLE_MINUTES = 100;
 
+/** The price of a room's hour the worker may set when he starts it: whole rupees from Rs 100 to Rs 10,000 (D65). */
+export const ROOM_HOURLY_MIN = 100;
+export const ROOM_HOURLY_MAX = 10_000;
+
+export function isValidRoomHourly(hourly: number): boolean {
+  return Number.isInteger(hourly) && hourly >= ROOM_HOURLY_MIN && hourly <= ROOM_HOURLY_MAX;
+}
+
 export function roomPreview(hourly: Rs, minMinutes = 60): RoomPreview {
   assertRupees(hourly, 'The hourly price');
   return {

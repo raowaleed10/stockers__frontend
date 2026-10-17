@@ -32,7 +32,7 @@ import {
 } from '../db/auth';
 import { counterAlerts, readAllCounterAlerts } from '../db/alerts';
 import { backInOrder, board, clubStatus, markOutOfOrder } from '../db/board';
-import { canteenSale, counterCanteenItems } from '../db/canteen';
+import { canteenSale, counterCanteenItems, undoCanteenSale } from '../db/canteen';
 import { checkout, checkoutBill, checkoutList, undoCheckout } from '../db/checkout';
 import type { MockDb } from '../db/db';
 import {
@@ -59,7 +59,14 @@ import {
   undoGame,
 } from '../db/games';
 import { createPlayer, recentPlayers, searchPlayers, statementOf } from '../db/players';
-import { closePreview, closeSheet, drawerExpense, lastClose, todayTotals } from '../db/sheet';
+import {
+  closePreview,
+  closeSheet,
+  drawerExpense,
+  lastClose,
+  todayTotals,
+  undoDrawerExpense,
+} from '../db/sheet';
 import { undoableActions } from '../db/undoable';
 import { endpoint, type Call } from '../http';
 
@@ -275,8 +282,16 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
       asWorker<CanteenSaleRequest>((db, by, { body }) => canteenSale(db, by, body)),
     ),
     http.post(
+      `${B}/canteen/sales/:id/undo`,
+      asWorker((db, by, c) => undoCanteenSale(db, by, c.param('id'))),
+    ),
+    http.post(
       `${B}/expenses/drawer`,
       asWorker<DrawerExpenseRequest>((db, by, { body }) => drawerExpense(db, by, body)),
+    ),
+    http.post(
+      `${B}/expenses/drawer/:id/undo`,
+      asWorker((db, by, c) => undoDrawerExpense(db, by, c.param('id'))),
     ),
     http.get(
       `${B}/today`,

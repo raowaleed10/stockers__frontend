@@ -26,6 +26,7 @@ The backend owns the final numbers. The frontend still needs the same rules to s
 | Other games: per game, loser pays; locked while the price is null (D13, Q3) | `gameCharge(price)` | price null → cannot start |
 | What "End Century" shows (screen 21): the time on the table since the start, the whole minutes charged, the minutes paused (not charged), the rate and the amount | `centuryBreakdown(game, now)` | Table 3 at 42 min 35 s: 42 min charged, Rs 630; 5 min paused: 37 min, Rs 555 |
 | What "End room" shows (screen 23): the time in the room, the pause, the first hour, the minutes after it and the amount; `firstAmount + extraAmount` is always `amount` | `roomBreakdown(game, now, minMinutes)` | Room 1, 1 h 45 min with 5 paused: 100 min, Rs 1,500 + 40 × Rs 25 = Rs 2,500 |
+| The price of a room's hour that a worker may set when he starts it: whole rupees from Rs 100 to Rs 10,000, starting at the owners' price (Rs 1,500, Q8). The server refuses anything else (`VALIDATION`) (D65) | `isValidRoomHourly(hourly)`, `ROOM_HOURLY_MIN`, `ROOM_HOURLY_MAX` | 99 and 10,001 refused; 100, 1,500 and 10,000 allowed |
 | The three numbers under the price on "Start a room" (screen 22) | `roomPreview(hourly, minMinutes)` | Rs 1,500: first hour Rs 1,500, Rs 25 a minute, 1 h 40 min is Rs 2,500; Rs 700: Rs 11.67 a minute, Rs 1,167 |
 | Paused time is not charged (D14) | `elapsed(startedAt, now, pausedMs, pausedAt?)` | paused at 12:04 → stays 12:04 |
 | Moved frame keeps the price of the table it started on (open question; default) | – | Table 1 (250) → Table 4: still Rs 250 |

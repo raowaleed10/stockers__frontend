@@ -139,6 +139,9 @@
     "left": "Undo for {{time}} more",
     "button": "Undo",
     "done": "Game undone on {{table}}.",
+    "charged": "{{amount}} charged to <name>{{names}}</name>",
+    "reopenedCentury": "Century on {{table}} is running again.",
+    "reopenedRoom": "{{table}} is running again.",
     "and": " and ",
     "comma": ", "
   },

@@ -16,7 +16,7 @@ import { cx } from '@/ui/cx';
 import { MoneyText } from '@/ui/MoneyText';
 import { Segmented } from '@/ui/Segmented';
 import { focusRing } from '@/ui/theme';
-import { useEndGame } from '../../api';
+import { useCorrectEnd, useEndGame, useGame } from '../../api';
 import { tablePath } from '../../components/table-paths';
 import { ChargeButton, KeepButton } from '../../end/buttons';
 import { useEndDraft } from '../../end/draft';
@@ -33,8 +33,17 @@ const MAX_DIGITS = 6;
  * Screen 20, `/table/:id/end` for a double frame: "Which side lost?", then how the price is split: half each, one player
  * pays all, or a custom split that must add up to the price (D9). One player alone on a side pays all of it. Charging
  * goes on to "Charge double?" (19) first when the frame is past its own time limit; a custom split doubles with it.
+ * "One pays all" starts with nobody picked: the worker taps who pays, the same rule as damage and discount (D65).
+ *
+ * With `correcting` it is the second step of Undo for a double that was already charged (D65): the same screen, judged at
+ * the minute the frame ended, and the answer takes the first charge back and makes the new one.
  */
-export function EndDouble({ table, board, game }: EndScreenProps) {
+export function EndDouble({
+  table,
+  board,
+  game,
+  correcting = false,
+}: EndScreenProps & { correcting?: boolean }) {
   const { t } = useTranslation('end');
   const { t: tBoard } = useTranslation('board');
   const { lang } = useFormat();
@@ -43,7 +52,9 @@ export function EndDouble({ table, board, game }: EndScreenProps) {
   const close = useCloseTable();
   const now = useNow(1000);
   const end = useEndGame();
+  const correct = useCorrectEnd();
   const draft = useEndDraft();
+  const view = useGame(game.id);
   const groupId = useId();
 
   const [side, setSide] = useState<SideIndex | null>(null);
@@ -52,9 +63,10 @@ export function EndDouble({ table, board, game }: EndScreenProps) {
   const [custom, setCustom] = useState<Record<string, number>>({});
 
   const sides = game.sides ?? [[], []];
-  const nameOf = (id: string) => board.players[id]?.name ?? id;
+  const nameOf = (id: string) => view.data?.players[id]?.name ?? board.players[id]?.name ?? id;
   const name = tBoard(`nameOf.${table.kind}`, { number: table.number.replace(/^R/i, '') });
-  const elapsedMs = elapsed(game.startedAt, now, game.pausedMs, game.pausedAt);
+  const endedMs = correcting && game.endedAt ? Date.parse(game.endedAt) : now;
+  const elapsedMs = elapsed(game.startedAt, endedMs, game.pausedMs, game.pausedAt);
   const minutes = Math.round(elapsedMs / MINUTE_MS);
   const total = game.price;
   const names = (ids: string[]) => ids.map(nameOf).join(t('and'));
@@ -63,7 +75,9 @@ export function EndDouble({ table, board, game }: EndScreenProps) {
   const shared = losers.length > 1;
   const even = splitEvenly(total, losers.length > 0 ? losers : ['_']);
   const evenShares = Object.fromEntries(losers.map((id, i) => [id, Object.values(even)[i] ?? 0]));
-  const payerId = payer && losers.includes(payer) ? payer : losers[0];
+  const payerId = payer && losers.includes(payer) ? payer : undefined;
+  // "One pays all" waits for the worker to tap who pays.
+  const needsPayer = mode === 'one' && shared && payerId === undefined;
   const amounts: Record<string, number> =
     !shared && losers[0] !== undefined
       ? { [losers[0]]: total }
@@ -74,6 +88,7 @@ export function EndDouble({ table, board, game }: EndScreenProps) {
           : evenShares;
   const sum = Object.values(amounts).reduce((acc, value) => acc + value, 0);
   const adds = losers.length > 0 && sum === total;
+  const pending = end.isPending || correct.isPending;
 
   const pickSide = (next: SideIndex) => {
     setSide(next);
@@ -89,23 +104,26 @@ export function EndDouble({ table, board, game }: EndScreenProps) {
     setCustom({ ...(other ? { [other]: total - value } : {}), [id]: value });
   };
 
-  const chargedIds = mode === 'one' && shared ? [payerId ?? ''] : losers;
+  const chargedIds = mode === 'one' && shared ? (payerId ? [payerId] : []) : losers;
 
   const submit = () => {
     if (side === null || !adds) return;
     const split = mode === 'custom' && shared ? amounts : undefined;
+    if (needsPayer) return;
     if (isGameOverLimit(game, elapsedMs)) {
       draft.set({ gameId: game.id, loserIds: chargedIds, split });
-      navigate(tablePath(pathname, table.id, '/end/overtime'));
+      navigate(
+        tablePath(
+          pathname,
+          table.id,
+          correcting ? `/correct/${game.id}/overtime` : '/end/overtime',
+        ),
+      );
       return;
     }
-    end.mutate(
-      {
-        id: game.id,
-        request: { loserIds: chargedIds, ...(split ? { split } : {}) },
-      },
-      { onSuccess: close },
-    );
+    const request = { loserIds: chargedIds, ...(split ? { split } : {}) };
+    if (correcting) correct.mutate({ id: game.id, request }, { onSuccess: close });
+    else end.mutate({ id: game.id, request }, { onSuccess: close });
   };
 
   return (
@@ -121,14 +139,16 @@ export function EndDouble({ table, board, game }: EndScreenProps) {
       onClose={close}
       actions={
         <>
-          <KeepButton onClick={close}>{t('keep')}</KeepButton>
+          <KeepButton onClick={close}>{correcting ? t('correct.keep') : t('keep')}</KeepButton>
           <div className="flex-1" />
-          <ChargeButton disabled={side === null || !adds || end.isPending} onClick={submit}>
+          <ChargeButton disabled={side === null || needsPayer || !adds || pending} onClick={submit}>
             {side === null
               ? t('double.choose')
-              : t('double.charge', {
-                  names: chargedIds.map((id) => firstName(nameOf(id))).join(t('and')),
-                })}
+              : needsPayer
+                ? t('double.choosePayer')
+                : t('double.charge', {
+                    names: chargedIds.map((id) => firstName(nameOf(id))).join(t('and')),
+                  })}
           </ChargeButton>
         </>
       }
@@ -181,7 +201,10 @@ export function EndDouble({ table, board, game }: EndScreenProps) {
                 label={t('double.splitLabel')}
                 drawn={52}
                 value={mode}
-                onChange={setMode}
+                onChange={(next) => {
+                  setMode(next);
+                  setPayer(null);
+                }}
                 options={[
                   { value: 'half', label: t('double.half') },
                   { value: 'one', label: t('double.one') },
@@ -206,16 +229,16 @@ export function EndDouble({ table, board, game }: EndScreenProps) {
               />
             ))}
           </div>
-          {!adds ? (
+          {!adds && !needsPayer ? (
             <p role="alert" className="m-0 text-[16px] text-c-danger-ink">
               {t('double.mismatch', { sum: formatRs(sum, lang), total: formatRs(total, lang) })}
             </p>
           ) : null}
         </section>
       ) : null}
-      {end.error ? (
+      {(end.error ?? correct.error) ? (
         <p role="alert" className="m-0 text-[17px] text-c-danger-ink">
-          {end.error.message}
+          {(end.error ?? correct.error)?.message}
         </p>
       ) : null}
     </CounterDialog>

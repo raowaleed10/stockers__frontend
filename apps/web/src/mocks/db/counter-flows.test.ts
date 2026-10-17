@@ -1146,7 +1146,7 @@ describe('drawer cash and today’s totals', () => {
   it('an expense from the drawer comes off what the drawer should have, with Zain’s name', () => {
     const db = make();
     const result = drawerExpense(db, actor(db), {
-      category: 'food-petrol',
+      category: 'food',
       amount: 500,
       note: 'Dinner for staff',
     });
@@ -1287,7 +1287,7 @@ describe('closing the sheet', () => {
   it('a drawer expense of Rs 500 lowers the expected cash in today’s totals and in the close preview (D53)', () => {
     const db = make({ scenario: 'closing' });
     const by = actor(db);
-    drawerExpense(db, by, { category: 'food-petrol', amount: 500, note: 'Dinner for staff' });
+    drawerExpense(db, by, { category: 'food', amount: 500, note: 'Dinner for staff' });
     expect(todayTotals(db)).toMatchObject({ drawerExpenses: 1000, drawerExpected: 21250 });
     expect(closePreview(db, by).cash).toEqual({
       received: 22250,
@@ -2071,7 +2071,8 @@ describe('correcting a charged frame (screen 18, D63)', () => {
     expect(undoableActions(db, by).charge).toEqual({
       gameId: 'g-t1-3',
       tableId: 't1',
-      name: 'Bilal Ahmed',
+      type: 'single',
+      names: ['Bilal Ahmed'],
       amount: 250,
       endedAt: '2026-10-03T21:51:00+05:00',
     });
