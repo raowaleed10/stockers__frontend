@@ -29,7 +29,7 @@ The backend owns the final numbers. The frontend still needs the same rules to s
 | The three numbers under the price on "Start a room" (screen 22) | `roomPreview(hourly, minMinutes)` | Rs 1,500: first hour Rs 1,500, Rs 25 a minute, 1 h 40 min is Rs 2,500; Rs 700: Rs 11.67 a minute, Rs 1,167 |
 | Paused time is not charged (D14) | `elapsed(startedAt, now, pausedMs, pausedAt?)` | paused at 12:04 → stays 12:04 |
 | Moved frame keeps the price of the table it started on (open question; default) | – | Table 1 (250) → Table 4: still Rs 250 |
-| Undo within 2 minutes with no reason (D16) | `canUndo(startedAt, now)` | 1:42 left → true |
+| Undo within 2 minutes with no reason (D16). The same 2 minutes apply to a charged frame, and to a payment, for the worker who did it (D63) | `canUndo(startedAt, now)` | 1:42 left → true |
 | Change game type within 5 minutes (D17) | `canChangeType(startedAt, now)` | started 9:50, now 9:53 → true, "2 minutes left" |
 
 ## 2a. Finding a player at the counter (`players.ts`), new on 16 Oct (P06)

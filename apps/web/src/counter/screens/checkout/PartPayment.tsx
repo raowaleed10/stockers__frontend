@@ -1,6 +1,6 @@
 import { formatRs, paymentPreview, type PaymentMethod } from '@stockers/shared';
 import { X } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useFormat } from '@/lib/use-format';
@@ -8,17 +8,17 @@ import { cx } from '@/ui/cx';
 import { IconButton } from '@/ui/IconButton';
 import { Keypad } from '@/ui/Keypad';
 import { focusRing } from '@/ui/theme';
-import { useCheckoutBill, usePayCheckout } from '../../api';
+import { useCheckoutBill } from '../../api';
 import { useCheckoutDraft } from '../../checkout/draft';
-import { discountRequest } from '../../checkout/request';
 import { PageHeader } from '../../components/PageHeader';
-import type { PaidNote } from './CheckoutList';
+import { ConfirmPayment, type PaymentPlan } from './ConfirmPayment';
 
 /**
  * Screen 26, `/checkout/:playerId/part`: "Bilal Ahmed pays part". The money received now as one line for each method (cash
  * and Easypaisa), a keypad that types into the line that is selected, and three boxes: the total (after any discount),
  * what is paid now, and what stays as credit. If he gives more than the total the extra is kept as advance (D26).
- * "Save payment" sends the lines, the credit and the discount together, with the worker's name.
+ * "Save payment" asks once (`ConfirmPayment`, D63), then sends the lines, the credit and the discount together, with the
+ * worker's name.
  */
 export function PartPayment() {
   const { playerId = '' } = useParams<{ playerId: string }>();
@@ -26,8 +26,8 @@ export function PartPayment() {
   const { lang } = useFormat();
   const navigate = useNavigate();
   const bill = useCheckoutBill(playerId);
-  const pay = usePayCheckout();
   const draft = useCheckoutDraft();
+  const [asking, setAsking] = useState<PaymentPlan | null>(null);
 
   const methods = bill.data?.methods ?? [];
   useEffect(() => {
@@ -62,29 +62,7 @@ export function PartPayment() {
 
   const save = () => {
     if (parts.length === 0) return;
-    pay.mutate(
-      {
-        playerId,
-        request: {
-          playerId,
-          parts,
-          toCredit: preview.toCredit,
-          ...(draft.discount ? { discount: discountRequest(draft.discount) } : {}),
-        },
-      },
-      {
-        onSuccess: (result) => {
-          draft.reset();
-          const note: PaidNote = {
-            name: data.player.name,
-            paid: preview.paid,
-            toCredit: result.settlement.toCredit,
-            advance: result.settlement.advance,
-          };
-          navigate('/checkout', { state: { paid: note } });
-        },
-      },
-    );
+    setAsking({ parts, toCredit: preview.toCredit, advance: preview.advance });
   };
 
   return (
@@ -170,11 +148,6 @@ export function PartPayment() {
             )}
           </div>
           <p className="m-0 text-[16px] text-c-text-2">{t('part.note')}</p>
-          {pay.error ? (
-            <p role="alert" className="m-0 text-[17px] text-c-danger-ink">
-              {pay.error.message}
-            </p>
-          ) : null}
         </section>
 
         <section
@@ -188,7 +161,7 @@ export function PartPayment() {
           <Keypad keys="amount" onDigit={draft.digit} onDelete={draft.deleteDigit} />
           <button
             type="button"
-            disabled={parts.length === 0 || pay.isPending}
+            disabled={parts.length === 0}
             onClick={save}
             className={cx(
               'mt-1.5 flex min-h-[80px] flex-col items-center justify-center rounded-[16px] bg-c-brass text-[21px] font-bold text-c-brass-ink transition-colors duration-150 active:bg-c-brass-press disabled:opacity-40',
@@ -206,6 +179,13 @@ export function PartPayment() {
           </button>
         </section>
       </main>
+      <ConfirmPayment
+        playerId={playerId}
+        name={data.player.name}
+        plan={asking}
+        methods={methods}
+        onClose={() => setAsking(null)}
+      />
     </div>
   );
 }

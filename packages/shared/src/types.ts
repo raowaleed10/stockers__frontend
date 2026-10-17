@@ -80,7 +80,14 @@ export interface Game {
     minutes?: number;
     /** The statement lines this end posted, so "Undo" on screen 18 can take them back. */
     lineIds?: string[];
+    /** The Activity event of a double charge, so a correction can take it back. */
+    doubleEventId?: string;
   };
+  /**
+   * "Tapped the wrong player?" (screen 18, D63): set when the worker who charged a frame taps Undo. The charge stands
+   * until he picks who lost again (or Nobody pays); he has 2 minutes from `at` to choose.
+   */
+  correction?: { at: ISO };
 }
 export interface Session {
   id: string;

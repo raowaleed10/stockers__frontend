@@ -1,4 +1,4 @@
-import { elapsed, isGameOverLimit, MINUTE_MS, toClubIso } from '@stockers/shared';
+import { elapsed, formatRs, isGameOverLimit, MINUTE_MS, toClubIso } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useNow } from '@/lib/clock';
@@ -6,7 +6,7 @@ import { useFormat } from '@/lib/use-format';
 import { CounterDialog } from '@/ui/CounterDialog';
 import { MoneyText } from '@/ui/MoneyText';
 import { PersonCard } from '@/ui/PersonCard';
-import { useEndGame, useGame, usePlayers } from '../../api';
+import { useCorrectEnd, useEndGame, useGame, usePlayers } from '../../api';
 import { RichText } from '../../components/RichText';
 import { tablePath } from '../../components/table-paths';
 import { KeepButton, NobodyPaysButton } from '../../end/buttons';
@@ -24,8 +24,17 @@ const showPhoneOf = (player: { phone?: string; phoneTail?: string } | undefined)
  * owes; tapping the loser charges the frame (the table price goes on his bill and the winner is recorded). Past the
  * game's own time limit the tap goes on to "Charge double?" (19) first. "Nobody pays" is the Discard of the stop screen,
  * which asks for a reason. A pool or other per-game table asks the same with "game" in the words.
+ *
+ * With `correcting` it is the second step of "Tapped the wrong player? Undo" (D63): the same two cards for a frame that has
+ * already been charged, which may be an earlier frame while the next one is running. The first charge stands until one is
+ * chosen, and "Keep it as it is" leaves it alone. The time is judged at the moment the frame ended.
  */
-export function WhoLost({ table, board, game }: EndScreenProps) {
+export function WhoLost({
+  table,
+  board,
+  game,
+  correcting = false,
+}: EndScreenProps & { correcting?: boolean }) {
   const { t } = useTranslation('end');
   const { t: tBoard } = useTranslation('board');
   const navigate = useNavigate();
@@ -34,6 +43,7 @@ export function WhoLost({ table, board, game }: EndScreenProps) {
   const close = useCloseTable();
   const now = useNow(1000);
   const end = useEndGame();
+  const correct = useCorrectEnd();
   const draft = useEndDraft();
   const view = useGame(game.id);
   const everyone = usePlayers();
@@ -41,10 +51,13 @@ export function WhoLost({ table, board, game }: EndScreenProps) {
 
   const isGame = game.type === 'game';
   const name = tBoard(`nameOf.${table.kind}`, { number: table.number.replace(/^R/i, '') });
-  const elapsedMs = elapsed(game.startedAt, now, game.pausedMs, game.pausedAt);
+  const endedMs = correcting && game.endedAt ? Date.parse(game.endedAt) : now;
+  const elapsedMs = elapsed(game.startedAt, endedMs, game.pausedMs, game.pausedAt);
   const minutes = Math.round(elapsedMs / MINUTE_MS);
   const players = game.playerIds ?? [];
-  const nameOf = (id: string) => board.players[id]?.name ?? id;
+  const nameOf = (id: string) => view.data?.players[id]?.name ?? board.players[id]?.name ?? id;
+  const pending = end.isPending || correct.isPending;
+  const sub = (rest: string) => tablePath(pathname, table.id, rest);
 
   // Wait for the numbers on the cards, so "No frames yet tonight" never shows for a moment before the real words.
   if (view.isPending || everyone.isPending) return null;
@@ -52,7 +65,18 @@ export function WhoLost({ table, board, game }: EndScreenProps) {
   const choose = (loserId: string) => {
     if (isGameOverLimit(game, elapsedMs)) {
       draft.set({ gameId: game.id, loserIds: [loserId] });
-      navigate(tablePath(pathname, table.id, '/end/overtime'));
+      navigate(sub(correcting ? `/correct/${game.id}/overtime` : '/end/overtime'));
+      return;
+    }
+    if (correcting) {
+      correct.mutate(
+        { id: game.id, request: { loserIds: [loserId] } },
+        {
+          // A running frame is not touched; with the table free he can start the next one from screen 18 again.
+          onSuccess: () =>
+            table.game || isGame ? close() : navigate(sub('/next'), { state: { gameId: game.id } }),
+        },
+      );
       return;
     }
     end.mutate(
@@ -82,7 +106,7 @@ export function WhoLost({ table, board, game }: EndScreenProps) {
           values={{
             name,
             n: game.frameNo ?? 1,
-            time: format.clock(toClubIso(now)),
+            time: format.clock(correcting && game.endedAt ? game.endedAt : toClubIso(now)),
             minutes,
           }}
         />
@@ -93,10 +117,12 @@ export function WhoLost({ table, board, game }: EndScreenProps) {
       actions={
         <>
           <KeepButton icon onClick={close}>
-            {t('keep')}
+            {correcting ? t('correct.keep') : t('keep')}
           </KeepButton>
           <div className="flex-1" />
-          <NobodyPaysButton onClick={() => navigate(tablePath(pathname, table.id, '/stop'))}>
+          <NobodyPaysButton
+            onClick={() => navigate(sub(correcting ? `/correct/${game.id}/stop` : '/stop'))}
+          >
             {t('who.nobody')}
           </NobodyPaysButton>
         </>
@@ -114,18 +140,25 @@ export function WhoLost({ table, board, game }: EndScreenProps) {
               phoneTail={showPhoneOf(everyone.data?.find((player) => player.id === id))}
               note={card.note}
               status={card.status}
-              disabled={end.isPending}
+              disabled={pending}
               onClick={() => choose(id)}
             />
           );
         })}
       </div>
       <p className="m-0 text-center text-[17px] text-c-text-2">
-        {isGame ? t('who.hintGame') : t('who.hint')}
+        {correcting && game.result
+          ? t('correct.hint', {
+              amount: formatRs(game.result.amount, format.lang),
+              name: nameOf(game.result.loserIds[0] ?? ''),
+            })
+          : isGame
+            ? t('who.hintGame')
+            : t('who.hint')}
       </p>
-      {end.error ? (
+      {(end.error ?? correct.error) ? (
         <p role="alert" className="m-0 text-center text-[17px] text-c-danger-ink">
-          {end.error.message}
+          {(end.error ?? correct.error)?.message}
         </p>
       ) : null}
     </CounterDialog>

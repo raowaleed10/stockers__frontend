@@ -5,12 +5,13 @@ import { publicWorkers, requireWorker, workerSignIn, workerSignOut, workerUnlock
 import { counterAlerts, counterUnread, ownerUnread, readAllCounterAlerts } from './alerts';
 import { board, waitingBills } from './board';
 import { canteenSale, counterCanteenItems } from './canteen';
-import { checkout, checkoutBill, checkoutList } from './checkout';
+import { checkout, checkoutBill, checkoutList, undoCheckout } from './checkout';
 import type { MockDb } from './db';
 import { MockApiError } from './errors';
 import {
   cancelGame,
   changeGameType,
+  correctEnd,
   damageCharge,
   discardGame,
   disputeGame,
@@ -31,6 +32,7 @@ import {
 import { createDb, type CreateDbOptions } from './load';
 import { createPlayer, searchPlayers, statementOf } from './players';
 import { seed } from './seed';
+import { undoableActions } from './undoable';
 import { closePreview, closeSheet, drawerExpense, todayTotals } from './sheet';
 
 const at = (iso: string) => Date.parse(iso);
@@ -1787,7 +1789,7 @@ describe('a discount (Q6)', () => {
   });
 });
 
-describe('undoing a charged frame (screen 18, D60)', () => {
+describe('correcting a charged frame (screen 18, D63)', () => {
   const shabir = { id: 'shabir', name: 'Shabir', role: 'worker' as const };
   const bilalTonight = (db: MockDb) =>
     db.tonightLines('bilal').reduce((sum, line) => sum + (line.charge ?? 0), 0);
@@ -1797,84 +1799,214 @@ describe('undoing a charged frame (screen 18, D60)', () => {
     const db = make();
     clock = at('2026-10-03T21:51:00+05:00');
     const by = actor(db);
-    const result = endGame(db, by, 'g-t1-3', { loserIds: ['bilal'] });
-    return { db, by, result };
+    endGame(db, by, 'g-t1-3', { loserIds: ['bilal'] });
+    return { db, by };
   }
 
-  it('takes the charge, the player’s numbers, the session frame and the sheet totals back, and runs the frame again', () => {
+  it('Undo changes nothing yet: the charge stands until he picks again, so walking away is safe', () => {
+    const { db, by } = ended();
+    clock += 20_000;
+    const game = undoEnd(db, by, 'g-t1-3');
+    expect(game.correction).toEqual({ at: '2026-10-03T21:51:20+05:00' });
+    expect(game.status).toBe('ended');
+    expect(bilalTonight(db)).toBe(850);
+    expect(db.s.sessions[0].frames).toHaveLength(3);
+  });
+
+  it('charges the other player: the first charge, his numbers, the session and the sheet go back, and Ali is charged', () => {
     const db = make();
     const before = {
       bilal: { ...db.player('bilal') },
-      aliWon: db.player('ali-raza').framesWon,
+      ali: { ...db.player('ali-raza') },
       today: { ...db.s.today },
       earned: db.s.deltas.earned,
-      frames: db.s.sessions[0].frames.length,
-      lines: db.statement('bilal').length,
+      bilalLines: db.statement('bilal').length,
+      aliLines: db.statement('ali-raza').length,
     };
     clock = at('2026-10-03T21:51:00+05:00');
     const by = actor(db);
     endGame(db, by, 'g-t1-3', { loserIds: ['bilal'] });
-    expect(bilalTonight(db)).toBe(850);
-    expect(db.s.sessions[0].frames).toHaveLength(before.frames + 1);
+    clock += 30_000;
+    undoEnd(db, by, 'g-t1-3');
+    clock += 20_000;
+    const done = correctEnd(db, by, 'g-t1-3', { loserIds: ['ali-raza'] });
 
-    clock += 56_000;
-    const game = undoEnd(db, by, 'g-t1-3');
-    expect(game).toMatchObject({ status: 'running' });
-    expect(game.result).toBeUndefined();
-    expect(game.endedAt).toBeUndefined();
+    expect(done.amount).toBe(250);
+    expect(done.game).toMatchObject({ status: 'ended', endedAt: '2026-10-03T21:51:00+05:00' });
+    expect(done.game.result).toMatchObject({ loserIds: ['ali-raza'], amount: 250 });
+    expect(done.game.correction).toBeUndefined();
+    // Bilal is back to where he was; Ali has the frame.
     expect(bilalTonight(db)).toBe(600);
-    expect(db.statement('bilal')).toHaveLength(before.lines);
+    expect(db.statement('bilal')).toHaveLength(before.bilalLines);
     expect(db.player('bilal')).toMatchObject({
       balance: before.bilal.balance,
-      framesPlayed: before.bilal.framesPlayed,
-      framesWon: before.bilal.framesWon,
+      framesPlayed: before.bilal.framesPlayed + 1, // the frame was played; Bilal won it now
+      framesWon: before.bilal.framesWon + 1,
       spent: before.bilal.spent,
     });
-    expect(db.player('ali-raza').framesWon).toBe(before.aliWon);
-    expect(db.s.sessions[0].frames).toHaveLength(before.frames);
-    expect(db.s.today).toMatchObject({ frames: before.today.frames, earned: before.today.earned });
-    expect(db.s.deltas.earned).toBe(before.earned);
-    // The minutes since it ended are not played minutes: the frame is where it was.
-    expect(clock - Date.parse(game.startedAt) - game.pausedMs).toBe(
-      at('2026-10-03T21:51:00+05:00') - Date.parse(game.startedAt),
-    );
+    expect(db.statement('ali-raza')).toHaveLength(before.aliLines + 1);
+    expect(db.player('ali-raza')).toMatchObject({
+      balance: before.ali.balance + 250,
+      framesWon: before.ali.framesWon,
+      spent: before.ali.spent + 250,
+    });
+    // Counted once, not twice.
+    expect(db.s.today.frames).toBe(before.today.frames + 1);
+    expect(db.s.today.earned).toBe(before.today.earned + 250);
+    expect(db.s.deltas.earned).toBe(before.earned + 250);
+    expect(db.s.sessions[0].frames.map((f) => [f.no, f.loserIds])).toEqual([
+      [1, expect.any(Array)],
+      [2, expect.any(Array)],
+      [3, ['ali-raza']],
+    ]);
+  });
+
+  it('is written in Activity with his name, and the first charge’s line is gone from the statement', () => {
+    const { db, by } = ended();
+    undoEnd(db, by, 'g-t1-3');
+    correctEnd(db, by, 'g-t1-3', { loserIds: ['ali-raza'] });
     expect(db.s.activity[0]).toMatchObject({
       type: 'undo',
       title: 'Frame undone on Table 1',
-      detail: 'Rs 250 taken off Bilal Ahmed’s bill. The frame is running again.',
+      detail: 'Rs 250 taken off Bilal Ahmed’s bill. Rs 250 charged to Ali Raza instead.',
+      amount: 250,
       by: { name: 'Zain' },
     });
-    expect(db.activeGameOn('t1')?.id).toBe('g-t1-3');
+    expect(db.statement('bilal').some((l) => l.text.includes('Frame 3'))).toBe(false);
+    expect(db.statement('ali-raza').at(-1)?.text).toBe('Frame 3, Table 1, lost to Bilal Ahmed');
   });
 
-  it('only the worker who charged it can undo it, and only for 2 minutes', () => {
+  it('works after the next frame has started, and never touches the running frame', () => {
+    const { db, by } = ended();
+    const next = nextFrame(db, by, 'g-t1-3');
+    clock += 30_000;
+    undoEnd(db, by, 'g-t1-3');
+    correctEnd(db, by, 'g-t1-3', { loserIds: ['ali-raza'] });
+
+    expect(db.game(next.id)).toMatchObject({ status: 'running', startedAt: next.startedAt });
+    expect(db.game(next.id).result).toBeUndefined();
+    expect(db.activeGameOn('t1')?.id).toBe(next.id);
+    expect(db.game('g-t1-3').result?.loserIds).toEqual(['ali-raza']);
+    expect(bilalTonight(db)).toBe(600);
+  });
+
+  it('Nobody pays is a discard with a reason: the charge goes back, Activity shows the undo and the discard', () => {
+    const { db, by } = ended();
+    undoEnd(db, by, 'g-t1-3');
+    const done = correctEnd(db, by, 'g-t1-3', {
+      discard: { reason: 'Players left without finishing', note: 'Power went off' },
+    });
+    expect(done.game.status).toBe('discarded');
+    expect(done.game.result).toBeUndefined();
+    expect(bilalTonight(db)).toBe(600);
+    expect(db.s.today.earned).toBe(seed.aggregates.today.earned);
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'discard',
+      title: 'Frame discarded on Table 1',
+      detail: 'Players left without finishing. “Power went off”',
+      amount: 250,
+    });
+    expect(db.s.activity[1]).toMatchObject({
+      type: 'undo',
+      detail: 'Rs 250 taken off Bilal Ahmed’s bill. Nobody pays.',
+    });
+  });
+
+  it('Nobody pays needs a reason; a refusal changes nothing', () => {
+    const { db, by } = ended();
+    undoEnd(db, by, 'g-t1-3');
+    expect(
+      refusal(() => correctEnd(db, by, 'g-t1-3', { discard: { reason: '  ' } })).body.code,
+    ).toBe('NOTE_REQUIRED');
+    expect(bilalTonight(db)).toBe(850);
+    expect(db.game('g-t1-3').status).toBe('ended');
+  });
+
+  it('a request that is refused leaves the first charge in place (not who, a stranger, both answers)', () => {
+    const { db, by } = ended();
+    undoEnd(db, by, 'g-t1-3');
+    for (const request of [
+      { loserIds: ['someone-else'] },
+      { loserIds: [] },
+      { loserIds: ['ali-raza'], discard: { reason: 'x' } },
+      {},
+    ]) {
+      expect(refusal(() => correctEnd(db, by, 'g-t1-3', request)).status).toBe(400);
+    }
+    expect(bilalTonight(db)).toBe(850);
+    expect(db.game('g-t1-3').result?.loserIds).toEqual(['bilal']);
+    expect(db.game('g-t1-3').correction).toBeDefined();
+  });
+
+  it('only the worker who charged it can undo it, and only for 2 minutes after the charge', () => {
     const { db, by } = ended();
     clock += 30_000;
     expect(refusal(() => undoEnd(db, shabir, 'g-t1-3')).body.code).toBe('NOT_ALLOWED');
     clock += 2 * 60_000;
     expect(refusal(() => undoEnd(db, by, 'g-t1-3')).body.code).toBe('UNDO_EXPIRED');
     expect(bilalTonight(db)).toBe(850);
-  });
-
-  it('is refused once another frame has started on the table, and for a game that is still running', () => {
-    const { db, by } = ended();
-    nextFrame(db, by, 'g-t1-3');
-    clock += 10_000;
-    expect(refusal(() => undoEnd(db, by, 'g-t1-3')).body.code).toBe('TABLE_BUSY');
     expect(refusal(() => undoEnd(db, by, 'g-t3-c')).body.code).toBe('GAME_NOT_RUNNING');
   });
 
-  it('a frame charged double is undone with its double-charge event', () => {
+  it('he has 2 minutes from tapping Undo to choose; after that the first charge stays', () => {
+    const { db, by } = ended();
+    clock += 100_000; // 1:40 after the charge: Undo still works
+    undoEnd(db, by, 'g-t1-3');
+    clock += 90_000; // 3:10 after the charge, 1:30 after Undo: choosing still works
+    expect(
+      refusal(() => correctEnd(db, shabir, 'g-t1-3', { loserIds: ['ali-raza'] })).body.code,
+    ).toBe('NOT_ALLOWED');
+    clock += 40_000; // 2:10 after Undo
+    expect(refusal(() => correctEnd(db, by, 'g-t1-3', { loserIds: ['ali-raza'] })).body.code).toBe(
+      'UNDO_EXPIRED',
+    );
+    expect(bilalTonight(db)).toBe(850);
+  });
+
+  it('choosing needs Undo first', () => {
+    const { db, by } = ended();
+    expect(refusal(() => correctEnd(db, by, 'g-t1-3', { loserIds: ['ali-raza'] })).body.code).toBe(
+      'GAME_NOT_RUNNING',
+    );
+  });
+
+  it('a frame charged double is corrected with its double-charge event, and charged double again when asked', () => {
     const db = make();
     clock = at('2026-10-03T21:44:00+05:00');
     const by = actor(db);
-    const doubles = db.s.activity.filter((a) => a.type === 'double-charge').length;
+    const doubles = () => db.s.activity.filter((a) => a.type === 'double-charge').length;
+    const before = doubles();
     endGame(db, by, 'g-t4-1', { loserIds: ['zubair'], chargeDouble: true });
-    expect(db.s.activity.filter((a) => a.type === 'double-charge')).toHaveLength(doubles + 1);
+    expect(doubles()).toBe(before + 1);
     clock += 20_000;
     undoEnd(db, by, 'g-t4-1');
-    expect(db.s.activity.filter((a) => a.type === 'double-charge')).toHaveLength(doubles);
-    expect(db.activeGameOn('t4')).toBeDefined();
+    // The frame took 36 minutes when it ended; the correction measures to that moment, not to now.
+    const done = correctEnd(db, by, 'g-t4-1', { loserIds: ['usman-t'], chargeDouble: true });
+    expect(done.amount).toBe(400);
+    expect(done.game.result).toMatchObject({ loserIds: ['usman-t'], chargedDouble: true });
+    expect(doubles()).toBe(before + 1); // the old event is gone, the new one is there
+    expect(db.statement('zubair').some((l) => l.doubled)).toBe(false);
+  });
+
+  it('charging double is judged at the moment the frame ended, even if the correction comes later', () => {
+    const db = make();
+    clock = at('2026-10-03T21:44:00+05:00');
+    const by = actor(db);
+    endGame(db, by, 'g-t4-1', { loserIds: ['zubair'] });
+    undoEnd(db, by, 'g-t4-1');
+    clock += 80_000;
+    // Table 4's frame had run 36 minutes when it ended, so double is allowed, and Table 1's frame 3 (9 minutes) is not.
+    expect(correctEnd(db, by, 'g-t4-1', { loserIds: ['zubair'], chargeDouble: true }).amount).toBe(
+      400,
+    );
+    const { db: other, by: otherBy } = ended();
+    undoEnd(other, otherBy, 'g-t1-3');
+    expect(
+      refusal(() =>
+        correctEnd(other, otherBy, 'g-t1-3', { loserIds: ['bilal'], chargeDouble: true }),
+      ).body.code,
+    ).toBe('VALIDATION');
+    expect(bilalTonight(other)).toBe(850);
   });
 
   it('a double frame’s two lines both go back', () => {
@@ -1886,8 +2018,135 @@ describe('undoing a charged frame (screen 18, D60)', () => {
     endGame(db, by, 'g-t5-d', { loserIds: ['imran', 'naveed'] });
     clock += 5_000;
     undoEnd(db, by, 'g-t5-d');
+    correctEnd(db, by, 'g-t5-d', { discard: { reason: 'Players left' } });
     expect([lines('imran'), lines('naveed')]).toEqual(before);
     expect(db.s.today.doubles).toBe(seed.aggregates.today.doubles);
+  });
+
+  it('GET /undoable names the frame he charged less than 2 minutes ago, for him only', () => {
+    const { db, by } = ended();
+    expect(undoableActions(db, by).charge).toEqual({
+      gameId: 'g-t1-3',
+      tableId: 't1',
+      name: 'Bilal Ahmed',
+      amount: 250,
+      endedAt: '2026-10-03T21:51:00+05:00',
+    });
+    expect(undoableActions(db, shabir).charge).toBeNull();
+    clock += 2 * 60_000 + 1000;
+    expect(undoableActions(db, by).charge).toBeNull();
+  });
+});
+
+describe('taking a payment back (D63)', () => {
+  const shabir = { id: 'shabir', name: 'Shabir', role: 'worker' as const };
+  const bilalPays = (db: MockDb) =>
+    checkout(
+      db,
+      actor(db),
+      'bilal',
+      {
+        playerId: 'bilal',
+        parts: [
+          { method: 'cash', amount: 600 },
+          { method: 'easypaisa', amount: 400 },
+        ],
+        toCredit: 300,
+        discount: { amount: 50, reason: 'Rounded the bill', note: 'Rounded down' },
+      },
+      true,
+    );
+
+  it('puts everything back: the bill, the balance, the drawer, the online money, the credit and discount totals', () => {
+    const db = make({ scenario: 'checkout' });
+    const before = {
+      balance: db.player('bilal').balance,
+      oldest: db.player('bilal').oldestUnpaidAt,
+      today: structuredClone(db.s.today),
+      earned: db.s.deltas.earned,
+      deltas: { ...db.s.deltas },
+      lines: db.statement('bilal').length,
+      bills: waitingBills(db).map((b) => b.playerId),
+      discounts: db.s.activity.filter((a) => a.type === 'discount').length,
+    };
+    bilalPays(db);
+    expect(db.player('bilal').balance).toBe(300);
+    clock += 45_000;
+    undoCheckout(db, actor(db), 'bilal');
+
+    expect(db.player('bilal').balance).toBe(before.balance);
+    expect(db.player('bilal').oldestUnpaidAt).toBe(before.oldest);
+    expect(db.statement('bilal')).toHaveLength(before.lines);
+    expect(statementBalance(db.statement('bilal'))).toBe(before.balance);
+    expect(db.s.today).toEqual(before.today);
+    expect(db.s.deltas).toEqual(before.deltas);
+    // The bill is waiting again in the place it was.
+    expect(waitingBills(db).map((b) => b.playerId)).toEqual(before.bills);
+    expect(checkoutBill(db, 'bilal', true)).toMatchObject({ oldCredit: 500, total: 1350 });
+    // The discount is gone from Activity; the undo is written with his name.
+    expect(db.s.activity.filter((a) => a.type === 'discount')).toHaveLength(before.discounts);
+    expect(db.s.activity[0]).toMatchObject({
+      type: 'undo',
+      title: 'Payment undone for Bilal Ahmed',
+      amount: 1000,
+      by: { name: 'Zain' },
+    });
+  });
+
+  it('can be paid again after the undo', () => {
+    const db = make({ scenario: 'checkout' });
+    bilalPays(db);
+    undoCheckout(db, actor(db), 'bilal');
+    const again = bilalPays(db);
+    expect(again.settlement).toMatchObject({ paid: 1000, toCredit: 300 });
+    expect(db.player('bilal').balance).toBe(300);
+    expect(db.s.today.discounts.count).toBe(3);
+  });
+
+  it('only the worker who took it can undo it, only for 2 minutes, and only once', () => {
+    const db = make({ scenario: 'checkout' });
+    bilalPays(db);
+    expect(refusal(() => undoCheckout(db, shabir, 'bilal')).body.code).toBe('NOT_ALLOWED');
+    clock += 2 * 60_000 + 1000;
+    expect(refusal(() => undoCheckout(db, actor(db), 'bilal')).body.code).toBe('UNDO_EXPIRED');
+    expect(db.player('bilal').balance).toBe(300);
+
+    const other = make({ scenario: 'checkout' });
+    bilalPays(other);
+    undoCheckout(other, actor(other), 'bilal');
+    expect(refusal(() => undoCheckout(other, actor(other), 'bilal')).status).toBe(404);
+  });
+
+  it('a payment of old credit only (no bill tonight) and an advance both come back', () => {
+    const db = make({ scenario: 'checkout' });
+    const by = actor(db);
+    const before = structuredClone(db.s.today);
+    checkout(
+      db,
+      by,
+      'zubair',
+      { playerId: 'zubair', parts: [{ method: 'cash', amount: 700 }], toCredit: 0 },
+      true,
+    );
+    expect(db.player('zubair').balance).toBe(-100);
+    undoCheckout(db, by, 'zubair');
+    expect(db.player('zubair').balance).toBe(600);
+    expect(db.s.today).toEqual(before);
+  });
+
+  it('GET /undoable names the payment he took, for him only, for 2 minutes', () => {
+    const db = make({ scenario: 'checkout' });
+    bilalPays(db);
+    expect(undoableActions(db, actor(db)).payment).toEqual({
+      playerId: 'bilal',
+      name: 'Bilal Ahmed',
+      paid: 1000,
+      toCredit: 300,
+      at: db.nowIso(),
+    });
+    expect(undoableActions(db, shabir).payment).toBeNull();
+    clock += 2 * 60_000 + 1000;
+    expect(undoableActions(db, actor(db)).payment).toBeNull();
   });
 });
 

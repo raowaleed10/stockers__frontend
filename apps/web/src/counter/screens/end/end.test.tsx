@@ -135,26 +135,141 @@ describe('screen 17: who lost this frame?', () => {
     });
   });
 
-  it('Undo takes the charge back and asks who lost again; Free the table closes', async () => {
+  /** Charges Bilal for Table 1's frame 3 at 9:51 PM and arrives at screen 18. */
+  const chargedBilal = async () => {
     at('2026-10-03T21:51:00+05:00');
     const view = renderCounter('/table/t1/end');
     await userEvent.click(
       within(await dialog('Who lost this frame?')).getByRole('button', { name: /^Bilal Ahmed/ }),
     );
-    const next = await afterCharge('Rs 250 added to Bilal Ahmed’s bill');
+    return { view, next: await afterCharge('Rs 250 added to Bilal Ahmed’s bill') };
+  };
+
+  it('Undo asks who lost again, and the first charge stands until he picks (D63)', async () => {
+    const { view, next } = await chargedBilal();
     await userEvent.click(within(next).getByRole('button', { name: /^Undo, / }));
-    await waitFor(() => expect(wherePath(view)).toBe('/table/t1/end'));
+    await waitFor(() => expect(wherePath(view)).toBe('/table/t1/correct/g-t1-3'));
     const again = await dialog('Who lost this frame?');
-    expect(within(again).getByRole('button', { name: /^Bilal Ahmed/ })).toHaveTextContent(
-      'Rs 600 waiting',
+    expect(again).toHaveTextContent('Table 1, frame 3 ended at 9:51 PM after 28 minutes');
+    expect(again).toHaveTextContent(
+      'Rs 250 is on Bilal Ahmed’s bill now. Tap who lost, or keep it as it is.',
     );
+    expect(within(again).getByRole('button', { name: 'Keep it as it is' })).toBeInTheDocument();
+    expect(tonight('bilal')).toBe(850); // nothing is changed yet
+
+    await userEvent.click(within(again).getByRole('button', { name: /^Ali Raza/ }));
+    await waitFor(() => expect(wherePath(view)).toBe('/table/t1/next'));
+    await afterCharge('Rs 250 added to Ali Raza’s bill');
     expect(tonight('bilal')).toBe(600);
-    expect(gameOn('t1')).toMatchObject({ status: 'running', frameNo: 3 });
-    expect(api.db.s.activity[0]).toMatchObject({
-      type: 'undo',
+    expect(tonight('ali-raza')).toBe(250);
+    expect(api.db.s.activity.find((a) => a.type === 'undo')).toMatchObject({
       title: 'Frame undone on Table 1',
+      detail: 'Rs 250 taken off Bilal Ahmed’s bill. Rs 250 charged to Ali Raza instead.',
       by: { name: 'Zain' },
     });
+  });
+
+  it('Keep it as it is closes the correction and leaves the first charge', async () => {
+    const { view, next } = await chargedBilal();
+    const undos = api.db.s.activity.filter((a) => a.type === 'undo').length;
+    await userEvent.click(within(next).getByRole('button', { name: /^Undo, / }));
+    await userEvent.click(
+      within(await dialog('Who lost this frame?')).getByRole('button', {
+        name: 'Keep it as it is',
+      }),
+    );
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+    expect(tonight('bilal')).toBe(850);
+    expect(api.db.s.activity.filter((a) => a.type === 'undo')).toHaveLength(undos);
+  });
+
+  it('Nobody pays after Undo is a discard that asks for a reason', async () => {
+    const { view, next } = await chargedBilal();
+    await userEvent.click(within(next).getByRole('button', { name: /^Undo, / }));
+    await userEvent.click(
+      within(await dialog('Who lost this frame?')).getByRole('button', { name: 'Nobody pays' }),
+    );
+    await waitFor(() => expect(wherePath(view)).toBe('/table/t1/correct/g-t1-3/stop'));
+    const stop = await dialog('Nobody pays for this frame');
+    expect(stop).toHaveTextContent(
+      'Rs 250 is taken off Bilal Ahmed’s bill. Choose why, so the owners can see it.',
+    );
+    const confirm = within(stop).getByRole('button', { name: 'Nobody pays' });
+    expect(confirm).toBeDisabled(); // a reason is required
+    await userEvent.click(within(stop).getByRole('button', { name: 'Table problem' }));
+    await userEvent.click(confirm);
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+    expect(tonight('bilal')).toBe(600);
+    expect(api.db.game('g-t1-3').status).toBe('discarded');
+    expect(api.db.s.activity.find((a) => a.type === 'discard')).toMatchObject({
+      title: 'Frame discarded on Table 1',
+      detail: 'Table problem',
+      by: { name: 'Zain' },
+    });
+  });
+
+  it('Undo also works after Next frame has started: the toast offers it and the running frame is not touched', async () => {
+    const { view, next } = await chargedBilal();
+    await userEvent.click(within(next).getByRole('button', { name: /^Next frame, same players/ }));
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
+    const running = gameOn('t1');
+    expect(running).toMatchObject({ frameNo: 4 });
+
+    // Two cream toasts now: the new frame (started by mistake?) and the charge of frame 3.
+    const toast = await waitFor(() => {
+      const found = screen
+        .getAllByRole('status')
+        .find((el) => el.textContent?.includes('Rs 250 added to Bilal Ahmed’s bill'));
+      expect(found).toBeDefined();
+      return found as HTMLElement;
+    });
+    expect(toast).toHaveTextContent(/Undo for (2:00|1:5\d) more/);
+    await userEvent.click(within(toast).getByRole('button', { name: /Undo/ }));
+    await waitFor(() => expect(wherePath(view)).toBe('/table/t1/correct/g-t1-3'));
+    const again = await dialog('Who lost this frame?');
+    expect(again).toHaveTextContent('Rs 250 is on Bilal Ahmed’s bill now.');
+
+    await userEvent.click(within(again).getByRole('button', { name: /^Ali Raza/ }));
+    await waitFor(() => expect(wherePath(view)).toBe('/')); // the table has a running frame: back to the board
+    expect(tonight('bilal')).toBe(600);
+    expect(tonight('ali-raza')).toBe(250);
+    expect(gameOn('t1')?.id).toBe(running?.id); // frame 4 was never touched
+    expect(gameOn('t1')?.startedAt).toBe(running?.startedAt);
+  });
+
+  it('a frame that ran over its limit asks "Charge double?" again, judged at the minute the frame ended', async () => {
+    at('2026-10-03T21:44:00+05:00');
+    const doubles = api.db.s.activity.filter((a) => a.type === 'double-charge').length;
+    const view = renderCounter('/table/t4/end');
+    await userEvent.click(
+      within(await dialog('Who lost this frame?')).getByRole('button', { name: /^Zubair Khan/ }),
+    );
+    await userEvent.click(
+      within(await dialog('This frame took 36 minutes. Charge double?')).getByRole('button', {
+        name: /^Normal price/,
+      }),
+    );
+    const next = await afterCharge('Rs 200 added to Zubair Khan’s bill');
+    await userEvent.click(within(next).getByRole('button', { name: /^Undo, / }));
+    await userEvent.click(
+      within(await dialog('Who lost this frame?')).getByRole('button', { name: /^Usman Tariq/ }),
+    );
+    await waitFor(() => expect(wherePath(view)).toBe('/table/t4/correct/g-t4-1/overtime'));
+    const over = await dialog('This frame took 36 minutes. Charge double?');
+    await userEvent.click(within(over).getByRole('button', { name: /^Double price/ }));
+    await afterCharge('Rs 400 added to Usman Tariq’s bill');
+    expect(api.db.game('g-t4-1').result).toMatchObject({
+      loserIds: ['usman-t'],
+      amount: 400,
+      chargedDouble: true,
+    });
+    expect(api.db.s.activity.filter((a) => a.type === 'double-charge')).toHaveLength(doubles + 1);
+  });
+
+  it('a reload of the correction after it is over goes back to the board', async () => {
+    at('2026-10-03T21:51:00+05:00');
+    const view = renderCounter('/table/t1/correct/g-t1-3');
+    await waitFor(() => expect(wherePath(view)).toBe('/'));
   });
 
   it('Free the table closes the screen and leaves the charge', async () => {

@@ -42,6 +42,9 @@ export const useCheckoutBill = (playerId: string) =>
     queryFn: () => calls.getCheckoutBill(playerId),
   });
 
+/** What this worker can still take back: a charged frame or a payment, for 2 minutes. */
+export const useUndoable = () => useQuery({ queryKey: keys.undoable, queryFn: calls.getUndoable });
+
 export const useCanteenItems = () =>
   useQuery({ queryKey: keys.canteen, queryFn: calls.getCanteenItems });
 
@@ -88,7 +91,11 @@ export const useCancelGame = () =>
     calls.cancelGame(v.id, v.request),
   );
 export const useUndoGame = () => useAction(calls.undoGame);
-export const useUndoEnd = () => useAction(calls.undoEnd);
+export const useUndoEnd = () => useAction(calls.undoEnd, [['game']]);
+export const useCorrectEnd = () =>
+  useAction((v: { id: string; request: Parameters<typeof calls.correctEnd>[1] }) =>
+    calls.correctEnd(v.id, v.request),
+  );
 export const useDamageCharge = () =>
   useAction((v: { id: string; request: Parameters<typeof calls.damageCharge>[1] }) =>
     calls.damageCharge(v.id, v.request),
@@ -118,6 +125,7 @@ export const usePayCheckout = () =>
   useAction((v: { playerId: string; request: Parameters<typeof calls.payCheckout>[1] }) =>
     calls.payCheckout(v.playerId, v.request),
   );
+export const useUndoCheckout = () => useAction(calls.undoCheckout);
 export const useSellCanteen = () => useAction(calls.sellCanteen);
 export const useAddDrawerExpense = () => useAction(calls.addDrawerExpense);
 export const useCloseSheet = () => useAction(calls.closeSheet);

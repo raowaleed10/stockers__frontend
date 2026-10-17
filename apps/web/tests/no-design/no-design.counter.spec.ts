@@ -290,11 +290,32 @@ const SHOTS: Shot[] = [
       await page.getByRole('button', { name: /^Bilal Ahmed/ }).click();
       await page.getByRole('button', { name: /^Undo, / }).click();
       await expect(page.getByRole('dialog', { name: 'Who lost this frame?' })).toBeVisible();
-      await expect(page.getByRole('button', { name: /^Bilal Ahmed/ })).toContainText(
-        'Rs 600 waiting',
-      );
+      await expect(page.getByText('Rs 250 is on Bilal Ahmed’s bill now.')).toBeVisible();
       await blur(page);
     },
+  },
+  {
+    id: 'correct-nobody-pays',
+    url: `/table/t1/end?now=${encodeURIComponent('2026-10-03T21:51:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Bilal Ahmed/ }).click();
+      await page.getByRole('button', { name: /^Undo, / }).click();
+      await page.getByRole('button', { name: 'Nobody pays' }).click();
+      const dialog = page.getByRole('dialog', { name: 'Nobody pays for this frame' });
+      await dialog.getByRole('button', { name: 'Table problem' }).click();
+      await blur(page);
+    },
+  },
+  {
+    id: 'undo-charge-toast',
+    url: `/table/t1/end?now=${encodeURIComponent('2026-10-03T21:51:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Bilal Ahmed/ }).click();
+      await page.getByRole('button', { name: /^Next frame, same players/ }).click();
+      await expect(page.getByText('Rs 250 added to Bilal Ahmed’s bill')).toBeVisible();
+      await blur(page);
+    },
+    clip: { x: 0, y: 560, width: 1440, height: 340 },
   },
   // P09: checkout
   {
@@ -303,7 +324,37 @@ const SHOTS: Shot[] = [
     prepare: async (page) => {
       await page.getByRole('button', { name: /^Saad Hussain/ }).click();
       await page.getByRole('button', { name: /^Paid in full/ }).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
       await expect(page.getByText('Saad Hussain paid Rs 430.')).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'checkout-confirm',
+    url: `/checkout/bilal/part?scenario=checkout&now=${encodeURIComponent('2026-10-03T22:22:00+05:00')}`,
+    prepare: async (page) => {
+      const pad = page.locator('main > section').nth(1);
+      for (const digit of '600')
+        await pad.getByRole('button', { name: digit, exact: true }).click();
+      await page.getByRole('button', { name: '+ Easypaisa' }).click();
+      for (const digit of '400')
+        await pad.getByRole('button', { name: digit, exact: true }).click();
+      await page.getByRole('button', { name: /^Save payment/ }).click();
+      await expect(
+        page.getByRole('dialog', {
+          name: 'Rs 1,000 paid: Cash 600, Easypaisa 400, Rs 350 to credit?',
+        }),
+      ).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'undo-payment-toast',
+    url: `/checkout/bilal?scenario=checkout&now=${encodeURIComponent('2026-10-03T22:20:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Paid in full/ }).click();
+      await page.getByRole('button', { name: 'Yes' }).click();
+      await expect(page.getByText('Payment saved: Bilal Ahmed paid Rs 1,350.')).toBeVisible();
       await blur(page);
     },
   },

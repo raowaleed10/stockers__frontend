@@ -53,6 +53,10 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 36 | [A bill that uses an advance](#36-a-bill-that-uses-an-advance) | counter | P09 |
 | 37 | [Part payment: paying more than the total](#37-part-payment-paying-more-than-the-total) | counter | P09 |
 | 38 | [Give a discount: changing or removing it](#38-give-a-discount-changing-or-removing-it) | counter | P09 |
+| 39 | [Money actions ask once: the confirm sheet](#39-money-actions-ask-once-the-confirm-sheet) | counter | P09 answers |
+| 40 | [Undo after a charged frame: Nobody pays](#40-undo-after-a-charged-frame-nobody-pays) | counter | P09 answers |
+| 41 | [The Undo toast after a payment](#41-the-undo-toast-after-a-payment) | counter | P09 answers |
+| 42 | [The Undo toast after a charged frame](#42-the-undo-toast-after-a-charged-frame) | counter | P09 answers |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -415,13 +419,17 @@ Below the numbered pieces there are also [the approved screens that change](#app
 
 ## 32. Undo on the next-frame screen
 
-- **What:** screen 18 draws "Tapped the wrong player? Undo, 1:56 left" and no document says what it does. It takes the charge
-  back (the line on the player's statement, his numbers, the session score and the sheet's totals) and asks "Who lost this frame?"
-  again, with the frame running as if it had not ended (the time since is not counted). Only the worker who charged the frame can
-  do it, only for 2 minutes, and only while no other game has started on the table (DEFAULT, needs answer, in `PROGRESS.md`).
-  Activity shows "Frame undone on Table 1" with his name. A Century, a room or a double frame has no Undo.
-- **Where:** `/table/t1/end?now=2026-10-03T21:51:00%2B05:00`, tap Bilal Ahmed, then "Undo". The picture is the screen it comes back to.
-- **Words:** "Undo, 1:56 left" (the words of screen 18).
+- **What:** screen 18 draws "Tapped the wrong player? Undo, 1:56 left" and no document said what it does. **Answered 17 Oct 2026
+  (D63):** it asks "Who lost this frame?" again, for the frame that was just charged. Tapping the right player takes the first charge
+  off (the line on the first player's statement, his numbers, the session score and the sheet's totals) and puts it on the other
+  player; "Nobody pays" is the Discard with a reason (§40). Nothing is changed until he picks, so "Keep it as it is" and walking
+  away leave the first charge. Only the worker who charged the frame can do it, for 2 minutes, **also after Next frame has started**:
+  it changes only the finished frame and never touches the running one (§42 is the toast that offers it then). He has 2 minutes from
+  tapping Undo to choose. A frame that ran over its limit asks "Charge double?" again, judged at the minute it ended. Activity shows
+  "Frame undone on Table 1" with his name. A Century, a room or a double frame has no Undo on screen 18.
+- **Where:** `/table/t1/end?now=2026-10-03T21:51:00%2B05:00`, tap Bilal Ahmed, then "Undo". The picture is the screen it opens.
+- **Words:** "Undo, 1:56 left" (the words of screen 18); under the two cards "Rs 250 is on Bilal Ahmed’s bill now. Tap who lost, or keep
+  it as it is."; the quiet button "Keep it as it is" (screen 17 says "Keep playing").
 - **Built from:** screens 17 and 18.
 
 ![Who lost, after Undo](no-design/next-frame-undone.png)
@@ -431,7 +439,8 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **What:** after a bill is paid (Paid in full, Paid part or Put all on credit) the worker is taken back to the list, and a green
   note at the top says what was done: who paid, how much, and what stays as credit or is kept as advance. The bill is gone from
   "Waiting to pay" and the count and "Waiting tonight" have gone down. The note stays until the worker leaves the page.
-- **Where:** `/checkout?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`, tap Saad Hussain, then "Paid in full".
+- **Where:** `/checkout?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`, tap Saad Hussain, then "Paid in full" and Yes (§39). The
+  owners kept this note on 17 Oct 2026 (D63).
 - **Words:** "Saad Hussain paid Rs 430." and, when something is left, "Rs 300 stays as credit." or "Rs 150 is kept as advance."
 - **Built from:** the green box of screens 1 and 26.
 
@@ -494,6 +503,56 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **Built from:** screen 27.
 
 ![Changing a discount](no-design/checkout-discount-edit.png)
+
+## 39. Money actions ask once: the confirm sheet
+
+- **What:** the owners were promised that money actions ask once. Paid in full, Put all on credit and Save payment (a part payment)
+  each open a sheet before anything is saved. It says the amount and the method in one sentence, with a big **Yes** and a big
+  **No**. Yes saves the payment with the worker's name and goes back to the list with the green note (§33); No (or Escape) closes the
+  sheet and nothing is saved. The discount is part of the same payment, so it is saved on Yes and dropped with the checkout otherwise.
+- **Where:** `/checkout/bilal/part?scenario=checkout&now=2026-10-03T22:22:00%2B05:00`: type 600 in Cash, add Easypaisa and type 400,
+  then "Save payment". Paid in full and Put all on credit ask the same way on `/checkout/bilal`.
+- **Words:** "Rs 1,000 paid: Cash 600, Easypaisa 400, Rs 350 to credit?" (with an advance: ", Rs 150 kept as advance"), "Put Rs 1,350 on
+  Bilal Ahmed’s credit?", "Bilal Ahmed has nothing to pay. Save it?", "Bilal Ahmed. You can undo it for 2 minutes.", "Yes", "No".
+- **Built from:** the dialog of screen 27 and the brass button of screen 25.
+
+![The confirm sheet](no-design/checkout-confirm.png)
+
+## 40. Undo after a charged frame: Nobody pays
+
+- **What:** "Nobody pays" on the "Who lost this frame?" that Undo opens (§32) is a Discard with a required reason, the same five reasons
+  and the optional note as the stop screen (14). The first charge is taken off, the frame is recorded as discarded, and Activity shows
+  "Frame undone on Table 1" and "Frame discarded on Table 1" with the worker's name and the reason.
+- **Where:** `/table/t1/end?now=2026-10-03T21:51:00%2B05:00`, tap Bilal Ahmed, then "Undo", then "Nobody pays".
+- **Words:** "Nobody pays for this frame", "Rs 250 is taken off Bilal Ahmed’s bill. Choose why, so the owners can see it.", "Reason
+  (required)", the reasons of screen 14, "Note (optional)", "Nobody pays", "Keep it as it is".
+- **Built from:** screens 14 and 17.
+
+![Nobody pays after Undo](no-design/correct-nobody-pays.png)
+
+## 41. The Undo toast after a payment
+
+- **What:** after a payment is saved (Yes on the sheet of §39) the cream Undo toast of the games appears for 2 minutes, for the worker
+  who took the payment only, on any screen and after a reload. Undo takes the payment back: the bill is waiting again in the same
+  place, the drawer and the online money lose the amount, and Activity shows "Payment undone for Bilal Ahmed". After Undo the toast
+  says "Payment undone for Bilal Ahmed." for a moment.
+- **Where:** `/checkout/bilal?scenario=checkout&now=2026-10-03T22:20:00%2B05:00`, "Paid in full", Yes.
+- **Words:** "Payment saved: Bilal Ahmed paid Rs 1,350.", "Rs 350 stays as credit." (when something is left), "Put on credit: Bilal
+  Ahmed’s bill." (when nothing was paid), "Undo for 1:50 more", "Undo", "Payment undone for Bilal Ahmed."
+- **Built from:** the toast of screen 14 (§25).
+
+![The toast after a payment](no-design/undo-payment-toast.png)
+
+## 42. The Undo toast after a charged frame
+
+- **What:** after screen 18 has gone (Next frame, Free the table, Change players), the same cream toast keeps the Undo of the charged
+  frame for the 2 minutes. It sits under the toast of the new frame when there is one. Undo opens "Who lost this frame?" again (§32).
+  It is not shown on screen 18 itself, which has its own Undo button, or while the correction is open.
+- **Where:** `/table/t1/end?now=2026-10-03T21:51:00%2B05:00`, tap Bilal Ahmed, then "Next frame, same players".
+- **Words:** "Rs 250 added to Bilal Ahmed’s bill", the table name beside it, "Undo for 1:59 more", "Undo".
+- **Built from:** the toast of screen 14 (§25) and the title of screen 18.
+
+![The toast after a charged frame](no-design/undo-charge-toast.png)
 
 ## Approved screens that change a field or a word
 

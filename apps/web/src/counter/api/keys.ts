@@ -15,4 +15,5 @@ export const counterKeys = {
   canteen: ['canteen'] as const,
   today: ['today'] as const,
   closePreview: ['closePreview'] as const,
+  undoable: ['undoable'] as const,
 };

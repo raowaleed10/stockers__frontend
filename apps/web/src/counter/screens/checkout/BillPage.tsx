@@ -8,25 +8,25 @@ import {
   type StatementLine,
 } from '@stockers/shared';
 import { Tag } from 'lucide-react';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useNow } from '@/lib/clock';
 import { useFormat } from '@/lib/use-format';
 import { cx } from '@/ui/cx';
 import { focusRing } from '@/ui/theme';
-import { useBoard, useCheckoutBill, usePayCheckout } from '../../api';
+import { useBoard, useCheckoutBill } from '../../api';
 import { useCheckoutDraft } from '../../checkout/draft';
-import { discountRequest } from '../../checkout/request';
 import { splitLine } from '../../checkout/split-line';
 import { PageHeader } from '../../components/PageHeader';
-import type { PaidNote } from './CheckoutList';
+import { ConfirmPayment, type PaymentPlan } from './ConfirmPayment';
 
 /**
  * Screen 25, `/checkout/:playerId`: a player's bill as a statement. The old credit with its date and age, then tonight's
  * lines, then the total to pay (old credit + tonight − advance − the discount, if one is given). On the right: Paid in
  * full (one tap, with the method picked under it), Paid part (the part payment page, 26) and Put all on credit; "Give a
- * discount" opens the dialog of screen 27 over this page. A payment is saved with the worker's name (D52).
+ * discount" opens the dialog of screen 27 over this page. Each of the three money buttons asks once before it saves
+ * (`ConfirmPayment`, D63); a payment is saved with the worker's name (D52).
  */
 export function BillPage() {
   const { playerId = '' } = useParams<{ playerId: string }>();
@@ -36,8 +36,8 @@ export function BillPage() {
   const now = useNow(60_000);
   const bill = useCheckoutBill(playerId);
   const board = useBoard();
-  const pay = usePayCheckout();
   const draft = useCheckoutDraft();
+  const [asking, setAsking] = useState<PaymentPlan | null>(null);
 
   useEffect(() => {
     draft.begin(playerId);
@@ -68,31 +68,6 @@ export function BillPage() {
   const due = Math.max(0, data.total - discount);
   const method = draft.method ?? data.methods[0]?.id ?? 'cash';
   const sheet = board.data?.sheet.number;
-
-  // What is sent: the discount with its reason in English (the owners read one wording), and the payment.
-  const discountBody = draft.discount ? discountRequest(draft.discount) : undefined;
-
-  const save = (parts: { method: string; amount: number }[], toCredit: number) => {
-    const paid = parts.reduce((sum, part) => sum + part.amount, 0);
-    pay.mutate(
-      {
-        playerId,
-        request: { playerId, parts, toCredit, ...(discountBody ? { discount: discountBody } : {}) },
-      },
-      {
-        onSuccess: (result) => {
-          draft.reset();
-          const note: PaidNote = {
-            name: player.name,
-            paid,
-            toCredit: result.settlement.toCredit,
-            advance: result.settlement.advance,
-          };
-          navigate('/checkout', { state: { paid: note } });
-        },
-      },
-    );
-  };
 
   const subtitle = [
     player.phone ? player.phone : player.phoneTail,
@@ -180,8 +155,13 @@ export function BillPage() {
         >
           <button
             type="button"
-            disabled={pay.isPending}
-            onClick={() => save(due > 0 ? [{ method, amount: due }] : [], 0)}
+            onClick={() =>
+              setAsking({
+                parts: due > 0 ? [{ method, amount: due }] : [],
+                toCredit: 0,
+                advance: 0,
+              })
+            }
             className={cx(
               'flex min-h-[96px] flex-col items-start justify-center rounded-[18px] bg-c-brass px-6 text-start text-c-brass-ink transition-colors duration-150 active:bg-c-brass-press disabled:opacity-40',
               focusRing.counter,
@@ -205,8 +185,8 @@ export function BillPage() {
           </button>
           <button
             type="button"
-            disabled={pay.isPending || due <= 0}
-            onClick={() => save([], due)}
+            disabled={due <= 0}
+            onClick={() => setAsking({ parts: [], toCredit: due, advance: 0 })}
             className={cx(
               'flex min-h-[84px] flex-col items-start justify-center rounded-[18px] border border-c-warn-line bg-c-warn-bg px-6 text-start text-c-text transition-colors duration-150 active:bg-c-raised-2 disabled:opacity-40',
               focusRing.counter,
@@ -258,14 +238,16 @@ export function BillPage() {
             <Tag aria-hidden="true" size={20} strokeWidth={2} />
             {t('bill.giveDiscount')}
           </button>
-          {pay.error ? (
-            <p role="alert" className="m-0 text-[17px] text-c-danger-ink">
-              {pay.error.message}
-            </p>
-          ) : null}
         </section>
       </main>
       <Outlet />
+      <ConfirmPayment
+        playerId={playerId}
+        name={player.name}
+        plan={asking}
+        methods={data.methods}
+        onClose={() => setAsking(null)}
+      />
     </Shell>
   );
 }

@@ -4,6 +4,7 @@ import type {
   ChangeTypeRequest,
   CheckoutRequest,
   CloseSheetRequest,
+  CorrectEndRequest,
   DamageRequest,
   DiscardRequest,
   DisputeRequest,
@@ -32,11 +33,12 @@ import {
 import { counterAlerts, readAllCounterAlerts } from '../db/alerts';
 import { backInOrder, board, clubStatus, markOutOfOrder } from '../db/board';
 import { canteenSale, counterCanteenItems } from '../db/canteen';
-import { checkout, checkoutBill, checkoutList } from '../db/checkout';
+import { checkout, checkoutBill, checkoutList, undoCheckout } from '../db/checkout';
 import type { MockDb } from '../db/db';
 import {
   cancelGame,
   changeGameType,
+  correctEnd,
   damageCharge,
   discardGame,
   disputeGame,
@@ -58,6 +60,7 @@ import {
 } from '../db/games';
 import { createPlayer, recentPlayers, searchPlayers, statementOf } from '../db/players';
 import { closePreview, closeSheet, drawerExpense, todayTotals } from '../db/sheet';
+import { undoableActions } from '../db/undoable';
 import { endpoint, type Call } from '../http';
 
 const B = '/api/counter';
@@ -182,6 +185,10 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
       asWorker((db, by, c) => undoEnd(db, by, c.param('id'))),
     ),
     http.post(
+      `${B}/games/:id/correct-end`,
+      asWorker<CorrectEndRequest>((db, by, c) => correctEnd(db, by, c.param('id'), c.body)),
+    ),
+    http.post(
       `${B}/games/:id/damage`,
       asWorker<DamageRequest>((db, by, c) => damageCharge(db, by, c.param('id'), c.body)),
     ),
@@ -247,6 +254,15 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
     http.post(
       `${B}/checkout/:playerId`,
       asWorker<CheckoutRequest>((db, by, c) => checkout(db, by, c.param('playerId'), c.body, true)),
+    ),
+
+    http.post(
+      `${B}/checkout/:playerId/undo`,
+      asWorker((db, by, c) => undoCheckout(db, by, c.param('playerId'))),
+    ),
+    http.get(
+      `${B}/undoable`,
+      asWorker((db, by) => undoableActions(db, by)),
     ),
 
     // Canteen, drawer, the day, closing

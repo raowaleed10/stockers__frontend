@@ -5,10 +5,19 @@ import type { InvalidationMap } from '@/lib/events';
  * `['board']` also refreshes `['board', 'pool']`.
  */
 export const counterInvalidations: InvalidationMap = {
-  'board.changed': [['board'], ['clubStatus'], ['game'], ['today'], ['closePreview'], ['recent']],
-  'game.changed': [['game'], ['board'], ['clubStatus'], ['recent'], ['players']],
+  'board.changed': [
+    ['board'],
+    ['clubStatus'],
+    ['game'],
+    ['today'],
+    ['closePreview'],
+    ['recent'],
+    ['undoable'],
+  ],
+  'game.changed': [['game'], ['board'], ['clubStatus'], ['recent'], ['players'], ['undoable']],
   'waiting.changed': [
     ['board'],
+    ['undoable'],
     ['checkout'],
     ['today'],
     ['closePreview'],
@@ -18,6 +27,7 @@ export const counterInvalidations: InvalidationMap = {
   ],
   'sheet.closed': [
     ['board'],
+    ['undoable'],
     ['clubStatus'],
     ['game'],
     ['checkout'],

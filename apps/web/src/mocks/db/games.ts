@@ -1,5 +1,6 @@
 import type {
   CancelRequest,
+  CorrectEndRequest,
   GameView,
   PlayerTonight,
   ChangeTypeRequest,
@@ -19,6 +20,7 @@ import type {
   StartRoomRequest,
   StatementLine,
   Table,
+  UndoableCharge,
 } from '@stockers/shared';
 import {
   canChangeType,
@@ -597,15 +599,24 @@ function postFrameLines(
   );
 }
 
-/** Ends a frame or a game: the loser (or the losing side) is charged. */
-export function endGame(
-  db: MockDb,
-  by: PersonRef,
-  id: string,
-  request: EndGameRequest,
-): EndGameResult {
-  const game = activeGame(db, id);
-  const table = db.table(game.tableId);
+/** What ending a frame or a game charges, worked out and checked before anything changes. */
+interface EndPlan {
+  loserIds: string[];
+  /** The whole charge. */
+  amount: Rs;
+  /** The price without a double charge, for the Activity line. */
+  normalAmount: Rs;
+  /** What each loser pays. */
+  amounts: Record<string, Rs>;
+  chargedDouble: boolean;
+  elapsedMs: number;
+}
+
+/**
+ * Checks a request to end a frame or a game, as if it ended at `endMs`, and works out what it charges. Changes nothing, so
+ * a refused request leaves the game as it was (a correction relies on that).
+ */
+function planEnd(game: Game, request: EndGameRequest, endMs: number): EndPlan {
   if (game.type === 'century' || game.type === 'room') {
     fail('VALIDATION', 'End a Century or a room with its own button.');
   }
@@ -614,7 +625,7 @@ export function endGame(
   if (loserIds.length === 0 || loserIds.some((l) => !all.includes(l))) {
     fail('VALIDATION', 'Choose who lost.');
   }
-  const elapsedMs = elapsed(game.startedAt, db.now(), game.pausedMs, game.pausedAt);
+  const elapsedMs = elapsed(game.startedAt, endMs, game.pausedMs, game.pausedAt);
 
   // Past the game's own time limit the worker chooses (Q2, D56): the normal price, or double. It is the same for a
   // single frame, a double frame and a game of pool, foosball, carrom, ludo or PlayStation; a double frame's price
@@ -648,10 +659,27 @@ export function endGame(
     if (chargedDouble) amount = overtimeOptions(game.price).double;
     amounts = { [loserIds[0]]: amount };
   }
+  return { loserIds, amount, normalAmount, amounts, chargedDouble, elapsedMs };
+}
+
+/**
+ * Charges a planned end: the statement lines, the players' numbers, the session score and the sheet's totals.
+ * `finishNow` ends the game now; a correction charges a game that has already ended, so it keeps its end time.
+ */
+function applyEnd(
+  db: MockDb,
+  by: PersonRef,
+  game: Game,
+  plan: EndPlan,
+  finishNow: boolean,
+): EndGameResult {
+  const table = db.table(game.tableId);
+  const { loserIds, amount, normalAmount, amounts, chargedDouble, elapsedMs } = plan;
+  const all = playersOf(game);
 
   const lines = postFrameLines(db, by, game, loserIds, amounts, chargedDouble);
-  finish(db, by, game, 'ended');
-  game.result = {
+  if (finishNow) finish(db, by, game, 'ended');
+  const result: NonNullable<Game['result']> = {
     loserIds,
     amount,
     ...(chargedDouble ? { chargedDouble: true } : {}),
@@ -659,6 +687,7 @@ export function endGame(
     minutes: Math.floor(elapsedMs / MINUTE_MS),
     lineIds: lines.map((line) => line.id),
   };
+  game.result = result;
 
   // Statistics and sheet totals.
   const winners = all.filter((p) => !loserIds.includes(p));
@@ -669,13 +698,17 @@ export function endGame(
     if (loserIds.includes(pid)) player.spent += amounts[pid] ?? 0;
   }
   const session = db.s.sessions.find((s) => s.id === game.sessionId);
-  session?.frames.push({
-    no: game.frameNo ?? session.frames.length + 1,
-    loserIds,
-    amount,
-    startedAt: game.startedAt,
-    endedAt: game.endedAt ?? db.nowIso(),
-  });
+  if (session) {
+    session.frames.push({
+      no: game.frameNo ?? session.frames.length + 1,
+      loserIds,
+      amount,
+      startedAt: game.startedAt,
+      endedAt: game.endedAt ?? db.nowIso(),
+    });
+    // A corrected frame can be charged after a later one.
+    session.frames.sort((a, b) => a.no - b.no);
+  }
   db.s.today.frames += 1;
   if (game.type === 'double') db.s.today.doubles += 1;
   db.s.today.earned += amount;
@@ -683,10 +716,11 @@ export function endGame(
 
   if (chargedDouble) {
     const payers = loserIds.map((l) => playerName(db, l)).join(' and ');
-    db.logActivity(by, 'double-charge', `Charged double on ${table.name}`, {
+    const event = db.logActivity(by, 'double-charge', `Charged double on ${table.name}`, {
       detail: `${game.type === 'game' ? 'Game' : 'Frame'} ran ${Math.floor(elapsedMs / MINUTE_MS)} minutes, over its limit of ${gameLimit(game)}. ${payers} paid ${formatRs(amount)} instead of ${formatRs(normalAmount)}.`,
       amount: amount - normalAmount,
     });
+    result.doubleEventId = event.id;
   }
   db.history(
     by,
@@ -696,6 +730,18 @@ export function endGame(
   changed(db, game);
   db.emit('waiting.changed');
   return { game, amount, lines };
+}
+
+/** Ends a frame or a game: the loser (or the losing side) is charged. */
+export function endGame(
+  db: MockDb,
+  by: PersonRef,
+  id: string,
+  request: EndGameRequest,
+): EndGameResult {
+  const game = activeGame(db, id);
+  const plan = planEnd(game, request, db.now());
+  return applyEnd(db, by, game, plan, true);
 }
 
 /** The same players, the next frame on the same table (D10, screen 18). */
@@ -727,30 +773,41 @@ export function nextFrame(db: MockDb, by: PersonRef, id: string): Game {
   return next;
 }
 
+/** A frame, a double frame or a game that has been charged: the kinds a correction can change. */
+function isCharged(game: Game): boolean {
+  return (
+    game.status === 'ended' &&
+    game.result !== undefined &&
+    game.endedAt !== undefined &&
+    (game.type === 'single' || game.type === 'double' || game.type === 'game')
+  );
+}
+
 /**
- * "Tapped the wrong player?" on screen 18 (DEFAULT, needs answer): the worker who charged a frame can take the charge
- * back for 2 minutes, as long as no other game has started on the table. The statement lines, the player's numbers,
- * the session score and the sheet's totals go back, the frame runs again from where it ended (the time since is not
- * counted), and Activity shows the undo with his name.
+ * "Tapped the wrong player? Undo" on screen 18 (D63). The worker who charged a frame can correct it for 2 minutes, also
+ * after the next frame has started: it only changes the finished frame and never touches a game that is running. Undo
+ * opens the correction (nothing is changed yet, so a worker who walks away leaves the charge as it was); `correctEnd`
+ * then takes the charge back and charges who lost, or nobody. He has 2 minutes from tapping Undo to choose.
  */
 export function undoEnd(db: MockDb, by: PersonRef, id: string): Game {
   const game = db.game(id);
-  const result = game.result;
-  const charged = game.type === 'single' || game.type === 'double' || game.type === 'game';
-  if (game.status !== 'ended' || !charged || !result || !game.endedAt) {
-    fail('GAME_NOT_RUNNING', 'That frame is not charged.');
-  }
-  const table = db.table(game.tableId);
+  if (!isCharged(game) || !game.endedAt) fail('GAME_NOT_RUNNING', 'That frame is not charged.');
   if (game.endedBy?.id !== by.id) {
     const name = game.endedBy?.name.split(' ')[0] ?? 'Another worker';
     fail('NOT_ALLOWED', `${name} charged this frame, so only ${name} can undo it.`);
   }
-  if (!canUndo(game.endedAt, db.now())) {
+  if (game.sheetId !== db.s.currentSheetId || !canUndo(game.endedAt, db.now())) {
     fail('UNDO_EXPIRED', 'It is more than 2 minutes since the frame was charged.');
   }
-  if (db.activeGameOn(table.id)) fail('TABLE_BUSY', `A game has already started on ${table.name}.`);
+  game.correction = { at: db.nowIso() };
+  changed(db, game);
+  return game;
+}
 
-  const names = result.loserIds.map((l) => playerName(db, l)).join(' and ');
+/** Takes a frame's charge back: the statement lines, the players' numbers, the session score and the sheet's totals. */
+function reverseCharge(db: MockDb, game: Game): void {
+  const result = game.result;
+  if (!result) return;
   const lineIds = new Set(result.lineIds ?? []);
   for (const loserId of result.loserIds) {
     for (const line of [...db.statement(loserId)]) {
@@ -775,27 +832,106 @@ export function undoEnd(db: MockDb, by: PersonRef, id: string): Game {
   if (game.type === 'double') db.s.today.doubles -= 1;
   db.s.today.earned -= result.amount;
   db.s.deltas.earned -= result.amount;
-  if (result.chargedDouble) {
-    db.s.activity = db.s.activity.filter(
-      (a) => !(a.type === 'double-charge' && a.at === game.endedAt && a.title.endsWith(table.name)),
+  if (result.doubleEventId) {
+    db.s.activity = db.s.activity.filter((a) => a.id !== result.doubleEventId);
+  }
+  delete game.result;
+}
+
+/**
+ * The second step of the correction (D63): the worker picks who lost again, or "Nobody pays" (a discard with a reason).
+ * The answer is checked first, then the old charge is taken back and the new one made in one step. Activity shows
+ * "Frame undone" with his name, and a double charge or a discard as they would be on their own.
+ */
+export function correctEnd(
+  db: MockDb,
+  by: PersonRef,
+  id: string,
+  request: CorrectEndRequest,
+): EndGameResult {
+  const game = db.game(id);
+  const old = game.result;
+  const correction = game.correction;
+  if (!isCharged(game) || !old || !game.endedAt || !correction) {
+    fail('GAME_NOT_RUNNING', 'Tap Undo on the charged frame first.');
+  }
+  if (game.endedBy?.id !== by.id) {
+    const name = game.endedBy?.name.split(' ')[0] ?? 'Another worker';
+    fail('NOT_ALLOWED', `${name} charged this frame, so only ${name} can change it.`);
+  }
+  if (!canUndo(correction.at, db.now())) {
+    fail(
+      'UNDO_EXPIRED',
+      'It is more than 2 minutes since you tapped Undo. The first charge stays.',
     );
   }
+  const table = db.table(game.tableId);
+  const nobody = request.discard !== undefined;
+  if (nobody === (request.loserIds !== undefined)) {
+    fail('VALIDATION', 'Choose who lost, or that nobody pays.');
+  }
+  const reason = request.discard?.reason?.trim();
+  if (nobody && !reason) fail('NOTE_REQUIRED', 'Choose a reason.');
+  // Check the new answer before anything is taken back: a refused request changes nothing.
+  const plan = nobody
+    ? undefined
+    : planEnd(game, request as EndGameRequest, Date.parse(game.endedAt));
 
-  // Running again: the time since it ended is not played time.
-  game.pausedMs += Math.max(0, db.now() - Date.parse(game.endedAt));
-  game.status = 'running';
-  delete game.endedAt;
-  delete game.endedBy;
-  delete game.result;
+  const names = old.loserIds.map((l) => playerName(db, l)).join(' and ');
+  const was = old.amount;
+  reverseCharge(db, game);
+  delete game.correction;
 
+  const instead = plan
+    ? `${formatRs(plan.amount)} charged to ${plan.loserIds.map((l) => playerName(db, l)).join(' and ')} instead.`
+    : 'Nobody pays.';
   db.logActivity(by, 'undo', `Frame undone on ${table.name}`, {
-    detail: `${formatRs(result.amount)} taken off ${names}’s bill. The frame is running again.`,
-    amount: result.amount,
+    detail: `${formatRs(was)} taken off ${names}’s bill. ${instead}`,
+    amount: was,
   });
-  db.history(by, `Undid the charge of ${table.name}: ${names}`, result.amount);
+  db.history(by, `Undid the charge of ${table.name}: ${names}`, was);
+
+  if (plan) return applyEnd(db, by, game, plan, false);
+
+  game.status = 'discarded';
+  const note = request.discard?.note?.trim();
+  db.logActivity(by, 'discard', `Frame discarded on ${table.name}`, {
+    detail: note ? `${reason}. “${note}”` : reason,
+    amount: was,
+  });
+  db.notify(
+    'cancelled-or-discarded',
+    `Frame discarded on ${table.name}`,
+    note ? `“${note}”` : (reason ?? ''),
+    was,
+  );
+  db.history(by, `Discarded ${table.name}: ${reason}`, was);
   changed(db, game);
   db.emit('waiting.changed');
-  return game;
+  return { game, amount: 0, lines: [] };
+}
+
+/** `GET /undoable` (charges): the frame this worker charged less than 2 minutes ago, the latest first. */
+export function undoableCharge(db: MockDb, by: PersonRef): UndoableCharge | null {
+  const game = db.s.games
+    .filter(
+      (g) =>
+        g.type === 'single' &&
+        isCharged(g) &&
+        g.endedBy?.id === by.id &&
+        g.sheetId === db.s.currentSheetId &&
+        canUndo(g.endedAt as string, db.now()),
+    )
+    .sort((a, b) => Date.parse(b.endedAt ?? '') - Date.parse(a.endedAt ?? ''))[0];
+  const loserId = game?.result?.loserIds[0];
+  if (!game || !game.result || !game.endedAt || !loserId) return null;
+  return {
+    gameId: game.id,
+    tableId: game.tableId,
+    name: playerName(db, loserId),
+    amount: game.result.amount,
+    endedAt: game.endedAt,
+  };
 }
 
 export function endCentury(db: MockDb, by: PersonRef, id: string): EndGameResult {

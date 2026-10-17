@@ -116,5 +116,11 @@
     "freeSub": "Players are done",
     "wrong": "Tapped the wrong player?",
     "undo": "Undo, {{time}} left"
+  },
+  "correct": {
+    "keep": "Keep it as it is",
+    "hint": "{{amount}} is on {{name}}’s bill now. Tap who lost, or keep it as it is.",
+    "nobodyTitle": "Nobody pays for this frame",
+    "nobodySub": "{{amount}} is taken off {{name}}’s bill. Choose why, so the owners can see it."
   }
 }

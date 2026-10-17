@@ -53,14 +53,43 @@ test.describe('ending a frame on Table 1', () => {
     expect(problems).toEqual([]);
   });
 
-  test('Undo takes the charge back and asks who lost again', async ({ page }) => {
+  test('Undo asks who lost again, and the right player is charged instead (D63)', async ({
+    page,
+  }) => {
     await open(page, `/table/t1/end?${at('21:51:00')}`);
     await page.getByRole('button', { name: /^Bilal Ahmed/ }).click();
     const next = page.getByRole('dialog', { name: 'Rs 250 added to Bilal Ahmed’s bill' });
     await next.getByRole('button', { name: /^Undo, / }).click();
-    await expect(page).toHaveURL(/\/table\/t1\/end$/);
+    await expect(page).toHaveURL(/\/table\/t1\/correct\/g-t1-3$/);
     const who = page.getByRole('dialog', { name: 'Who lost this frame?' });
-    await expect(who.getByRole('button', { name: /^Bilal Ahmed/ })).toContainText('Rs 600 waiting');
+    await expect(who).toContainText('Rs 250 is on Bilal Ahmed’s bill now.');
+    await who.getByRole('button', { name: /^Ali Raza/ }).click();
+    await expect(page).toHaveURL(/\/table\/t1\/next$/);
+    await expect(
+      page.getByRole('dialog', { name: 'Rs 250 added to Ali Raza’s bill' }),
+    ).toBeVisible();
+  });
+
+  test('Undo still works after Next frame has started: the toast offers it and the running frame stays', async ({
+    page,
+  }) => {
+    await open(page, `/table/t1/end?${at('21:51:00')}`);
+    await page.getByRole('button', { name: /^Bilal Ahmed/ }).click();
+    await page.getByRole('button', { name: /^Next frame, same players/ }).click();
+    await expect(page).toHaveURL(/\/$/);
+    const toast = page
+      .getByRole('status')
+      .filter({ hasText: 'Rs 250 added to Bilal Ahmed’s bill' });
+    await toast.getByRole('button', { name: 'Undo' }).click();
+    await expect(page).toHaveURL(/\/table\/t1\/correct\/g-t1-3$/);
+    await page
+      .getByRole('dialog', { name: 'Who lost this frame?' })
+      .getByRole('button', { name: /^Ali Raza/ })
+      .click();
+    await expect(page).toHaveURL(/\/$/);
+    // Frame 4 is still running on Table 1, and Bilal is back to Rs 600.
+    await expect(page.getByRole('button', { name: 'Table 1, playing' })).toContainText('Frame 4');
+    await expect(page.getByRole('button', { name: /Bilal Ahmed/ })).toContainText('Rs 600');
   });
 
   test('Nobody pays opens the stop screen, and Keep playing closes the question', async ({

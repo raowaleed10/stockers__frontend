@@ -1,12 +1,14 @@
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { clock } from '@/lib/clock';
 import { createTestApi } from '@/mocks/test-server';
 import {
   renderCounter,
   resetCounterState,
   setLanguage,
   startCounterTests,
+  textIs,
   wherePath,
 } from '../../test/harness';
 import { useCheckoutDraft } from '../../checkout/draft';
@@ -41,13 +43,19 @@ afterEach(() => {
 });
 
 /** The green note after a payment (the harness's router probe is an <output>, which is also a status). */
-const paidNote = () => screen.findByText(/ paid Rs /);
+const paidNote = () => screen.findByText(/ paid Rs /, { selector: 'p' });
 const dialog = (name: string | RegExp) => screen.findByRole('dialog', { name });
 const bill = (name: string | RegExp) => screen.findByRole('heading', { name });
 const button = (name: string | RegExp) => screen.findByRole('button', { name });
 const lines = (playerId: string) => api.db.statement(playerId);
 const tonight = (playerId: string) =>
   api.db.tonightLines(playerId).reduce((sum, line) => sum + (line.charge ?? 0), 0);
+
+/** Answers "Yes" on the sheet that every money action asks first (D63). */
+async function confirmYes() {
+  const sheet = await screen.findByRole('dialog');
+  await userEvent.click(within(sheet).getByRole('button', { name: 'Yes' }));
+}
 
 /** Taps the digits on the amount keypad. */
 async function typeDigits(digits: string[]) {
@@ -219,6 +227,7 @@ describe('screen 25: a player’s bill', () => {
       }),
     );
     await userEvent.click(screen.getByRole('button', { name: /^Paid in full/ }));
+    await confirmYes();
     await waitFor(() => expect(wherePath(view)).toBe('/checkout'));
     expect(await paidNote()).toHaveTextContent('Bilal Ahmed paid Rs 1,350.');
     expect(screen.queryByRole('button', { name: /^Bilal Ahmed/ })).toBeNull();
@@ -242,6 +251,7 @@ describe('screen 25: a player’s bill', () => {
     await bill('Bilal Ahmed');
     const cash = api.db.s.today.cashReceived;
     await userEvent.click(screen.getByRole('button', { name: /^Put all on credit/ }));
+    await confirmYes();
     await waitFor(() => expect(wherePath(view)).toBe('/checkout'));
     expect(await paidNote()).toHaveTextContent('Bilal Ahmed paid Rs 0. Rs 1,350 stays as credit.');
     expect(lines('bilal').some((line) => line.kind === 'payment')).toBe(false);
@@ -259,6 +269,7 @@ describe('screen 25: a player’s bill', () => {
     expect(section).toHaveTextContent('Century, Table 3, 42 min at Rs 15');
     expect(section).toHaveTextContent('Total to payRs 430');
     await userEvent.click(screen.getByRole('button', { name: /^Paid in full/ }));
+    await confirmYes();
     await waitFor(() => expect(wherePath(view)).toBe('/checkout'));
     expect(lines('saad').find((line) => line.kind === 'payment')).toMatchObject({
       paid: 430,
@@ -377,6 +388,7 @@ describe('screen 27: give a discount', () => {
     await userEvent.click(within(d).getByRole('button', { name: 'Frame ended early' }));
     await userEvent.click(within(d).getByRole('button', { name: 'Apply Rs 50 discount' }));
     await userEvent.click(await button(/^Paid in full/));
+    await confirmYes();
     await waitFor(() => expect(wherePath(view)).toBe('/checkout'));
     expect(lines('bilal').find((line) => line.kind === 'payment')).toMatchObject({
       paid: 1300,
@@ -447,6 +459,7 @@ describe('screen 26: part payment', () => {
     const cash = api.db.s.today.cashReceived;
     const easypaisa = api.db.s.today.online.easypaisa ?? 0;
     await userEvent.click(screen.getByRole('button', { name: /^Save payment/ }));
+    await confirmYes();
     await waitFor(() => expect(wherePath(view)).toBe('/checkout'));
     expect(await paidNote()).toHaveTextContent(
       'Bilal Ahmed paid Rs 1,000. Rs 300 stays as credit.',
@@ -519,6 +532,7 @@ describe('screen 26: part payment', () => {
       'Rs 150 is kept as advance',
     );
     await userEvent.click(screen.getByRole('button', { name: /^Save payment/ }));
+    await confirmYes();
     await waitFor(() => expect(wherePath(view)).toBe('/checkout'));
     expect(await paidNote()).toHaveTextContent(
       'Kamran Iqbal paid Rs 1,500. Rs 150 is kept as advance.',
@@ -562,6 +576,137 @@ describe('screen 26: part payment', () => {
     await screen.findByRole('heading', { name: 'Bilal Ahmed pays part' });
     await userEvent.click(screen.getByRole('button', { name: 'Bill' }));
     await waitFor(() => expect(wherePath(view)).toBe('/checkout/bilal'));
+  });
+});
+
+describe('money actions ask once (D63)', () => {
+  const askedWith = async (name: string) => {
+    const sheet = await screen.findByRole('dialog');
+    expect(sheet).toHaveAccessibleName(name);
+    return sheet;
+  };
+
+  it('Paid in full asks with the amount and the method, and nothing is saved until Yes', async () => {
+    const view = renderCounter('/checkout/bilal');
+    await bill('Bilal Ahmed');
+    await userEvent.click(screen.getByRole('button', { name: /^Paid in full/ }));
+    const sheet = await askedWith('Rs 1,350 paid: Cash 1,350?');
+    expect(sheet).toHaveTextContent('Bilal Ahmed. You can undo it for 2 minutes.');
+    expect(within(sheet).getByRole('button', { name: 'Yes' })).toBeInTheDocument();
+    expect(within(sheet).getByRole('button', { name: 'No' })).toBeInTheDocument();
+    expect(api.db.player('bilal').balance).toBe(1350);
+    expect(wherePath(view)).toBe('/checkout/bilal');
+  });
+
+  it('No (and Escape) closes the sheet and saves nothing', async () => {
+    const view = renderCounter('/checkout/bilal');
+    await bill('Bilal Ahmed');
+    await userEvent.click(screen.getByRole('button', { name: /^Paid in full/ }));
+    await userEvent.click(
+      within(await askedWith('Rs 1,350 paid: Cash 1,350?')).getByRole('button', { name: 'No' }),
+    );
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    expect(api.db.player('bilal').balance).toBe(1350);
+    expect(tonight('bilal')).toBe(850);
+
+    await userEvent.click(screen.getByRole('button', { name: /^Put all on credit/ }));
+    await askedWith('Put Rs 1,350 on Bilal Ahmed’s credit?');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    expect(tonight('bilal')).toBe(850);
+    expect(wherePath(view)).toBe('/checkout/bilal');
+  });
+
+  it('Put all on credit asks "Put Rs 1,350 on Bilal Ahmed’s credit?"', async () => {
+    renderCounter('/checkout/bilal');
+    await bill('Bilal Ahmed');
+    await userEvent.click(screen.getByRole('button', { name: /^Put all on credit/ }));
+    await askedWith('Put Rs 1,350 on Bilal Ahmed’s credit?');
+  });
+
+  it('a part payment asks with every method and what goes on credit: Rs 1,000 paid: Cash 600, Easypaisa 400, Rs 300 to credit?', async () => {
+    renderCounter('/checkout/bilal/part');
+    await screen.findByRole('heading', { name: 'Bilal Ahmed pays part' });
+    await typeDigits(['6', '0', '0']);
+    await userEvent.click(screen.getByRole('button', { name: '+ Easypaisa' }));
+    await typeDigits(['4', '0', '0']);
+    await userEvent.click(screen.getByRole('button', { name: /^Save payment/ }));
+    await askedWith('Rs 1,000 paid: Cash 600, Easypaisa 400, Rs 350 to credit?');
+    expect(tonight('bilal')).toBe(850);
+  });
+
+  it('an extra amount says it is kept as advance', async () => {
+    renderCounter('/checkout/kamran/part');
+    await screen.findByRole('heading', { name: 'Kamran Iqbal pays part' });
+    await typeDigits(['1', '5', '00']);
+    await userEvent.click(screen.getByRole('button', { name: /^Save payment/ }));
+    await askedWith('Rs 1,500 paid: Cash 1,500, Rs 150 kept as advance?');
+  });
+
+  it('Yes saves it with Zain’s name and the list says so; the cream toast then offers Undo for 2 minutes', async () => {
+    const view = renderCounter('/checkout/bilal');
+    await bill('Bilal Ahmed');
+    await userEvent.click(screen.getByRole('button', { name: /^Paid in full/ }));
+    await askedWith('Rs 1,350 paid: Cash 1,350?');
+    await confirmYes();
+    await waitFor(() => expect(wherePath(view)).toBe('/checkout'));
+    expect(await paidNote()).toHaveTextContent('Bilal Ahmed paid Rs 1,350.');
+    const toast = await screen.findByText(textIs('Payment saved: Bilal Ahmed paid Rs 1,350.'));
+    const card = toast.closest('[role="status"]') as HTMLElement;
+    expect(card).toHaveTextContent(/Undo for (2:00|1:5\d) more/);
+    expect(lines('bilal').find((line) => line.kind === 'payment')).toMatchObject({
+      paid: 1350,
+      doneBy: { name: 'Zain' },
+    });
+  });
+
+  it('Undo on the toast takes the payment back: the bill is waiting again, the toast says so', async () => {
+    renderCounter('/checkout/bilal');
+    await bill('Bilal Ahmed');
+    const cash = api.db.s.today.cashReceived;
+    await userEvent.click(screen.getByRole('button', { name: /^Paid in full/ }));
+    await confirmYes();
+    const toast = (
+      await screen.findByText(textIs('Payment saved: Bilal Ahmed paid Rs 1,350.'))
+    ).closest('[role="status"]') as HTMLElement;
+    expect(api.db.player('bilal').balance).toBe(0);
+    await userEvent.click(within(toast).getByRole('button', { name: /Undo/ }));
+    expect(await screen.findByText('Payment undone for Bilal Ahmed.')).toBeInTheDocument();
+    expect(api.db.player('bilal').balance).toBe(1350);
+    expect(tonight('bilal')).toBe(850);
+    expect(api.db.s.today.cashReceived).toBe(cash);
+    // He is on the waiting list again.
+    expect(await button(/^Bilal Ahmed/)).toHaveTextContent('Rs 1,350');
+    expect(api.db.s.activity[0]).toMatchObject({
+      type: 'undo',
+      title: 'Payment undone for Bilal Ahmed',
+      by: { name: 'Zain' },
+    });
+  });
+
+  it('a put-on-credit toast says so, and is only for the worker who took it', async () => {
+    renderCounter('/checkout/bilal');
+    await bill('Bilal Ahmed');
+    await userEvent.click(screen.getByRole('button', { name: /^Put all on credit/ }));
+    await confirmYes();
+    expect(
+      await screen.findByText(textIs('Put on credit: Bilal Ahmed’s bill.')),
+    ).toBeInTheDocument();
+  });
+
+  it('the toast is gone after 2 minutes', async () => {
+    renderCounter('/checkout/bilal');
+    await bill('Bilal Ahmed');
+    await userEvent.click(screen.getByRole('button', { name: /^Paid in full/ }));
+    await confirmYes();
+    await screen.findByText(textIs('Payment saved: Bilal Ahmed paid Rs 1,350.'));
+    api.setTime('2026-10-03T22:23:30+05:00');
+    clock.setStart(Date.parse('2026-10-03T22:23:30+05:00'));
+    await waitFor(
+      () =>
+        expect(screen.queryByText(textIs('Payment saved: Bilal Ahmed paid Rs 1,350.'))).toBeNull(),
+      { timeout: 4000 },
+    );
   });
 });
 

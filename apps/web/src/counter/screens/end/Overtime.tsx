@@ -13,7 +13,8 @@ import { Button } from '@/ui/Button';
 import { CounterDialog } from '@/ui/CounterDialog';
 import { MoneyText } from '@/ui/MoneyText';
 import { OptionCard } from '@/ui/OptionCard';
-import { useEndGame } from '../../api';
+import type { GameView } from '@stockers/shared';
+import { useCorrectEnd, useEndGame } from '../../api';
 import { boardOfTableScreen, tablePath } from '../../components/table-paths';
 import { useEndDraft } from '../../end/draft';
 import { useKeptGame } from '../../end/use-kept-game';
@@ -26,13 +27,20 @@ import { firstName } from '../table/game-info';
  * (17) or the side and split (20) and before anything is charged, for a game past its own time limit (Q2, D56). Normal
  * price or double price; the worker always chooses. A double charge is written in Activity. For a double frame the
  * total is the whole double price, and a custom split is doubled with it, so it still adds up.
+ *
+ * With `correcting` (D63) it is the same question for a frame that was already charged and is being charged again: the
+ * minutes are those of the frame when it ended, and the answer goes to the correction.
  */
 export function Overtime() {
   const { id } = useParams<{ id: string }>();
   return <TableGate tableId={id}>{(context) => <OvertimeStep {...context} />}</TableGate>;
 }
 
-function OvertimeStep({ table, board }: TableContext) {
+export function OvertimeStep({
+  table,
+  board,
+  correcting,
+}: TableContext & { correcting?: GameView }) {
   const { t } = useTranslation('end');
   const { t: tBoard } = useTranslation('board');
   const navigate = useNavigate();
@@ -40,16 +48,27 @@ function OvertimeStep({ table, board }: TableContext) {
   const close = useCloseTable();
   const now = useNow(1000);
   const end = useEndGame();
+  const correct = useCorrectEnd();
   const draft = useEndDraft();
-  const game = useKeptGame(table);
+  const kept = useKeptGame(table);
+  const game = correcting?.game ?? kept;
+  const back = tablePath(
+    pathname,
+    table.id,
+    correcting ? `/correct/${correcting.game.id}` : '/end',
+  );
 
   if (!game) return <Navigate to={boardOfTableScreen(pathname)} replace />;
   // Nobody has been chosen (the page was reloaded): ask who lost first.
-  if (!end.isSuccess && (draft.gameId !== game.id || draft.loserIds.length === 0)) {
-    return <Navigate to={tablePath(pathname, table.id, '/end')} replace />;
+  if (
+    !end.isSuccess &&
+    !correct.isSuccess &&
+    (draft.gameId !== game.id || draft.loserIds.length === 0)
+  ) {
+    return <Navigate to={back} replace />;
   }
 
-  const nameOf = (id: string) => board.players[id]?.name ?? id;
+  const nameOf = (id: string) => correcting?.players[id]?.name ?? board.players[id]?.name ?? id;
   const name = tBoard(`nameOf.${table.kind}`, { number: table.number.replace(/^R/i, '') });
   const everyone = [...(game.playerIds ?? []), ...(game.sides?.flat() ?? [])];
   const isDouble = game.type === 'double';
@@ -58,8 +77,9 @@ function OvertimeStep({ table, board }: TableContext) {
     : draft.loserIds;
   const winners = everyone.filter((id) => !losers.includes(id));
   const names = (ids: string[]) => ids.map(nameOf).join(t('and'));
+  const endedMs = correcting?.game.endedAt ? Date.parse(correcting.game.endedAt) : now;
   const minutes = Math.round(
-    elapsed(game.startedAt, now, game.pausedMs, game.pausedAt) / MINUTE_MS,
+    elapsed(game.startedAt, endedMs, game.pausedMs, game.pausedAt) / MINUTE_MS,
   );
   const limit = gameLimit(game) ?? 30;
   const options = overtimeOptions(game.price);
@@ -79,19 +99,17 @@ function OvertimeStep({ table, board }: TableContext) {
       ...(split ? { split } : {}),
       ...(chargeDouble ? { chargeDouble: true } : {}),
     };
-    end.mutate(
-      { id: game.id, request },
-      {
-        onSuccess: () => {
-          if (game.type === 'single') {
-            navigate(tablePath(pathname, table.id, '/next'), { state: { gameId: game.id } });
-          } else {
-            close();
-          }
-          draft.reset();
-        },
-      },
-    );
+    const done = () => {
+      // A corrected frame leaves a running frame alone; with the table free, screen 18 offers the next one.
+      if (game.type === 'single' && !(correcting && table.game)) {
+        navigate(tablePath(pathname, table.id, '/next'), { state: { gameId: game.id } });
+      } else {
+        close();
+      }
+      draft.reset();
+    };
+    if (correcting) correct.mutate({ id: game.id, request }, { onSuccess: done });
+    else end.mutate({ id: game.id, request }, { onSuccess: done });
   };
 
   return (
@@ -112,7 +130,7 @@ function OvertimeStep({ table, board }: TableContext) {
               first: firstName(nameOf(losers[0] ?? '')),
             })
       }
-      onClose={() => navigate(tablePath(pathname, table.id, '/end'))}
+      onClose={() => navigate(back)}
       actions={
         <>
           <span className="min-w-0 flex-[1_1_360px] text-[16px] text-c-text-2">
@@ -122,7 +140,7 @@ function OvertimeStep({ table, board }: TableContext) {
             theme="counter"
             size="counter-main"
             className="min-h-[60px] px-6 text-[18px]"
-            onClick={() => navigate(tablePath(pathname, table.id, '/end'))}
+            onClick={() => navigate(back)}
           >
             {t('over.back')}
           </Button>
@@ -135,7 +153,7 @@ function OvertimeStep({ table, board }: TableContext) {
           className="flex-[1_1_340px]"
           title={t('over.normal')}
           value={<MoneyText value={options.normal} />}
-          disabled={end.isPending}
+          disabled={end.isPending || correct.isPending}
           onClick={() => charge(false)}
         />
         <OptionCard
@@ -144,13 +162,13 @@ function OvertimeStep({ table, board }: TableContext) {
           className="flex-[1_1_340px]"
           title={t('over.double')}
           value={<MoneyText value={options.double} />}
-          disabled={end.isPending}
+          disabled={end.isPending || correct.isPending}
           onClick={() => charge(true)}
         />
       </div>
-      {end.error ? (
+      {(end.error ?? correct.error) ? (
         <p role="alert" className="m-0 text-[17px] text-c-danger-ink">
-          {end.error.message}
+          {(end.error ?? correct.error)?.message}
         </p>
       ) : null}
     </CounterDialog>

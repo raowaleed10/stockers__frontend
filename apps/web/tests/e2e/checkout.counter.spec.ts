@@ -70,11 +70,18 @@ test.describe('paying a bill', () => {
     await expect(payments).toContainText('Paid nowRs 1,000');
     await expect(payments).toContainText('Stays as creditRs 300');
     await page.getByRole('button', { name: /^Save payment/ }).click();
+    // Money actions ask once (D63): nothing is saved until Yes.
+    const sure = page.getByRole('dialog', {
+      name: 'Rs 1,000 paid: Cash 600, Easypaisa 400, Rs 300 to credit?',
+    });
+    await expect(sure).toBeVisible();
+    await sure.getByRole('button', { name: 'Yes' }).click();
 
     await expect(page).toHaveURL(/\/checkout$/);
     await expect(
       page.getByText('Bilal Ahmed paid Rs 1,000. Rs 300 stays as credit.'),
     ).toBeVisible();
+    await expect(page.getByText('Payment saved: Bilal Ahmed paid Rs 1,000.')).toBeVisible();
     await expect(page.getByRole('radio', { name: 'Waiting to pay (7)' })).toBeChecked();
     await expect(page.getByRole('button', { name: /^Bilal Ahmed/ })).toHaveCount(0);
     await expect(page.getByText('Waiting tonight Rs 5,530')).toBeVisible();
@@ -94,6 +101,7 @@ test.describe('paying a bill', () => {
       'Rs 430 received now',
     );
     await page.getByRole('button', { name: /^Paid in full/ }).click();
+    await page.getByRole('button', { name: 'Yes' }).click();
     await expect(page.getByText('Saad Hussain paid Rs 430.')).toBeVisible();
     await expect(page.getByRole('button', { name: /^Saad Hussain/ })).toHaveCount(0);
   });
@@ -103,8 +111,31 @@ test.describe('paying a bill', () => {
   }) => {
     await open(page, `/checkout/bilal?${START}`);
     await page.getByRole('button', { name: /^Put all on credit/ }).click();
+    await expect(
+      page.getByRole('dialog', { name: 'Put Rs 1,350 on Bilal Ahmed’s credit?' }),
+    ).toBeVisible();
+    await page.getByRole('button', { name: 'Yes' }).click();
     await expect(page.getByText('Bilal Ahmed paid Rs 0. Rs 1,350 stays as credit.')).toBeVisible();
     await expect(page.getByRole('radio', { name: 'Waiting to pay (7)' })).toBeChecked();
+  });
+
+  test('No saves nothing, and Undo on the toast takes a saved payment back within 2 minutes', async ({
+    page,
+  }) => {
+    await open(page, `/checkout/bilal?${START}`);
+    await page.getByRole('button', { name: /^Paid in full/ }).click();
+    await page.getByRole('button', { name: 'No', exact: true }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page).toHaveURL(/\/checkout\/bilal(\?|$)/);
+
+    await page.getByRole('button', { name: /^Paid in full/ }).click();
+    await page.getByRole('button', { name: 'Yes' }).click();
+    const toast = page.getByRole('status').filter({ hasText: 'Payment saved: Bilal Ahmed' });
+    await expect(toast).toContainText(/Undo for (2:00|1:5\d) more/);
+    await toast.getByRole('button', { name: 'Undo' }).click();
+    await expect(page.getByText('Payment undone for Bilal Ahmed.')).toBeVisible();
+    await expect(page.getByRole('button', { name: /^Bilal Ahmed/ })).toContainText('Rs 1,350');
+    await expect(page.getByRole('radio', { name: 'Waiting to pay (8)' })).toBeChecked();
   });
 
   test('a discount of more than the bill is refused, and Tables goes back to the board', async ({

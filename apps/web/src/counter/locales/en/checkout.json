@@ -124,5 +124,21 @@
     "applyNone": "Apply discount",
     "remove": "Remove discount",
     "tooMuch": "A discount cannot be more than the bill, {{total}}."
+  },
+  "confirm": {
+    "full": "{{amount}} paid: {{how}}{{rest}}?",
+    "toCredit": ", {{amount}} to credit",
+    "advance": ", {{amount}} kept as advance",
+    "allCredit": "Put {{amount}} on {{name}}’s credit?",
+    "nothing": "{{name}} has nothing to pay. Save it?",
+    "sub": "{{name}}. You can undo it for 2 minutes.",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "undo": {
+    "saved": "Payment saved: <name>{{name}}</name> paid {{amount}}.",
+    "savedCredit": "Put on credit: <name>{{name}}</name>’s bill.",
+    "credit": "{{amount}} stays as credit.",
+    "done": "Payment undone for {{name}}."
   }
 }

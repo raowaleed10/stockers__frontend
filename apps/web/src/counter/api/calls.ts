@@ -13,6 +13,7 @@ import type {
   ClubStatus,
   CloseSheetRequest,
   CloseSheetResult,
+  CorrectEndRequest,
   CounterCanteenItem,
   DamageRequest,
   DiscardRequest,
@@ -38,6 +39,8 @@ import type {
   StatementLine,
   Table,
   TodayTotals,
+  UndoableActions,
+  UndoablePayment,
   UnlockRequest,
   WorkerSession,
 } from '@stockers/shared';
@@ -80,6 +83,8 @@ export const cancelGame = (id: string, request: CancelRequest) =>
   api.post<Game>(`/games/${id}/cancel`, request);
 export const undoGame = (id: string) => api.post<Game>(`/games/${id}/undo`);
 export const undoEnd = (id: string) => api.post<Game>(`/games/${id}/undo-end`);
+export const correctEnd = (id: string, request: CorrectEndRequest) =>
+  api.post<EndGameResult>(`/games/${id}/correct-end`, request);
 export const damageCharge = (id: string, request: DamageRequest) =>
   api.post<StatementLine>(`/games/${id}/damage`, request);
 export const endGame = (id: string, request: EndGameRequest) =>
@@ -108,6 +113,12 @@ export const getCheckoutList = () => api.get<CheckoutList>('/checkout');
 export const getCheckoutBill = (playerId: string) => api.get<CheckoutBill>(`/checkout/${playerId}`);
 export const payCheckout = (playerId: string, request: CheckoutRequest) =>
   api.post<CheckoutResult>(`/checkout/${playerId}`, request);
+
+export const undoCheckout = (playerId: string) =>
+  api.post<UndoablePayment>(`/checkout/${playerId}/undo`);
+
+// What the worker can still take back
+export const getUndoable = () => api.get<UndoableActions>('/undoable');
 
 // Canteen, drawer, the day, closing
 export const getCanteenItems = () => api.get<CounterCanteenItem[]>('/canteen/items');

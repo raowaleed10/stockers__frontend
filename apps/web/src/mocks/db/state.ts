@@ -67,6 +67,34 @@ export interface DisputeInfo {
   amount: Rs;
 }
 
+/**
+ * What a payment changed, so the worker who took it can undo it for 2 minutes (D63). One record for each player, the
+ * latest only: a second payment replaces it.
+ */
+export interface CheckoutUndo {
+  by: PersonRef;
+  at: ISO;
+  sheetId: string;
+  name: string;
+  paid: Rs;
+  toCredit: Rs;
+  /** The statement lines the payment posted (a payment for each method, and the discount). */
+  postedLineIds: string[];
+  /** Tonight's charge lines the payment settled; they are "tonight" again after the undo. */
+  settledLineIds: string[];
+  /** Where the player stood in the waiting list, or -1. */
+  billIndex: number;
+  oldestUnpaidAt: ISO | undefined;
+  /** Money received now, for each method. */
+  received: Record<string, Rs>;
+  newCredit: Rs;
+  newCreditPlayer: boolean;
+  oldCreditPaid: Rs;
+  oldCreditPlayer: boolean;
+  discount: Rs;
+  discountEventId?: string;
+}
+
 export interface DbState {
   scenario: ScenarioName | null;
   owners: Owner[];
@@ -106,6 +134,8 @@ export interface DbState {
   /** Sign-ins, sign-outs, automatic sign-outs, refusals and lockouts, oldest first. */
   workerEvents: WorkerSessionEvent[];
   disputes: Record<string, DisputeInfo>;
+  /** The latest payment of each player that can still be undone (D63), by player id. */
+  checkoutUndo: Record<string, CheckoutUndo>;
   settings: OwnerSettings;
   pauseAll: { at: ISO; by: PersonRef; activityId?: string } | null;
   lastBackupAt: ISO | null;

@@ -247,6 +247,36 @@ export interface EndGameResult {
   minutes?: number;
   lines: StatementLine[];
 }
+/**
+ * The second answer after "Tapped the wrong player? Undo" (screen 18, D63): who lost again (the same body as ending a
+ * frame), or `discard` for "Nobody pays". Exactly one of the two.
+ */
+export interface CorrectEndRequest extends Partial<EndGameRequest> {
+  discard?: DiscardRequest;
+}
+
+/** A frame the signed-in worker charged less than 2 minutes ago and can still take back. */
+export interface UndoableCharge {
+  gameId: string;
+  tableId: string;
+  /** The player charged. */
+  name: string;
+  amount: Rs;
+  endedAt: ISO;
+}
+/** A payment the signed-in worker took less than 2 minutes ago and can still take back. */
+export interface UndoablePayment {
+  playerId: string;
+  name: string;
+  paid: Rs;
+  toCredit: Rs;
+  at: ISO;
+}
+/** `GET /undoable`: what the signed-in worker can still undo. The counter hides each one when its 2 minutes are up. */
+export interface UndoableActions {
+  charge: UndoableCharge | null;
+  payment: UndoablePayment | null;
+}
 export interface GamesResult {
   games: Game[];
 }

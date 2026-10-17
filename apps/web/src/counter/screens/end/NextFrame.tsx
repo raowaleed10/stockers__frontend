@@ -22,7 +22,7 @@ const clockLeft = (seconds: number) =>
  * Screen 18, `/table/:id/next`: "Rs 250 added to Bilal Ahmed's bill". It opens after a single frame is charged, with the
  * id of the frame that ended in the router's state (a reload has nothing to show, so it goes back to the board). The
  * session score, then Next frame (same players, the same table), Change players, or Free the table. "Tapped the wrong
- * player? Undo" takes the charge back for 2 minutes and asks who lost again (DEFAULT, needs answer: docs/NO_DESIGN.md).
+ * player? Undo" opens the correction for 2 minutes: who lost again, or Nobody pays (D63, docs/NO_DESIGN.md).
  */
 export function NextFrame() {
   const { id } = useParams<{ id: string }>();
@@ -78,7 +78,7 @@ function NextStep({ table, board }: TableContext) {
   })();
 
   const left = game.endedAt ? undoSecondsLeft(game.endedAt, now) : 0;
-  const canUndo = left > 0 && game.endedBy?.id === me.data?.worker.id && !table.game;
+  const canUndo = left > 0 && game.endedBy?.id === me.data?.worker.id;
 
   const option =
     'flex min-h-[120px] min-w-0 flex-col items-start justify-center gap-1 text-start transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-40';
@@ -163,7 +163,7 @@ function NextStep({ table, board }: TableContext) {
             disabled={undo.isPending}
             onClick={() =>
               undo.mutate(game.id, {
-                onSuccess: () => navigate(tablePath(pathname, table.id, '/end')),
+                onSuccess: () => navigate(tablePath(pathname, table.id, `/correct/${game.id}`)),
               })
             }
             className={cx(

@@ -8,6 +8,7 @@ import { BillPage } from '../screens/checkout/BillPage';
 import { CheckoutList } from '../screens/checkout/CheckoutList';
 import { DiscountDialog } from '../screens/checkout/DiscountDialog';
 import { PartPayment } from '../screens/checkout/PartPayment';
+import { CorrectFrame } from '../screens/end/CorrectFrame';
 import { EndGame } from '../screens/end/EndGame';
 import { NextFrame } from '../screens/end/NextFrame';
 import { Overtime } from '../screens/end/Overtime';
@@ -78,6 +79,17 @@ const TABLE_ROUTES = [
   <Route key="end" path="table/:id/end" element={<EndGame />} />,
   <Route key="overtime" path="table/:id/end/overtime" element={<Overtime />} />,
   <Route key="next" path="table/:id/next" element={<NextFrame />} />,
+  <Route key="correct" path="table/:id/correct/:gameId" element={<CorrectFrame />} />,
+  <Route
+    key="correct-over"
+    path="table/:id/correct/:gameId/overtime"
+    element={<CorrectFrame step="overtime" />}
+  />,
+  <Route
+    key="correct-stop"
+    path="table/:id/correct/:gameId/stop"
+    element={<CorrectFrame step="stop" />}
+  />,
   <Route key="room" path="room/:id/start" element={<RoomStart />} />,
   <Route key="room-end" path="room/:id/end" element={<RoomEnd />} />,
   <Route key="new-player" path="players/new" element={<NewPlayer />} />,

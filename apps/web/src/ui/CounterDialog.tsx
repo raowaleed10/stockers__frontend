@@ -217,7 +217,7 @@ export function CounterDialog({
   return createPortal(
     // The designs centre a dialog in the page below the 70 px top bar (screens 7 to 15), so the padding on top is the
     // bar's, and the dialog sits in what is left. A dialog taller than that scrolls.
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-c-scrim pt-[70px] [body[data-undo-toast]_&]:pb-[110px]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-c-scrim pt-[70px] [body[data-undo-toast]_&]:pb-[var(--undo-room,110px)]">
       <div className="flex min-h-full items-center justify-center p-6">{panel}</div>
     </div>,
     document.body,

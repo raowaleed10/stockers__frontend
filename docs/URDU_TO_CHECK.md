@@ -495,5 +495,20 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Checkout: discount / applyNone | Apply discount | رعایت لگائیں | P09 |
 | Checkout: discount / remove | Remove discount | رعایت ہٹائیں | P09 |
 | Checkout: discount / tooMuch | A discount cannot be more than the bill, {{total}}. | رعایت بل سے زیادہ نہیں ہو سکتی، {{total}}۔ | P09 |
+| Undo after a charged frame / keep | Keep it as it is | جیسا ہے ویسا رہنے دیں | P09 answers |
+| Undo after a charged frame / hint | {{amount}} is on {{name}}’s bill now. Tap who lost, or keep it as it is. | {{amount}} ابھی {{name}} کے بل پر ہیں۔ ہارنے والے پر ٹیپ کریں، یا ویسا ہی رہنے دیں۔ | P09 answers |
+| Undo after a charged frame / Nobody pays, title | Nobody pays for this frame | اس فریم کے پیسے کوئی نہیں دے گا | P09 answers |
+| Undo after a charged frame / Nobody pays, text | {{amount}} is taken off {{name}}’s bill. Choose why, so the owners can see it. | {{amount}} {{name}} کے بل سے ہٹا دیے جائیں گے۔ وجہ چنیں تاکہ مالکان دیکھ سکیں۔ | P09 answers |
+| Confirm sheet / paid | {{amount}} paid: {{how}}{{rest}}? | {{amount}} ادا ہوئے: {{how}}{{rest}}؟ | P09 answers |
+| Confirm sheet / to credit | , {{amount}} to credit | ، {{amount}} ادھار میں | P09 answers |
+| Confirm sheet / advance | , {{amount}} kept as advance | ، {{amount}} ایڈوانس کے طور پر رکھے | P09 answers |
+| Confirm sheet / all on credit | Put {{amount}} on {{name}}’s credit? | {{amount}} {{name}} کے ادھار میں ڈالیں؟ | P09 answers |
+| Confirm sheet / nothing to pay | {{name}} has nothing to pay. Save it? | {{name}} کو کچھ ادا نہیں کرنا۔ محفوظ کریں؟ | P09 answers |
+| Confirm sheet / undo note | {{name}}. You can undo it for 2 minutes. | {{name}}۔ آپ اسے 2 منٹ تک واپس لے سکتے ہیں۔ | P09 answers |
+| Confirm sheet / buttons | Yes · No | ہاں · نہیں | P09 answers |
+| Undo toast / payment saved | Payment saved: {{name}} paid {{amount}}. | ادائیگی محفوظ ہو گئی: {{name}} نے {{amount}} ادا کیے۔ | P09 answers |
+| Undo toast / put on credit | Put on credit: {{name}}’s bill. | ادھار میں ڈالا: {{name}} کا بل۔ | P09 answers |
+| Undo toast / credit left | {{amount}} stays as credit. | {{amount}} ادھار رہتا ہے۔ | P09 answers |
+| Undo toast / payment undone | Payment undone for {{name}}. | {{name}} کی ادائیگی واپس لے لی گئی۔ | P09 answers |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

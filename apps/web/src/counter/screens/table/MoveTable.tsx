@@ -71,7 +71,7 @@ function MoveStep({ table, board }: TableContext) {
   const game = table.game;
   if (!game) return <Navigate to={boardOfTableScreen(pathname)} replace />;
   return createPortal(
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-c-scrim pt-[70px] [body[data-undo-toast]_&]:pb-[110px]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-c-scrim pt-[70px] [body[data-undo-toast]_&]:pb-[var(--undo-room,110px)]">
       <div
         ref={ref}
         role="dialog"
