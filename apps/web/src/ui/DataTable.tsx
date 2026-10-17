@@ -32,6 +32,8 @@ export interface DataTableProps<Row> {
   footer?: ReactNode[];
   /** Below this width the table scrolls sideways inside its box. */
   minWidth?: number;
+  /** `lg` is the roomier table of the counter's statement (screen 30): 17 px lines with 13 px above and below. */
+  size?: 'md' | 'lg';
   className?: string;
 }
 
@@ -69,9 +71,11 @@ export function DataTable<Row>({
   highlight,
   footer,
   minWidth,
+  size = 'md',
   className,
 }: DataTableProps<Row>) {
   const look = LOOK[theme];
+  const roomy = size === 'lg' && theme === 'counter';
   return (
     // relative: so the screen-reader-only caption and headers are clipped by the scroll box, not the page.
     // A box that scrolls must be reachable by keyboard, so a narrow screen can still read every column.
@@ -95,8 +99,10 @@ export function DataTable<Row>({
                 scope="col"
                 style={column.width ? { width: column.width } : undefined}
                 className={cx(
-                  'px-[18px] py-2.5 text-[14px] font-semibold',
+                  'font-semibold',
+                  roomy ? 'px-4 py-3 text-[15px]' : 'px-[18px] py-2.5 text-[14px]',
                   look.head,
+                  roomy && 'border-b-0 bg-c-raised',
                   ALIGN[column.align ?? 'start'],
                   column.nowrap && 'whitespace-nowrap',
                   stickyHeader && 'sticky top-0 z-10',
@@ -117,7 +123,8 @@ export function DataTable<Row>({
                 <td
                   key={column.key}
                   className={cx(
-                    'px-[18px] py-3 align-middle text-[15px]',
+                    'align-middle',
+                    roomy ? 'px-4 py-[13px] text-[17px]' : 'px-[18px] py-3 text-[15px]',
                     look.cell,
                     ALIGN[column.align ?? 'start'],
                     column.nowrap && 'whitespace-nowrap',

@@ -63,6 +63,11 @@ Worked examples (from the screens):
 - At sheet close, unpaid bills move to credit and are marked "Left without checkout" (D27).
 - A player's balance always equals the sum of his statement lines (a test).
 
+## 4a. The canteen and the players list (P10, D64)
+- A basket is the items at their selling price: 2 cold drinks at Rs 120 and 1 chips at Rs 60 are **Rs 300** (`basketTotal`). Stock is whole numbers: `stockState` says `fresh` (no stock), `soldOut` (none), `low` (at or under the owners' number: 3 left of low 5) or `ok`; `canAddOne` stops an order at the stock.
+- The players list: `accountCounts` gives All, Owe money and Advance; `accountList` lists the most owed first, the biggest advance first, and everyone alphabetically.
+- A statement is cut with `statementSince`: *since last zero* is the lines after the last time his balance was nothing (when it is nothing now, the stretch that ended there); *this month* is the lines of the calendar month in club time; *all* is everything.
+
 ## 5. Drawer cash (`drawer.ts`), new on 12 Oct (D53)
 
 ```

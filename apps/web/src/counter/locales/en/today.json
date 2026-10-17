@@ -1,0 +1,30 @@
+{
+  "back": "Tables",
+  "title": "Today’s totals",
+  "sub": "Sheet {{number}}, from <when>{{time}}</when> until now",
+  "loadFailed": "Today’s totals could not be loaded.",
+  "moneyLabel": "Money received",
+  "cash": {
+    "title": "Cash that should be in the drawer",
+    "text": "Cash received {{received}}, minus {{expenses}} taken for expenses. Count it when you close the sheet.",
+    "textNone": "Cash received {{received}}. Count it when you close the sheet."
+  },
+  "total": "Total received today",
+  "activityLabel": "Activity",
+  "frames": "Frames played",
+  "doubles": "{{count}} of them doubles",
+  "century": "Century minutes",
+  "centuryGames_one": "{{count}} Century game",
+  "centuryGames_other": "{{count}} Century games",
+  "credit": "Put on credit today",
+  "players_one": "{{count}} player",
+  "players_other": "{{count}} players",
+  "oldCredit": "Old credit collected",
+  "waiting_one": "Still waiting to pay: <b>{{count}} bill, {{amount}}</b>. Ask them before they leave.",
+  "waiting_other": "Still waiting to pay: <b>{{count}} bills, {{amount}}</b>. Ask them before they leave.",
+  "waitingNone": "Nobody is waiting to pay.",
+  "checkout": "Go to checkout",
+  "expenses": "Expenses from the drawer tonight: {{amount}}, {{what}} ({{who}}, <when>{{time}}</when>). Profit is shown to the owners only.",
+  "expensesMore": "Expenses from the drawer tonight: {{amount}}. The last one: {{what}} ({{who}}, <when>{{time}}</when>). Profit is shown to the owners only.",
+  "expensesNone": "No expenses from the drawer tonight. Profit is shown to the owners only."
+}

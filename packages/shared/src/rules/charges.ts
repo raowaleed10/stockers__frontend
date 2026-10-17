@@ -95,9 +95,13 @@ export function canStartGame(price: Rs | null): boolean {
 export const UNDO_WINDOW_SEC = 120;
 export const CHANGE_TYPE_WINDOW_MIN = 5;
 
-/** Seconds left to undo a game started by mistake (D16). Zero once the 2 minutes have passed. */
+/**
+ * Seconds left to undo a game started by mistake (D16). Zero once the 2 minutes have passed, and zero for something that has
+ * not happened yet (a clock set before it, as the demo clock can be): there is nothing to undo.
+ */
 export function undoSecondsLeft(startedAt: ISO, now: Moment, windowSec = UNDO_WINDOW_SEC): number {
   const since = toMs(now) - toMs(startedAt);
+  if (since < 0) return 0;
   return Math.max(0, Math.ceil((windowSec * 1000 - since) / 1000));
 }
 
@@ -112,6 +116,7 @@ export function changeTypeMinutesLeft(
   windowMin = CHANGE_TYPE_WINDOW_MIN,
 ): number {
   const since = toMs(now) - toMs(startedAt);
+  if (since < 0) return 0;
   return Math.max(0, Math.ceil((windowMin * MINUTE_MS - since) / MINUTE_MS));
 }
 

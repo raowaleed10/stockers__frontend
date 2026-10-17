@@ -59,7 +59,7 @@ import {
   undoGame,
 } from '../db/games';
 import { createPlayer, recentPlayers, searchPlayers, statementOf } from '../db/players';
-import { closePreview, closeSheet, drawerExpense, todayTotals } from '../db/sheet';
+import { closePreview, closeSheet, drawerExpense, lastClose, todayTotals } from '../db/sheet';
 import { undoableActions } from '../db/undoable';
 import { endpoint, type Call } from '../http';
 
@@ -285,6 +285,10 @@ export function buildCounterHandlers(getDb: () => MockDb): RequestHandler[] {
     http.get(
       `${B}/sheets/current/close-preview`,
       asWorker((db, by) => closePreview(db, by)),
+    ),
+    http.get(
+      `${B}/sheets/last-close`,
+      asWorker((db) => lastClose(db)),
     ),
     http.post(
       `${B}/sheets/current/close`,

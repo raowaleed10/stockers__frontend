@@ -1,7 +1,7 @@
 // Finding a player at the counter (docs/07 §2a): how the results of a search are put in order, what "Last played"
 // says, and which saved names look like the one being typed. Pure functions, no clock.
 
-import type { ISO } from '../types';
+import type { ISO, Rs } from '../types';
 import { clubDayNumber, type Moment } from './club-time';
 
 interface Searchable {
@@ -101,4 +101,41 @@ export function similarPlayers<T extends { name: string }>(
     )
     .slice(0, limit)
     .map(({ player }) => player);
+}
+
+/** The filters of the players list (screen 30). */
+export type AccountFilter = 'all' | 'owe' | 'advance';
+
+interface Account {
+  name: string;
+  /** More than 0 he owes the club; less than 0 the club holds an advance. */
+  balance: Rs;
+}
+
+/** How many players each filter holds: "All 312", "Owe money 41", "Advance 6". */
+export function accountCounts(players: readonly Account[]): Record<AccountFilter, number> {
+  return {
+    all: players.length,
+    owe: players.filter((p) => p.balance > 0).length,
+    advance: players.filter((p) => p.balance < 0).length,
+  };
+}
+
+/**
+ * The players a filter shows, in the order the list has them: everyone alphabetically; the ones who owe, the most first;
+ * the ones with an advance, the biggest first. Equal amounts are alphabetical.
+ */
+export function accountList<T extends Account>(players: readonly T[], filter: AccountFilter): T[] {
+  const byName = (a: T, b: T) => a.name.localeCompare(b.name);
+  if (filter === 'owe') {
+    return players
+      .filter((p) => p.balance > 0)
+      .sort((a, b) => b.balance - a.balance || byName(a, b));
+  }
+  if (filter === 'advance') {
+    return players
+      .filter((p) => p.balance < 0)
+      .sort((a, b) => a.balance - b.balance || byName(a, b));
+  }
+  return [...players].sort(byName);
 }

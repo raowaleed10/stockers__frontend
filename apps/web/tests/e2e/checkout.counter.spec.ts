@@ -102,7 +102,7 @@ test.describe('paying a bill', () => {
     );
     await page.getByRole('button', { name: /^Paid in full/ }).click();
     await page.getByRole('button', { name: 'Yes' }).click();
-    await expect(page.getByText('Saad Hussain paid Rs 430.')).toBeVisible();
+    await expect(page.getByText('Saad Hussain paid Rs 430.', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: /^Saad Hussain/ })).toHaveCount(0);
   });
 

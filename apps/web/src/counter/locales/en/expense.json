@@ -1,0 +1,26 @@
+{
+  "addedBy": "Added by {{name}}",
+  "title": "Expense from the drawer",
+  "sub": "For cash taken from tonight’s money, like food or petrol. It comes off the cash the drawer should have.",
+  "what": "What for?",
+  "kinds": {
+    "food": "Food",
+    "petrol": "Petrol",
+    "tea": "Tea and milk",
+    "cleaning": "Cleaning",
+    "repairs": "Repairs",
+    "other": "Other"
+  },
+  "note": "Note (required)",
+  "amount": "Amount",
+  "rs": "Rs",
+  "quick": "Quick amounts",
+  "drawer": "Cash in the drawer",
+  "drawerWas": "Now {{amount}}",
+  "drawerNow": "After {{amount}}",
+  "footer": "The owners see it in Expenses and Activity with your name. Only they can change or remove it.",
+  "cancel": "Cancel",
+  "take": "Take {{amount}} from the drawer",
+  "takeNone": "Take cash from the drawer",
+  "done": "{{amount}} taken from the drawer: {{what}}."
+}

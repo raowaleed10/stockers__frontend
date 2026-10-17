@@ -2,7 +2,7 @@
 // There is no credit limit, no warning and no block. Credit older than 15 days is only shown in amber.
 
 import type { ISO, Rs, StatementLine } from '../types';
-import { clubDayNumber, type Moment } from './club-time';
+import { clubDayNumber, toClubIso, type Moment } from './club-time';
 
 export const OLD_CREDIT_DAYS = 15;
 
@@ -37,4 +37,34 @@ export function statementBalance(lines: Amounts[]): Rs {
 export function runningBalances(lines: Amounts[]): Rs[] {
   let balance = 0;
   return lines.map((line) => (balance += (line.charge ?? 0) - (line.paid ?? 0)));
+}
+
+/** The periods a statement can be cut to on the counter (screen 30). */
+export type StatementPeriod = 'zero' | 'month' | 'all';
+
+/**
+ * The lines of a statement for one period, oldest first, as the counter shows them (screen 30):
+ *  - `all` is every line;
+ *  - `month` is the lines of the current calendar month (club time);
+ *  - `zero` is "since last zero": the lines after the last time his balance was nothing. When the balance is nothing right
+ *    now, the stretch that ended there is shown, so a player who has paid up still shows what he paid for.
+ */
+export function statementSince<T extends Pick<StatementLine, 'at' | 'balance'>>(
+  lines: readonly T[],
+  period: StatementPeriod,
+  now: Moment,
+): T[] {
+  if (period === 'all') return [...lines];
+  if (period === 'month') {
+    const month = toClubIso(now).slice(0, 7);
+    return lines.filter((line) => line.at.slice(0, 7) === month);
+  }
+  const zeroAt = (before: number) => {
+    for (let i = before; i >= 0; i -= 1) if (lines[i]?.balance === 0) return i;
+    return -1;
+  };
+  const last = zeroAt(lines.length - 1);
+  if (last < lines.length - 1) return lines.slice(last + 1);
+  // Paid up: back to the zero before it.
+  return lines.slice(zeroAt(last - 1) + 1);
 }

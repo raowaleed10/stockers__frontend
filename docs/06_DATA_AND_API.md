@@ -113,7 +113,7 @@ export interface Settings { paymentMethods: PaymentMethod[];
 | `GET /canteen/items` · `POST /canteen/sales` | `{playerId|null, items, payNow?}` | 28 |
 | `POST /expenses/drawer` | `{category, amount, note}` → new expected drawer cash | 29 |
 | `GET /today` | cash in drawer, online by method, frames, credit, waiting | 31 |
-| `GET /sheets/current/close-preview` · `POST /sheets/current/close` | `{counted, note}` → new sheet | 32, 33 |
+| `GET /sheets/current/close-preview` · `POST /sheets/current/close` · `GET /sheets/last-close` | `{counted, note}` → new sheet. Both previews carry `methods` (the payment methods that are on, in the owners' order) so every online line has a name; `TodayTotals` does too. `GET /sheets/last-close` answers what the last close did (`CloseSheetResult`, kept by the server) so screen 33 survives a reload; `NOT_FOUND` before any close. A close without the count (`counted` missing) is `VALIDATION`; a difference with no note is `NOTE_REQUIRED` | 32, 33 |
 
 ## 3. API: owner (`/api/owner/*`, owner session only; the counter session gets 404)
 

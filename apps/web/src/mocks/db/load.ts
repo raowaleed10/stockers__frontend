@@ -224,6 +224,7 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
       ]),
     ),
     checkoutUndo: {},
+    lastClose: null,
     settings: {
       ...raw.settings,
       // The seed lists the payment methods at its top level; Settings shows the same list.

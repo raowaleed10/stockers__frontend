@@ -1,0 +1,33 @@
+{
+  "title": "شیٹ {{number}} بند ہو گئی",
+  "sub": "<when>{{time}}</when> پر بند ہوئی۔ شیٹ {{next}} اب کھلی ہے۔",
+  "loadFailed": "بند کرنے کا نتیجہ لوڈ نہیں ہو سکا۔",
+  "moved": "شیٹ {{number}} میں گیا",
+  "movedNoneTitle": "کچھ چل نہیں رہا تھا",
+  "movedNoneText": "بند کرتے وقت ہر ٹیبل خالی تھا",
+  "movedMany": "{{count}} گیمز",
+  "movedCentury": "{{table}}، سنچری",
+  "movedRoom": "{{table}}، روم",
+  "movedUnder": "اب بھی {{who}} کے نام پر چل رہا ہے",
+  "movedRunning": "اب بھی چل رہا ہے",
+  "credit": "ادھار میں گیا",
+  "creditPlayers_one": "{{count}} کھلاڑی، {{amount}}",
+  "creditPlayers_other": "{{count}} کھلاڑی، {{amount}}",
+  "creditText": "چیک آؤٹ کے بغیر گئے کے طور پر درج",
+  "creditNoneTitle": "کوئی نہیں",
+  "creditNoneText": "سب کا چیک آؤٹ ہو گیا",
+  "cash": "نقد کی جانچ",
+  "cashShort": "{{amount}} کم",
+  "cashExtra": "{{amount}} زیادہ",
+  "cashMatches": "نقد برابر ہے",
+  "cashNote": "آپ کا نوٹ مالکان کے لیے محفوظ ہو گیا",
+  "cashOk": "نہ کم نہ زیادہ",
+  "emailed": "خلاصہ عقیل اور عادل کو ای میل ہو گیا۔ بیک اپ <when>{{time}}</when> پر محفوظ ہوا۔",
+  "back": "ٹیبلز پر واپس",
+  "at": "{{time}}، {{day}}",
+  "movedType": {
+    "single": "{{table}}، سنگل فریم",
+    "double": "{{table}}، ڈبل فریم",
+    "game": "{{table}}، گیم"
+  }
+}

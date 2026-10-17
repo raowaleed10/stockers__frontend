@@ -189,6 +189,11 @@
   --c-note-icon: #8C7B6B;     /* its icon */
   --c-toast-muted: #5E5249;   /* the "Undo for 1:42 more" words on the cream toast (14) */
 
+  /* ---------- the canteen and the drawer expense (added in P10; screens 28 and 29) ---------- */
+  --c-soldout-bg: #1F1915;    /* a sold-out item (28) */
+  --c-soldout-line: #5A4A3C;  /* its dashed border */
+  --c-strike: #8C7F6E;        /* the drawer figure that no longer holds, struck through (29) */
+
   /* ---------- shape ---------- */
   --r-tile: 18px;
   --r-dialog: 26px;

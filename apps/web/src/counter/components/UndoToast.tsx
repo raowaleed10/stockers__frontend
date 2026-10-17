@@ -8,6 +8,7 @@ import { useFormat } from '@/lib/use-format';
 import { cx } from '@/ui/cx';
 import { useBoard, useMe, useUndoable, useUndoCheckout, useUndoEnd, useUndoGame } from '../api';
 import { useLockStore } from '../session/lock-store';
+import { useNote } from './note-store';
 import { RichText } from './RichText';
 import { tablePath } from './table-paths';
 
@@ -48,6 +49,8 @@ export function UndoToast() {
   const undoPayment = useUndoCheckout();
   const now = useNow(1000);
   const [done, setDone] = useState<Done | null>(null);
+  const note = useNote((state) => state.message);
+  const clearNote = useNote((state) => state.clear);
 
   const mine = me.data?.worker.id;
   const tableOf = (table: Pick<BoardTable, 'kind' | 'number'>) =>
@@ -77,13 +80,21 @@ export function UndoToast() {
     return () => clearTimeout(timer);
   }, [done]);
 
+  // What a page that closed by itself said (an expense, a canteen sale) goes after a few seconds too.
+  useEffect(() => {
+    if (!note) return;
+    const timer = setTimeout(clearNote, DONE_FOR_MS);
+    return () => clearTimeout(timer);
+  }, [note, clearNote]);
+
   // After Undo of a game, another game that can still be undone takes the place of the message.
   const doneShown = done !== null && !(done.kind === 'game' && candidate);
   const count =
     (candidate?.game ? 1 : 0) +
     (chargeShown ? 1 : 0) +
     (paymentShown ? 1 : 0) +
-    (doneShown ? 1 : 0);
+    (doneShown ? 1 : 0) +
+    (note ? 1 : 0);
   const visible = !locked && count > 0;
 
   // A dialog on screen leaves room for the toasts under it (screen 14 centres the two together).
@@ -119,6 +130,12 @@ export function UndoToast() {
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-[75px] z-[60] flex flex-col items-center gap-3 px-6">
+      {note ? (
+        <Card>
+          <span className="min-w-0 flex-1 text-[19px] font-semibold">{note}</span>
+        </Card>
+      ) : null}
+
       {done && doneShown ? (
         <Card>
           <span className="min-w-0 flex-1 text-[19px] font-semibold">

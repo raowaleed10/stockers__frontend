@@ -128,5 +128,6 @@ export const addDrawerExpense = (request: DrawerExpenseRequest) =>
   api.post<DrawerExpenseResult>('/expenses/drawer', request);
 export const getToday = () => api.get<TodayTotals>('/today');
 export const getClosePreview = () => api.get<ClosePreview>('/sheets/current/close-preview');
+export const getLastClose = () => api.get<CloseSheetResult>('/sheets/last-close');
 export const closeSheet = (request: CloseSheetRequest) =>
   api.post<CloseSheetResult>('/sheets/current/close', request);

@@ -1,0 +1,37 @@
+{
+  "back": "Tables",
+  "title": "Players",
+  "new": "New player",
+  "loadFailed": "The players could not be loaded.",
+  "list": "Player list",
+  "search": "Name or phone",
+  "searchLabel": "Search players",
+  "filterLabel": "Filter",
+  "all": "All {{count}}",
+  "owe": "Owe money {{count}}",
+  "advance": "Advance {{count}}",
+  "line": {
+    "oldest_one": "{{tail}}, oldest unpaid {{count}} day",
+    "oldest_other": "{{tail}}, oldest unpaid {{count}} days",
+    "tonight": "{{tail}}, since tonight",
+    "advance": "{{tail}}, advance",
+    "clear": "{{tail}}, nothing owed",
+    "plain": "{{tail}}"
+  },
+  "none": "No player found.",
+  "pick": "Pick a player on the left to see his account.",
+  "statementLabel": "Statement",
+  "sub": "{{phone}}. {{played}} frames played, {{won}} won.",
+  "owes": "Owes the club",
+  "advanceTitle": "Advance with the club",
+  "clear": "Nothing owed",
+  "periodLabel": "Period",
+  "period": {
+    "zero": "Since last zero",
+    "month": "This month",
+    "all": "All"
+  },
+  "checkout": "Checkout {{name}}",
+  "caption": "Statement lines",
+  "empty": "Nothing in this period."
+}

@@ -5,6 +5,7 @@ import type {
   CounterAlert,
   CanteenSale,
   Category,
+  CloseSheetResult,
   Expense,
   Game,
   ISO,
@@ -136,6 +137,8 @@ export interface DbState {
   disputes: Record<string, DisputeInfo>;
   /** The latest payment of each player that can still be undone (D63), by player id. */
   checkoutUndo: Record<string, CheckoutUndo>;
+  /** What the last close of a sheet did, for "Sheet 48 is closed" (screen 33). */
+  lastClose: CloseSheetResult | null;
   settings: OwnerSettings;
   pauseAll: { at: ISO; by: PersonRef; activityId?: string } | null;
   lastBackupAt: ISO | null;

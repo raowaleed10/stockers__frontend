@@ -5,7 +5,7 @@ import { cx } from '@/ui/cx';
 import { useBoard, usePauseAll } from '../api';
 import { useLockStore } from '../session/lock-store';
 import { useSwitchWorker } from '../session/use-leave-session';
-import { alertsPath } from './alerts-path';
+import { alertsPath, boardPathOf } from './alerts-path';
 import { isPageRoute } from './page-routes';
 import { CounterActionBar } from './CounterActionBar';
 import { CounterTopBar } from './CounterTopBar';
@@ -71,7 +71,7 @@ export function CounterFrame({ session }: { session: WorkerSession }) {
             onCanteen={go('/canteen')}
             onPlayers={go('/players')}
             onToday={go('/today')}
-            onExpense={go('/expense')}
+            onExpense={go(`${boardPathOf(pathname) === '/' ? '' : boardPathOf(pathname)}/expense`)}
             onPauseAll={() => pauseAll.mutate()}
             pausedAll={board.data?.pausedAll ?? false}
             onCloseSheet={go('/close-sheet')}

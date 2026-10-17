@@ -33,7 +33,7 @@ import { createDb, type CreateDbOptions } from './load';
 import { createPlayer, searchPlayers, statementOf } from './players';
 import { seed } from './seed';
 import { undoableActions } from './undoable';
-import { closePreview, closeSheet, drawerExpense, todayTotals } from './sheet';
+import { closePreview, closeSheet, drawerExpense, lastClose, todayTotals } from './sheet';
 
 const at = (iso: string) => Date.parse(iso);
 const NIGHT = at('2026-10-03T21:42:00+05:00');
@@ -1272,6 +1272,49 @@ describe('closing the sheet', () => {
     expect(db.s.notifications[1].text).toBe(
       'Waqas Butt Rs 450 and Shoaib Malik Rs 250 moved to their credit.',
     );
+  });
+
+  it('names every online method in the preview and in today’s totals, in the owners’ order', () => {
+    const db = make({ scenario: 'closing' });
+    const names = ['Cash', 'Bank transfer', 'Easypaisa', 'JazzCash'];
+    expect(closePreview(db, actor(db)).methods.map((m) => m.name)).toEqual(names);
+    expect(todayTotals(db).methods.map((m) => m.name)).toEqual(names);
+    // A method the owners turned off is not offered.
+    db.s.paymentMethods.find((m) => m.id === 'jazzcash')!.enabled = false;
+    expect(todayTotals(db).methods.map((m) => m.id)).toEqual(['cash', 'bank', 'easypaisa']);
+  });
+
+  it('a drawer expense of Rs 500 lowers the expected cash in today’s totals and in the close preview (D53)', () => {
+    const db = make({ scenario: 'closing' });
+    const by = actor(db);
+    drawerExpense(db, by, { category: 'food-petrol', amount: 500, note: 'Dinner for staff' });
+    expect(todayTotals(db)).toMatchObject({ drawerExpenses: 1000, drawerExpected: 21250 });
+    expect(closePreview(db, by).cash).toEqual({
+      received: 22250,
+      drawerExpenses: 1000,
+      expected: 21250,
+    });
+    // Counting 21,550 is now Rs 300 extra, and the note is still asked for.
+    expect(refusal(() => closeSheet(db, by, { counted: 21550 })).body.code).toBe('NOTE_REQUIRED');
+  });
+
+  it('keeps what the close did, for screen 33: the same answer after a reload, and the closed scenario has it', () => {
+    const fresh = make({ scenario: 'closing' });
+    expect(refusal(() => lastClose(fresh)).status).toBe(404);
+    const result = closeSheet(fresh, actor(fresh), { counted: 21550, note: 'Gave change' });
+    expect(lastClose(fresh)).toEqual(result);
+
+    const closed = make({ scenario: 'closed' });
+    expect(lastClose(closed)).toMatchObject({
+      closed: { number: 48, closedBy: { name: 'Shabir' } },
+      newSheet: { number: 49 },
+      moved: [{ tableName: 'Table 2', type: 'century', underPlayerId: 'ahmed-nawaz' }],
+      cash: { expected: 21750, counted: 21550, difference: -200 },
+    });
+    expect(lastClose(closed).leftWithoutCheckout.map((l) => [l.name, l.amount])).toEqual([
+      ['Waqas Butt', 450],
+      ['Shoaib Malik', 250],
+    ]);
   });
 
   it('closes with no note when the cash is exact', () => {

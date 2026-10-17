@@ -50,6 +50,10 @@ export const useCanteenItems = () =>
 
 export const useToday = () => useQuery({ queryKey: keys.today, queryFn: calls.getToday });
 
+/** What the last close did (screen 33). */
+export const useLastClose = () =>
+  useQuery({ queryKey: keys.lastClose, queryFn: calls.getLastClose, retry: false });
+
 export const useClosePreview = () =>
   useQuery({ queryKey: keys.closePreview, queryFn: calls.getClosePreview });
 

@@ -16,6 +16,7 @@ export function PageHeader({
   onBack,
   title,
   subtitle,
+  actions,
   className,
 }: {
   /** The words of the back button: where it goes ("Tables", "Checkout", "Bill"). */
@@ -23,6 +24,8 @@ export function PageHeader({
   onBack: () => void;
   title: ReactNode;
   subtitle?: ReactNode;
+  /** Buttons between the title and the clock (screen 30: "New player"). */
+  actions?: ReactNode;
   className?: string;
 }) {
   const now = useNow(1000);
@@ -50,6 +53,7 @@ export function PageHeader({
         {subtitle ? <span className="text-[16px] text-c-text-2">{subtitle}</span> : null}
       </div>
       <div className="flex-1" />
+      {actions}
       <span className="font-num text-[34px] font-semibold leading-none">
         <bdi>{format.clock(toClubIso(now))}</bdi>
       </span>

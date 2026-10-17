@@ -35,6 +35,7 @@ const preset: Partial<Config> = {
           // added in P07 (see tokens.css)
           'discard-line': v('c-discard-line'), 'note-bg': v('c-note-bg'), 'note-text': v('c-note-text'),
           'note-icon': v('c-note-icon'), 'toast-muted': v('c-toast-muted'),
+          'soldout-bg': v('c-soldout-bg'), 'soldout-line': v('c-soldout-line'), strike: v('c-strike'),
         },
         s: {
           free: v('s-free'), play: v('s-play'), over: v('s-over'), card: v('s-card'),

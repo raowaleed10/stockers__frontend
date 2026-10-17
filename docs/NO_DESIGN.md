@@ -57,6 +57,16 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 40 | [Undo after a charged frame: Nobody pays](#40-undo-after-a-charged-frame-nobody-pays) | counter | P09 answers |
 | 41 | [The Undo toast after a payment](#41-the-undo-toast-after-a-payment) | counter | P09 answers |
 | 42 | [The Undo toast after a charged frame](#42-the-undo-toast-after-a-charged-frame) | counter | P09 answers |
+| 43 | [Canteen: nobody picked yet](#43-canteen-nobody-picked-yet) | counter | P10 |
+| 44 | [Canteen: a cash sale](#44-canteen-a-cash-sale) | counter | P10 |
+| 45 | [Expense from the drawer: nothing picked yet](#45-expense-from-the-drawer-nothing-picked-yet) | counter | P10 |
+| 46 | [Expense from the drawer: the note after it is saved](#46-expense-from-the-drawer-the-note-after-it-is-saved) | counter | P10 |
+| 47 | [Players: nobody picked yet](#47-players-nobody-picked-yet) | counter | P10 |
+| 48 | [Players: Advance](#48-players-advance) | counter | P10 |
+| 49 | [Today’s totals: nobody waiting to pay](#49-todays-totals-nobody-waiting-to-pay) | counter | P10 |
+| 50 | [Close sheet: a note is needed](#50-close-sheet-a-note-is-needed) | counter | P10 |
+| 51 | [Close sheet: the confirm sheet](#51-close-sheet-the-confirm-sheet) | counter | P10 |
+| 52 | [Sheet closed: nothing moved](#52-sheet-closed-nothing-moved) | counter | P10 |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -553,6 +563,128 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **Built from:** the toast of screen 14 (§25) and the title of screen 18.
 
 ![The toast after a charged frame](no-design/undo-charge-toast.png)
+
+## 43. Canteen: nobody picked yet
+
+- **What:** screen 28 draws a player already picked (Usman Tariq, with "Change"). A real page opens with nobody picked: under "Charge to"
+  the player search of screens 8 and 9 (type a name or the last digits of a phone, tap the player), with "Add “Ali” as a new
+  player" as its last row. Until a player is picked the big button says "Pick a player first" and is off; with an empty order it says
+  "Add something first". The order says "Tap an item to add it to the order." A player who is picked shows his masked phone and one
+  plain line: where he is playing, or what he owes.
+- **Where:** `/canteen?now=2026-10-03T21:55:00%2B05:00`, tap Biscuits.
+- **Words:** "Search by name or phone", "Pick a player first", "Add something first", "Tap an item to add it to the order.", "{{tail}},
+  playing on Table 4", "{{tail}}, owes Rs 600", "Rs 300 added to Usman Tariq’s bill." (the note after a sale, §46's pattern).
+- **Built from:** screens 8 (player search) and 28.
+
+![Canteen with nobody picked](no-design/canteen-nobody.png)
+
+## 44. Canteen: a cash sale
+
+- **What:** screen 28 draws only the player half of "Charge to". With "Cash sale, no name" (Q10) the player card is replaced by the
+  payment methods the owners have on ("Money taken now": Cash, Bank transfer, Easypaisa, JazzCash, Cash first), and the big button
+  takes the money now: "Take Rs 120 now (Easypaisa)". The money goes in the drawer (cash) or the online totals, the sale has no name,
+  and the order is empty again for the next customer.
+- **Where:** `/canteen?now=2026-10-03T21:55:00%2B05:00`, tap Coffee, then "Cash sale, no name" and Easypaisa.
+- **Words:** "Money taken now", "Take Rs 120 now (Easypaisa)", "Rs 120 taken for the canteen, Easypaisa."
+- **Built from:** the "Paid by" choices of screen 25 and screen 28.
+
+![A canteen cash sale](no-design/canteen-cash-sale.png)
+
+## 45. Expense from the drawer: nothing picked yet
+
+- **What:** screen 29 draws Food, a note and Rs 500 already chosen. A real dialog opens with nothing chosen for the worker (money:
+  the same as the damage charge): no kind, an empty note and amount, and "Take cash from the drawer" off until a kind, a note and an
+  amount above 0 are given. "Cash in the drawer" shows what the drawer should have now; once an amount is given it shows
+  "Rs 17,950" struck through and the new figure beside it.
+- **Where:** `/expense?now=2026-10-03T20:15:00%2B05:00` (or the action bar's Expense).
+- **Words:** "Take cash from the drawer" (while the button is off), "Cash in the drawer". The accessible names of the two figures are
+  "Now Rs 17,950" and "After Rs 17,450".
+- **Built from:** screens 15 and 29.
+
+![The expense dialog, nothing picked](no-design/expense-empty.png)
+
+## 46. Expense from the drawer: the note after it is saved
+
+- **What:** after "Take Rs 500 from the drawer" the dialog closes and the cream toast area says what was done for four seconds, so the
+  worker knows it was saved: "Rs 500 taken from the drawer: Dinner for staff." The same note is used after a canteen sale. It is
+  saved with his name and the owners see it in Expenses and Activity (D53).
+- **Where:** `/?now=2026-10-03T20:15:00%2B05:00`, Expense, Food, a note, Rs 500, "Take Rs 500 from the drawer".
+- **Words:** "Rs 500 taken from the drawer: Dinner for staff.", "Rs 300 added to Usman Tariq’s bill.", "Rs 120 taken for the canteen, Cash."
+- **Built from:** the cream toast of screen 14 (§25).
+
+![The note after an expense](no-design/expense-saved-note.png)
+
+## 47. Players: nobody picked yet
+
+- **What:** screen 30 draws Kamran Iqbal picked. `/players` has nobody picked: the list is on the left (All first, alphabetical) and the
+  panel on the right says what to do. A search or a filter that finds nobody says "No player found."
+- **Where:** `/players?now=2026-10-03T22:25:00%2B05:00`.
+- **Words:** "Pick a player on the left to see his account.", "No player found.", "Nothing in this period." (a period with no lines).
+- **Built from:** screen 30.
+
+![Players, nobody picked](no-design/players-none-picked.png)
+
+## 48. Players: Advance
+
+- **What:** screen 30 draws the "Owe money" list only. In the **Advance** list (players the club holds money for) the amount at the end
+  of a row is green, the line says "advance", and his account says "Advance with the club" in green above the amount; a player who
+  owes nothing says "Nothing owed". The list is the biggest advance first; "Owe money" is the most owed first; "All" is alphabetical.
+- **Where:** `/players/saad?now=2026-10-03T22:25:00%2B05:00`, tap Advance.
+- **Words:** "{{tail}}, advance", "Advance with the club", "Nothing owed", "{{tail}}, nothing owed", "{{tail}}, since tonight".
+- **Built from:** screen 30 and the green box of screen 25 (Advance held).
+
+![Players, Advance](no-design/players-advance.png)
+
+## 49. Today’s totals: nobody waiting to pay
+
+- **What:** the line of screen 31 about the bills still waiting ("Still waiting to pay: 6 bills, Rs 5,100. Ask them before they leave.")
+  says "Nobody is waiting to pay." when there is nothing waiting, and "Go to checkout" stays. The line about the drawer expenses
+  says the total and the last one when there is more than one ("Expenses from the drawer tonight: Rs 1,000. The last one: Gas
+  cylinder (Zain, 9:55 PM). …"), and "No expenses from the drawer tonight." when there are none.
+- **Where:** `/today?scenario=empty&now=2026-10-03T22:30:00%2B05:00`.
+- **Words:** "Nobody is waiting to pay.", "Expenses from the drawer tonight: {{amount}}. The last one: {{what}} ({{who}}, {{time}}). Profit is
+  shown to the owners only.", "No expenses from the drawer tonight. Profit is shown to the owners only."
+- **Built from:** screen 31.
+
+![Today's totals, nobody waiting](no-design/today-nobody-waiting.png)
+
+## 50. Close sheet: a note is needed
+
+- **What:** screen 32 draws the cash counted (Rs 21,550) and "Short Rs 200" with the note written. Before the count the third box says
+  "Difference" with a dash; when the cash is **extra** it is green ("Extra Rs 50"); when it matches it says "Cash matches" with Rs 0 and
+  needs no note. While a note is needed and empty, "Close sheet 48" is off and a line under it says "Write a note about the
+  difference before you close." (amber).
+- **Where:** `/close-sheet?scenario=closing&now=2026-10-04T03:40:00%2B05:00`, count 21,800.
+- **Words:** "Difference", "Extra", "Cash matches", "Count the cash" (the empty box), "Write a note about the difference before you close."
+- **Built from:** screen 32 (the red "Short" box in green).
+
+![Close sheet, a note is needed](no-design/close-note-needed.png)
+
+## 51. Close sheet: the confirm sheet
+
+- **What:** "Close sheet 48" asks once before it closes (money actions ask once, D63). The sheet says how much was counted and
+  whether the cash is short, extra or matches, how many players move to credit and how much, and how many games move to the next
+  sheet, with a big **No** and a big **Yes, close it**. DEFAULT, needs answer: the owners were promised that money actions ask once; closing moves
+  bills to credit, so it asks the same way. No (or Escape) changes nothing.
+- **Where:** `/close-sheet?scenario=closing&now=2026-10-04T03:40:00%2B05:00`, count 21,550, a note, "Close sheet 48".
+- **Words:** "Close sheet 48 with Rs 21,550 counted?", "The cash is Rs 200 short.", "2 players left without checkout move to credit (Rs 700).",
+  "1 game still running moves to sheet 49.", "Yes, close it", "No".
+- **Built from:** the confirm sheet of §39.
+
+![Close sheet, are you sure](no-design/close-confirm.png)
+
+## 52. Sheet closed: nothing moved
+
+- **What:** screen 33 draws a close with a game moved, two players moved to credit and Rs 200 short. When nothing was running the first
+  card says "Nothing was running / Every table was free at the close"; when everybody was checked out the second says "Nobody /
+  Everyone was checked out"; when the cash was exact the third says "Cash matches / Nothing short or extra". Several games moved say
+  "3 games / Still running".
+- **Where:** `/close-sheet?scenario=empty&as=shabir&now=2026-10-04T03:40:00%2B05:00`, count 17,950, close.
+- **Words:** "Nothing was running", "Every table was free at the close", "Nobody", "Everyone was checked out", "Cash matches", "Nothing short or
+  extra", "{{count}} games", "Still running", "{{table}}, single frame".
+- **Built from:** screen 33.
+
+![Sheet closed, nothing moved](no-design/closed-nothing.png)
 
 ## Approved screens that change a field or a word
 

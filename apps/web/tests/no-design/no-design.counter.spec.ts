@@ -325,7 +325,7 @@ const SHOTS: Shot[] = [
       await page.getByRole('button', { name: /^Saad Hussain/ }).click();
       await page.getByRole('button', { name: /^Paid in full/ }).click();
       await page.getByRole('button', { name: 'Yes' }).click();
-      await expect(page.getByText('Saad Hussain paid Rs 430.')).toBeVisible();
+      await expect(page.getByText('Saad Hussain paid Rs 430.', { exact: true })).toBeVisible();
       await blur(page);
     },
   },
@@ -406,6 +406,113 @@ const SHOTS: Shot[] = [
       await dialog.getByRole('button', { name: 'Apply Rs 50 discount' }).click();
       await page.getByRole('button', { name: 'Give a discount' }).click();
       await expect(page.getByRole('button', { name: 'Remove discount' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  // P10: the canteen, the drawer, the players and closing the sheet
+  {
+    id: 'canteen-nobody',
+    url: `/canteen?now=${encodeURIComponent('2026-10-03T21:55:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Biscuits,/ }).click();
+      await page.getByRole('button', { name: /^Biscuits,/ }).click();
+      await expect(page.getByRole('button', { name: 'Pick a player first' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'canteen-cash-sale',
+    url: `/canteen?now=${encodeURIComponent('2026-10-03T21:55:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Coffee,/ }).click();
+      await page.getByRole('radio', { name: 'Cash sale, no name' }).click();
+      await page.getByRole('button', { name: 'Easypaisa' }).click();
+      await expect(page.getByRole('button', { name: 'Take Rs 120 now (Easypaisa)' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'expense-empty',
+    url: `/expense?now=${encodeURIComponent('2026-10-03T20:15:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByRole('dialog', { name: 'Expense from the drawer' })).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'expense-saved-note',
+    url: `/?now=${encodeURIComponent('2026-10-03T20:15:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: 'Expense' }).click();
+      const dialog = page.getByRole('dialog', { name: 'Expense from the drawer' });
+      await dialog.getByRole('button', { name: 'Food' }).click();
+      await dialog.getByLabel('Note (required)').fill('Dinner for staff');
+      await dialog.getByRole('button', { name: '500', exact: true }).click();
+      await dialog.getByRole('button', { name: 'Take Rs 500 from the drawer' }).click();
+      await expect(page.getByText('Rs 500 taken from the drawer: Dinner for staff.')).toBeVisible();
+      await blur(page);
+    },
+    clip: { x: 0, y: 700, width: 1440, height: 200 },
+  },
+  {
+    id: 'players-none-picked',
+    url: `/players?now=${encodeURIComponent('2026-10-03T22:25:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByText('Pick a player on the left to see his account.')).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'players-advance',
+    url: `/players/saad?now=${encodeURIComponent('2026-10-03T22:25:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Advance / }).click();
+      await expect(page.getByText('Advance with the club')).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'close-note-needed',
+    url: `/close-sheet?scenario=closing&now=${encodeURIComponent('2026-10-04T03:40:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByLabel('Cash counted').fill('21800');
+      await expect(
+        page.getByText('Write a note about the difference before you close.'),
+      ).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'close-confirm',
+    url: `/close-sheet?scenario=closing&now=${encodeURIComponent('2026-10-04T03:40:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByLabel('Cash counted').fill('21550');
+      await page
+        .getByLabel(/^Note about the difference/)
+        .fill('Gave Rs 200 change from the drawer for a bank payment');
+      await page.getByRole('button', { name: /^Close sheet 48/ }).click();
+      await expect(
+        page.getByRole('dialog', { name: 'Close sheet 48 with Rs 21,550 counted?' }),
+      ).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'closed-nothing',
+    url: `/close-sheet?scenario=empty&as=shabir&now=${encodeURIComponent('2026-10-04T03:40:00+05:00')}`,
+    prepare: async (page) => {
+      await page.getByLabel('Cash counted').fill('17950');
+      await page.getByRole('button', { name: /^Close sheet/ }).click();
+      await page.getByRole('button', { name: 'Yes, close it' }).click();
+      await expect(page.getByText('Nothing was running')).toBeVisible();
+      await blur(page);
+    },
+  },
+  {
+    id: 'today-nobody-waiting',
+    url: `/today?scenario=empty&now=${encodeURIComponent('2026-10-03T22:30:00+05:00')}`,
+    prepare: async (page) => {
+      await expect(page.getByText('Nobody is waiting to pay.')).toBeVisible();
       await blur(page);
     },
   },

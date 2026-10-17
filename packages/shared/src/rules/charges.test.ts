@@ -354,3 +354,11 @@ describe('roomPreview (screen 22)', () => {
     expect(() => roomPreview(1500.5)).toThrow(RangeError);
   });
 });
+
+describe('a clock set before the event', () => {
+  it('has nothing to undo and no type to change yet', () => {
+    expect(undoSecondsLeft('2026-10-03T21:50:00+05:00', '2026-10-03T20:15:00+05:00')).toBe(0);
+    expect(canUndo('2026-10-03T21:50:00+05:00', '2026-10-03T20:15:00+05:00')).toBe(false);
+    expect(changeTypeMinutesLeft('2026-10-03T21:50:00+05:00', '2026-10-03T20:15:00+05:00')).toBe(0);
+  });
+});

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { createTestApi } from '@/mocks/test-server';
+import { alertsPath } from './alerts-path';
 import {
   renderCounter,
   resetCounterState,
@@ -77,11 +78,11 @@ describe('the bell opens the alerts panel', () => {
     await waitFor(() => expect(wherePath(view)).toBe('/board/pool'));
   });
 
-  it('opens from a screen that is not a board over the first tab', async () => {
-    const view = renderCounter('/canteen');
-    await userEvent.click(await bell('Notifications, 3 new'));
-    await panel();
-    expect(wherePath(view)).toBe('/alerts');
+  it('opens from a screen that is not a board over the first tab', () => {
+    // The pages of the action bar have their own header and no bell, so this is the rule, not a button.
+    expect(alertsPath('/canteen')).toBe('/alerts');
+    expect(alertsPath('/checkout/bilal')).toBe('/alerts');
+    expect(alertsPath('/board/pool/table/po1')).toBe('/board/pool/alerts');
   });
 
   it('opens straight from the address /alerts', async () => {

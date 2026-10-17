@@ -350,6 +350,8 @@ export interface TodayTotals {
   drawerExpenses: Rs;
   drawerExpected: Rs;
   online: Record<string, Rs>;
+  /** The payment methods that are on, in the owners' order, so every online line has a name. */
+  methods: PaymentMethod[];
   received: Rs;
   frames: number;
   doubles: number;
@@ -370,6 +372,8 @@ export interface ClosePreview {
   closingBy: PersonRef;
   cash: { received: Rs; drawerExpenses: Rs; expected: Rs };
   online: Record<string, Rs>;
+  /** The payment methods that are on, in the owners' order. */
+  methods: PaymentMethod[];
   leftWithoutCheckout: { playerId: string; name: string; amount: Rs }[];
   running: {
     gameId: string;

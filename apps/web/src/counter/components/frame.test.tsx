@@ -169,19 +169,37 @@ describe('the action bar (screen 3)', () => {
   });
 
   it.each([
-    ['Canteen', '/canteen'],
-    ['Players', '/players'],
-    ['Today’s totals', '/today'],
-    ['Expense', '/expense'],
-    ['Close sheet', '/close-sheet'],
-  ])('goes from %s to its placeholder screen at %s, inside the frame', async (name, path) => {
+    ['Canteen', '/canteen', 'Canteen'],
+    ['Players', '/players', 'Players'],
+    ['Today’s totals', '/today', 'Today’s totals'],
+    ['Close sheet', '/close-sheet', 'Close sheet 48'],
+  ])(
+    'goes from %s to its page at %s, with its own header and no bars',
+    async (name, path, heading) => {
+      const view = renderCounter('/');
+      await chip();
+      await userEvent.click(within(screen.getByRole('contentinfo')).getByRole('button', { name }));
+      expect(wherePath(view)).toBe(path);
+      expect(await screen.findByRole('heading', { name: heading })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Tables' })).toBeInTheDocument();
+      // A page of the action bar draws its own header: no top bar and no action bar (screens 28 to 32).
+      expect(screen.queryByRole('contentinfo')).toBeNull();
+      expect(screen.getAllByRole('banner')).toHaveLength(1);
+    },
+  );
+
+  it('Expense opens its dialog over the board, so the bars stay around it (screen 29)', async () => {
     const view = renderCounter('/');
     await chip();
-    await userEvent.click(within(screen.getByRole('contentinfo')).getByRole('button', { name }));
-    expect(wherePath(view)).toBe(path);
-    expect(screen.getByRole('heading', { name })).toBeInTheDocument();
-    // The bars are still there around it.
-    expect(screen.getByRole('banner')).toBeInTheDocument();
+    await userEvent.click(
+      within(screen.getByRole('contentinfo')).getByRole('button', { name: 'Expense' }),
+    );
+    expect(wherePath(view)).toBe('/expense');
+    expect(
+      await screen.findByRole('dialog', { name: 'Expense from the drawer' }),
+    ).toBeInTheDocument();
+    // (jsdom counts a dialog's own header as a banner too, so there are two.)
+    expect(screen.getAllByRole('banner').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 });

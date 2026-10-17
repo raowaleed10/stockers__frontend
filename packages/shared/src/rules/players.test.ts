@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { formatWeekday } from './format';
-import { lastPlayedWhen, rankPlayerResults, similarPlayers } from './players';
+import {
+  accountCounts,
+  accountList,
+  lastPlayedWhen,
+  rankPlayerResults,
+  similarPlayers,
+} from './players';
 
 const NIGHT = '2026-10-03T21:46:00+05:00'; // Saturday
 
@@ -116,5 +122,49 @@ describe('similarPlayers', () => {
     expect(
       similarPlayers([player('x', 'Ali Khan'), player('y', 'Ali Khan Junior')], 'ali khan')[0].id,
     ).toBe('x');
+  });
+});
+
+describe('the players list (screen 30)', () => {
+  const people = [
+    { name: 'Waqas Butt', balance: 950 },
+    { name: 'Kamran Iqbal', balance: 1350 },
+    { name: 'Bilal Ahmed', balance: 300 },
+    { name: 'Ali Haider', balance: 1200 },
+    { name: 'Saad Hussain', balance: -200 },
+    { name: 'Hamid Ali', balance: 0 },
+    { name: 'Imran Shah', balance: -50 },
+    { name: 'Faisal Khan', balance: 300 },
+  ];
+
+  it('counts each filter', () => {
+    expect(accountCounts(people)).toEqual({ all: 8, owe: 5, advance: 2 });
+    expect(accountCounts([])).toEqual({ all: 0, owe: 0, advance: 0 });
+  });
+
+  it('owe money lists the most owed first, as screen 30 does, and equal amounts alphabetically', () => {
+    expect(accountList(people, 'owe').map((p) => p.name)).toEqual([
+      'Kamran Iqbal',
+      'Ali Haider',
+      'Waqas Butt',
+      'Bilal Ahmed',
+      'Faisal Khan',
+    ]);
+  });
+
+  it('advance lists the biggest advance first, and all is alphabetical', () => {
+    expect(accountList(people, 'advance').map((p) => p.name)).toEqual([
+      'Saad Hussain',
+      'Imran Shah',
+    ]);
+    expect(accountList(people, 'all').map((p) => p.name)[0]).toBe('Ali Haider');
+    expect(accountList(people, 'all')).toHaveLength(8);
+  });
+
+  it('does not change the list it is given', () => {
+    const copy = people.map((p) => ({ ...p }));
+    accountList(people, 'owe');
+    accountList(people, 'all');
+    expect(people).toEqual(copy);
   });
 });

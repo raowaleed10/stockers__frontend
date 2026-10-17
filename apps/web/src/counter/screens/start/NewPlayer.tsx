@@ -36,6 +36,9 @@ export function NewPlayer() {
   const { pathname, state } = useLocation();
   const [params] = useSearchParams();
   const forTable = params.get('for');
+  // Opened from the players page (screen 30) or the canteen (28): back where it came from, nobody is picked for a game.
+  const back = params.get('back');
+  const fromPlayers = back === 'players' || back === 'canteen';
   const draft = useStartDraft();
   const create = useCreatePlayer();
   const everyone = usePlayers();
@@ -57,13 +60,23 @@ export function NewPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [forTable]);
 
-  const returnTo =
-    draft.returnTo ??
-    (forTable ? tablePath(pathname, forTable, '/start/players') : boardOfTableScreen(pathname));
+  const returnTo = fromPlayers
+    ? back === 'canteen'
+      ? '/canteen'
+      : '/players'
+    : (draft.returnTo ??
+      (forTable ? tablePath(pathname, forTable, '/start/players') : boardOfTableScreen(pathname)));
 
   const similar = useMemo(() => similarPlayers(everyone.data ?? [], name), [everyone.data, name]);
 
   const finish = (player: Parameters<typeof toPicked>[0]) => {
+    if (fromPlayers) {
+      // The players page opens his own page; the canteen gets him picked.
+      if (back === 'canteen')
+        navigate('/canteen', { replace: true, state: { playerId: player.id } });
+      else navigate(`/players/${player.id}`, { replace: true });
+      return;
+    }
     draft.pick(toPicked(player));
     draft.setReturnTo(null);
     navigate(returnTo, { replace: true });

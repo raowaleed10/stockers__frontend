@@ -1,5 +1,4 @@
 import { lazy, Suspense } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { NotFound } from '@/ui/NotFound';
 import { AlertsPanel } from '../components/AlertsPanel';
@@ -9,6 +8,12 @@ import { CheckoutList } from '../screens/checkout/CheckoutList';
 import { DiscountDialog } from '../screens/checkout/DiscountDialog';
 import { PartPayment } from '../screens/checkout/PartPayment';
 import { CorrectFrame } from '../screens/end/CorrectFrame';
+import { Canteen } from '../screens/canteen/Canteen';
+import { CloseSheet } from '../screens/close/CloseSheet';
+import { SheetClosed } from '../screens/close/SheetClosed';
+import { ExpenseDialog } from '../screens/expense/ExpenseDialog';
+import { Players } from '../screens/players/Players';
+import { Today } from '../screens/today/Today';
 import { EndGame } from '../screens/end/EndGame';
 import { NextFrame } from '../screens/end/NextFrame';
 import { Overtime } from '../screens/end/Overtime';
@@ -25,7 +30,6 @@ import { DamageCharge } from '../screens/table/DamageCharge';
 import { MoveTable } from '../screens/table/MoveTable';
 import { StopFrame } from '../screens/table/StopFrame';
 import { TablePanel } from '../screens/table/TablePanel';
-import { PagePlaceholder } from '../screens/PagePlaceholder';
 import { SignIn } from '../screens/SignIn';
 import { RequireWorker } from '../session/RequireWorker';
 
@@ -35,20 +39,6 @@ const KitPage = import.meta.env.DEV ? lazy(() => import('@/dev/kit/KitPage')) : 
 const TilesPage = import.meta.env.DEV ? lazy(() => import('@/dev/tiles/TilesPage')) : null;
 const DataPage = import.meta.env.DEV ? lazy(() => import('../screens/dev/DataPage')) : null;
 const GamesPreview = import.meta.env.DEV ? lazy(() => import('../screens/dev/GamesPreview')) : null;
-
-/** The screens that later steps build. Each shows its name inside the real frame until then. */
-const LATER_SCREENS = [
-  { path: '/canteen', title: 'actions.canteen' },
-  { path: '/players', title: 'actions.players' },
-  { path: '/today', title: 'actions.today' },
-  { path: '/expense', title: 'actions.expense' },
-  { path: '/close-sheet', title: 'actions.closeSheet' },
-] as const;
-
-function LaterScreen({ title }: { title: (typeof LATER_SCREENS)[number]['title'] }) {
-  const { t } = useTranslation('frame');
-  return <PagePlaceholder title={t(title)} />;
-}
 
 /**
  * The screens that open over a board, for one table (docs/03, screens 7 to 12). They are children of both `/` and
@@ -93,6 +83,7 @@ const TABLE_ROUTES = [
   <Route key="room" path="room/:id/start" element={<RoomStart />} />,
   <Route key="room-end" path="room/:id/end" element={<RoomEnd />} />,
   <Route key="new-player" path="players/new" element={<NewPlayer />} />,
+  <Route key="expense" path="expense" element={<ExpenseDialog />} />,
 ];
 
 export function CounterRoutes() {
@@ -130,9 +121,12 @@ export function CounterRoutes() {
             }
           />
         ) : null}
-        {LATER_SCREENS.map(({ path, title }) => (
-          <Route key={path} path={path} element={<LaterScreen title={title} />} />
-        ))}
+        <Route path="/canteen" element={<Canteen />} />
+        <Route path="/players" element={<Players />} />
+        <Route path="/players/:id" element={<Players />} />
+        <Route path="/today" element={<Today />} />
+        <Route path="/close-sheet" element={<CloseSheet />} />
+        <Route path="/sheet-closed" element={<SheetClosed />} />
       </Route>
       {KitPage ? (
         <Route

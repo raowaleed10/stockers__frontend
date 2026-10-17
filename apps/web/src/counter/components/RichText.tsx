@@ -6,7 +6,17 @@ import { Trans } from 'react-i18next';
 // letter, so `رات 9:42` runs right to left and `9:42 PM` left to right.
 const COMPONENTS = { when: <bdi />, name: <bdi />, b: <b /> };
 
-type Namespace = 'signin' | 'frame' | 'lock' | 'start' | 'table' | 'end' | 'checkout';
+type Namespace =
+  | 'signin'
+  | 'frame'
+  | 'lock'
+  | 'start'
+  | 'table'
+  | 'end'
+  | 'checkout'
+  | 'today'
+  | 'close'
+  | 'closed';
 
 /** A counter word that has a time or bold part inside it. Plain words use `t()`. */
 export function RichText<N extends Namespace>({

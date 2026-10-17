@@ -510,5 +510,213 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Undo toast / put on credit | Put on credit: {{name}}’s bill. | ادھار میں ڈالا: {{name}} کا بل۔ | P09 answers |
 | Undo toast / credit left | {{amount}} stays as credit. | {{amount}} ادھار رہتا ہے۔ | P09 answers |
 | Undo toast / payment undone | Payment undone for {{name}}. | {{name}} کی ادائیگی واپس لے لی گئی۔ | P09 answers |
+| Canteen / back | Tables | ٹیبلز | P10 |
+| Canteen / title | Canteen | کینٹین | P10 |
+| Canteen / loadFailed | The canteen items could not be loaded. | کینٹین کی چیزیں لوڈ نہیں ہو سکیں۔ | P10 |
+| Canteen / typesLabel | Item type | چیز کی قسم | P10 |
+| Canteen / types / all | All | سب | P10 |
+| Canteen / types / drinks | Drinks | مشروبات | P10 |
+| Canteen / types / food | Food | کھانا | P10 |
+| Canteen / types / cigarettes | Cigarettes | سگریٹ | P10 |
+| Canteen / itemsLabel | Items | چیزیں | P10 |
+| Canteen / item / fresh | Made fresh | تازہ بنتی ہے | P10 |
+| Canteen / item / left | {{count}} left | {{count}} باقی | P10 |
+| Canteen / item / low | {{count}} left, low | {{count}} باقی، کم | P10 |
+| Canteen / item / soldOut | Sold out | ختم | P10 |
+| Canteen / item / inBasket | {{count}} in the order | آرڈر میں {{count}} | P10 |
+| Canteen / orderLabel | Order | آرڈر | P10 |
+| Canteen / chargeTo | Charge to | کس کے نام | P10 |
+| Canteen / mode / player | A player | کھلاڑی | P10 |
+| Canteen / mode / cash | Cash sale, no name | نقد فروخت، بغیر نام | P10 |
+| Canteen / player / search | Search by name or phone | نام یا فون سے تلاش کریں | P10 |
+| Canteen / player / searchLabel | Search the player to charge | جس کھلاڑی کے نام لگانا ہے اسے تلاش کریں | P10 |
+| Canteen / player / results | Search results | تلاش کے نتائج | P10 |
+| Canteen / player / none | No player found. | کوئی کھلاڑی نہیں ملا۔ | P10 |
+| Canteen / player / change | Change | بدلیں | P10 |
+| Canteen / player / playing | {{tail}}, playing on {{table}} | {{tail}}، {{table}} پر کھیل رہا ہے | P10 |
+| Canteen / player / owes | {{tail}}, owes {{amount}} | {{tail}}، {{amount}} باقی ہیں | P10 |
+| Canteen / player / plain | {{tail}} | {{tail}} | P10 |
+| Canteen / player / searchHint | Type a name or the last digits of the phone. | نام یا فون کے آخری ہندسے لکھیں۔ | P10 |
+| Canteen / basket / empty | Tap an item to add it to the order. | آرڈر میں ڈالنے کے لیے کسی چیز پر ٹیپ کریں۔ | P10 |
+| Canteen / basket / less | One less {{name}} | {{name}} ایک کم | P10 |
+| Canteen / basket / more | One more {{name}} | {{name}} ایک اور | P10 |
+| Canteen / basket / total | Total | کل | P10 |
+| Canteen / paidBy | Money taken now | ابھی لی گئی رقم | P10 |
+| Canteen / add | Add {{amount}} to {{name}}’s bill | {{amount}} {{name}} کے بل میں شامل کریں | P10 |
+| Canteen / addPick | Pick a player first | پہلے کھلاڑی چنیں | P10 |
+| Canteen / addEmpty | Add something first | پہلے کچھ شامل کریں | P10 |
+| Canteen / cash | Take {{amount}} now ({{method}}) | ابھی {{amount}} لیں ({{method}}) | P10 |
+| Canteen / note | It is paid at checkout with his games. For a cash sale, the money is taken now. | یہ چیک آؤٹ پر اس کے گیمز کے ساتھ ادا ہوگا۔ نقد فروخت میں پیسے ابھی لیے جاتے ہیں۔ | P10 |
+| Canteen / done | {{amount}} added to {{name}}’s bill. | {{amount}} {{name}} کے بل میں شامل ہو گئے۔ | P10 |
+| Canteen / doneCash | {{amount}} taken for the canteen, {{method}}. | کینٹین کے {{amount}} لے لیے گئے، {{method}}۔ | P10 |
+| Expense / addedBy | Added by {{name}} | {{name}} نے شامل کیا | P10 |
+| Expense / title | Expense from the drawer | دراز سے خرچ | P10 |
+| Expense / sub | For cash taken from tonight’s money, like food or petrol. It comes off the cash the drawer should have. | آج رات کے پیسوں سے نکالی گئی رقم کے لیے، جیسے کھانا یا پیٹرول۔ یہ دراز میں ہونی چاہیے رقم سے کم ہو جاتی ہے۔ | P10 |
+| Expense / what | What for? | کس لیے؟ | P10 |
+| Expense / kinds / food | Food | کھانا | P10 |
+| Expense / kinds / petrol | Petrol | پیٹرول | P10 |
+| Expense / kinds / tea | Tea and milk | چائے اور دودھ | P10 |
+| Expense / kinds / cleaning | Cleaning | صفائی | P10 |
+| Expense / kinds / repairs | Repairs | مرمت | P10 |
+| Expense / kinds / other | Other | دیگر | P10 |
+| Expense / note | Note (required) | نوٹ (ضروری) | P10 |
+| Expense / amount | Amount | رقم | P10 |
+| Expense / rs | Rs | روپے | P10 |
+| Expense / quick | Quick amounts | فوری رقم | P10 |
+| Expense / drawer | Cash in the drawer | دراز میں رقم | P10 |
+| Expense / drawerWas | Now {{amount}} | ابھی {{amount}} | P10 |
+| Expense / drawerNow | After {{amount}} | بعد میں {{amount}} | P10 |
+| Expense / footer | The owners see it in Expenses and Activity with your name. Only they can change or remove it. | مالکان اسے آپ کے نام کے ساتھ خرچوں اور سرگرمی میں دیکھتے ہیں۔ صرف وہی اسے بدل یا ہٹا سکتے ہیں۔ | P10 |
+| Expense / cancel | Cancel | منسوخ کریں | P10 |
+| Expense / take | Take {{amount}} from the drawer | دراز سے {{amount}} لیں | P10 |
+| Expense / takeNone | Take cash from the drawer | دراز سے رقم لیں | P10 |
+| Expense / done | {{amount}} taken from the drawer: {{what}}. | دراز سے {{amount}} لیے گئے: {{what}}۔ | P10 |
+| Players / back | Tables | ٹیبلز | P10 |
+| Players / title | Players | کھلاڑی | P10 |
+| Players / new | New player | نیا کھلاڑی | P10 |
+| Players / loadFailed | The players could not be loaded. | کھلاڑی لوڈ نہیں ہو سکے۔ | P10 |
+| Players / list | Player list | کھلاڑیوں کی فہرست | P10 |
+| Players / search | Name or phone | نام یا فون | P10 |
+| Players / searchLabel | Search players | کھلاڑی تلاش کریں | P10 |
+| Players / filterLabel | Filter | فلٹر | P10 |
+| Players / all | All {{count}} | سب {{count}} | P10 |
+| Players / owe | Owe money {{count}} | ادھار والے {{count}} | P10 |
+| Players / advance | Advance {{count}} | ایڈوانس {{count}} | P10 |
+| Players / line / oldest_one | {{tail}}, oldest unpaid {{count}} day | {{tail}}، سب سے پرانا ادھار {{count}} دن | P10 |
+| Players / line / oldest_other | {{tail}}, oldest unpaid {{count}} days | {{tail}}، سب سے پرانا ادھار {{count}} دن | P10 |
+| Players / line / tonight | {{tail}}, since tonight | {{tail}}، آج رات سے | P10 |
+| Players / line / advance | {{tail}}, advance | {{tail}}، ایڈوانس | P10 |
+| Players / line / clear | {{tail}}, nothing owed | {{tail}}، کچھ باقی نہیں | P10 |
+| Players / line / plain | {{tail}} | {{tail}} | P10 |
+| Players / none | No player found. | کوئی کھلاڑی نہیں ملا۔ | P10 |
+| Players / pick | Pick a player on the left to see his account. | اس کا کھاتا دیکھنے کے لیے بائیں طرف سے کھلاڑی چنیں۔ | P10 |
+| Players / statementLabel | Statement | کھاتا | P10 |
+| Players / sub | {{phone}}. {{played}} frames played, {{won}} won. | {{phone}}۔ {{played}} فریم کھیلے، {{won}} جیتے۔ | P10 |
+| Players / owes | Owes the club | کلب کا مقروض | P10 |
+| Players / advanceTitle | Advance with the club | کلب کے پاس ایڈوانس | P10 |
+| Players / clear | Nothing owed | کچھ باقی نہیں | P10 |
+| Players / periodLabel | Period | مدت | P10 |
+| Players / period / zero | Since last zero | آخری صفر کے بعد | P10 |
+| Players / period / month | This month | اس مہینے | P10 |
+| Players / period / all | All | سب | P10 |
+| Players / checkout | Checkout {{name}} | {{name}} کا چیک آؤٹ | P10 |
+| Players / caption | Statement lines | کھاتے کی لائنیں | P10 |
+| Players / empty | Nothing in this period. | اس مدت میں کچھ نہیں۔ | P10 |
+| Today’s totals / back | Tables | ٹیبلز | P10 |
+| Today’s totals / title | Today’s totals | آج کے کل | P10 |
+| Today’s totals / sub | Sheet {{number}}, from <when>{{time}}</when> until now | شیٹ {{number}}، <when>{{time}}</when> سے اب تک | P10 |
+| Today’s totals / loadFailed | Today’s totals could not be loaded. | آج کے کل لوڈ نہیں ہو سکے۔ | P10 |
+| Today’s totals / moneyLabel | Money received | وصول شدہ رقم | P10 |
+| Today’s totals / cash / title | Cash that should be in the drawer | دراز میں جتنی نقد رقم ہونی چاہیے | P10 |
+| Today’s totals / cash / text | Cash received {{received}}, minus {{expenses}} taken for expenses. Count it when you close the sheet. | نقد وصول {{received}}، منفی خرچوں کے لیے لیے گئے {{expenses}}۔ شیٹ بند کرتے وقت اسے گنیں۔ | P10 |
+| Today’s totals / cash / textNone | Cash received {{received}}. Count it when you close the sheet. | نقد وصول {{received}}۔ شیٹ بند کرتے وقت اسے گنیں۔ | P10 |
+| Today’s totals / total | Total received today | آج کل وصول | P10 |
+| Today’s totals / activityLabel | Activity | سرگرمی | P10 |
+| Today’s totals / frames | Frames played | کھیلے گئے فریم | P10 |
+| Today’s totals / doubles | {{count}} of them doubles | ان میں {{count}} ڈبل | P10 |
+| Today’s totals / century | Century minutes | سنچری کے منٹ | P10 |
+| Today’s totals / centuryGames_one | {{count}} Century game | {{count}} سنچری گیم | P10 |
+| Today’s totals / centuryGames_other | {{count}} Century games | {{count}} سنچری گیمز | P10 |
+| Today’s totals / credit | Put on credit today | آج ادھار میں ڈالا | P10 |
+| Today’s totals / players_one | {{count}} player | {{count}} کھلاڑی | P10 |
+| Today’s totals / players_other | {{count}} players | {{count}} کھلاڑی | P10 |
+| Today’s totals / oldCredit | Old credit collected | پرانا ادھار وصول | P10 |
+| Today’s totals / waiting_one | Still waiting to pay: <b>{{count}} bill, {{amount}}</b>. Ask them before they leave. | ابھی ادائیگی باقی ہے: <b>{{count}} بل، {{amount}}</b>۔ جانے سے پہلے ان سے کہیں۔ | P10 |
+| Today’s totals / waiting_other | Still waiting to pay: <b>{{count}} bills, {{amount}}</b>. Ask them before they leave. | ابھی ادائیگی باقی ہے: <b>{{count}} بل، {{amount}}</b>۔ جانے سے پہلے ان سے کہیں۔ | P10 |
+| Today’s totals / waitingNone | Nobody is waiting to pay. | کسی کی ادائیگی باقی نہیں۔ | P10 |
+| Today’s totals / checkout | Go to checkout | چیک آؤٹ پر جائیں | P10 |
+| Today’s totals / expenses | Expenses from the drawer tonight: {{amount}}, {{what}} ({{who}}, <when>{{time}}</when>). Profit is shown to the owners only. | آج رات دراز سے خرچ: {{amount}}، {{what}} ({{who}}، <when>{{time}}</when>)۔ منافع صرف مالکان کو دکھایا جاتا ہے۔ | P10 |
+| Today’s totals / expensesMore | Expenses from the drawer tonight: {{amount}}. The last one: {{what}} ({{who}}, <when>{{time}}</when>). Profit is shown to the owners only. | آج رات دراز سے خرچ: {{amount}}۔ آخری: {{what}} ({{who}}، <when>{{time}}</when>)۔ منافع صرف مالکان کو دکھایا جاتا ہے۔ | P10 |
+| Today’s totals / expensesNone | No expenses from the drawer tonight. Profit is shown to the owners only. | آج رات دراز سے کوئی خرچ نہیں۔ منافع صرف مالکان کو دکھایا جاتا ہے۔ | P10 |
+| Close sheet / back | Tables | ٹیبلز | P10 |
+| Close sheet / title | Close sheet {{number}} | شیٹ {{number}} بند کریں | P10 |
+| Close sheet / sub | Opened <when>{{opened}}</when>. Closing <when>{{closing}}</when>, by {{who}}. {{length}}. | کھلی <when>{{opened}}</when>۔ بند ہو رہی ہے <when>{{closing}}</when>، {{who}} کے ہاتھوں۔ {{length}}۔ | P10 |
+| Close sheet / loadFailed | The close sheet could not be loaded. | شیٹ بند کرنے کا صفحہ لوڈ نہیں ہو سکا۔ | P10 |
+| Close sheet / cashLabel | Cash check | نقد کی جانچ | P10 |
+| Close sheet / count | 1. Count the cash drawer | 1. دراز کی نقد رقم گنیں | P10 |
+| Close sheet / expected | Cash expected (after {{expenses}} expenses) | متوقع نقد ({{expenses}} خرچوں کے بعد) | P10 |
+| Close sheet / expectedPlain | Cash expected | متوقع نقد | P10 |
+| Close sheet / counted | Cash counted | گنی ہوئی نقد رقم | P10 |
+| Close sheet / short | Short | کم | P10 |
+| Close sheet / extra | Extra | زیادہ | P10 |
+| Close sheet / matches | Cash matches | نقد برابر ہے | P10 |
+| Close sheet / waitingCount | Count the cash | نقد گنیں | P10 |
+| Close sheet / note | Note about the difference (owners will see it) | فرق کے بارے میں نوٹ (مالکان دیکھیں گے) | P10 |
+| Close sheet / noteNeeded | Write a note about the difference before you close. | بند کرنے سے پہلے فرق کے بارے میں نوٹ لکھیں۔ | P10 |
+| Close sheet / onlineLabel | Online money | آن لائن رقم | P10 |
+| Close sheet / online | 2. Online money on this sheet | 2. اس شیٹ کی آن لائن رقم | P10 |
+| Close sheet / happensLabel | What happens | کیا ہوگا | P10 |
+| Close sheet / happens | 3. When you close | 3. بند کرنے پر | P10 |
+| Close sheet / left_one | 1 player left without checkout | 1 کھلاڑی چیک آؤٹ کے بغیر چلا گیا | P10 |
+| Close sheet / left_other | {{count}} players left without checkout | {{count}} کھلاڑی چیک آؤٹ کے بغیر چلے گئے | P10 |
+| Close sheet / leftText | {{names}} move to credit. | {{names}} ادھار میں چلے جاتے ہیں۔ | P10 |
+| Close sheet / checkFirst | Check out first | پہلے چیک آؤٹ کریں | P10 |
+| Close sheet / running_one | 1 game still running moves to sheet {{number}} | 1 چلتا ہوا گیم شیٹ {{number}} میں چلا جاتا ہے | P10 |
+| Close sheet / running_other | {{count}} games still running move to sheet {{number}} | {{count}} چلتے ہوئے گیمز شیٹ {{number}} میں چلے جاتے ہیں | P10 |
+| Close sheet / runningNone | No game is running, so nothing moves to sheet {{number}}. | کوئی گیم نہیں چل رہا، اس لیے شیٹ {{number}} میں کچھ نہیں جاتا۔ | P10 |
+| Close sheet / what / single | {{table}}, single frame, {{minutes}} min so far. | {{table}}، سنگل فریم، اب تک {{minutes}} منٹ۔ | P10 |
+| Close sheet / what / double | {{table}}, double frame, {{minutes}} min so far. | {{table}}، ڈبل فریم، اب تک {{minutes}} منٹ۔ | P10 |
+| Close sheet / what / game | {{table}}, game, {{minutes}} min so far. | {{table}}، گیم، اب تک {{minutes}} منٹ۔ | P10 |
+| Close sheet / what / century | {{table}}, Century under {{who}}, {{minutes}} min so far. | {{table}}، سنچری {{who}} کے نام، اب تک {{minutes}} منٹ۔ | P10 |
+| Close sheet / what / centuryPlain | {{table}}, Century, {{minutes}} min so far. | {{table}}، سنچری، اب تک {{minutes}} منٹ۔ | P10 |
+| Close sheet / what / room | {{table}} under {{who}}, {{minutes}} min so far. | {{table}} {{who}} کے نام، اب تک {{minutes}} منٹ۔ | P10 |
+| Close sheet / what / roomPlain | {{table}}, {{minutes}} min so far. | {{table}}، اب تک {{minutes}} منٹ۔ | P10 |
+| Close sheet / summary | The day summary is emailed to Aqil and Adil, and a backup is saved. | دن کا خلاصہ عقیل اور عادل کو ای میل ہوتا ہے، اور بیک اپ محفوظ ہو جاتا ہے۔ | P10 |
+| Close sheet / inShortLabel | Totals and confirm | کل اور تصدیق | P10 |
+| Close sheet / inShort | Sheet {{number}} in short | شیٹ {{number}} مختصراً | P10 |
+| Close sheet / frames | Frames | فریم | P10 |
+| Close sheet / century | Century minutes | سنچری کے منٹ | P10 |
+| Close sheet / rooms | Room hours | روم کے گھنٹے | P10 |
+| Close sheet / received | Money received | وصول شدہ رقم | P10 |
+| Close sheet / credit | Put on credit | ادھار میں ڈالا | P10 |
+| Close sheet / discounts | Discounts given | دی گئی رعایتیں | P10 |
+| Close sheet / discountsValue_one | {{amount}}, {{count}} time | {{amount}}، {{count}} بار | P10 |
+| Close sheet / discountsValue_other | {{amount}}, {{count}} times | {{amount}}، {{count}} بار | P10 |
+| Close sheet / button | Close sheet {{number}} | شیٹ {{number}} بند کریں | P10 |
+| Close sheet / buttonSub | Sheet {{next}} opens straight away | شیٹ {{next}} فوراً کھل جاتی ہے | P10 |
+| Close sheet / fine | Owners can still correct it later. Every change is recorded. | مالکان بعد میں بھی اسے درست کر سکتے ہیں۔ ہر تبدیلی درج ہوتی ہے۔ | P10 |
+| Close sheet / confirm / title | Close sheet {{number}} now? | شیٹ {{number}} ابھی بند کریں؟ | P10 |
+| Close sheet / confirm / titleCounted | Close sheet {{number}} with {{counted}} counted? | {{counted}} گن کر شیٹ {{number}} بند کریں؟ | P10 |
+| Close sheet / confirm / short | The cash is {{amount}} short. | نقد {{amount}} کم ہے۔ | P10 |
+| Close sheet / confirm / extra | The cash is {{amount}} extra. | نقد {{amount}} زیادہ ہے۔ | P10 |
+| Close sheet / confirm / matches | The cash matches. | نقد برابر ہے۔ | P10 |
+| Close sheet / confirm / left_one | 1 player left without checkout moves to credit ({{amount}}). | چیک آؤٹ کے بغیر گیا 1 کھلاڑی ادھار میں چلا جاتا ہے ({{amount}})۔ | P10 |
+| Close sheet / confirm / left_other | {{count}} players left without checkout move to credit ({{amount}}). | چیک آؤٹ کے بغیر گئے {{count}} کھلاڑی ادھار میں چلے جاتے ہیں ({{amount}})۔ | P10 |
+| Close sheet / confirm / running_one | 1 game still running moves to sheet {{number}}. | 1 چلتا ہوا گیم شیٹ {{number}} میں چلا جاتا ہے۔ | P10 |
+| Close sheet / confirm / running_other | {{count}} games still running move to sheet {{number}}. | {{count}} چلتے ہوئے گیمز شیٹ {{number}} میں چلے جاتے ہیں۔ | P10 |
+| Close sheet / confirm / yes | Yes, close it | ہاں، بند کریں | P10 |
+| Close sheet / confirm / no | No | نہیں | P10 |
+| Close sheet / dayTime | {{day}}, {{time}} | {{day}}، {{time}} | P10 |
+| Close sheet / difference | Difference | فرق | P10 |
+| Close sheet / placeholder | Count the cash | نقد گنیں | P10 |
+| Sheet closed / title | Sheet {{number}} is closed | شیٹ {{number}} بند ہو گئی | P10 |
+| Sheet closed / sub | Closed at <when>{{time}}</when>. Sheet {{next}} is open now. | <when>{{time}}</when> پر بند ہوئی۔ شیٹ {{next}} اب کھلی ہے۔ | P10 |
+| Sheet closed / loadFailed | What the close did could not be loaded. | بند کرنے کا نتیجہ لوڈ نہیں ہو سکا۔ | P10 |
+| Sheet closed / moved | Moved to sheet {{number}} | شیٹ {{number}} میں گیا | P10 |
+| Sheet closed / movedNoneTitle | Nothing was running | کچھ چل نہیں رہا تھا | P10 |
+| Sheet closed / movedNoneText | Every table was free at the close | بند کرتے وقت ہر ٹیبل خالی تھا | P10 |
+| Sheet closed / movedMany | {{count}} games | {{count}} گیمز | P10 |
+| Sheet closed / movedCentury | {{table}}, Century | {{table}}، سنچری | P10 |
+| Sheet closed / movedRoom | {{table}}, room | {{table}}، روم | P10 |
+| Sheet closed / movedUnder | Still running under {{who}} | اب بھی {{who}} کے نام پر چل رہا ہے | P10 |
+| Sheet closed / movedRunning | Still running | اب بھی چل رہا ہے | P10 |
+| Sheet closed / credit | Moved to credit | ادھار میں گیا | P10 |
+| Sheet closed / creditPlayers_one | {{count}} player, {{amount}} | {{count}} کھلاڑی، {{amount}} | P10 |
+| Sheet closed / creditPlayers_other | {{count}} players, {{amount}} | {{count}} کھلاڑی، {{amount}} | P10 |
+| Sheet closed / creditText | Marked left without checkout | چیک آؤٹ کے بغیر گئے کے طور پر درج | P10 |
+| Sheet closed / creditNoneTitle | Nobody | کوئی نہیں | P10 |
+| Sheet closed / creditNoneText | Everyone was checked out | سب کا چیک آؤٹ ہو گیا | P10 |
+| Sheet closed / cash | Cash check | نقد کی جانچ | P10 |
+| Sheet closed / cashShort | {{amount}} short | {{amount}} کم | P10 |
+| Sheet closed / cashExtra | {{amount}} extra | {{amount}} زیادہ | P10 |
+| Sheet closed / cashMatches | Cash matches | نقد برابر ہے | P10 |
+| Sheet closed / cashNote | Your note was saved for the owners | آپ کا نوٹ مالکان کے لیے محفوظ ہو گیا | P10 |
+| Sheet closed / cashOk | Nothing short or extra | نہ کم نہ زیادہ | P10 |
+| Sheet closed / emailed | Summary emailed to Aqil and Adil. Backup saved at <when>{{time}}</when>. | خلاصہ عقیل اور عادل کو ای میل ہو گیا۔ بیک اپ <when>{{time}}</when> پر محفوظ ہوا۔ | P10 |
+| Sheet closed / back | Back to tables | ٹیبلز پر واپس | P10 |
+| Sheet closed / at | {{time}}, {{day}} | {{time}}، {{day}} | P10 |
+| Sheet closed / movedType / single | {{table}}, single frame | {{table}}، سنگل فریم | P10 |
+| Sheet closed / movedType / double | {{table}}, double frame | {{table}}، ڈبل فریم | P10 |
+| Sheet closed / movedType / game | {{table}}, game | {{table}}، گیم | P10 |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

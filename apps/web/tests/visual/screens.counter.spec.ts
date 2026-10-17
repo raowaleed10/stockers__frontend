@@ -313,6 +313,66 @@ const BUILT: Record<
     crop: { x: 24, y: 99, width: 1392, height: 104 },
     shift: { x: 0, y: 2 },
   },
+  // Screens 28 to 33 (P10).
+  28: {
+    // The PNG has Usman Tariq picked and a cold drink twice and chips once in the order.
+    prepare: async (page) => {
+      await page.getByRole('searchbox', { name: 'Search the player to charge' }).fill('usman');
+      await page.getByRole('button', { name: /^Usman Tariq/ }).click();
+      await page.getByRole('button', { name: /^Cold drink/ }).click();
+      await page.getByRole('button', { name: /^Cold drink/ }).click();
+      await page.getByRole('button', { name: /^Chips/ }).click();
+      await blur(page);
+    },
+  },
+  29: {
+    window: true,
+    // The PNG has Food, a note and Rs 500 picked.
+    prepare: async (page) => {
+      await page.getByRole('button', { name: 'Food', exact: true }).click();
+      await page.getByLabel('Note (required)').fill('Dinner for staff');
+      await page.getByRole('button', { name: '500', exact: true }).click();
+      await blur(page);
+    },
+    // The drawer figures are the story's 12,300 and 11,800 at 8:15 PM; the seed holds the whole night (17,950).
+    masks: async (page) => {
+      const box = await page.getByText('Cash in the drawer').locator('xpath=..').boundingBox();
+      return box ? [box] : [];
+    },
+  },
+  30: {
+    prepare: async (page) => {
+      await page.getByRole('button', { name: /^Owe money/ }).click();
+      await blur(page);
+    },
+    // The list is the story's five players with the amounts of 10:25 PM (Bilal has paid, Rs 300); the seed's list of the
+    // players who owe is longer and its amounts differ, and the counts are 312, 41 and 6 in the PNG.
+    masks: async (page) => {
+      const list = await page.getByRole('list', { name: 'Player list' }).boundingBox();
+      const chips = await page.getByRole('group', { name: 'Filter' }).boundingBox();
+      return [list, chips].filter((box): box is NonNullable<typeof box> => box !== null);
+    },
+  },
+  31: {
+    // The PNG's waiting line (6 bills, Rs 5,100) is the checkout night after two payments; the seed's base night is different.
+    masks: async (page) => {
+      const box = await page
+        .getByRole('button', { name: 'Go to checkout' })
+        .locator('xpath=..')
+        .boundingBox();
+      return box ? [box] : [];
+    },
+  },
+  32: {
+    prepare: async (page) => {
+      await page.getByLabel('Cash counted').fill('21550');
+      await page
+        .getByLabel(/^Note about the difference/)
+        .fill('Gave Rs 200 change from the drawer for a bank payment');
+      await blur(page);
+    },
+  },
+  33: {},
   34: {
     masks: async (page) => {
       const box = await page.getByTestId('big-clock').boundingBox();

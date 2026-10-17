@@ -28,6 +28,7 @@ export const counterInvalidations: InvalidationMap = {
   'sheet.closed': [
     ['board'],
     ['undoable'],
+    ['lastClose'],
     ['clubStatus'],
     ['game'],
     ['checkout'],

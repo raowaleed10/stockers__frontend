@@ -16,4 +16,5 @@ export const counterKeys = {
   today: ['today'] as const,
   closePreview: ['closePreview'] as const,
   undoable: ['undoable'] as const,
+  lastClose: ['lastClose'] as const,
 };

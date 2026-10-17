@@ -1,0 +1,33 @@
+{
+  "title": "Sheet {{number}} is closed",
+  "sub": "Closed at <when>{{time}}</when>. Sheet {{next}} is open now.",
+  "loadFailed": "What the close did could not be loaded.",
+  "moved": "Moved to sheet {{number}}",
+  "movedNoneTitle": "Nothing was running",
+  "movedNoneText": "Every table was free at the close",
+  "movedMany": "{{count}} games",
+  "movedCentury": "{{table}}, Century",
+  "movedRoom": "{{table}}, room",
+  "movedUnder": "Still running under {{who}}",
+  "movedRunning": "Still running",
+  "credit": "Moved to credit",
+  "creditPlayers_one": "{{count}} player, {{amount}}",
+  "creditPlayers_other": "{{count}} players, {{amount}}",
+  "creditText": "Marked left without checkout",
+  "creditNoneTitle": "Nobody",
+  "creditNoneText": "Everyone was checked out",
+  "cash": "Cash check",
+  "cashShort": "{{amount}} short",
+  "cashExtra": "{{amount}} extra",
+  "cashMatches": "Cash matches",
+  "cashNote": "Your note was saved for the owners",
+  "cashOk": "Nothing short or extra",
+  "emailed": "Summary emailed to Aqil and Adil. Backup saved at <when>{{time}}</when>.",
+  "back": "Back to tables",
+  "at": "{{time}}, {{day}}",
+  "movedType": {
+    "single": "{{table}}, single frame",
+    "double": "{{table}}, double frame",
+    "game": "{{table}}, game"
+  }
+}

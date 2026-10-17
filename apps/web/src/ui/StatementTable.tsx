@@ -28,6 +28,9 @@ export interface StatementTableProps {
   onEdit?: (line: StatementRow) => void;
   /** Under the lines, for example the "Tonight" and "Total to pay" rows of a bill. */
   footer?: ReactNode;
+  /** `lg` is the table of screen 30, drawn with 17 px lines. */
+  size?: 'md' | 'lg';
+  className?: string;
 }
 
 const DASH = '–';
@@ -42,6 +45,8 @@ export function StatementTable({
   editable = false,
   onEdit,
   footer,
+  size = 'md',
+  className,
 }: StatementTableProps) {
   const { t } = useTranslation();
   const counter = theme === 'counter';
@@ -161,6 +166,8 @@ export function StatementTable({
         getRowKey={(line) => line.id}
         highlight={(line) => line.kind === 'left-without-checkout'}
         minWidth={showDoneBy || editable ? 760 : 640}
+        size={size}
+        className={className}
       />
       {footer}
     </div>

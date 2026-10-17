@@ -1,5 +1,6 @@
 // Money and game rules live here, each with a unit test.
 export * from './board';
+export * from './canteen';
 export * from './charges';
 export * from './checkout';
 export * from './club-time';

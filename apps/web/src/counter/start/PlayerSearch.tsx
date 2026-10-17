@@ -1,32 +1,14 @@
-import { rankPlayerResults, type BoardTable } from '@stockers/shared';
+import { rankPlayerResults } from '@stockers/shared';
 import { Plus, Search } from 'lucide-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cx } from '@/ui/cx';
 import { PersonCard } from '@/ui/PersonCard';
 import { focusWithinRing } from '@/ui/theme';
-import { useBoard, usePlayers } from '../api';
+import { usePlayers } from '../api';
 import type { PickedPlayer } from './draft';
 import { toPicked, usePlayerNote } from './player-parts';
-
-/** Where each player is playing now, from the board: the table or room, and its place in the board's order. */
-function useBusyPlayers() {
-  const board = useBoard('all');
-  return useMemo(() => {
-    const busy = new Map<string, { table: BoardTable; order: number }>();
-    board.data?.tables.forEach((table, order) => {
-      const game = table.game;
-      if (!game) return;
-      const ids = [
-        ...(game.playerIds ?? []),
-        ...(game.sides?.flat() ?? []),
-        ...(game.underPlayerId ? [game.underPlayerId] : []),
-      ];
-      ids.forEach((id) => busy.set(id, { table, order }));
-    });
-    return busy;
-  }, [board.data]);
-}
+import { useBusyPlayers } from './use-busy-players';
 
 export interface PlayerSearchProps {
   /** The screen reader name of the box. */

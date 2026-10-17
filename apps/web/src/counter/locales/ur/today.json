@@ -1,0 +1,30 @@
+{
+  "back": "ٹیبلز",
+  "title": "آج کے کل",
+  "sub": "شیٹ {{number}}، <when>{{time}}</when> سے اب تک",
+  "loadFailed": "آج کے کل لوڈ نہیں ہو سکے۔",
+  "moneyLabel": "وصول شدہ رقم",
+  "cash": {
+    "title": "دراز میں جتنی نقد رقم ہونی چاہیے",
+    "text": "نقد وصول {{received}}، منفی خرچوں کے لیے لیے گئے {{expenses}}۔ شیٹ بند کرتے وقت اسے گنیں۔",
+    "textNone": "نقد وصول {{received}}۔ شیٹ بند کرتے وقت اسے گنیں۔"
+  },
+  "total": "آج کل وصول",
+  "activityLabel": "سرگرمی",
+  "frames": "کھیلے گئے فریم",
+  "doubles": "ان میں {{count}} ڈبل",
+  "century": "سنچری کے منٹ",
+  "centuryGames_one": "{{count}} سنچری گیم",
+  "centuryGames_other": "{{count}} سنچری گیمز",
+  "credit": "آج ادھار میں ڈالا",
+  "players_one": "{{count}} کھلاڑی",
+  "players_other": "{{count}} کھلاڑی",
+  "oldCredit": "پرانا ادھار وصول",
+  "waiting_one": "ابھی ادائیگی باقی ہے: <b>{{count}} بل، {{amount}}</b>۔ جانے سے پہلے ان سے کہیں۔",
+  "waiting_other": "ابھی ادائیگی باقی ہے: <b>{{count}} بل، {{amount}}</b>۔ جانے سے پہلے ان سے کہیں۔",
+  "waitingNone": "کسی کی ادائیگی باقی نہیں۔",
+  "checkout": "چیک آؤٹ پر جائیں",
+  "expenses": "آج رات دراز سے خرچ: {{amount}}، {{what}} ({{who}}، <when>{{time}}</when>)۔ منافع صرف مالکان کو دکھایا جاتا ہے۔",
+  "expensesMore": "آج رات دراز سے خرچ: {{amount}}۔ آخری: {{what}} ({{who}}، <when>{{time}}</when>)۔ منافع صرف مالکان کو دکھایا جاتا ہے۔",
+  "expensesNone": "آج رات دراز سے کوئی خرچ نہیں۔ منافع صرف مالکان کو دکھایا جاتا ہے۔"
+}

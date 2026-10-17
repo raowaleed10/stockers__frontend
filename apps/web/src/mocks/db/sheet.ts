@@ -50,6 +50,7 @@ export function todayTotals(db: MockDb): TodayTotals {
     drawerExpenses: today.drawerExpenses,
     drawerExpected: expected(today),
     online: { ...today.online },
+    methods: db.s.paymentMethods.filter((method) => method.enabled),
     received: sheetReceived({ cash: today.cashReceived, online: today.online }),
     frames: today.frames,
     doubles: today.doubles,
@@ -148,6 +149,7 @@ export function closePreview(db: MockDb, by: PersonRef): ClosePreview {
       expected: expected(today),
     },
     online: { ...today.online },
+    methods: db.s.paymentMethods.filter((method) => method.enabled),
     leftWithoutCheckout: left,
     running: runningGames(db),
     summary: {
@@ -339,7 +341,7 @@ export function closeSheet(
 
   db.emit('sheet.closed', { sheetId: closed.id });
   db.emit('board.changed');
-  return {
+  const result: CloseSheetResult = {
     closed: {
       id: closed.id,
       number: closed.number,
@@ -364,4 +366,11 @@ export function closeSheet(
     },
     backedUpAt: db.nowIso(),
   };
+  db.s.lastClose = result;
+  return result;
+}
+
+/** `GET /sheets/last-close` (screen 33): what the last close did. Nothing has been closed yet on a fresh night. */
+export function lastClose(db: MockDb): CloseSheetResult {
+  return db.s.lastClose ?? fail('NOT_FOUND', 'No sheet has been closed yet.');
 }

@@ -1,0 +1,51 @@
+{
+  "back": "Tables",
+  "title": "Canteen",
+  "loadFailed": "The canteen items could not be loaded.",
+  "typesLabel": "Item type",
+  "types": {
+    "all": "All",
+    "drinks": "Drinks",
+    "food": "Food",
+    "cigarettes": "Cigarettes"
+  },
+  "itemsLabel": "Items",
+  "item": {
+    "fresh": "Made fresh",
+    "left": "{{count}} left",
+    "low": "{{count}} left, low",
+    "soldOut": "Sold out",
+    "inBasket": "{{count}} in the order"
+  },
+  "orderLabel": "Order",
+  "chargeTo": "Charge to",
+  "mode": {
+    "player": "A player",
+    "cash": "Cash sale, no name"
+  },
+  "player": {
+    "search": "Search by name or phone",
+    "searchLabel": "Search the player to charge",
+    "results": "Search results",
+    "none": "No player found.",
+    "change": "Change",
+    "playing": "{{tail}}, playing on {{table}}",
+    "owes": "{{tail}}, owes {{amount}}",
+    "plain": "{{tail}}",
+    "searchHint": "Type a name or the last digits of the phone."
+  },
+  "basket": {
+    "empty": "Tap an item to add it to the order.",
+    "less": "One less {{name}}",
+    "more": "One more {{name}}",
+    "total": "Total"
+  },
+  "paidBy": "Money taken now",
+  "add": "Add {{amount}} to {{name}}’s bill",
+  "addPick": "Pick a player first",
+  "addEmpty": "Add something first",
+  "cash": "Take {{amount}} now ({{method}})",
+  "note": "It is paid at checkout with his games. For a cash sale, the money is taken now.",
+  "done": "{{amount}} added to {{name}}’s bill.",
+  "doneCash": "{{amount}} taken for the canteen, {{method}}."
+}

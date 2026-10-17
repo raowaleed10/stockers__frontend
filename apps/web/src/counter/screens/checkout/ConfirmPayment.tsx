@@ -2,11 +2,10 @@ import { formatAmount, formatRs, type PaymentMethod } from '@stockers/shared';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useFormat } from '@/lib/use-format';
-import { Button } from '@/ui/Button';
-import { CounterDialog } from '@/ui/CounterDialog';
 import { usePayCheckout } from '../../api';
 import { useCheckoutDraft, type PaymentLine } from '../../checkout/draft';
 import { discountRequest } from '../../checkout/request';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import type { PaidNote } from './CheckoutList';
 
 /** What is about to be saved: the money received in each method, what goes on credit, what is kept as advance. */
@@ -89,42 +88,15 @@ export function ConfirmPayment({
     );
 
   return (
-    <CounterDialog
-      width={760}
-      titleSize={30}
+    <ConfirmDialog
       title={title}
       subtitle={t('confirm.sub', { name })}
-      showClose={false}
-      onClose={onClose}
-      actions={
-        <>
-          <Button
-            theme="counter"
-            size="counter-main"
-            className="min-h-[76px] min-w-[200px] flex-1 text-[24px]"
-            disabled={pay.isPending}
-            onClick={onClose}
-          >
-            {t('confirm.no')}
-          </Button>
-          <Button
-            theme="counter"
-            variant="primary"
-            size="counter-main"
-            className="min-h-[76px] min-w-[200px] flex-1 text-[24px]"
-            disabled={pay.isPending}
-            onClick={yes}
-          >
-            {t('confirm.yes')}
-          </Button>
-        </>
-      }
-    >
-      {pay.error ? (
-        <p role="alert" className="m-0 text-[17px] text-c-danger-ink">
-          {pay.error.message}
-        </p>
-      ) : null}
-    </CounterDialog>
+      yes={t('confirm.yes')}
+      no={t('confirm.no')}
+      onYes={yes}
+      onNo={onClose}
+      pending={pay.isPending}
+      error={pay.error?.message}
+    />
   );
 }

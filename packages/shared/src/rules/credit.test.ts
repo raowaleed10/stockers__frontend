@@ -5,6 +5,7 @@ import {
   isOldCredit,
   runningBalances,
   statementBalance,
+  statementSince,
 } from './credit';
 
 const at = (iso: string) => Date.parse(iso);
@@ -77,5 +78,58 @@ describe('balanceKind', () => {
     expect(balanceKind(300)).toBe('owes');
     expect(balanceKind(-200)).toBe('advance');
     expect(balanceKind(0)).toBe('clear');
+  });
+});
+
+describe('statementSince (screen 30)', () => {
+  // Kamran: nothing owed before 15 Sep, then 250, 500, 620, the move to credit, 1,100 and 1,350.
+  const line = (at: string, balance: number) => ({ at, balance });
+  const kamran = [
+    line('2026-09-02T20:00:00+05:00', 0), // paid up on 2 Sep
+    line('2026-09-15T21:10:00+05:00', 250),
+    line('2026-09-15T21:40:00+05:00', 500),
+    line('2026-09-15T22:15:00+05:00', 620),
+    line('2026-09-16T04:02:00+05:00', 620),
+    line('2026-09-22T20:20:00+05:00', 1100),
+    line('2026-10-03T21:20:00+05:00', 1350),
+  ];
+
+  it('since last zero starts after the last time the balance was nothing', () => {
+    const lines = statementSince(kamran, 'zero', NIGHT);
+    expect(lines).toHaveLength(6);
+    expect(lines[0]?.balance).toBe(250);
+    expect(lines.at(-1)?.balance).toBe(1350);
+  });
+
+  it('a player who has never been at zero shows everything', () => {
+    expect(statementSince(kamran.slice(1), 'zero', NIGHT)).toHaveLength(6);
+  });
+
+  it('a player who has paid up shows the stretch that ended at zero', () => {
+    const paid = [
+      line('2026-09-02T20:00:00+05:00', 0),
+      line('2026-09-10T20:00:00+05:00', 250),
+      line('2026-09-10T21:00:00+05:00', 500),
+      line('2026-09-11T20:00:00+05:00', 0),
+    ];
+    expect(statementSince(paid, 'zero', NIGHT).map((l) => l.balance)).toEqual([250, 500, 0]);
+  });
+
+  it('a player with no lines shows nothing', () => {
+    expect(statementSince([], 'zero', NIGHT)).toEqual([]);
+    expect(statementSince([], 'month', NIGHT)).toEqual([]);
+  });
+
+  it('this month is the calendar month in club time', () => {
+    expect(statementSince(kamran, 'month', NIGHT).map((l) => l.balance)).toEqual([1350]);
+    // 1 Oct 00:30 club time is still 30 Sep in UTC: it belongs to October.
+    const edge = [line('2026-10-01T00:30:00+05:00', 100), line('2026-09-30T23:50:00+05:00', 50)];
+    expect(statementSince(edge, 'month', NIGHT)).toHaveLength(1);
+  });
+
+  it('all is every line, as a copy', () => {
+    const all = statementSince(kamran, 'all', NIGHT);
+    expect(all).toHaveLength(7);
+    expect(all).not.toBe(kamran);
   });
 });
