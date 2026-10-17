@@ -21,6 +21,7 @@ import type {
   OwnerExpenses,
   OwnerPlayers,
   OwnerSession,
+  PublicOwner,
   OwnerSettings,
   OwnerSignInRequest,
   OwnerWorker,
@@ -53,6 +54,7 @@ const api = createApiClient('/api/owner');
 // Sign-in
 export const signIn = (request: OwnerSignInRequest) =>
   api.post<OwnerSession>('/auth/sign-in', request);
+export const getPublicOwners = () => api.get<PublicOwner[]>('/auth/owners');
 export const getMe = () => api.get<OwnerSession>('/auth/me');
 export const signOut = () => api.post<{ ok: true }>('/auth/sign-out');
 export const signOutAll = () => api.post<{ ok: true }>('/auth/sign-out-all');

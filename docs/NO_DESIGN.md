@@ -71,6 +71,10 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 54 | [The Undo toast after a canteen sale](#54-the-undo-toast-after-a-canteen-sale) | counter | P10 answers |
 | 55 | [Expense from the drawer: it asks once](#55-expense-from-the-drawer-it-asks-once) | counter | P10 answers |
 | 56 | [Start a room: the price of an hour has a range](#56-start-a-room-the-price-of-an-hour-has-a-range) | counter | P10 answers |
+| 57 | [Owner sign-in: a wrong password](#57-owner-sign-in-a-wrong-password) | owner | P11 |
+| 58 | [Owner sign-in: wait 15 minutes](#58-owner-sign-in-wait-15-minutes) | owner | P11 |
+| 59 | [Owner sidebar: Sign out](#59-owner-sidebar-sign-out) | owner | P11 |
+| 60 | [Owner phone: the More sheet](#60-owner-phone-the-more-sheet) | owner (phone) | P11 |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -747,6 +751,50 @@ Below the numbered pieces there are also [the approved screens that change](#app
 
 ![A room price outside the range](no-design/room-start-price-range.png)
 
+## 57. Owner sign-in: a wrong password
+
+- **What:** screens 35 and 52 draw the page with the password typed. After a wrong password (the field is empty or the server says no)
+  a red line under the field says so, the field's border turns red, and the page stays. The words are the counter's PIN page words
+  (§5) for a password.
+- **Where:** `/owner-dev/sign-in?as=none&now=2026-10-03T22:30:00%2B05:00`, tap "Sign in" with nothing typed.
+- **Words:** "Wrong password. Try again."
+- **Built from:** the red line of the PIN page (§5) and the field of screen 35.
+
+![Owner sign-in, wrong password](no-design/owner-signin-wrong.png)
+
+## 58. Owner sign-in: wait 15 minutes
+
+- **What:** after 5 wrong tries in a row the red line says to wait and the "Sign in" button stays off until the time is up (the same 15
+  minutes the note under the button says). The minutes shown count down.
+- **Where:** `/owner-dev/sign-in?as=none&now=2026-10-03T22:30:00%2B05:00`, tap "Sign in" five times with nothing typed.
+- **Words:** "Too many tries. Wait 15 minutes."
+- **Built from:** §6 ("Wait 5 minutes" on the counter's PIN page).
+
+![Owner sign-in, wait](no-design/owner-signin-wait.png)
+
+## 59. Owner sidebar: Sign out
+
+- **What:** no approved screen draws a way to sign out. A small icon button sits at the end of the owner's name in the walnut block at
+  the bottom of the sidebar (it does not make the block taller). It signs the owner out and goes back to the sign-in page at the
+  same address. On a phone it is a button in the More sheet (§60).
+- **Where:** `/owner-dev/live?now=2026-10-03T22:30:00%2B05:00`, the bottom of the sidebar.
+- **Words:** "Sign out" (the name of the button; it has no visible text on a computer).
+- **Built from:** the owner block of screen 36 and the icon buttons of screen 36.
+
+![Sign out in the owner sidebar](no-design/owner-sidebar-signout.png)
+
+## 60. Owner phone: the More sheet
+
+- **What:** the fifth tab of the phone's bottom bar (screen 53) is "More". It opens a bottom sheet with the pages the tab bar does not
+  have, in the sidebar's order, then the language pills of screen 52 and a "Sign out" button. DEFAULT, needs answer: the sheet also lists
+  **Reports** (seven pages), because Reports is not a tab and no phone screen draws it (the owners' list was Prices, Canteen, Expenses,
+  Activity, Workers and Settings). While one of these pages is open, "More" is the open tab. A tap outside or Escape closes it.
+- **Where:** `/owner-dev/live?now=2026-10-03T22:30:00%2B05:00` on a phone (390 wide), tap "More".
+- **Words:** "More", "Reports", "Games and prices", "Canteen", "Expenses", "Activity", "Workers", "Settings", "Sign out".
+- **Built from:** the owner bottom sheet (`OwnerAside` on a phone) and the rows of screen 58.
+
+![The More sheet](no-design/owner-more-sheet.png)
+
 ## Approved screens that change a field or a word
 
 These are changes to screens the owners already approved. They are built in P15 and P16 (the owner screens), so there is no
@@ -830,3 +878,9 @@ picture yet; each one is listed here so the owners see it with the rest of the b
   show the counter's own names instead, and nothing is merged. The types an owner picks in "Add an expense" are unchanged (Staff
   salaries, Bills, Generator, Repairs and supplies, Cleaning and tea, Rent, Other).
 - **Words:** "Food", "Petrol", "Tea and milk", "Cleaning". Urdu: "کھانا", "پیٹرول", "چائے اور دودھ", "صفائی".
+
+### Screens 36 and 53, Dashboard and Home: the unread counts
+
+- **Change:** the Activity badge in the sidebar (screen 36 draws 4) and the bells (4 on screen 36, 3 on screen 53) show the owners' unread
+  count. The PNGs disagree with each other (4 and 3); the seed gives 4 at 10:30 PM and the phone is drawn with 4 (P03 answer 6).
+  DEFAULT, needs answer: the Activity badge is the same unread count as the bell.

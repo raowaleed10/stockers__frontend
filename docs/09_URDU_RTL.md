@@ -25,6 +25,7 @@ The owners want the English/Urdu switch on the counter **and** in the owner port
 
 The owners' portal has words the workers must not be able to read: profit, salaries, other people's credit. Both apps are built as separate bundles, so the rule is kept by where the words live (table above), not by hiding them.
 
+- The owner's namespaces are `shell` (the sidebar, the phone bars, the page titles) and `login` (the sign-in page). Namespace names are unique across both apps, so the owner's sign-in is `login` and not `signin`.
 - The counter entry registers `common` and `src/counter/locales`. The owner entry registers `common` and `src/owner/locales`. Neither loads the other's folder.
 - `npm run check:bundles` (run after `npm run build`) reads every owner text value **longer than 10 characters**, in English and Urdu, and fails if any of them appears in `dist/counter`. It looks for each text as written, with quotes and backslashes escaped, and with non-ASCII as `\uXXXX`. It prints the file and key.
 - If a counter screen needs an owner word, it is not an owner word any more: move it to `common`, and the check passes. The check also fails when an owner file repeats a word that a counter file has, so that happens by itself.

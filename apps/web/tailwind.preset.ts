@@ -53,6 +53,8 @@ const preset: Partial<Config> = {
           // added in P01 (see tokens.css)
           'red-line': v('o-red-line'), track: v('o-track'), stripe: v('o-stripe'), divider: v('o-divider'),
           'on-green': v('o-on-green'), 'grey-tint': v('o-grey-tint'),
+          // added in P11 (see tokens.css)
+          'ink-3': v('o-ink-3'),
         },
         // tile text and buttons that components write with a class (the drawings themselves are in tiles.css)
         tile: { frozen: v('tile-frozen'), btn: v('tile-btn-bg') },
@@ -74,6 +76,8 @@ const preset: Partial<Config> = {
         // added in P04 (see tokens.css)
         'ball-ivory': v('shadow-ball-ivory'), 'ball-sm': v('shadow-ball-sm'),
         'ball-md': v('shadow-ball-md'), 'ball-alert': v('shadow-ball-alert'),
+        // added in P11 (see tokens.css)
+        'ball-xs': v('shadow-ball-xs'), 'login-card': v('shadow-login-card'),
       },
       minHeight: {
         touch: v('touch-counter'), 'touch-main': v('touch-counter-main'),

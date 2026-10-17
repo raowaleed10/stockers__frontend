@@ -447,6 +447,8 @@ export interface OwnerSignInRequest {
 export interface OwnerSession {
   owner: Owner;
 }
+/** `GET /auth/owners`, for the sign-in page before anybody is signed in: the two names to choose from. Nothing else. */
+export type PublicOwner = Pick<Owner, 'id' | 'name'>;
 
 export interface Dashboard {
   at: ISO;

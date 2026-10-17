@@ -1,0 +1,32 @@
+{
+  "menu": "Owner menu",
+  "owner": "Owner",
+  "signOut": "Sign out",
+  "nav": {
+    "dashboard": "Dashboard",
+    "live": "Live tables",
+    "sheets": "Sheets",
+    "players": "Players and credit",
+    "reports": "Reports",
+    "canteen": "Canteen",
+    "expenses": "Expenses",
+    "activity": "Activity",
+    "workers": "Workers",
+    "settings": "Settings",
+    "alerts": "Alerts"
+  },
+  "unread": "{{count}} new",
+  "bell": "Notifications, {{count}} new",
+  "tabs": {
+    "label": "Main",
+    "home": "Home",
+    "live": "Live",
+    "sheets": "Sheets",
+    "players": "Players",
+    "more": "More"
+  },
+  "more": {
+    "title": "More",
+    "close": "Close"
+  }
+}

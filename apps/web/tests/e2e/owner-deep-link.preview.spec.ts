@@ -40,9 +40,9 @@ test('a deep link loads the page and all of its files, also after a hard reload'
       const response = step === 'open' ? await page.goto(DEEP_LINK) : await page.reload();
       expect(response?.status()).toBe(200);
 
-      // Today the owner app has no Sheets screen, so a deep link shows its own "Page not found".
-      // P13 replaces this with the real Sheets heading.
-      await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
+      // The built bundle has no API behind it here, so the guard sends the deep link to the sign-in page (P11). That the
+      // app came up under the prefix, with its files, is what this test is about; P13 can open a real sheet.
+      await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
 
       const look = await page.evaluate(async () => {
         await document.fonts.ready;
@@ -78,9 +78,11 @@ test('a deep link loads the page and all of its files, also after a hard reload'
 });
 
 test('the app takes its router base from the injected tag, not from the code', async ({ page }) => {
-  // On a deep link "Page not found" is also what a wrong base would show, so check the home page.
+  // On a deep link "Page not found" is also what a wrong base would show, so check the home page: with no session it goes
+  // to the sign-in page at the same base path.
   await page.goto(PREFIX);
-  await expect(page.getByRole('heading', { name: 'Stockers' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
+  expect(new URL(page.url()).pathname).toBe(`${PREFIX}sign-in`);
 });
 
 test('the page has base and app-base injected before any script or stylesheet', async ({

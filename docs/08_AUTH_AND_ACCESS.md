@@ -41,6 +41,7 @@ Note: the private address hides the door; the **owner password** is the lock. Th
 ## 2. Owner sign-in (screens 35, 52)
 - Choose Aqil or Adil, type the password, and tick "Keep me signed in on this computer" (or phone).
 - The session is an HTTP-only secure cookie, scoped to the owner path. No tokens in localStorage.
+- **As built in P11:** the names on the page come from the public `GET /auth/owners`. A wrong password shows "Wrong password. Try again." under the field; after 5 wrong tries "Too many tries. Wait 15 minutes." and the button is off until the time is up (`NO_DESIGN.md` §57, §58). A signed-out visit to any owner page goes to `/sign-in` and, after signing in, opens the page that was asked for (only a plain path of this app is accepted as that page). A 404 from `/auth/me` (a counter session) counts as signed out. Sign out is the icon beside the owner's name in the sidebar, or the button in the phone's More sheet, and goes back to `/sign-in`.
 - Owners never use the counter app to sign in. If an owner needs to work at the counter, a worker signs in, or the owners add themselves as a worker with a PIN.
 
 ## 3. Worker sign-in with sign-in times (screens 1, 2, 34, 50)

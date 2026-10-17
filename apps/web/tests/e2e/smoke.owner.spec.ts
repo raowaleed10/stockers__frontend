@@ -3,9 +3,9 @@ import { expect, test } from '@playwright/test';
 // The owner app is served at /owner-dev/ in development only.
 // This spec runs twice: desktop (1440x900) and phone (390x844).
 
-test('the owner placeholder loads in Barlow on the owner background', async ({ page }) => {
+test('the owner dashboard page loads in Barlow on the owner background', async ({ page }) => {
   await page.goto('/owner-dev/');
-  await expect(page.getByRole('heading', { name: 'Stockers' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 
   const look = await page.evaluate(() => ({
@@ -33,7 +33,7 @@ test('an address inside the owner path that does not exist shows "Page not found
 
 test('the mock API answers in the browser', async ({ page }) => {
   await page.goto('/owner-dev/');
-  await expect(page.getByRole('heading', { name: 'Stockers' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
   const body = await page.evaluate(() => fetch('/api/owner/health').then((r) => r.json()));
   expect(body).toEqual({ ok: true });
 });

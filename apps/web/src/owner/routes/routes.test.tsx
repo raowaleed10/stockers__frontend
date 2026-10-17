@@ -1,30 +1,34 @@
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
-import { registerResources } from '@/lib/i18n';
-import { routerFuture } from '@/lib/router-future';
+import { screen } from '@testing-library/react';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { createTestApi } from '@/mocks/test-server';
 import { readAppBase } from '../app-base';
-import { ownerResources } from '../locales';
-import { OwnerRoutes } from './index';
+import { renderOwner, resetOwnerState, startOwnerTests } from '../test/harness';
 
-registerResources(ownerResources);
-
-const renderAt = (path: string) =>
-  render(
-    <MemoryRouter initialEntries={[path]} future={routerFuture}>
-      <OwnerRoutes />
-    </MemoryRouter>,
-  );
+const api = createTestApi();
+beforeAll(() => startOwnerTests(api), 60_000);
+afterAll(() => api.server.close());
+beforeEach(() => {
+  api.load({ app: 'owner' });
+  api.setTime('2026-10-03T22:30:00+05:00');
+  resetOwnerState();
+});
 
 describe('owner routes', () => {
-  it('shows the placeholder at /', () => {
-    renderAt('/');
-    expect(screen.getByRole('heading', { name: 'Stockers' })).toBeInTheDocument();
+  it('shows the dashboard page inside the owner frame at /', async () => {
+    renderOwner('/');
+    expect(await screen.findByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Owner menu' })).toBeInTheDocument();
   });
 
-  it('shows a plain "Page not found" for any other address', () => {
-    renderAt('/anything-else');
-    expect(screen.getByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
+  it('shows a plain "Page not found" for any other address, signed in or not', async () => {
+    const signedIn = renderOwner('/anything-else');
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Owner menu' })).toBeNull();
+    signedIn.unmount();
+
+    api.db.s.auth.session = null;
+    renderOwner('/anything-else');
+    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument();
   });
 });
 

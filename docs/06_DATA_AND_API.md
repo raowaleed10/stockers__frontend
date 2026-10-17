@@ -124,7 +124,8 @@ export interface Settings { paymentMethods: PaymentMethod[];
 
 | Call | Screens |
 |---|---|
-| `POST /auth/sign-in` `{ownerId, password}` · `GET /auth/me` · `POST /auth/sign-out` | 35, 52 |
+| `GET /auth/owners` | The two names the sign-in page offers, `[{id, name}]`. **No session needed**, and nothing but the names (no last seen). The backend must implement it (P11) | 35, 52 |
+| `POST /auth/sign-in` `{ownerId, password, keepSignedIn?}` · `GET /auth/me` · `POST /auth/sign-out` | 35, 52. A wrong password is 401 `WRONG_PASSWORD`; the 5th wrong try in a row is 429 `TOO_MANY_TRIES` `{retryAfterSec}` (15 minutes). `GET /auth/me` is 401 with no session and 404 for a counter session |
 | `GET /dashboard` | 36, 53 |
 | `GET /reports?period=month&month=2026-09&compare=2026-08` | 37 |
 | `GET /activity?type=&by=&from=&to=` · `POST /activity/:id/decide` `{payer}` | 38 |

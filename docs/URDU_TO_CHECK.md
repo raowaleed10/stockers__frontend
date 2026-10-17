@@ -728,5 +728,23 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Expense / confirm sheet, Yes · No | Yes · No | ہاں · نہیں | P10 answers |
 | End a double / one pays all, before anybody is picked | Choose who pays | جو ادا کرے اسے چنیں | P10 answers |
 | Start a room / the price is outside the range | The price of an hour is from {{min}} to {{max}}. | ایک گھنٹے کی قیمت {{min}} سے {{max}} تک ہے۔ | P10 answers |
+| Owner menu / the page names | Dashboard · Live tables · Sheets · Players and credit · Reports · Games and prices · Canteen · Expenses · Activity · Workers · Settings · Alerts | ڈیش بورڈ · لائیو ٹیبل · شیٹس · کھلاڑی اور ادھار · رپورٹس · گیمز اور قیمتیں · کینٹین · خرچے · سرگرمی · ورکرز · سیٹنگز · الرٹس | P11 |
+| Owner menu / the phone tabs | Home · Live · Sheets · Players · More | ہوم · لائیو · شیٹس · کھلاڑی · مزید | P11 |
+| Owner menu / the name of the menu | Owner menu | مالک کا مینو | P11 |
+| Owner menu / who is signed in | Owner | مالک | P11 |
+| Owner menu / Sign out | Sign out | سائن آؤٹ | P11 |
+| Owner menu / the bell | Notifications, {{count}} new · Notifications | اطلاعات، {{count}} نئی · اطلاعات | P11 |
+| Owner menu / the badge | {{count}} new | {{count}} نئے | P11 |
+| Owner phone / More sheet | More · Close | مزید · بند کریں | P11 |
+| Owner sign-in / the brand panel | Owner portal · Money, sheets, players, prices, workers and settings. Only Aqil and Adil can sign in here. | مالکان کا پورٹل · پیسے، شیٹس، کھلاڑی، قیمتیں، ورکرز اور سیٹنگز۔ یہاں صرف Aqil اور Adil سائن ان کر سکتے ہیں۔ | P11 |
+| Owner sign-in / the private-address note | Private address. You opened {{address}}. Workers don’t have this link and the counter screen never shows it. Keep it to yourselves. | نجی ایڈریس۔ آپ نے {{address}} کھولا ہے۔ ورکرز کے پاس یہ لنک نہیں ہے اور کاؤنٹر کی اسکرین اسے کبھی نہیں دکھاتی۔ اسے اپنے تک رکھیں۔ | P11 |
+| Owner sign-in / the card | Sign in · Who is signing in? · Owner · Password · Show password · Hide password | سائن ان · کون سائن ان کر رہا ہے؟ · مالک · پاس ورڈ · پاس ورڈ دکھائیں · پاس ورڈ چھپائیں | P11 |
+| Owner sign-in / keep me signed in | Keep me signed in on this computer · …on this phone | مجھے اس کمپیوٹر پر سائن ان رکھیں · …اس فون پر سائن ان رکھیں | P11 |
+| Owner sign-in / under the button | Forgot the password? The other owner can set a new one in Settings. After 5 wrong tries, sign-in waits 15 minutes. | پاس ورڈ بھول گئے؟ دوسرا مالک سیٹنگز میں نیا بنا سکتا ہے۔ 5 غلط کوششوں کے بعد سائن ان 15 منٹ رکا رہتا ہے۔ | P11 |
+| Owner sign-in / the phone's line | This is the private owner address. Forgot the password? The other owner can set a new one in Settings. | یہ مالکان کا نجی ایڈریس ہے۔ پاس ورڈ بھول گئے؟ دوسرا مالک سیٹنگز میں نیا بنا سکتا ہے۔ | P11 |
+| Owner sign-in / the place line | Snooker club, Mian Plaza | اسنوکر کلب، میاں پلازہ | P11 |
+| Owner sign-in / a wrong password | Wrong password. Try again. | پاس ورڈ غلط ہے۔ دوبارہ کوشش کریں۔ | P11 |
+| Owner sign-in / too many tries | Too many tries. Wait {{minutes}} minutes. | بہت زیادہ کوششیں۔ {{minutes}} منٹ انتظار کریں۔ | P11 |
+| Owner sign-in / the owners cannot be loaded | Could not load the owners. · Try again | مالکان لوڈ نہیں ہو سکے۔ · دوبارہ کوشش کریں | P11 |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

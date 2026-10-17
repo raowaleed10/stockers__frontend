@@ -1,0 +1,32 @@
+{
+  "menu": "مالک کا مینو",
+  "owner": "مالک",
+  "signOut": "سائن آؤٹ",
+  "nav": {
+    "dashboard": "ڈیش بورڈ",
+    "live": "لائیو ٹیبل",
+    "sheets": "شیٹس",
+    "players": "کھلاڑی اور ادھار",
+    "reports": "رپورٹس",
+    "canteen": "کینٹین",
+    "expenses": "خرچے",
+    "activity": "سرگرمی",
+    "workers": "ورکرز",
+    "settings": "سیٹنگز",
+    "alerts": "الرٹس"
+  },
+  "unread": "{{count}} نئے",
+  "bell": "اطلاعات، {{count}} نئی",
+  "tabs": {
+    "label": "مین",
+    "home": "ہوم",
+    "live": "لائیو",
+    "sheets": "شیٹس",
+    "players": "کھلاڑی",
+    "more": "مزید"
+  },
+  "more": {
+    "title": "مزید",
+    "close": "بند کریں"
+  }
+}

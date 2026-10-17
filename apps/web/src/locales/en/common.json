@@ -5,6 +5,12 @@
     "title": "Something went wrong",
     "reload": "Reload"
   },
+  "place": "Snooker club, Mian Plaza",
+  "retry": "Try again",
+  "notifications": "Notifications",
+  "pages": {
+    "prices": "Games and prices"
+  },
   "close": "Close",
   "closePanel": "Close panel",
   "keypad": {

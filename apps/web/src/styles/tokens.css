@@ -194,6 +194,11 @@
   --c-soldout-line: #5A4A3C;  /* its dashed border */
   --c-strike: #8C7F6E;        /* the drawer figure that no longer holds, struck through (29) */
 
+  /* ---------- the owner shell and sign-in (added in P11; screens 35, 36, 52, 53) ---------- */
+  --o-ink-3: #6E685F;         /* a tab that is not the open one (53) */
+  --shadow-ball-xs: inset -4px -4px 0 rgba(0, 0, 0, 0.28);    /* brand ball, 26 and 30 px (36, 53) */
+  --shadow-login-card: 0 20px 50px rgba(30, 40, 30, 0.08);    /* the white sign-in card (35) */
+
   /* ---------- shape ---------- */
   --r-tile: 18px;
   --r-dialog: 26px;

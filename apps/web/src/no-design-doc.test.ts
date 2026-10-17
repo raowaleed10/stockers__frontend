@@ -9,7 +9,9 @@ import { describe, expect, it } from 'vitest';
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const DOC = path.join(REPO, 'docs/NO_DESIGN.md');
 const PICTURES = path.join(REPO, 'docs/no-design');
-const SPEC = path.join(REPO, 'apps/web/tests/no-design/no-design.counter.spec.ts');
+const SPECS = ['counter', 'owner'].map((app) =>
+  path.join(REPO, `apps/web/tests/no-design/no-design.${app}.spec.ts`),
+);
 
 const doc = readFileSync(DOC, 'utf8');
 const linked = [...doc.matchAll(/!\[[^\]]*\]\(no-design\/([a-z0-9-]+\.png)\)/g)].map((m) => m[1]);
@@ -33,10 +35,10 @@ describe('docs/NO_DESIGN.md', () => {
     expect(files.sort()).toEqual([...linked].sort());
   });
 
-  it('has a screenshot entry in the spec for every picture (so one command makes them all again)', () => {
-    const spec = readFileSync(SPEC, 'utf8');
+  it('has a screenshot entry in a spec for every picture (so one command makes them all again)', () => {
+    const spec = SPECS.map((file) => readFileSync(file, 'utf8')).join('\n');
     for (const file of linked) {
-      expect(spec, `no entry for ${file} in no-design.counter.spec.ts`).toContain(
+      expect(spec, `no entry for ${file} in the no-design specs`).toContain(
         `id: '${file.replace(/\.png$/, '')}'`,
       );
     }

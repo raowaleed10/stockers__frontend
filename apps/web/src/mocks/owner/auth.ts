@@ -1,4 +1,10 @@
-import type { Owner, OwnerSession, OwnerSignInRequest, PersonRef } from '@stockers/shared';
+import type {
+  Owner,
+  OwnerSession,
+  OwnerSignInRequest,
+  PersonRef,
+  PublicOwner,
+} from '@stockers/shared';
 import type { MockDb } from '../db/db';
 import { fail } from '../db/errors';
 
@@ -45,6 +51,11 @@ export function ownerSignIn(db: MockDb, request: OwnerSignInRequest): OwnerSessi
   owner.lastSeen = db.nowIso();
   db.s.auth.session = { kind: 'owner', ownerId: owner.id, at: db.nowIso() };
   return { owner };
+}
+
+/** The names the sign-in page offers (docs/06 §3). No session needed, and nothing but the names. */
+export function publicOwners(db: MockDb): PublicOwner[] {
+  return db.s.owners.map(({ id, name }) => ({ id, name }));
 }
 
 export function ownerMe(db: MockDb): OwnerSession {

@@ -18,6 +18,8 @@ import type kit from '@/dev/locales/en/kit.json';
 import type preview from '@/dev/locales/en/preview.json';
 import type tiles from '@/dev/locales/en/tiles.json';
 import type common from '@/locales/en/common.json';
+import type login from '@/owner/locales/en/login.json';
+import type shell from '@/owner/locales/en/shell.json';
 
 // Makes t('...') check its keys against the English files. Type-only, so nothing here reaches a bundle.
 // Adding a namespace file in counter/locales or owner/locales? Add one `import type` line for it
@@ -42,6 +44,8 @@ declare module 'i18next' {
       signin: typeof signin; // counter: the sign-in page
       start: typeof start; // counter: starting a game, adding a player, changing the type
       table: typeof table; // counter: the table panel, move, stop, damage, the undo toast and Pause all
+      login: typeof login; // owner: the sign-in page (screens 35 and 52)
+      shell: typeof shell; // owner: the sidebar, the phone bars and the page titles
       data: typeof data; // dev-only: the /dev/data page
       kit: typeof kit; // dev-only: the /dev/kit page
       preview: typeof preview; // dev-only: the /dev/games-preview page

@@ -169,6 +169,8 @@ All in `src/counter` unless it says `src/ui`.
 - **Data:** `BillPart.amount`, `.doubled` and `.text`, `StatementLine.doubled`, `WaitingBill.oldestUnpaidAt`; `docs/06`.
 - **Shared rules:** `paymentPreview`, `isValidDiscount` (`rules/checkout.ts`) and `formatMonthYear` (`rules/format.ts`).
 
+- **As built in P11 (D66, owner app):** `screens/SignIn.tsx` (screens 35 and 52 in one page, two looks by the width), `session/RequireOwner.tsx` (the guard), `components/OwnerFrame.tsx` (the frame: `OwnerSidebar` on a computer, `PhoneTopBar`, `PhoneTabBar` and `MoreSheet` under 768 px), `OwnerBrand` (the ball and "Stockers" at the four sizes the designs draw), `OwnerLanguage` (the sidebar's track or the phone's pills), `nav.ts` (the 11 pages, the phone tabs, what More lists, `isOpen`), `screens/OwnerPage.tsx` (a page that is not built yet: its title in the frame). `test/harness.tsx` has `renderOwner`, `startOwnerTests`, `setPhone`. Namespaces `shell` and `login` (the owner's own words; `login`, not `signin`, because the counter has a `signin` and namespace names are unique across both apps). Tokens `--o-ink-3`, `--shadow-ball-xs`, `--shadow-owner-card`. The sign-in page uses the class `screen-text` for the browser's own line height (the designs have no other), and the phone's cards and field are content-box as drawn.
+
 ## Rules for components
 - `ui` and `tiles` never fetch data and never read the clock directly (`TimerText` uses `useNow()`, which is allowed).
 - All text comes in through props or `t()`; no English hard-coded inside shared components.

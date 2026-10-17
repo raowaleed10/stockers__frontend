@@ -115,7 +115,8 @@ test.describe('worker sign-in (screens 1 and 2)', () => {
   }) => {
     await open(page, `/checkout?as=none&now=${NIGHT}`);
     await expect(page).toHaveURL(/\/sign-in/);
-    await page.goto('/owner-dev/sign-in');
+    // An address that looks like an owner area is just an unknown address on the counter.
+    await page.goto('/owner/sign-in');
     await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
   });
 });

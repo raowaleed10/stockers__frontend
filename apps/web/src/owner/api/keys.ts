@@ -1,6 +1,7 @@
 /** Query keys of the owner app (docs/06 §5). Events invalidate by the first word of a key. */
 export const ownerKeys = {
   me: ['me'] as const,
+  publicOwners: ['publicOwners'] as const,
   dashboard: ['dashboard'] as const,
   reports: (params: object) => ['reports', params] as const,
   activity: (filters: object) => ['activity', filters] as const,

@@ -26,7 +26,7 @@ import { fail } from '../db/errors';
 import { statementOf } from '../db/players';
 import { endpoint, fileEndpoint, type Call } from '../http';
 import { activityList, decideDispute } from './activity';
-import { ownerMe, ownerSignIn, ownerSignOut, requireOwner } from './auth';
+import { ownerMe, ownerSignIn, ownerSignOut, publicOwners, requireOwner } from './auth';
 import {
   addCanteenItem,
   addStock,
@@ -86,6 +86,10 @@ export function buildOwnerHandlers(getDb: () => MockDb): RequestHandler[] {
     http.post(
       `${B}/auth/sign-in`,
       endpoint<OwnerSignInRequest>(({ body }) => ownerSignIn(getDb(), body)),
+    ),
+    http.get(
+      `${B}/auth/owners`,
+      endpoint(() => publicOwners(getDb())),
     ),
     http.get(
       `${B}/auth/me`,

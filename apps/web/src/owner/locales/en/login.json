@@ -1,0 +1,19 @@
+{
+  "title": "Sign in",
+  "panelTitle": "Owner portal",
+  "panelText": "Money, sheets, players, prices, workers and settings. Only Aqil and Adil can sign in here.",
+  "private": "<b>Private address.</b> You opened <addr>{{address}}</addr>. Workers don’t have this link and the counter screen never shows it. Keep it to yourselves.",
+  "who": "Who is signing in?",
+  "role": "Owner",
+  "password": "Password",
+  "show": "Show password",
+  "hide": "Hide password",
+  "keepComputer": "Keep me signed in on this computer",
+  "keepPhone": "Keep me signed in on this phone",
+  "submit": "Sign in",
+  "forgot": "Forgot the password? The other owner can set a new one in Settings. After 5 wrong tries, sign-in waits 15 minutes.",
+  "forgotPhone": "This is the private owner address. Forgot the password? The other owner can set a new one in Settings.",
+  "wrong": "Wrong password. Try again.",
+  "wait": "Too many tries. Wait {{minutes}} minutes.",
+  "loadFailed": "Could not load the owners."
+}

@@ -8,6 +8,9 @@ import { ownerKeys as keys } from './keys';
 
 /** Who is signed in. A 401 means nobody is. */
 export const useMe = () => useQuery({ queryKey: keys.me, queryFn: calls.getMe, retry: false });
+/** The two names on the sign-in page. It needs no session. */
+export const usePublicOwners = () =>
+  useQuery({ queryKey: keys.publicOwners, queryFn: calls.getPublicOwners });
 export const useDashboard = () =>
   useQuery({ queryKey: keys.dashboard, queryFn: calls.getDashboard });
 export const useReports = (query: ReportsQuery = {}) =>
