@@ -39,7 +39,9 @@ export function OwnerFrame({ owner }: { owner: Owner }) {
       {phone ? <PhoneTopBar unread={unread} /> : null}
       <main
         className={cx(
-          'flex min-w-0 flex-1 flex-col',
+          'flex min-w-0 flex-col',
+          // The designs size the sidebar and the page as 1 and 999 parts of the space left (240.64 px of 1440): the same here.
+          phone ? 'flex-1' : 'flex-[999_1_560px]',
           phone ? 'gap-3.5 px-4 pb-[22px] pt-1.5' : 'gap-5 px-[30px] pb-[34px] pt-[26px]',
         )}
       >

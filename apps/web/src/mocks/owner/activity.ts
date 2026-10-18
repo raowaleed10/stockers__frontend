@@ -3,11 +3,35 @@ import type {
   ActivityList,
   ActivityQuery,
   DecideRequest,
+  DisputeBrief,
   PersonRef,
 } from '@stockers/shared';
 import { formatRs } from '@stockers/shared';
 import type { MockDb } from '../db/db';
 import { fail } from '../db/errors';
+
+/** The disputes waiting for an owner as the banner of screen 38 needs them: the oldest first. */
+function disputesWaiting(db: MockDb, happened: ActivityEvent[]): DisputeBrief[] {
+  return happened
+    .filter((event) => event.needsDecision && db.s.disputes[event.id])
+    .map((event): DisputeBrief => {
+      const info = db.s.disputes[event.id];
+      const table = db.table(info.tableId);
+      return {
+        eventId: event.id,
+        at: event.at,
+        table: { kind: table.kind, number: table.number },
+        players: [
+          { id: info.playerIds[0], name: db.player(info.playerIds[0]).name },
+          { id: info.playerIds[1], name: db.player(info.playerIds[1]).name },
+        ],
+        ...(info.frameNo !== undefined ? { frameNo: info.frameNo } : {}),
+        amount: info.amount,
+        ...(info.note ? { note: info.note } : {}),
+      };
+    })
+    .sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
+}
 
 /** `GET /activity`: what changed money outside a normal game, newest first, only what has happened. */
 export function activityList(db: MockDb, query: ActivityQuery): ActivityList {
@@ -27,12 +51,18 @@ export function activityList(db: MockDb, query: ActivityQuery): ActivityList {
 
   const counts: Record<string, number> = { all: happened.length };
   for (const event of happened) counts[event.type] = (counts[event.type] ?? 0) + 1;
-  return { events, counts, needsDecision: happened.filter((e) => e.needsDecision).length };
+  return {
+    events,
+    counts,
+    needsDecision: happened.filter((e) => e.needsDecision).length,
+    disputes: disputesWaiting(db, happened),
+  };
 }
 
 /**
  * The owners decide a dispute (screen 38): one player pays, the other pays, half each, or nobody.
- * What is decided is added to his statement; the event is kept, marked as decided.
+ * What is decided is added to his statement; the event is kept, marked as decided, and a new line in Activity says who
+ * decided and what ("by Aqil").
  */
 export function decideDispute(
   db: MockDb,
@@ -80,8 +110,13 @@ export function decideDispute(
         : `${names} pays ${formatRs(info.amount)}`;
   event.needsDecision = false;
   event.detail = `${event.detail ?? ''} Decided by ${by.name.split(' ')[0]}: ${decision}.`.trim();
+  const decided = db.logActivity(by, 'dispute', `Dispute on ${table.name} decided`, {
+    detail: `${db.player(first).name} vs ${db.player(second).name}. ${decision}.`,
+    ...(payers.length > 0 ? { amount: info.amount } : {}),
+    facts: { tableId: table.id },
+  });
   db.history(by, `Decided the dispute on ${table.name}: ${decision}`, info.amount, event.sheetId);
   delete db.s.disputes[id];
   db.emit('waiting.changed');
-  return event;
+  return decided;
 }

@@ -1,6 +1,7 @@
 import type {
   CancelRequest,
   CorrectEndRequest,
+  DiscardReason,
   GameView,
   PlayerTonight,
   ChangeTypeRequest,
@@ -427,6 +428,15 @@ function finish(db: MockDb, by: PersonRef, game: Game, status: Game['status']): 
   delete game.pausedAt;
 }
 
+/** The four reasons of the counter's stop screen, as the key the owners' sentences use ("players left"). */
+function discardReason(text: string | undefined): DiscardReason {
+  const lower = (text ?? '').toLowerCase();
+  if (lower.includes('left')) return 'left';
+  if (lower.includes('power')) return 'power';
+  if (lower.includes('table')) return 'table';
+  return 'other';
+}
+
 export function discardGame(db: MockDb, by: PersonRef, id: string, request: DiscardRequest): Game {
   const game = activeGame(db, id);
   const table = db.table(game.tableId);
@@ -437,6 +447,7 @@ export function discardGame(db: MockDb, by: PersonRef, id: string, request: Disc
   db.logActivity(by, 'discard', `Frame discarded on ${table.name}`, {
     detail: note ? `${request.reason}. “${note}”` : request.reason,
     amount: wouldHaveBeen,
+    facts: { tableId: table.id, reason: discardReason(request.reason) },
   });
   db.notify(
     'cancelled-or-discarded',
@@ -467,7 +478,13 @@ export function disputeGame(db: MockDb, by: PersonRef, id: string, request: Disp
     amount,
     needsDecision: true,
   });
-  db.s.disputes[event.id] = { tableId: table.id, playerIds: [sides[0], sides[1]], amount };
+  db.s.disputes[event.id] = {
+    tableId: table.id,
+    playerIds: [sides[0], sides[1]],
+    amount,
+    ...(game.frameNo ? { frameNo: game.frameNo } : {}),
+    note,
+  };
   db.history(by, `Dispute on ${table.name}: ${note}`, amount);
   changed(db, game);
   return game;
@@ -720,6 +737,7 @@ function applyEnd(
     const event = db.logActivity(by, 'double-charge', `Charged double on ${table.name}`, {
       detail: `${game.type === 'game' ? 'Game' : 'Frame'} ran ${Math.floor(elapsedMs / MINUTE_MS)} minutes, over its limit of ${gameLimit(game)}. ${payers} paid ${formatRs(amount)} instead of ${formatRs(normalAmount)}.`,
       amount: amount - normalAmount,
+      facts: { tableId: table.id, minutes: Math.floor(elapsedMs / MINUTE_MS) },
     });
     result.doubleEventId = event.id;
   }
@@ -956,6 +974,7 @@ export function correctEnd(
   db.logActivity(by, 'discard', `Frame discarded on ${table.name}`, {
     detail: note ? `${reason}. “${note}”` : reason,
     amount: was,
+    facts: { tableId: table.id, reason: discardReason(reason) },
   });
   db.notify(
     'cancelled-or-discarded',

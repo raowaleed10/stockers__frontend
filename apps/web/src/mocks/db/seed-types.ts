@@ -161,6 +161,8 @@ export interface SeedAggregates {
     todayOpen: boolean;
   };
   busyHours: Record<string, number>;
+  /** The top players of the last 30 days (screen 36): visits and what each spent in those days. */
+  topPlayers30: { playerId: string; visits: number; spent: Rs }[];
   reports: {
     month: string;
     compare: string;
@@ -173,6 +175,11 @@ export interface SeedAggregates {
     byTable: Record<string, Rs>;
     byMethod: Record<string, [Rs, Rs]>;
     year2026: Record<string, Rs>;
+    /** Mock only: 2025 month by month, so the year view has a year to compare with. */
+    year2025: Record<string, Rs>;
+    /** The running total of each month, day by day (screen 37's line chart). */
+    race: { shown: Rs[]; compared: Rs[] };
+    closedTables: { tableId: string; days: number; note?: string }[];
   };
   sheetFolders: { month: string; days: number; sheets: number; earned: Rs }[];
 }
@@ -214,6 +221,8 @@ export interface SeedDispute {
   tableId: string;
   playerIds: [string, string];
   amount: Rs;
+  frameNo?: number;
+  note?: string;
 }
 
 /** An owner notification. `readAt`: it was unread until then. */

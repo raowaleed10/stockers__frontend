@@ -4,6 +4,7 @@ import type {
   EditEntryRequest,
   ExpenseRequest,
   ExportFormat,
+  ReportPeriod,
   NewCanteenItemRequest,
   NewTableRequest,
   NewWorkerRequest,
@@ -43,7 +44,14 @@ import {
   recordPayment,
   setOpeningBalance,
 } from './players';
-import { dashboard, live, notifications, readAllNotifications, reports } from './reports';
+import {
+  dashboard,
+  exportReportFile,
+  live,
+  notifications,
+  readAllNotifications,
+  reports,
+} from './reports';
 import { editEntry, exportSheet, sheetDetail, sheetFolders, sheetsOfMonth } from './sheets';
 import {
   addExpense,
@@ -157,6 +165,24 @@ export function buildOwnerHandlers(getDb: () => MockDb): RequestHandler[] {
       asOwner<EditEntryRequest>((db, by, c) =>
         editEntry(db, by, c.param('id'), c.param('entryId'), c.body),
       ),
+    ),
+    http.get(
+      `${B}/reports/export`,
+      fileEndpoint((c) => {
+        const db = getDb();
+        requireOwner(db);
+        const format = c.query.get('format') ?? 'pdf';
+        if (format !== 'pdf' && format !== 'xlsx') return fail('VALIDATION', 'Choose pdf or xlsx.');
+        return exportReportFile(
+          db,
+          {
+            ...(c.query.get('period') ? { period: c.query.get('period') as ReportPeriod } : {}),
+            ...(c.query.get('month') ? { month: c.query.get('month') as string } : {}),
+            ...(c.query.get('compare') ? { compare: c.query.get('compare') as string } : {}),
+          },
+          format,
+        );
+      }),
     ),
     http.get(
       `${B}/sheets/:id/export`,

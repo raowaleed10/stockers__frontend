@@ -220,7 +220,13 @@ export function createDb(seed: SeedFile, options: CreateDbOptions): MockDb {
     disputes: Object.fromEntries(
       raw.disputes.map((d) => [
         d.activityId,
-        { tableId: d.tableId, playerIds: d.playerIds, amount: d.amount },
+        {
+          tableId: d.tableId,
+          playerIds: d.playerIds,
+          amount: d.amount,
+          ...(d.frameNo !== undefined ? { frameNo: d.frameNo } : {}),
+          ...(d.note !== undefined ? { note: d.note } : {}),
+        },
       ]),
     ),
     checkoutUndo: {},

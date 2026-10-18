@@ -66,7 +66,7 @@ describe('screen 35: owner sign-in on a computer', () => {
     await userEvent.type(screen.getByLabelText('Password'), 'stockers48');
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }));
     await waitFor(() => expect(wherePath(view)).toBe('/'));
-    expect(await screen.findByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /^Today, / })).toBeInTheDocument();
     expect(api.db.s.auth.session).toMatchObject({ kind: 'owner', ownerId: 'adil' });
   });
 
@@ -197,7 +197,10 @@ describe('screen 36: the sidebar of the owner frame', () => {
       within(nav).getByRole('link', { name: new RegExp('^' + name + '( \\d+ new)?$') });
     await userEvent.click(link());
     await waitFor(() => expect(wherePath(view)).toBe(path));
-    expect(await screen.findByRole('heading', { name })).toBeInTheDocument();
+    // The dashboard's title is the day (screen 36); the others are the page's name.
+    expect(
+      await screen.findByRole('heading', { name: name === 'Dashboard' ? /^Today, / : name }),
+    ).toBeInTheDocument();
     expect(link()).toHaveAttribute('aria-current', 'page');
   });
 

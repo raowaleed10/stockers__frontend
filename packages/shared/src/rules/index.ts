@@ -8,6 +8,7 @@ export * from './credit';
 export * from './drawer';
 export * from './format';
 export * from './players';
+export * from './reports';
 export * from './sheet';
 export * from './slots';
 export * from './time';

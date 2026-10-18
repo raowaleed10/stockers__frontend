@@ -1,0 +1,69 @@
+{
+  "title": "Reports",
+  "pdf": "PDF",
+  "excel": "Excel",
+  "periodLabel": "Period type",
+  "day": "Day",
+  "month": "Month",
+  "year": "Year",
+  "show": "Show",
+  "compared": "compared with",
+  "totals": "Totals",
+  "earned": "Earned",
+  "expenses": "Expenses",
+  "profit": "Profit",
+  "vs": "vs {{amount}}",
+  "profitNote": "vs {{amount}}. After expenses and canteen buying cost.",
+  "creditEnd": {
+    "day": "Credit pending at day end",
+    "month": "Credit pending at month end",
+    "year": "Credit pending at year end"
+  },
+  "creditNote": "Counted in earned, not yet received",
+  "race": {
+    "month": "Earned through the month, day by day",
+    "year": "Earned through the year, month by month",
+    "day": "Day {{n}}",
+    "summary": "Running total of earnings: {{shown}} ends at {{shownTotal}}, {{compared}} at {{comparedTotal}}",
+    "tip": "{{step}}",
+    "shownEnd": "{{name}} {{amount}}"
+  },
+  "game": {
+    "title": "By game",
+    "game": "Game",
+    "change": "Change",
+    "frames": "Snooker frames",
+    "century": "Century",
+    "rooms": "Rooms",
+    "canteen": "$t(common:canteenSales)",
+    "unpriced": "Pool, foosball, carrom, ludo, PlayStation",
+    "notPriced": "Not priced",
+    "total": "Total, Rs"
+  },
+  "table": {
+    "title": "By table, {{period}}",
+    "note": "Frames and Century together for each table.",
+    "closed_one": "{{table}} was closed {{count}} day for {{note}}.",
+    "closed_other": "{{table}} was closed {{count}} days for {{note}}."
+  },
+  "method": {
+    "title": "Money received, by payment method",
+    "method": "Method",
+    "total": "Received, Rs",
+    "note": "Includes old credit paid back. What is still owed shows under credit pending."
+  },
+  "year2": {
+    "title": "{{year}} month by month",
+    "sofar": "Earned so far this year: {{amount}}",
+    "summary": "Earned per month in {{year}} from {{first}} {{firstAmount}} to {{last}} {{lastAmount}}",
+    "open": "so far"
+  },
+  "empty": "There is no report for that period.",
+  "downloadFailed": "Could not make the file. Try again.",
+  "methods": {
+    "cash": "Cash",
+    "bank": "$t(common:bankTransfer)",
+    "easypaisa": "Easypaisa",
+    "jazzcash": "JazzCash"
+  }
+}

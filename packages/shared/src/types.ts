@@ -195,6 +195,8 @@ export interface CanteenItem {
   buyIsEstimate?: boolean;
   stock: number | null; // null = made fresh
   lowAt: number;
+  /** What the owners call many of it in a sentence ("Cigarette packs"); the name is used when this is left out. */
+  plural?: string;
 }
 export interface CanteenSale {
   id: string;
@@ -281,6 +283,19 @@ export type ActivityType =
   | 'out-of-order'
   | 'sign-in'
   | 'sign-out';
+/** Why a frame was discarded: the four reasons of the counter's stop screen (screen 14). */
+export type DiscardReason = 'left' | 'power' | 'table' | 'other';
+
+/** The structured part of an event, so a sentence (the dashboard's "Needs a look") is made from data and not from text (D67). */
+export interface ActivityFacts {
+  tableId?: string;
+  minutes?: number;
+  reason?: DiscardReason;
+}
+
+/** A table as a screen needs it to write its name in its own language: `Table 4`, `Room 1`. */
+export type TableRef = Pick<Table, 'kind' | 'number'>;
+
 export interface ActivityEvent {
   id: string;
   at: ISO;
@@ -288,6 +303,7 @@ export interface ActivityEvent {
   type: ActivityType;
   title: string;
   detail?: string;
+  facts?: ActivityFacts;
   amount?: Rs;
   sheetId?: string;
   needsDecision?: boolean;

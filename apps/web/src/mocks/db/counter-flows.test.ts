@@ -647,10 +647,11 @@ describe('undo, cancel, discard and dispute', () => {
     expect(game.status).toBe('dispute');
     const event = db.s.activity[0];
     expect(event).toMatchObject({ type: 'dispute', needsDecision: true, amount: 200 });
-    expect(db.s.disputes[event.id]).toEqual({
+    expect(db.s.disputes[event.id]).toMatchObject({
       tableId: 't4',
       playerIds: ['usman-t', 'zubair'],
       amount: 200,
+      note: 'Both say the other fouled',
     });
     expect(refusal(() => disputeGame(db, actor(db), 'g-t4-1', { note: 'again' })).body.code).toBe(
       'GAME_NOT_RUNNING',

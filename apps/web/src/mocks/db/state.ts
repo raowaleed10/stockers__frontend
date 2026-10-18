@@ -66,6 +66,9 @@ export interface DisputeInfo {
   tableId: string;
   playerIds: [string, string];
   amount: Rs;
+  /** The frame of the fight and what the worker wrote, for the owners' banner (screen 38). */
+  frameNo?: number;
+  note?: string;
 }
 
 /**

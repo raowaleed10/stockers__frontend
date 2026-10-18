@@ -72,12 +72,12 @@ describe('dashboard and reports (screens 36, 37, 53)', () => {
       profit: 61900,
     });
     expect(d.credit).toMatchObject({ total: 48300, advanceHeld: 3400 });
-    expect(d.topPlayers.map((p) => p.playerId)).toEqual([
-      'kamran',
-      'ali-raza',
-      'bilal',
-      'faisal',
-      'waqas',
+    // The top players of the last 30 days (screen 36), with their visits.
+    expect(d.topPlayers.map((p) => [p.name, p.visits, p.spent])).toEqual([
+      ['Saad Hussain', 22, 9840],
+      ['Bilal Ahmed', 18, 8350],
+      ['Ali Hassan', 9, 7900],
+      ['Usman Tariq', 15, 6120],
     ]);
     expect(d.topDebtors.map((p) => [p.playerId, p.balance])).toEqual([
       ['kamran', 1350],
@@ -110,7 +110,7 @@ describe('dashboard and reports (screens 36, 37, 53)', () => {
       earned: [773000, 735200],
       profit: [516500, 486400],
     });
-    expect(r.byTable.t3).toBe(106800);
+    expect(r.byTable[0]).toEqual({ table: { kind: 'snooker', number: '3' }, earned: 106800 });
     expect(r.year['09']).toBe(773000);
   });
 
@@ -160,11 +160,24 @@ describe('activity (screen 38)', () => {
 
   it('lets an owner decide a dispute: half each charges both and keeps the event', async () => {
     api.load({ app: 'owner' });
-    const event = await owner.decideDispute('a2', { payer: 'half' });
-    expect(event.needsDecision).toBe(false);
-    expect(event.detail).toBe(
+    const decided = await owner.decideDispute('a2', { payer: 'half' });
+    // A new line in Activity says who decided and what (D67: "by Aqil").
+    expect(decided).toMatchObject({
+      type: 'dispute',
+      title: 'Dispute on Table 3 decided',
+      by: { name: 'Aqil Farooq', role: 'owner' },
+      amount: 250,
+    });
+    expect(decided.detail).toBe('Faisal Mehmood vs Naveed Akhtar. Half each (Rs 125 and Rs 125).');
+    const list = await owner.getActivity();
+    const event = list.events.find((e) => e.id === 'a2');
+    expect(event?.needsDecision).toBe(false);
+    expect(event?.detail).toBe(
       'Faisal Mehmood vs Naveed Akhtar, frame 3. “Both say the other fouled on the black” Decided by Aqil: Half each (Rs 125 and Rs 125).',
     );
+    expect(list.events[0].id).toBe(decided.id);
+    expect(list.counts.dispute).toBe(2);
+    expect(list.disputes).toEqual([]);
     const faisal = await owner.getPlayer('faisal');
     expect(faisal.player.balance).toBe(250 + 125);
     expect(faisal.lines.at(-1)).toMatchObject({

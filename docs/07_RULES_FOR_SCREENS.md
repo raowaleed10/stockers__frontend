@@ -108,6 +108,17 @@ The server decides with its own clock. The frontend uses these functions only to
 - Earned = received for this sheet + new credit − old credit paid on this sheet.
 - Profit (owners only) = earned − expenses − canteen buying cost (Q11).
 
+## 7b. What the owner pages work out (`reports.ts`, P12)
+| Rule | Function | Example |
+|---|---|---|
+| A change against the period compared with, to one decimal, written with its sign | `percentChange(now, before)` | 773,000 against 735,200 → **+5.1%**; 31,300 against 28,600 → +9.4%; nothing before → no figure |
+| A part as a whole-number share of a total | `share(part, total)` | 51,400 of 86,000 → 60%; 8,300 → 10% |
+| A bar as a whole-number share of the longest | `barWidth(value, max)` | By table: 101,200 against 106,800 → 95% |
+| Money written short for an axis or a bar | `compactMoney(n)` | 36,000 → 36k; 35,600 → 35.6k; 641,000 → 641k; 6,224,200 → 6.2m |
+| Whole days since a date, at the club's clock | `dayAge(now, since)` | Kamran, since 15 Sep 9:10 PM, at 3 Oct 10:30 PM → 18 days |
+| A round top and even steps for a bar chart's axis | `niceAxis(max, steps)` | Highest day 35,600 → 0, 12k, 24k, 36k |
+| The hour of a busy-hours bar | `hourLabel(h)` | 22 → 10 PM; 0 → 12 AM |
+
 ## 8. Timers on the board
 - Show `elapsed()` with `useNow()` (once per second).
 - Only the clock text updates each second; do not re-render the whole board. Keep a ticking `<TimerText>` per tile.

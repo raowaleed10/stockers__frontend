@@ -746,5 +746,75 @@ Strings that were translated without an approved Urdu wording in `docs/09_URDU_R
 | Owner sign-in / a wrong password | Wrong password. Try again. | پاس ورڈ غلط ہے۔ دوبارہ کوشش کریں۔ | P11 |
 | Owner sign-in / too many tries | Too many tries. Wait {{minutes}} minutes. | بہت زیادہ کوششیں۔ {{minutes}} منٹ انتظار کریں۔ | P11 |
 | Owner sign-in / the owners cannot be loaded | Could not load the owners. · Try again | مالکان لوڈ نہیں ہو سکے۔ · دوبارہ کوشش کریں | P11 |
+| Owner dashboard / title | Today, {{day}} | آج، {{day}} | P12 |
+| Owner dashboard / sheetLine | Sheet {{number}} open since <when>{{time}}</when>. Live, updated <when>{{updated}}</when>. | شیٹ {{number}} <when>{{time}}</when> سے کھلی ہے۔ لائیو، <when>{{updated}}</when> پر اپ ڈیٹ۔ | P12 |
+| Owner dashboard / sheetLinePhone | Sheet {{number}}, open since <when>{{time}}</when>. Live, <when>{{updated}}</when>. | شیٹ {{number}}، <when>{{time}}</when> سے کھلی ہے۔ لائیو، <when>{{updated}}</when>۔ | P12 |
+| Owner dashboard / download | Download today | آج کی فائل ڈاؤن لوڈ کریں | P12 |
+| Owner dashboard / earned | Earned today | آج کی کمائی | P12 |
+| Owner dashboard / earnedNote | {{frames}} frames, {{century}} Century minutes, {{rooms}} rooms, canteen | {{frames}} فریم، {{century}} سنچری منٹ، {{rooms}} روم، کینٹین | P12 |
+| Owner dashboard / received | Received today | آج وصول ہوئے | P12 |
+| Owner dashboard / receivedNote | Cash {{cash}}, online {{online}} | کیش {{cash}}، آن لائن {{online}} | P12 |
+| Owner dashboard / credit | Put on credit today | آج ادھار میں گئے | P12 |
+| Owner dashboard / creditNote | Old credit collected {{amount}} | پرانا ادھار وصول {{amount}} | P12 |
+| Owner dashboard / inUse | Tables in use now | اس وقت چلتے ٹیبل | P12 |
+| Owner dashboard / inUseValue | {{used}} of {{total}} | {{total}} میں سے {{used}} | P12 |
+| Owner dashboard / over_one | {{count}} table over {{minutes}} minutes | {{count}} ٹیبل {{minutes}} منٹ سے اوپر | P12 |
+| Owner dashboard / over_other | {{count}} tables over {{minutes}} minutes | {{count}} ٹیبل {{minutes}} منٹ سے اوپر | P12 |
+| Owner dashboard / month | {{month}} so far, {{count}} day · {{month}} so far, {{count}} days · Earned · Expenses · Canteen buying cost · Profit · {{pct}}% more than the first {{days}} days of {{previous}} · {{pct}}% less than the first {{days}} days of {{previous}} · The same as the first {{days}} days of {{previous}} | {{month}} اب تک، {{count}} دن · {{month}} اب تک، {{count}} دن · کمائی · خرچے · کینٹین کی خرید · منافع · {{previous}} کے پہلے {{days}} دنوں سے {{pct}}% زیادہ · {{previous}} کے پہلے {{days}} دنوں سے {{pct}}% کم · {{previous}} کے پہلے {{days}} دنوں کے برابر | P12 |
+| Owner dashboard / creditCard | Credit pending, all players · {{count}} player owes money · {{count}} players owe money · Older than 15 days · {{amount}}, {{count}} player · {{amount}}, {{count}} players | ادھار باقی، سب کھلاڑی · {{count}} کھلاڑی کے ذمے رقم ہے · {{count}} کھلاڑیوں کے ذمے رقم ہے · 15 دن سے پرانا · {{amount}}، {{count}} کھلاڑی · {{amount}}، {{count}} کھلاڑی | P12 |
+| Owner dashboard / hand | Money in hand today · Received {{received}} minus {{expenses}} expenses paid today · {{name}} {{amount}} · Bank · Easypaisa · JazzCash | آج ہاتھ میں رقم · وصول {{received}} منفی آج دیے گئے خرچے {{expenses}} · {{name}} {{amount}} · بینک · Easypaisa · JazzCash | P12 |
+| Owner dashboard / days | Earned per day, last 30 days · Weekends are the tall bars. Best day: {{day}}, {{amount}}. · Bar chart of daily earnings from {{from}} to {{to}}, between {{min}} and {{max}} a day · Today, still open · Today so far, {{amount}} · {{day}}, {{amount}} | روزانہ کمائی، پچھلے 30 دن · ہفتے کے آخری دن اونچے ستون ہیں۔ بہترین دن: {{day}}، {{amount}}۔ · {{from}} سے {{to}} تک روزانہ کمائی کا ستون چارٹ، روزانہ {{min}} سے {{max}} کے درمیان · آج، ابھی کھلا ہے · آج اب تک، {{amount}} · {{day}}، {{amount}} | P12 |
+| Owner dashboard / share | Where {{month}}’s money came from · Snooker frames · Century · Rooms · Canteen sales · Canteen profit after buying price: {{profit}}. Pool and other games start once prices are set. | {{month}} کا پیسہ کہاں سے آیا · اسنوکر فریم · سنچری · روم · کینٹین کی فروخت · خرید کی قیمت کے بعد کینٹین کا منافع: {{profit}}۔ پول اور دوسرے گیمز قیمت لگنے پر شروع ہوں گے۔ | P12 |
+| Owner dashboard / busy | Busiest hours, last 4 weeks · Tables in use, on average · {{hour}}, {{n}} tables · {{hour}} peak, {{n}} · Average tables in use by hour, peaking at {{n}} of {{total}} tables at {{hour}} | سب سے مصروف گھنٹے، پچھلے 4 ہفتے · چلتے ٹیبل، اوسطاً · {{hour}}، {{n}} ٹیبل · {{hour}} سب سے زیادہ، {{n}} · ہر گھنٹے میں چلتے ٹیبل کی اوسط، {{hour}} پر {{total}} میں سے {{n}} ٹیبل کے ساتھ سب سے زیادہ | P12 |
+| Owner dashboard / debts | Biggest debts · {{count}} day · {{count}} days · See all {{count}} player who owes · See all {{count}} players who owe | سب سے بڑے ادھار · {{count}} دن · {{count}} دن · رقم دینے والے سب {{count}} کھلاڑی دیکھیں · رقم دینے والے سب {{count}} کھلاڑی دیکھیں | P12 |
+| Owner dashboard / top | Top players, last 30 days · {{count}} visit · {{count}} visits · Open player report | سب سے اوپر کھلاڑی، پچھلے 30 دن · {{count}} آمد · {{count}} آمدیں · کھلاڑیوں کی رپورٹ کھولیں | P12 |
+| Owner dashboard / needs | Needs a look · Open activity · See all alerts · Nothing needs a look. · {{count}} frame charged double on {{table}}, it ran {{minutes}} minutes · {{count}} frames charged double, the last on {{table}}, it ran {{minutes}} minutes · {{count}} discount today, {{total}} in total · {{count}} discounts today, {{total}} in total · {{name}}: {{left}} left. · {{names}} sold out. · {{count}} frame discarded on {{table}} · {{count}} frames discarded, the last on {{table}} · , players left · , power cut · , table problem ·  | دیکھنے کی باتیں · سرگرمی کھولیں · سب الرٹس دیکھیں · کچھ دیکھنے کی ضرورت نہیں۔ · {{table}} پر {{count}} فریم ڈبل چارج ہوا، {{minutes}} منٹ چلا · {{count}} فریم ڈبل چارج ہوئے، آخری {{table}} پر، {{minutes}} منٹ چلا · آج {{count}} رعایت، کل {{total}} · آج {{count}} رعایتیں، کل {{total}} · {{name}}: {{left}} باقی۔ · {{names}} ختم۔ · {{table}} پر {{count}} فریم ختم کیا گیا · {{count}} فریم ختم کیے گئے، آخری {{table}} پر · ، کھلاڑی چلے گئے · ، بجلی چلی گئی · ، ٹیبل کا مسئلہ ·  | P12 |
+| Owner dashboard / phone | {{used}} of {{total}} in use · {{count}} over {{minutes}} min · Received · Cash {{cash}}, online {{online}} · Put on credit · Old credit paid {{amount}} · Money in hand · After {{expenses}} expenses · Online today · Earned per day · Last 7 days · Today, hatched, is still open. · Earned per day, last 7 days. Best was {{day}}, {{best}}. Today {{today}} so far. · Credit pending · {{count}} players. {{amount}} is older than 15 days. · See all players who owe | {{total}} میں سے {{used}} چل رہے ہیں · {{count}} {{minutes}} منٹ سے اوپر · وصول · کیش {{cash}}، آن لائن {{online}} · ادھار میں گئے · پرانا ادھار وصول {{amount}} · ہاتھ میں رقم · {{expenses}} خرچوں کے بعد · آج آن لائن · روزانہ کمائی · پچھلے 7 دن · آج، دھاری دار، ابھی کھلا ہے۔ · روزانہ کمائی، پچھلے 7 دن۔ بہترین {{day}}، {{best}}۔ آج اب تک {{today}}۔ · ادھار باقی · {{count}} کھلاڑی۔ {{amount}} 15 دن سے پرانا ہے۔ · رقم دینے والے سب کھلاڑی دیکھیں | P12 |
+| Owner dashboard / table | Table {{number}} · Room {{number}} · Pool table {{number}} · Foosball table {{number}} · Carrom board {{number}} · Ludo board {{number}} · PlayStation {{number}} | ٹیبل {{number}} · روم {{number}} · پول ٹیبل {{number}} · فوسبال ٹیبل {{number}} · کیرم بورڈ {{number}} · لوڈو بورڈ {{number}} · پلے اسٹیشن {{number}} | P12 |
+| Owner dashboard / downloadFailed | Could not make the file. Try again. | فائل نہیں بن سکی۔ دوبارہ کوشش کریں۔ | P12 |
+| Owner reports / title | Reports | رپورٹس | P12 |
+| Owner reports / pdf | PDF | PDF | P12 |
+| Owner reports / excel | Excel | ایکسل | P12 |
+| Owner reports / periodLabel | Period type | مدت کی قسم | P12 |
+| Owner reports / day | Day | دن | P12 |
+| Owner reports / month | Month | مہینہ | P12 |
+| Owner reports / year | Year | سال | P12 |
+| Owner reports / show | Show | دکھائیں | P12 |
+| Owner reports / compared | compared with | کا موازنہ | P12 |
+| Owner reports / totals | Totals | کل رقمیں | P12 |
+| Owner reports / earned | Earned | کمائی | P12 |
+| Owner reports / expenses | Expenses | خرچے | P12 |
+| Owner reports / profit | Profit | منافع | P12 |
+| Owner reports / vs | vs {{amount}} | پچھلی مدت {{amount}} | P12 |
+| Owner reports / profitNote | vs {{amount}}. After expenses and canteen buying cost. | پچھلی مدت {{amount}}۔ خرچوں اور کینٹین کی خرید کے بعد۔ | P12 |
+| Owner reports / creditEnd | Credit pending at day end · Credit pending at month end · Credit pending at year end | دن کے آخر میں ادھار باقی · مہینے کے آخر میں ادھار باقی · سال کے آخر میں ادھار باقی | P12 |
+| Owner reports / creditNote | Counted in earned, not yet received | کمائی میں شامل، ابھی وصول نہیں ہوا | P12 |
+| Owner reports / race | Earned through the month, day by day · Earned through the year, month by month · Day {{n}} · Running total of earnings: {{shown}} ends at {{shownTotal}}, {{compared}} at {{comparedTotal}} · {{step}} · {{name}} {{amount}} | مہینے بھر کی کمائی، دن بدن · سال بھر کی کمائی، مہینہ بہ مہینہ · دن {{n}} · کمائی کا جمع ہوتا کل: {{shown}} کا اختتام {{shownTotal}} پر، {{compared}} کا {{comparedTotal}} پر · {{step}} · {{name}} {{amount}} | P12 |
+| Owner reports / game | By game · Game · Change · Snooker frames · Century · Rooms · Canteen sales · Pool, foosball, carrom, ludo, PlayStation · Not priced · Total, Rs | گیم کے لحاظ سے · گیم · تبدیلی · اسنوکر فریم · سنچری · روم · کینٹین کی فروخت · پول، فوسبال، کیرم، لوڈو، پلے اسٹیشن · قیمت نہیں · کل، روپے | P12 |
+| Owner reports / table | By table, {{period}} · Frames and Century together for each table. · {{table}} was closed {{count}} day for {{note}}. · {{table}} was closed {{count}} days for {{note}}. | ٹیبل کے لحاظ سے، {{period}} · ہر ٹیبل کے فریم اور سنچری ملا کر۔ · {{table}} {{count}} دن بند رہی: {{note}}۔ · {{table}} {{count}} دن بند رہی: {{note}}۔ | P12 |
+| Owner reports / method | Money received, by payment method · Method · Received, Rs · Includes old credit paid back. What is still owed shows under credit pending. | وصول شدہ رقم، ادائیگی کے طریقے سے · طریقہ · وصول، روپے · واپس آیا پرانا ادھار شامل ہے۔ جو ابھی باقی ہے وہ ادھار باقی میں دکھتا ہے۔ | P12 |
+| Owner reports / year2 | {{year}} month by month · Earned so far this year: {{amount}} · Earned per month in {{year}} from {{first}} {{firstAmount}} to {{last}} {{lastAmount}} · so far | {{year}} مہینہ بہ مہینہ · اس سال اب تک کی کمائی: {{amount}} · {{year}} میں ہر مہینے کی کمائی، {{first}} {{firstAmount}} سے {{last}} {{lastAmount}} تک · اب تک | P12 |
+| Owner reports / empty | There is no report for that period. | اس مدت کی کوئی رپورٹ نہیں۔ | P12 |
+| Owner reports / downloadFailed | Could not make the file. Try again. | فائل نہیں بن سکی۔ دوبارہ کوشش کریں۔ | P12 |
+| Owner reports / methods | Cash · Bank transfer · Easypaisa · JazzCash | کیش · بینک ٹرانسفر · Easypaisa · JazzCash | P12 |
+| Owner activity / title | Activity | سرگرمی | P12 |
+| Owner activity / sub | Everything that changed money outside a normal game. Nothing is deleted, only recorded. | عام گیم کے علاوہ جو کچھ پیسوں میں بدلا، سب۔ کچھ مٹایا نہیں جاتا، صرف درج ہوتا ہے۔ | P12 |
+| Owner activity / waiting | Waiting for an owner | مالک کے انتظار میں | P12 |
+| Owner activity / dispute | {{count}} dispute is waiting for you · {{count}} disputes are waiting for you · {{table}}, {{time}}. {{a}} vs {{b}} · , frame {{n}} · , {{amount}}. ·  “{{note}}” · {{name}} pays · Half each · Nobody pays | {{count}} جھگڑا آپ کے فیصلے کا منتظر ہے · {{count}} جھگڑے آپ کے فیصلے کے منتظر ہیں · {{table}}، {{time}}۔ {{a}} بمقابلہ {{b}} · ، فریم {{n}} · ، {{amount}}۔ ·  “{{note}}” · {{name}} دے · آدھا آدھا · کوئی نہیں دے گا | P12 |
+| Owner activity / filter | Filter | فلٹر | P12 |
+| Owner activity / chips | All, today {{count}} · Discounts {{count}} · Discarded and cancelled {{count}} · Charged double {{count}} · Damage charges {{count}} · Disputes {{count}} · Drawer expenses {{count}} · Edits by owners {{count}} · Left without checkout {{count}} · Cash short or extra {{count}} | سب، آج {{count}} · رعایتیں {{count}} · ختم اور منسوخ {{count}} · ڈبل چارج {{count}} · نقصان کے چارج {{count}} · جھگڑے {{count}} · دراز سے خرچ {{count}} · مالکان کی ترامیم {{count}} · بغیر چیک آؤٹ گئے {{count}} · کیش کم یا زیادہ {{count}} | P12 |
+| Owner activity / doneBy | Done by | کس نے کیا | P12 |
+| Owner activity / everyone | Everyone | سب | P12 |
+| Owner activity / list | Activity list | سرگرمی کی فہرست | P12 |
+| Owner activity / time | Time | وقت | P12 |
+| Owner activity / by | Done by | کس نے کیا | P12 |
+| Owner activity / what | What happened | کیا ہوا | P12 |
+| Owner activity / amount | Amount | رقم | P12 |
+| Owner activity / notCharged | {{amount}} not charged | {{amount}} چارج نہیں ہوئے | P12 |
+| Owner activity / waitingAmount | {{amount}} waiting | {{amount}} باقی | P12 |
+| Owner activity / none | Nothing here for this filter. | اس فلٹر کے لیے یہاں کچھ نہیں۔ | P12 |
+| Owner activity / alertsLabel | Alerts | الرٹس | P12 |
+| Owner activity / alerts | Owners get a phone alert for: sheet closed, left without checkout, game discarded or cancelled, bill or sheet edited, low canteen stock. | مالکان کو فون پر الرٹ ملتا ہے: شیٹ بند ہو، بغیر چیک آؤٹ جانا، گیم ختم یا منسوخ ہو، بل یا شیٹ بدلی جائے، کینٹین کا اسٹاک کم ہو۔ | P12 |
+| Owner activity / changeAlerts | Change alerts | الرٹس بدلیں | P12 |
 
 The Free, Playing, Over 30 min, Paused and Out of order words are from the approved list in `docs/09_URDU_RTL.md` and are not repeated here. The sample words on the `/dev/kit` and `/dev/tiles` pages (`src/dev/locales/ur/`, `src/dev/tiles/samples-*.ts`) are my own dev-only samples for checking layout, never shown to users, and are not listed here, except the words above, which a real screen will use.

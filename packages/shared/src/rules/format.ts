@@ -150,6 +150,21 @@ export function formatMonthYear(iso: ISO, lang: FormatLang = 'en'): string {
   return `${month} ${t.getUTCFullYear()}`;
 }
 
+/** The name of a month, 1 to 12: `September`, or `Sep` with `short`. Urdu has one form (`ستمبر`). */
+export function monthName(month: number, lang: FormatLang = 'en', short = false): string {
+  const index = Math.min(12, Math.max(1, Math.round(month))) - 1;
+  if (lang === 'ur') return UR_MONTHS[index];
+  return short ? MONTHS[index].slice(0, 3) : MONTHS[index];
+}
+
+/** The hour of a bar in a busy-hours chart: 22 is `10 PM` and 0 is `12 AM`; in Urdu `رات 10` (the day-part word first). */
+export function hourLabel(hour: number, lang: FormatLang = 'en'): string {
+  const h = ((Math.round(hour) % 24) + 24) % 24;
+  const { time, period } = partsOf(h, 0, lang);
+  const number = time.replace(/:00$/, '');
+  return lang === 'ur' ? `${period} ${number}` : `${number} ${period}`;
+}
+
 /** `Thursday`; in Urdu `جمعرات`: the weekday alone, for "Last played Thursday". */
 export function formatWeekday(iso: ISO, lang: FormatLang = 'en'): string {
   const day = clubTime(iso).getUTCDay();

@@ -44,6 +44,8 @@ export interface StatCardProps {
   /** The colour of the label. It can differ from the card, as on screen 43. */
   labelTone?: StatLabelTone;
   size?: StatSize;
+  /** Digits of the same width (the default, so a column lines up). The owner dashboards are drawn with proportional digits. */
+  tabular?: boolean;
   className?: string;
 }
 
@@ -56,6 +58,7 @@ export function StatCard({
   tone = 'plain',
   labelTone = 'default',
   size = 'md',
+  tabular = true,
   className,
 }: StatCardProps) {
   const look = SIZE[size];
@@ -83,7 +86,9 @@ export function StatCard({
       className={cx('flex flex-col', look.box, className)}
     >
       <span className={cx('font-semibold', look.label, labelColour)}>{label}</span>
-      <span className={cx('font-num font-bold tabular-nums', look.value)}>{value}</span>
+      <span className={cx('font-num font-bold', tabular && 'tabular-nums', look.value)}>
+        {value}
+      </span>
       {note ? <span className={cx(look.note, noteColour)}>{note}</span> : null}
     </Card>
   );

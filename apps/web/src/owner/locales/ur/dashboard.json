@@ -1,0 +1,129 @@
+{
+  "title": "آج، {{day}}",
+  "sheetLine": "شیٹ {{number}} <when>{{time}}</when> سے کھلی ہے۔ لائیو، <when>{{updated}}</when> پر اپ ڈیٹ۔",
+  "sheetLinePhone": "شیٹ {{number}}، <when>{{time}}</when> سے کھلی ہے۔ لائیو، <when>{{updated}}</when>۔",
+  "download": "آج کی فائل ڈاؤن لوڈ کریں",
+  "earned": "آج کی کمائی",
+  "earnedNote": "{{frames}} فریم، {{century}} سنچری منٹ، {{rooms}} روم، کینٹین",
+  "received": "آج وصول ہوئے",
+  "receivedNote": "کیش {{cash}}، آن لائن {{online}}",
+  "credit": "$t(common:putOnCreditToday)",
+  "creditNote": "پرانا ادھار وصول {{amount}}",
+  "inUse": "اس وقت چلتے ٹیبل",
+  "inUseValue": "{{total}} میں سے {{used}}",
+  "over_one": "{{count}} ٹیبل {{minutes}} منٹ سے اوپر",
+  "over_other": "{{count}} ٹیبل {{minutes}} منٹ سے اوپر",
+  "month": {
+    "title_one": "{{month}} اب تک، {{count}} دن",
+    "title_other": "{{month}} اب تک، {{count}} دن",
+    "earned": "کمائی",
+    "expenses": "خرچے",
+    "canteen": "کینٹین کی خرید",
+    "profit": "منافع",
+    "more": "{{previous}} کے پہلے {{days}} دنوں سے {{pct}}% زیادہ",
+    "less": "{{previous}} کے پہلے {{days}} دنوں سے {{pct}}% کم",
+    "same": "{{previous}} کے پہلے {{days}} دنوں کے برابر"
+  },
+  "creditCard": {
+    "title": "ادھار باقی، سب کھلاڑی",
+    "owe_one": "{{count}} کھلاڑی کے ذمے رقم ہے",
+    "owe_other": "{{count}} کھلاڑیوں کے ذمے رقم ہے",
+    "old": "15 دن سے پرانا",
+    "oldValue_one": "{{amount}}، {{count}} کھلاڑی",
+    "oldValue_other": "{{amount}}، {{count}} کھلاڑی"
+  },
+  "hand": {
+    "title": "آج ہاتھ میں رقم",
+    "note": "وصول {{received}} منفی آج دیے گئے خرچے {{expenses}}",
+    "chip": "{{name}} {{amount}}",
+    "bank": "بینک",
+    "method": {
+      "easypaisa": "Easypaisa",
+      "jazzcash": "JazzCash"
+    }
+  },
+  "days": {
+    "title": "روزانہ کمائی، پچھلے 30 دن",
+    "note": "ہفتے کے آخری دن اونچے ستون ہیں۔ بہترین دن: {{day}}، {{amount}}۔",
+    "summary": "{{from}} سے {{to}} تک روزانہ کمائی کا ستون چارٹ، روزانہ {{min}} سے {{max}} کے درمیان",
+    "today": "آج، ابھی کھلا ہے",
+    "todayTip": "آج اب تک، {{amount}}",
+    "tip": "{{day}}، {{amount}}"
+  },
+  "share": {
+    "title": "{{month}} کا پیسہ کہاں سے آیا",
+    "frames": "اسنوکر فریم",
+    "century": "سنچری",
+    "rooms": "روم",
+    "canteen": "$t(common:canteenSales)",
+    "note": "خرید کی قیمت کے بعد کینٹین کا منافع: {{profit}}۔ پول اور دوسرے گیمز قیمت لگنے پر شروع ہوں گے۔"
+  },
+  "busy": {
+    "title": "سب سے مصروف گھنٹے، پچھلے 4 ہفتے",
+    "note": "چلتے ٹیبل، اوسطاً",
+    "tip": "{{hour}}، {{n}} ٹیبل",
+    "peak": "{{hour}} سب سے زیادہ، {{n}}",
+    "summary": "ہر گھنٹے میں چلتے ٹیبل کی اوسط، {{hour}} پر {{total}} میں سے {{n}} ٹیبل کے ساتھ سب سے زیادہ"
+  },
+  "debts": {
+    "title": "سب سے بڑے ادھار",
+    "age_one": "$t(common:dayCount)",
+    "age_other": "$t(common:dayCount)",
+    "all_one": "رقم دینے والے سب {{count}} کھلاڑی دیکھیں",
+    "all_other": "رقم دینے والے سب {{count}} کھلاڑی دیکھیں"
+  },
+  "top": {
+    "title": "سب سے اوپر کھلاڑی، پچھلے 30 دن",
+    "visits_one": "{{count}} آمد",
+    "visits_other": "{{count}} آمدیں",
+    "open": "کھلاڑیوں کی رپورٹ کھولیں"
+  },
+  "needs": {
+    "title": "دیکھنے کی باتیں",
+    "open": "سرگرمی کھولیں",
+    "all": "سب الرٹس دیکھیں",
+    "none": "کچھ دیکھنے کی ضرورت نہیں۔",
+    "double_one": "{{table}} پر {{count}} فریم ڈبل چارج ہوا، {{minutes}} منٹ چلا",
+    "double_other": "{{count}} فریم ڈبل چارج ہوئے، آخری {{table}} پر، {{minutes}} منٹ چلا",
+    "discounts_one": "آج {{count}} رعایت، کل {{total}}",
+    "discounts_other": "آج {{count}} رعایتیں، کل {{total}}",
+    "low": "{{name}}: {{left}} باقی۔",
+    "soldOut": "{{names}} ختم۔",
+    "discard_one": "{{table}} پر {{count}} فریم ختم کیا گیا",
+    "discard_other": "{{count}} فریم ختم کیے گئے، آخری {{table}} پر",
+    "reason": {
+      "left": "، کھلاڑی چلے گئے",
+      "power": "، بجلی چلی گئی",
+      "table": "، ٹیبل کا مسئلہ",
+      "other": ""
+    }
+  },
+  "phone": {
+    "inUse": "{{total}} میں سے {{used}} چل رہے ہیں",
+    "over": "{{count}} {{minutes}} منٹ سے اوپر",
+    "received": "وصول",
+    "receivedNote": "کیش {{cash}}، آن لائن {{online}}",
+    "credit": "$t(common:putOnCredit)",
+    "creditNote": "پرانا ادھار وصول {{amount}}",
+    "hand": "ہاتھ میں رقم",
+    "handNote": "$t(common:afterExpenses)",
+    "online": "آج آن لائن",
+    "daysTitle": "روزانہ کمائی",
+    "daysNote": "پچھلے 7 دن",
+    "daysOpen": "آج، دھاری دار، ابھی کھلا ہے۔",
+    "daysSummary": "روزانہ کمائی، پچھلے 7 دن۔ بہترین {{day}}، {{best}}۔ آج اب تک {{today}}۔",
+    "creditTitle": "ادھار باقی",
+    "creditSub": "{{count}} کھلاڑی۔ {{amount}} 15 دن سے پرانا ہے۔",
+    "creditAll": "رقم دینے والے سب کھلاڑی دیکھیں"
+  },
+  "table": {
+    "snooker": "$t(common:tableName.snooker)",
+    "room": "$t(common:tableName.room)",
+    "pool": "$t(common:tableName.pool)",
+    "foosball": "$t(common:tableName.foosball)",
+    "carrom": "$t(common:tableName.carrom)",
+    "ludo": "$t(common:tableName.ludo)",
+    "playstation": "$t(common:tableName.playstation)"
+  },
+  "downloadFailed": "فائل نہیں بن سکی۔ دوبارہ کوشش کریں۔"
+}

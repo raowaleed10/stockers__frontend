@@ -1,5 +1,6 @@
 import type {
   ActivityEvent,
+  ActivityFacts,
   CounterAlert,
   ActivityType,
   AppNotification,
@@ -120,6 +121,7 @@ export class MockDb {
       amount?: number;
       sheetId?: string | null;
       needsDecision?: boolean;
+      facts?: ActivityFacts;
     } = {},
   ): ActivityEvent {
     const event: ActivityEvent = {
@@ -132,6 +134,7 @@ export class MockDb {
       ...(options.amount !== undefined ? { amount: options.amount } : {}),
       ...(options.sheetId === null ? {} : { sheetId: options.sheetId ?? this.s.currentSheetId }),
       ...(options.needsDecision ? { needsDecision: true } : {}),
+      ...(options.facts ? { facts: options.facts } : {}),
     };
     this.s.activity.unshift(event);
     return event;

@@ -20,11 +20,19 @@ export interface MoneyTextProps {
   size?: MoneySize;
   /** Crossed out, for a price that no longer applies. */
   strike?: boolean;
+  /** Digits of the same width (the default). The owner dashboards are drawn with proportional digits. */
+  tabular?: boolean;
   className?: string;
 }
 
 /** `Rs 1,350`, or `1,350 روپے` in Urdu. Digits are always Western. */
-export function MoneyText({ value, size = 'inherit', strike = false, className }: MoneyTextProps) {
+export function MoneyText({
+  value,
+  size = 'inherit',
+  strike = false,
+  tabular = true,
+  className,
+}: MoneyTextProps) {
   const { i18n } = useTranslation();
   const lang: FormatLang = i18n.language === 'ur' ? 'ur' : 'en';
   const look = SIZE[size];
@@ -34,7 +42,8 @@ export function MoneyText({ value, size = 'inherit', strike = false, className }
   return (
     <span
       className={cx(
-        'whitespace-nowrap tabular-nums',
+        'whitespace-nowrap',
+        tabular && 'tabular-nums',
         look.text,
         look.condensed && lang === 'en' && 'font-num',
         strike && 'line-through decoration-2 opacity-70',

@@ -75,6 +75,14 @@ to see it, the words on it, and a screenshot. Send this file and the pictures to
 | 58 | [Owner sign-in: wait 15 minutes](#58-owner-sign-in-wait-15-minutes) | owner | P11 |
 | 59 | [Owner sidebar: Sign out](#59-owner-sidebar-sign-out) | owner | P11 |
 | 60 | [Owner phone: the More sheet](#60-owner-phone-the-more-sheet) | owner (phone) | P11 |
+| 61 | [Dashboard: nothing needs a look](#61-dashboard-nothing-needs-a-look) | owner | P12 |
+| 62 | [Dashboard: the tip on a bar](#62-dashboard-the-tip-on-a-bar) | owner | P12 |
+| 63 | [Activity: a dispute decided](#63-activity-a-dispute-decided) | owner | P12 |
+| 64 | [Activity: nothing for this filter](#64-activity-nothing-for-this-filter) | owner | P12 |
+| 65 | [Activity on a phone](#65-activity-on-a-phone) | owner (phone) | P12 |
+| 66 | [Reports: Year](#66-reports-year) | owner | P12 |
+| 67 | [Reports: Day](#67-reports-day) | owner | P12 |
+| 68 | [Reports on a phone](#68-reports-on-a-phone) | owner (phone) | P12 |
 
 Below the numbered pieces there are also [the approved screens that change](#approved-screens-that-change-a-field-or-a-word) (the maximum time of a game). Those are built in P15 and P16, so they have no picture yet.
 
@@ -794,6 +802,99 @@ Below the numbered pieces there are also [the approved screens that change](#app
 - **Built from:** the owner bottom sheet (`OwnerAside` on a phone) and the rows of screen 58.
 
 ![The More sheet](no-design/owner-more-sheet.png)
+
+## 61. Dashboard: nothing needs a look
+
+- **What:** screen 36 draws the "Needs a look" card with four lines. On a night with nothing to flag (no frame charged double, no
+  discount, no low stock, no frame discarded) the card keeps its title and its "Open activity" link, and says one plain line instead of
+  the list.
+- **Where:** `/owner-dev/?now=2026-10-03T22:30:00%2B05:00` when the dashboard has no lines (the picture changes the answer of the
+  mock to say so; the seed's night always has four).
+- **Words:** "Needs a look", "Nothing needs a look.", "Open activity". Urdu: "دیکھنے کی باتیں", "کچھ دیکھنے کی ضرورت نہیں۔", "سرگرمی کھولیں".
+- **Built from:** the "Needs a look" card of screen 36 and the empty lines of screens 31 and 39.
+
+![Dashboard, nothing needs a look](no-design/dashboard-needs-nothing.png)
+
+## 62. Dashboard: the tip on a bar
+
+- **What:** the 30-day bars of screen 36 draw no tips. Touching or pointing at a bar opens a small white pill with the day and what it
+  earned ("Sun 27 Sep, Rs 35,600"); the open day says "Today so far". Nothing depends on the tip: the chart has a text summary for a
+  screen reader, and the best day is written under the title. The same pill is used on the other charts of the owner pages.
+- **Where:** `/owner-dev/?now=2026-10-03T22:30:00%2B05:00`, move over a bar.
+- **Words:** "{day}, {amount}", "Today so far, {amount}".
+- **Built from:** the white pills of the owner app (the filter pills of screen 38) and the amount style of screen 36.
+
+![The tip on a bar](no-design/dashboard-chart-tooltip.png)
+
+## 63. Activity: a dispute decided
+
+- **What:** screen 38 draws the amber banner with the four buttons. When an owner taps one ("Faisal pays"), the banner goes at once,
+  and a new line is added to the top of the list, done by that owner, "Dispute on Table 3 decided" with who pays and how much. The
+  line is as permanent as the others (nothing is deleted, only recorded). With more than one dispute waiting, the banner shows the
+  oldest, and the title counts them all ("2 disputes are waiting for you"). DEFAULT, needs answer: oldest first.
+- **Where:** `/owner-dev/activity?now=2026-10-04T03:45:00%2B05:00&scenario=closed`, tap "Faisal pays".
+- **Words:** "Dispute on {table} decided", "{name} pays", "Half each", "Nobody pays". Urdu: "{{name}} دے", "آدھا آدھا", "کوئی نہیں دے گا".
+- **Built from:** the banner and the list rows of screen 38.
+
+![A dispute decided](no-design/activity-decided.png)
+
+## 64. Activity: nothing for this filter
+
+- **What:** a chip or a person that has no events shows one grey line inside the list card, under the column heads, so the table
+  keeps its shape.
+- **Where:** `/owner-dev/activity?now=2026-10-04T03:45:00%2B05:00&scenario=closed`, tap "Damage charges", then "Adil".
+- **Words:** "Nothing here for this filter." Urdu: "اس فلٹر کے لیے یہاں کچھ نہیں۔"
+- **Built from:** the empty lines of the player lists (screens 31 and 39).
+
+![Nothing for this filter](no-design/activity-none-for-filter.png)
+
+## 65. Activity on a phone
+
+- **What:** no phone screen draws Activity (it is in the More sheet, §60). It is the page of screen 38 in one column: the banner with
+  its four buttons in two rows, the type chips wrapping, the person chips under them, and each event a card row of two lines: the
+  time and who did it, then what happened with its amount at the end (the four columns of the computer do not fit 390 px). The
+  column heads are kept for a screen reader only. The list scrolls with the page, not inside its card.
+- **Where:** `/owner-dev/activity?now=2026-10-04T03:45:00%2B05:00&scenario=closed` at 390 wide.
+- **Words:** the same as screen 38.
+- **Built from:** the banner and the chips of screen 38, and the frame of screen 53.
+
+![Activity on a phone](no-design/activity-phone.png)
+
+## 66. Reports: Year
+
+- **What:** screen 37 is drawn for one month. "Year" shows the same page for a whole year against the year before: the same four
+  cards (the last one says "Credit pending at year end"), the line chart of the running total month by month (twelve points, not
+  thirty), "By game" with the two years as columns, "By table, 2026" for the year, and "Money received, by payment method". The chart's amounts
+  read in thousands ("k") and millions ("m"). The mock's year figures are the month's scaled up, so they are for the look only.
+  DEFAULT, needs answer: no real year figures yet.
+- **Where:** `/owner-dev/reports?now=2026-10-03T22:30:00%2B05:00`, tap "Year".
+- **Words:** "Year", "Credit pending at year end", "Earned through the year, month by month", "By table, 2026".
+  Urdu: "سال", "سال کے آخر میں ادھار باقی", "سال بھر کی کمائی، مہینہ بہ مہینہ".
+- **Built from:** screen 37 with its own parts.
+
+![Reports, Year](no-design/reports-year.png)
+
+## 67. Reports: Day
+
+- **What:** "Day" shows one day against the day before ("Sat 3 Oct", "Fri 2 Oct"): the four cards ("Credit pending at day end"), then
+  "By game", "By table, 3 Oct" and "Money received, by payment method". There is no running-total chart for a day.
+- **Where:** `/owner-dev/reports?now=2026-10-03T22:30:00%2B05:00`, tap "Day".
+- **Words:** "Day", "Credit pending at day end", "By table, 3 Oct". Urdu: "دن", "دن کے آخر میں ادھار باقی".
+- **Built from:** screen 37.
+
+![Reports, Day](no-design/reports-day.png)
+
+## 68. Reports on a phone
+
+- **What:** no phone screen draws Reports (it is in the More sheet, §60). The page of screen 37 in one column: the Day / Month / Year
+  switch above the two pickers, which stack, the four cards two by two (Profit in green), then the chart, "By game", "By table", the
+  payment methods and the month-by-month bars, each card full width with the same columns as on a computer (the bars write an amount
+  only above the picked, the open and the last closed month). "PDF" and "Excel" sit beside the title.
+- **Where:** `/owner-dev/reports?now=2026-10-03T22:30:00%2B05:00` at 390 wide.
+- **Words:** the same as screen 37.
+- **Built from:** screen 37 and the cards of screen 53.
+
+![Reports on a phone](no-design/reports-phone.png)
 
 ## Approved screens that change a field or a word
 

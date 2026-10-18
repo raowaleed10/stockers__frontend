@@ -51,5 +51,25 @@
   "tile": {
     "versus": "{{a}} <w>بمقابلہ</w> {{b}}",
     "under": "{{name}} <w>کے نام</w>"
+  },
+  "putOnCreditToday": "آج ادھار میں گئے",
+  "putOnCredit": "ادھار میں گئے",
+  "dayCount_one": "{{count}} دن",
+  "dayCount_other": "{{count}} دن",
+  "afterExpenses": "{{expenses}} خرچوں کے بعد",
+  "canteenSales": "کینٹین کی فروخت",
+  "bankTransfer": "بینک ٹرانسفر",
+  "disputeFrame": "، فریم {{n}}",
+  "payerPays": "{{name}} دے",
+  "nobodyPays": "کوئی نہیں دے گا",
+  "amountWaiting": "{{amount}} باقی",
+  "tableName": {
+    "snooker": "ٹیبل {{number}}",
+    "room": "روم {{number}}",
+    "pool": "پول ٹیبل {{number}}",
+    "foosball": "فوسبال ٹیبل {{number}}",
+    "carrom": "کیرم بورڈ {{number}}",
+    "ludo": "لوڈو بورڈ {{number}}",
+    "playstation": "پلے اسٹیشن {{number}}"
   }
 }

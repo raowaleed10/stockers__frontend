@@ -1,0 +1,42 @@
+{
+  "title": "سرگرمی",
+  "sub": "عام گیم کے علاوہ جو کچھ پیسوں میں بدلا، سب۔ کچھ مٹایا نہیں جاتا، صرف درج ہوتا ہے۔",
+  "waiting": "مالک کے انتظار میں",
+  "dispute": {
+    "title_one": "{{count}} جھگڑا آپ کے فیصلے کا منتظر ہے",
+    "title_other": "{{count}} جھگڑے آپ کے فیصلے کے منتظر ہیں",
+    "who": "{{table}}، {{time}}۔ {{a}} بمقابلہ {{b}}",
+    "frame": "$t(common:disputeFrame)",
+    "amount": "، {{amount}}۔",
+    "note": " “{{note}}”",
+    "pays": "$t(common:payerPays)",
+    "half": "آدھا آدھا",
+    "nobody": "$t(common:nobodyPays)"
+  },
+  "filter": "فلٹر",
+  "chips": {
+    "all": "سب، آج {{count}}",
+    "discounts": "رعایتیں {{count}}",
+    "cancelled": "ختم اور منسوخ {{count}}",
+    "double": "ڈبل چارج {{count}}",
+    "damage": "نقصان کے چارج {{count}}",
+    "disputes": "جھگڑے {{count}}",
+    "drawer": "دراز سے خرچ {{count}}",
+    "edits": "مالکان کی ترامیم {{count}}",
+    "left": "بغیر چیک آؤٹ گئے {{count}}",
+    "cash": "کیش کم یا زیادہ {{count}}"
+  },
+  "doneBy": "کس نے کیا",
+  "everyone": "سب",
+  "list": "سرگرمی کی فہرست",
+  "time": "وقت",
+  "by": "کس نے کیا",
+  "what": "کیا ہوا",
+  "amount": "رقم",
+  "notCharged": "{{amount}} چارج نہیں ہوئے",
+  "waitingAmount": "$t(common:amountWaiting)",
+  "none": "اس فلٹر کے لیے یہاں کچھ نہیں۔",
+  "alertsLabel": "الرٹس",
+  "alerts": "مالکان کو فون پر الرٹ ملتا ہے: شیٹ بند ہو، بغیر چیک آؤٹ جانا، گیم ختم یا منسوخ ہو، بل یا شیٹ بدلی جائے، کینٹین کا اسٹاک کم ہو۔",
+  "changeAlerts": "الرٹس بدلیں"
+}

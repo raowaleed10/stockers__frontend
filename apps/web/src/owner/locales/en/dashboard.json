@@ -1,0 +1,129 @@
+{
+  "title": "Today, {{day}}",
+  "sheetLine": "Sheet {{number}} open since <when>{{time}}</when>. Live, updated <when>{{updated}}</when>.",
+  "sheetLinePhone": "Sheet {{number}}, open since <when>{{time}}</when>. Live, <when>{{updated}}</when>.",
+  "download": "Download today",
+  "earned": "Earned today",
+  "earnedNote": "{{frames}} frames, {{century}} Century minutes, {{rooms}} rooms, canteen",
+  "received": "Received today",
+  "receivedNote": "Cash {{cash}}, online {{online}}",
+  "credit": "$t(common:putOnCreditToday)",
+  "creditNote": "Old credit collected {{amount}}",
+  "inUse": "Tables in use now",
+  "inUseValue": "{{used}} of {{total}}",
+  "over_one": "{{count}} table over {{minutes}} minutes",
+  "over_other": "{{count}} tables over {{minutes}} minutes",
+  "month": {
+    "title_one": "{{month}} so far, {{count}} day",
+    "title_other": "{{month}} so far, {{count}} days",
+    "earned": "Earned",
+    "expenses": "Expenses",
+    "canteen": "Canteen buying cost",
+    "profit": "Profit",
+    "more": "{{pct}}% more than the first {{days}} days of {{previous}}",
+    "less": "{{pct}}% less than the first {{days}} days of {{previous}}",
+    "same": "The same as the first {{days}} days of {{previous}}"
+  },
+  "creditCard": {
+    "title": "Credit pending, all players",
+    "owe_one": "{{count}} player owes money",
+    "owe_other": "{{count}} players owe money",
+    "old": "Older than 15 days",
+    "oldValue_one": "{{amount}}, {{count}} player",
+    "oldValue_other": "{{amount}}, {{count}} players"
+  },
+  "hand": {
+    "title": "Money in hand today",
+    "note": "Received {{received}} minus {{expenses}} expenses paid today",
+    "chip": "{{name}} {{amount}}",
+    "bank": "Bank",
+    "method": {
+      "easypaisa": "Easypaisa",
+      "jazzcash": "JazzCash"
+    }
+  },
+  "days": {
+    "title": "Earned per day, last 30 days",
+    "note": "Weekends are the tall bars. Best day: {{day}}, {{amount}}.",
+    "summary": "Bar chart of daily earnings from {{from}} to {{to}}, between {{min}} and {{max}} a day",
+    "today": "Today, still open",
+    "todayTip": "Today so far, {{amount}}",
+    "tip": "{{day}}, {{amount}}"
+  },
+  "share": {
+    "title": "Where {{month}}’s money came from",
+    "frames": "Snooker frames",
+    "century": "Century",
+    "rooms": "Rooms",
+    "canteen": "$t(common:canteenSales)",
+    "note": "Canteen profit after buying price: {{profit}}. Pool and other games start once prices are set."
+  },
+  "busy": {
+    "title": "Busiest hours, last 4 weeks",
+    "note": "Tables in use, on average",
+    "tip": "{{hour}}, {{n}} tables",
+    "peak": "{{hour}} peak, {{n}}",
+    "summary": "Average tables in use by hour, peaking at {{n}} of {{total}} tables at {{hour}}"
+  },
+  "debts": {
+    "title": "Biggest debts",
+    "age_one": "$t(common:dayCount)",
+    "age_other": "$t(common:dayCount)",
+    "all_one": "See all {{count}} player who owes",
+    "all_other": "See all {{count}} players who owe"
+  },
+  "top": {
+    "title": "Top players, last 30 days",
+    "visits_one": "{{count}} visit",
+    "visits_other": "{{count}} visits",
+    "open": "Open player report"
+  },
+  "needs": {
+    "title": "Needs a look",
+    "open": "Open activity",
+    "all": "See all alerts",
+    "none": "Nothing needs a look.",
+    "double_one": "{{count}} frame charged double on {{table}}, it ran {{minutes}} minutes",
+    "double_other": "{{count}} frames charged double, the last on {{table}}, it ran {{minutes}} minutes",
+    "discounts_one": "{{count}} discount today, {{total}} in total",
+    "discounts_other": "{{count}} discounts today, {{total}} in total",
+    "low": "{{name}}: {{left}} left.",
+    "soldOut": "{{names}} sold out.",
+    "discard_one": "{{count}} frame discarded on {{table}}",
+    "discard_other": "{{count}} frames discarded, the last on {{table}}",
+    "reason": {
+      "left": ", players left",
+      "power": ", power cut",
+      "table": ", table problem",
+      "other": ""
+    }
+  },
+  "phone": {
+    "inUse": "{{used}} of {{total}} in use",
+    "over": "{{count}} over {{minutes}} min",
+    "received": "Received",
+    "receivedNote": "Cash {{cash}}, online {{online}}",
+    "credit": "$t(common:putOnCredit)",
+    "creditNote": "Old credit paid {{amount}}",
+    "hand": "Money in hand",
+    "handNote": "$t(common:afterExpenses)",
+    "online": "Online today",
+    "daysTitle": "Earned per day",
+    "daysNote": "Last 7 days",
+    "daysOpen": "Today, hatched, is still open.",
+    "daysSummary": "Earned per day, last 7 days. Best was {{day}}, {{best}}. Today {{today}} so far.",
+    "creditTitle": "Credit pending",
+    "creditSub": "{{count}} players. {{amount}} is older than 15 days.",
+    "creditAll": "See all players who owe"
+  },
+  "table": {
+    "snooker": "$t(common:tableName.snooker)",
+    "room": "$t(common:tableName.room)",
+    "pool": "$t(common:tableName.pool)",
+    "foosball": "$t(common:tableName.foosball)",
+    "carrom": "$t(common:tableName.carrom)",
+    "ludo": "$t(common:tableName.ludo)",
+    "playstation": "$t(common:tableName.playstation)"
+  },
+  "downloadFailed": "Could not make the file. Try again."
+}

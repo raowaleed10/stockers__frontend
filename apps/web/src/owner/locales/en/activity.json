@@ -1,0 +1,42 @@
+{
+  "title": "Activity",
+  "sub": "Everything that changed money outside a normal game. Nothing is deleted, only recorded.",
+  "waiting": "Waiting for an owner",
+  "dispute": {
+    "title_one": "{{count}} dispute is waiting for you",
+    "title_other": "{{count}} disputes are waiting for you",
+    "who": "{{table}}, {{time}}. {{a}} vs {{b}}",
+    "frame": "$t(common:disputeFrame)",
+    "amount": ", {{amount}}.",
+    "note": " “{{note}}”",
+    "pays": "$t(common:payerPays)",
+    "half": "Half each",
+    "nobody": "$t(common:nobodyPays)"
+  },
+  "filter": "Filter",
+  "chips": {
+    "all": "All, today {{count}}",
+    "discounts": "Discounts {{count}}",
+    "cancelled": "Discarded and cancelled {{count}}",
+    "double": "Charged double {{count}}",
+    "damage": "Damage charges {{count}}",
+    "disputes": "Disputes {{count}}",
+    "drawer": "Drawer expenses {{count}}",
+    "edits": "Edits by owners {{count}}",
+    "left": "Left without checkout {{count}}",
+    "cash": "Cash short or extra {{count}}"
+  },
+  "doneBy": "Done by",
+  "everyone": "Everyone",
+  "list": "Activity list",
+  "time": "Time",
+  "by": "Done by",
+  "what": "What happened",
+  "amount": "Amount",
+  "notCharged": "{{amount}} not charged",
+  "waitingAmount": "$t(common:amountWaiting)",
+  "none": "Nothing here for this filter.",
+  "alertsLabel": "Alerts",
+  "alerts": "Owners get a phone alert for: sheet closed, left without checkout, game discarded or cancelled, bill or sheet edited, low canteen stock.",
+  "changeAlerts": "Change alerts"
+}

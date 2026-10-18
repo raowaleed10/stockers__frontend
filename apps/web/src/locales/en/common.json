@@ -51,5 +51,25 @@
   "tile": {
     "versus": "{{a}} <w>vs</w> {{b}}",
     "under": "<w>Under</w> {{name}}"
+  },
+  "putOnCreditToday": "Put on credit today",
+  "putOnCredit": "Put on credit",
+  "dayCount_one": "{{count}} day",
+  "dayCount_other": "{{count}} days",
+  "afterExpenses": "After {{expenses}} expenses",
+  "canteenSales": "Canteen sales",
+  "bankTransfer": "Bank transfer",
+  "disputeFrame": ", frame {{n}}",
+  "payerPays": "{{name}} pays",
+  "nobodyPays": "Nobody pays",
+  "amountWaiting": "{{amount}} waiting",
+  "tableName": {
+    "snooker": "Table {{number}}",
+    "room": "Room {{number}}",
+    "pool": "Pool table {{number}}",
+    "foosball": "Foosball table {{number}}",
+    "carrom": "Carrom board {{number}}",
+    "ludo": "Ludo board {{number}}",
+    "playstation": "PlayStation {{number}}"
   }
 }

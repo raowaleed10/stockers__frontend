@@ -5,199 +5,278 @@
 :root {
   /* ---------- fonts ---------- */
   --font-body: 'Barlow', system-ui, sans-serif;
-  --font-num: 'Barlow Condensed', 'Barlow', sans-serif;      /* numbers, timers, table numbers, clock, big amounts */
+  --font-num:
+    'Barlow Condensed', 'Barlow', sans-serif; /* numbers, timers, table numbers, clock, big amounts */
   --font-urdu: 'Noto Nastaliq Urdu', 'Barlow', serif;
 
   /* ---------- counter (dark) ---------- */
-  --c-page: #16110D;
-  --c-deep: #0D0A07;          /* behind dialogs */
-  --c-header: #110D0A;        /* top bar and bottom action bar */
-  --c-panel: #211913;         /* panels, dialogs */
-  --c-raised: #2B2119;        /* buttons, list rows, selected tab bg */
-  --c-raised-2: #3A2D21;      /* pressed / selected */
-  --c-line: #3B2F25;
-  --c-line-2: #4A3B2E;
-  --c-line-3: #6B5640;        /* dashed or strong borders */
-  --c-text: #F3ECDD;          /* ivory */
-  --c-text-2: #B9AC97;        /* secondary */
-  --c-text-3: #D9CDB8;        /* soft body on panels */
-  --c-brass: #E0AE52;         /* main action, selection */
-  --c-brass-ink: #1B140D;     /* text on brass */
-  --c-felt: #1E6B45;          /* sign-in panel, brand ball */
+  --c-page: #16110d;
+  --c-deep: #0d0a07; /* behind dialogs */
+  --c-header: #110d0a; /* top bar and bottom action bar */
+  --c-panel: #211913; /* panels, dialogs */
+  --c-raised: #2b2119; /* buttons, list rows, selected tab bg */
+  --c-raised-2: #3a2d21; /* pressed / selected */
+  --c-line: #3b2f25;
+  --c-line-2: #4a3b2e;
+  --c-line-3: #6b5640; /* dashed or strong borders */
+  --c-text: #f3ecdd; /* ivory */
+  --c-text-2: #b9ac97; /* secondary */
+  --c-text-3: #d9cdb8; /* soft body on panels */
+  --c-brass: #e0ae52; /* main action, selection */
+  --c-brass-ink: #1b140d; /* text on brass */
+  --c-felt: #1e6b45; /* sign-in panel, brand ball */
 
   /* ---------- table status (D7, Q2) ---------- */
-  --s-free: #48C07F;
-  --s-play: #F0574F;
-  --s-over: #F0574F;          /* plus the red card */
-  --s-card: #D92D20;          /* red card behind the timer */
-  --s-card-edge: #8F1C14;
-  --s-pause: #F2C14E;
-  --s-ooo: #9AA0A6;           /* dashed */
-  --s-noprice: #E0AE52;
+  --s-free: #48c07f;
+  --s-play: #f0574f;
+  --s-over: #f0574f; /* plus the red card */
+  --s-card: #d92d20; /* red card behind the timer */
+  --s-card-edge: #8f1c14;
+  --s-pause: #f2c14e;
+  --s-ooo: #9aa0a6; /* dashed */
+  --s-noprice: #e0ae52;
   --s-pill-bg: rgba(10, 8, 6, 0.55);
 
   /* ---------- table tiles ---------- */
-  --wood-1: #82502C; --wood-2: #4E2E17; --wood-3: #6E4424;          /* snooker rail */
-  --cloth-1: #2A8C52; --cloth-2: #1D6E3F; --cloth-3: #14502D;        /* snooker cloth */
-  --cloth-lit-1: #3DB06B; --cloth-lit-2: #239052; --cloth-lit-3: #16582F;
-  --cloth-dim-1: #4C6151; --cloth-dim-2: #3A4C3F; --cloth-dim-3: #2C3A30;
-  --cushion: #16603A;
+  --wood-1: #82502c;
+  --wood-2: #4e2e17;
+  --wood-3: #6e4424; /* snooker rail */
+  --cloth-1: #2a8c52;
+  --cloth-2: #1d6e3f;
+  --cloth-3: #14502d; /* snooker cloth */
+  --cloth-lit-1: #3db06b;
+  --cloth-lit-2: #239052;
+  --cloth-lit-3: #16582f;
+  --cloth-dim-1: #4c6151;
+  --cloth-dim-2: #3a4c3f;
+  --cloth-dim-3: #2c3a30;
+  --cushion: #16603a;
   --pocket: #000000;
-  --pool-rail-1: #3A3633; --pool-rail-2: #1E1B19;
-  --pool-cloth-1: #2F7FC4; --pool-cloth-2: #1F5F9A; --pool-cloth-3: #174775;
-  --room-wall: #8A7660; --room-floor: #2B221B; --sofa: #86372B;
-  --carrom-frame-1: #6A4322; --carrom-frame-2: #3B2312;
-  --carrom-board-1: #F6E4BC; --carrom-board-2: #DDBC82; --carrom-ink: #2A1A0C;
-  --foos-cabinet-1: #2C2C31; --foos-cabinet-2: #151518;
-  --foos-pitch-1: #2E8A47; --foos-pitch-2: #287D40;
-  --ludo-red: #D9342B; --ludo-green: #1E8A3E; --ludo-yellow: #E8B820; --ludo-blue: #2357C9;
-  --tv-bezel-1: #26262A; --tv-bezel-2: #0C0C0E;
-  --tv-screen-1: #2A64B8; --tv-screen-2: #173E7C; --tv-screen-3: #0B1F42;
+  --pool-rail-1: #3a3633;
+  --pool-rail-2: #1e1b19;
+  --pool-cloth-1: #2f7fc4;
+  --pool-cloth-2: #1f5f9a;
+  --pool-cloth-3: #174775;
+  --room-wall: #8a7660;
+  --room-floor: #2b221b;
+  --sofa: #86372b;
+  --carrom-frame-1: #6a4322;
+  --carrom-frame-2: #3b2312;
+  --carrom-board-1: #f6e4bc;
+  --carrom-board-2: #ddbc82;
+  --carrom-ink: #2a1a0c;
+  --foos-cabinet-1: #2c2c31;
+  --foos-cabinet-2: #151518;
+  --foos-pitch-1: #2e8a47;
+  --foos-pitch-2: #287d40;
+  --ludo-red: #d9342b;
+  --ludo-green: #1e8a3e;
+  --ludo-yellow: #e8b820;
+  --ludo-blue: #2357c9;
+  --tv-bezel-1: #26262a;
+  --tv-bezel-2: #0c0c0e;
+  --tv-screen-1: #2a64b8;
+  --tv-screen-2: #173e7c;
+  --tv-screen-3: #0b1f42;
 
   /* ---------- owner (light) ---------- */
-  --o-page: #EEF2EF;
-  --o-card: #FFFFFF;
-  --o-line: #DCE3DE;
-  --o-line-2: #C9D2CC;
-  --o-soft: #F6F8F7;          /* table header rows, inner boxes */
-  --o-ink: #1D1A16;
-  --o-ink-2: #5F5A52;
-  --o-green: #1E6B45;         /* primary */
-  --o-green-hover: #0E5E31;
-  --o-green-tint: #E3F0E8;
-  --o-green-ink: #14532F;
+  --o-page: #eef2ef;
+  --o-card: #ffffff;
+  --o-line: #dce3de;
+  --o-line-2: #c9d2cc;
+  --o-soft: #f6f8f7; /* table header rows, inner boxes */
+  --o-ink: #1d1a16;
+  --o-ink-2: #5f5a52;
+  --o-green: #1e6b45; /* primary */
+  --o-green-hover: #0e5e31;
+  --o-green-tint: #e3f0e8;
+  --o-green-ink: #14532f;
   --o-sidebar: #211913;
-  --o-sidebar-active: #3A2D21;
-  --o-sidebar-text: #D9CDB8;
-  --o-amber-ink: #8A5C14;
-  --o-amber-ink-2: #6B4A10;
-  --o-amber-tint: #FBF1DC;
-  --o-amber-line: #EBD3A3;
-  --o-blue: #2A6FD6;
-  --o-blue-tint: #E6EEFB;
-  --o-blue-line: #B7CCF2;
-  --o-blue-ink: #1D3F82;
-  --o-red: #B42318;
-  --o-red-tint: #FBE7E5;
-  --o-chart: #178A4A;         /* one hue for charts; today's bar is hatched */
+  --o-sidebar-active: #3a2d21;
+  --o-sidebar-text: #d9cdb8;
+  --o-amber-ink: #8a5c14;
+  --o-amber-ink-2: #6b4a10;
+  --o-amber-tint: #fbf1dc;
+  --o-amber-line: #ebd3a3;
+  --o-blue: #2a6fd6;
+  --o-blue-tint: #e6eefb;
+  --o-blue-line: #b7ccf2;
+  --o-blue-ink: #1d3f82;
+  --o-red: #b42318;
+  --o-red-tint: #fbe7e5;
+  --o-chart: #178a4a; /* one hue for charts; today's bar is hatched */
 
   /* status on light backgrounds (owner phone live tables) */
-  --sl-free: #178A4A; --sl-play: #B42318; --sl-pause: #B7791F; --sl-ooo: #6B7280;
+  --sl-free: #178a4a;
+  --sl-play: #b42318;
+  --sl-pause: #b7791f;
+  --sl-ooo: #6b7280;
 
   /* ---------- added in P01 ----------
      Colours the approved screens use that the first token list did not name. Nothing above changed.
      The screen each one comes from is in PROGRESS.md. */
-  --c-brass-press: #F0C670;   /* pressed brass button (the link hover colour in the screens) */
-  --c-selected: #33271C;      /* selected option card or chip (7, 25, 26) */
+  --c-brass-press: #f0c670; /* pressed brass button (the link hover colour in the screens) */
+  --c-selected: #33271c; /* selected option card or chip (7, 25, 26) */
   --c-scrim: rgba(13, 10, 7, 0.92); /* behind a counter dialog (7, 19) */
-  --c-warn-bg: #2A2216;       /* amber box on dark (25, 26) */
-  --c-warn-line: #8C6E2E;
-  --c-warn-ink: #F5D488;
-  --c-danger-bg: #2E1918;     /* warning option and dialog (19) */
-  --c-danger-line: #A8403A;
-  --c-danger-ink: #F7A29C;
-  --c-info-bg: #1B2232;       /* blue option on dark (25) */
-  --c-info-line: #3A5A8C;
-  --c-info-ink: #A9C9FA;
-  --c-ok-bg: #1E2A22;         /* green box on dark (1, 26) */
-  --c-ok-line: #2F6B48;
-  --c-ok-ink: #8FDDB2;
-  --o-red-line: #E8B4AE;      /* border of a red button (50, 51) */
-  --o-track: #F1F4F2;         /* behind a segmented control (50, 51) */
-  --o-stripe: #FAFBFA;        /* every second table row (49) */
-  --o-divider: #EEF2EF;       /* thin line between rows (43, 49) */
-  --o-on-green: #CFE5D7;      /* small text on a solid green card (36) */
-  --o-grey-tint: #EEF0F2;     /* fill of the grey "Out of order" pill (54) */
+  --c-warn-bg: #2a2216; /* amber box on dark (25, 26) */
+  --c-warn-line: #8c6e2e;
+  --c-warn-ink: #f5d488;
+  --c-danger-bg: #2e1918; /* warning option and dialog (19) */
+  --c-danger-line: #a8403a;
+  --c-danger-ink: #f7a29c;
+  --c-info-bg: #1b2232; /* blue option on dark (25) */
+  --c-info-line: #3a5a8c;
+  --c-info-ink: #a9c9fa;
+  --c-ok-bg: #1e2a22; /* green box on dark (1, 26) */
+  --c-ok-line: #2f6b48;
+  --c-ok-ink: #8fddb2;
+  --o-red-line: #e8b4ae; /* border of a red button (50, 51) */
+  --o-track: #f1f4f2; /* behind a segmented control (50, 51) */
+  --o-stripe: #fafbfa; /* every second table row (49) */
+  --o-divider: #eef2ef; /* thin line between rows (43, 49) */
+  --o-on-green: #cfe5d7; /* small text on a solid green card (36) */
+  --o-grey-tint: #eef0f2; /* fill of the grey "Out of order" pill (54) */
   /* Status pill text on its own tint (54). The three --sl-* colours above are under 4.5:1 there, so these are
      the same hues, darkened until each reaches 4.5:1 (checked by StatusPill.contrast.test.ts). */
-  --sl-free-ink: #147B42;
+  --sl-free-ink: #147b42;
   --sl-pause-ink: #966319;
-  --sl-ooo-ink: #666D7A;
+  --sl-ooo-ink: #666d7a;
 
   /* ---------- table tiles (added in P02; screens 3, 4, 5, 6 and 16, read from design/tiles.reference.css) ---------- */
-  --tile-sub: #D3E6D7;        /* second line of text on green cloth */
-  --tile-sub-pool: #D2E2F2;
-  --tile-sub-carrom: #6A4E30;
-  --tile-sub-tv: #C9D8F0;
-  --tile-sub-note: #E2D4C0;   /* detail under an out-of-order note */
-  --tile-cta: #BFF0CF;        /* "Tap to start a game" */
-  --tile-frozen: #F5D488;     /* a paused timer on the power-cut board (16) */
-  --tile-btn-bg: rgba(20, 15, 10, 0.82);      /* the Resume button on a paused tile (16) */
+  --tile-sub: #d3e6d7; /* second line of text on green cloth */
+  --tile-sub-pool: #d2e2f2;
+  --tile-sub-carrom: #6a4e30;
+  --tile-sub-tv: #c9d8f0;
+  --tile-sub-note: #e2d4c0; /* detail under an out-of-order note */
+  --tile-cta: #bff0cf; /* "Tap to start a game" */
+  --tile-frozen: #f5d488; /* a paused timer on the power-cut board (16) */
+  --tile-btn-bg: rgba(20, 15, 10, 0.82); /* the Resume button on a paused tile (16) */
   --tile-pill-carrom: rgba(42, 26, 12, 0.82); /* status pill on the carrom board */
-  --tile-glow: rgba(240, 87, 79, 0.55);       /* red glow of an over-30 tile */
+  --tile-glow: rgba(240, 87, 79, 0.55); /* red glow of an over-30 tile */
   --shadow-tile-soft: 0 12px 26px rgba(0, 0, 0, 0.4); /* a tile with no status ring */
   /* White and black at a given opacity, for rails, cushions and shadows: wNN is white NN %, kNN is black NN % */
-  --ov-w08: rgba(255, 255, 255, 0.08); --ov-w10: rgba(255, 255, 255, 0.1); --ov-w12: rgba(255, 255, 255, 0.12);
-  --ov-w15: rgba(255, 255, 255, 0.15); --ov-w16: rgba(255, 255, 255, 0.16); --ov-w20: rgba(255, 255, 255, 0.2);
-  --ov-w22: rgba(255, 255, 255, 0.22); --ov-w45: rgba(255, 255, 255, 0.45); --ov-w55: rgba(255, 255, 255, 0.55);
-  --ov-w70: rgba(255, 255, 255, 0.7); --ov-w75: rgba(255, 255, 255, 0.75);
-  --ov-k22: rgba(0, 0, 0, 0.22); --ov-k25: rgba(0, 0, 0, 0.25); --ov-k35: rgba(0, 0, 0, 0.35);
-  --ov-k40: rgba(0, 0, 0, 0.4); --ov-k45: rgba(0, 0, 0, 0.45); --ov-k50: rgba(0, 0, 0, 0.5);
-  --ov-k55: rgba(0, 0, 0, 0.55); --ov-k60: rgba(0, 0, 0, 0.6); --ov-k70: rgba(0, 0, 0, 0.7);
+  --ov-w08: rgba(255, 255, 255, 0.08);
+  --ov-w10: rgba(255, 255, 255, 0.1);
+  --ov-w12: rgba(255, 255, 255, 0.12);
+  --ov-w15: rgba(255, 255, 255, 0.15);
+  --ov-w16: rgba(255, 255, 255, 0.16);
+  --ov-w20: rgba(255, 255, 255, 0.2);
+  --ov-w22: rgba(255, 255, 255, 0.22);
+  --ov-w45: rgba(255, 255, 255, 0.45);
+  --ov-w55: rgba(255, 255, 255, 0.55);
+  --ov-w70: rgba(255, 255, 255, 0.7);
+  --ov-w75: rgba(255, 255, 255, 0.75);
+  --ov-k22: rgba(0, 0, 0, 0.22);
+  --ov-k25: rgba(0, 0, 0, 0.25);
+  --ov-k35: rgba(0, 0, 0, 0.35);
+  --ov-k40: rgba(0, 0, 0, 0.4);
+  --ov-k45: rgba(0, 0, 0, 0.45);
+  --ov-k50: rgba(0, 0, 0, 0.5);
+  --ov-k55: rgba(0, 0, 0, 0.55);
+  --ov-k60: rgba(0, 0, 0, 0.6);
+  --ov-k70: rgba(0, 0, 0, 0.7);
   /* snooker, pool and room */
-  --pocket-rim: #24170D;
-  --cover-1: #55595F; --cover-2: #474A4F;            /* grey stripes over a table that is out of order */
-  --pool-rail-3: #2E2A27;
-  --pool-cushion: #1A5288; --pool-cushion-dim: #34485B;
-  --pool-dim-1: #4B6278; --pool-dim-2: #3B4D60; --pool-dim-3: #2E3C4B;
-  --pool-diamond: #EDE6D6;
-  --sofa-1: #5E241C; --sofa-2: #86372B; --sofa-3: #6E2B22; --sofa-seat-1: #9A4434; --sofa-seat-2: #7E3428;
+  --pocket-rim: #24170d;
+  --cover-1: #55595f;
+  --cover-2: #474a4f; /* grey stripes over a table that is out of order */
+  --pool-rail-3: #2e2a27;
+  --pool-cushion: #1a5288;
+  --pool-cushion-dim: #34485b;
+  --pool-dim-1: #4b6278;
+  --pool-dim-2: #3b4d60;
+  --pool-dim-3: #2e3c4b;
+  --pool-diamond: #ede6d6;
+  --sofa-1: #5e241c;
+  --sofa-2: #86372b;
+  --sofa-3: #6e2b22;
+  --sofa-seat-1: #9a4434;
+  --sofa-seat-2: #7e3428;
   /* carrom */
-  --carrom-frame-3: #59381C; --carrom-board-mid: #ECD29F;
-  --carrom-dim-1: #D9CDB5; --carrom-dim-2: #C9B999; --carrom-dim-3: #B7A684;
-  --carrom-edge: rgba(80, 45, 15, 0.35); --carrom-glow: rgba(90, 50, 10, 0.25);
-  --carrom-halo: #F3E2BC;                             /* light halo behind dark text on the board */
-  --carrom-pocket-rim: #3A2410; --carrom-pocket-ring: rgba(60, 35, 15, 0.6);
-  --carrom-line: #5A3416; --carrom-red: #B8312A;
-  --coin-white: #F3E9D2; --coin-black: #2B2B2B; --coin-queen-1: #F06A5E; --coin-queen-2: #B3201B;
+  --carrom-frame-3: #59381c;
+  --carrom-board-mid: #ecd29f;
+  --carrom-dim-1: #d9cdb5;
+  --carrom-dim-2: #c9b999;
+  --carrom-dim-3: #b7a684;
+  --carrom-edge: rgba(80, 45, 15, 0.35);
+  --carrom-glow: rgba(90, 50, 10, 0.25);
+  --carrom-halo: #f3e2bc; /* light halo behind dark text on the board */
+  --carrom-pocket-rim: #3a2410;
+  --carrom-pocket-ring: rgba(60, 35, 15, 0.6);
+  --carrom-line: #5a3416;
+  --carrom-red: #b8312a;
+  --coin-white: #f3e9d2;
+  --coin-black: #2b2b2b;
+  --coin-queen-1: #f06a5e;
+  --coin-queen-2: #b3201b;
   /* foosball */
-  --foos-goal: #050506; --foos-rod-1: #8E959F; --foos-rod-2: #E3E7EC;
-  --foos-handle-1: #1B1B1F; --foos-handle-2: #4A4A52; --foos-handle-ring: #5C5C66;
-  --foos-red: #D0302B; --foos-blue: #2357C9;
+  --foos-goal: #050506;
+  --foos-rod-1: #8e959f;
+  --foos-rod-2: #e3e7ec;
+  --foos-handle-1: #1b1b1f;
+  --foos-handle-2: #4a4a52;
+  --foos-handle-ring: #5c5c66;
+  --foos-red: #d0302b;
+  --foos-blue: #2357c9;
   /* ludo and PlayStation */
-  --ludo-paper: #FBF7EE;
+  --ludo-paper: #fbf7ee;
   --ludo-grid: rgba(40, 30, 20, 0.45);
-  --tv-bezel-ring: #3A3A40;
-  --tv-off-1: #26282E; --tv-off-2: #141519; --tv-off-3: #08090B;
-  --tv-stand-1: #1A1A1D; --tv-stand-2: #2E2E33; --tv-foot: #121214;
-  --tv-pad: #FFFFFF;
+  --tv-bezel-ring: #3a3a40;
+  --tv-off-1: #26282e;
+  --tv-off-2: #141519;
+  --tv-off-3: #08090b;
+  --tv-stand-1: #1a1a1d;
+  --tv-stand-2: #2e2e33;
+  --tv-foot: #121214;
+  --tv-pad: #ffffff;
   /* the small table in the phone list (54) */
-  --mini-cloth-free: #1F7A45; --mini-ink: #FFFFFF; --mini-pocket: #0B0806;
-  --mini-cover-1: #6B7078; --mini-cover-2: #5A5E64;
+  --mini-cloth-free: #1f7a45;
+  --mini-ink: #ffffff;
+  --mini-pocket: #0b0806;
+  --mini-cover-1: #6b7078;
+  --mini-cover-2: #5a5e64;
   /* screen 54 draws the playing cloth #239052, which is 4.05:1 under the white "R1"; this is the same green
      darkened until it reaches 4.5:1 (axe, color-contrast) */
-  --mini-cloth-lit: #21864C;
+  --mini-cloth-lit: #21864c;
   /* balls: snooker, then the pool balls that differ */
-  --ball-cue: #F4F1EA; --ball-red: #C8232C; --ball-yellow: #F2C230; --ball-green: #1E8A3E;
-  --ball-brown: #7A4A22; --ball-blue: #2357C9; --ball-pink: #F08BB0; --ball-black: #151515;
-  --ball-pool-red: #D0302B; --ball-purple: #6A3BA8; --ball-orange: #F07A1E; --ball-maroon: #7A2420;
+  --ball-cue: #f4f1ea;
+  --ball-red: #c8232c;
+  --ball-yellow: #f2c230;
+  --ball-green: #1e8a3e;
+  --ball-brown: #7a4a22;
+  --ball-blue: #2357c9;
+  --ball-pink: #f08bb0;
+  --ball-black: #151515;
+  --ball-pool-red: #d0302b;
+  --ball-purple: #6a3ba8;
+  --ball-orange: #f07a1e;
+  --ball-maroon: #7a2420;
 
   /* ---------- sign-in, lock and top bar (added in P04; screens 1, 2, 3 and 34) ---------- */
-  --c-on-felt: #CFE5D7;       /* small text on the green sign-in panel (1, 2) */
-  --c-pill-free-bg: #172419;  /* "2 free" pill on the lock screen (34) */
-  --c-pill-ooo-bg: #25272A;   /* "1 out of order" pill on the lock screen (34) */
+  --c-on-felt: #cfe5d7; /* small text on the green sign-in panel (1, 2) */
+  --c-pill-free-bg: #172419; /* "2 free" pill on the lock screen (34) */
+  --c-pill-ooo-bg: #25272a; /* "1 out of order" pill on the lock screen (34) */
   --shadow-ball-ivory: inset -7px -7px 0 rgba(0, 0, 0, 0.18); /* ivory brand ball, 44 px (1, 2) */
-  --shadow-ball-sm: inset -5px -5px 0 rgba(0, 0, 0, 0.28);    /* brand ball, 34 px (3) */
-  --shadow-ball-md: inset -6px -6px 0 rgba(0, 0, 0, 0.28);    /* brand ball, 40 px (34) */
+  --shadow-ball-sm: inset -5px -5px 0 rgba(0, 0, 0, 0.28); /* brand ball, 34 px (3) */
+  --shadow-ball-md: inset -6px -6px 0 rgba(0, 0, 0, 0.28); /* brand ball, 40 px (34) */
   --shadow-ball-alert: inset -8px -8px 0 rgba(0, 0, 0, 0.25); /* red clock ball, 72 px (2) */
   /* ---------- the live board (added in P05; screens 3 to 6) ---------- */
-  --c-note-line: #5C4730;     /* border of the "For the look only" box (5) */
-  --c-info-text: #D6E4FB;     /* the sentence in the blue note of screen 9 */
-  --c-discard-line: #6B3A36;  /* border of the Discard frame button (11) */
-  --c-note-bg: #1A1410;       /* the dashed note under the table panel (11) */
-  --c-note-text: #A8998A;     /* its words */
-  --c-note-icon: #8C7B6B;     /* its icon */
-  --c-toast-muted: #5E5249;   /* the "Undo for 1:42 more" words on the cream toast (14) */
+  --c-note-line: #5c4730; /* border of the "For the look only" box (5) */
+  --c-info-text: #d6e4fb; /* the sentence in the blue note of screen 9 */
+  --c-discard-line: #6b3a36; /* border of the Discard frame button (11) */
+  --c-note-bg: #1a1410; /* the dashed note under the table panel (11) */
+  --c-note-text: #a8998a; /* its words */
+  --c-note-icon: #8c7b6b; /* its icon */
+  --c-toast-muted: #5e5249; /* the "Undo for 1:42 more" words on the cream toast (14) */
 
   /* ---------- the canteen and the drawer expense (added in P10; screens 28 and 29) ---------- */
-  --c-soldout-bg: #1F1915;    /* a sold-out item (28) */
-  --c-soldout-line: #5A4A3C;  /* its dashed border */
-  --c-strike: #8C7F6E;        /* the drawer figure that no longer holds, struck through (29) */
+  --c-soldout-bg: #1f1915; /* a sold-out item (28) */
+  --c-soldout-line: #5a4a3c; /* its dashed border */
+  --c-strike: #8c7f6e; /* the drawer figure that no longer holds, struck through (29) */
 
   /* ---------- the owner shell and sign-in (added in P11; screens 35, 36, 52, 53) ---------- */
-  --o-ink-3: #6E685F;         /* a tab that is not the open one (53) */
-  --shadow-ball-xs: inset -4px -4px 0 rgba(0, 0, 0, 0.28);    /* brand ball, 26 and 30 px (36, 53) */
-  --shadow-login-card: 0 20px 50px rgba(30, 40, 30, 0.08);    /* the white sign-in card (35) */
+  --o-ink-3: #6e685f; /* a tab that is not the open one (53) */
+  --shadow-ball-xs: inset -4px -4px 0 rgba(0, 0, 0, 0.28); /* brand ball, 26 and 30 px (36, 53) */
+  --shadow-login-card: 0 20px 50px rgba(30, 40, 30, 0.08); /* the white sign-in card (35) */
 
   /* ---------- shape ---------- */
   --r-tile: 18px;
@@ -209,14 +288,15 @@
   --shadow-dialog-dark: 0 30px 80px rgba(0, 0, 0, 0.55);
   --shadow-dialog-light: 0 20px 50px rgba(20, 40, 80, 0.12);
   --shadow-tile: 0 12px 26px rgba(0, 0, 0, 0.55);
-  --shadow-dot: inset -3px -3px 0 rgba(0, 0, 0, 0.28);   /* status dot (added in P01, screen 3) */
-  --shadow-redcard: 0 2px 0 var(--s-card-edge), 0 0 0 2px rgba(255, 255, 255, 0.15); /* red-card timer (3) */
-  --shadow-thumb: 0 1px 3px rgba(0, 0, 0, 0.12);         /* selected segment (50, 51) */
+  --shadow-dot: inset -3px -3px 0 rgba(0, 0, 0, 0.28); /* status dot (added in P01, screen 3) */
+  --shadow-redcard:
+    0 2px 0 var(--s-card-edge), 0 0 0 2px rgba(255, 255, 255, 0.15); /* red-card timer (3) */
+  --shadow-thumb: 0 1px 3px rgba(0, 0, 0, 0.12); /* selected segment (50, 51) */
 
   /* ---------- touch ---------- */
-  --touch-counter: 56px;      /* minimum on the counter */
+  --touch-counter: 56px; /* minimum on the counter */
   --touch-counter-main: 64px; /* footer actions, dialog main buttons */
-  --touch-key: 76px;          /* PIN and number keys */
-  --touch-key-lock: 80px;     /* the keys on the lock screen (34) */
-  --touch-owner: 44px;        /* minimum in the owner portal */
+  --touch-key: 76px; /* PIN and number keys */
+  --touch-key-lock: 80px; /* the keys on the lock screen (34) */
+  --touch-owner: 44px; /* minimum in the owner portal */
 }

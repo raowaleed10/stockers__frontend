@@ -62,6 +62,9 @@ export const signOutAll = () => api.post<{ ok: true }>('/auth/sign-out-all');
 // Dashboard, reports, activity
 export const getDashboard = () => api.get<Dashboard>('/dashboard');
 export const getReports = (query: ReportsQuery = {}) => api.get<Reports>('/reports', { ...query });
+/** The PDF or Excel file of a report, to save. */
+export const exportReport = (query: ReportsQuery & { format: ExportFormat }) =>
+  api.blob('/reports/export', { ...query });
 export const getActivity = (query: ActivityQuery = {}) =>
   api.get<ActivityList>('/activity', { ...query });
 export const decideDispute = (id: string, request: DecideRequest) =>

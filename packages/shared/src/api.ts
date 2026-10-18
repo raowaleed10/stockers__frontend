@@ -6,6 +6,8 @@ import type { Slot } from './rules/slots';
 import type { Settlement } from './rules/checkout';
 import type {
   ActivityEvent,
+  DiscardReason,
+  TableRef,
   AppNotification,
   CanteenItem,
   CanteenSale,
@@ -469,6 +471,8 @@ export interface Dashboard {
     tablesTotal: number;
     /** Games running past their own time limit right now (the red card). */
     overLimit: number;
+    /** The starting time limit of a game, in minutes ("1 table over 30 minutes"); each game keeps its own (D56). */
+    limitMinutes: number;
     drawerExpenses: Rs;
     drawerExpected: Rs;
   };
@@ -495,10 +499,22 @@ export interface Dashboard {
     todayOpen: boolean;
   };
   busyHours: Record<string, number>;
-  topPlayers: { playerId: string; name: string; spent: Rs }[];
+  /** The last 30 days. */
+  topPlayers: { playerId: string; name: string; visits: number; spent: Rs }[];
   topDebtors: { playerId: string; name: string; balance: Rs; oldestUnpaidAt?: ISO }[];
   unread: number;
+  /** The sheet that is open ("Sheet 48 open since 11:10 AM"). */
+  sheet: SheetSummary;
+  /** The "Needs a look" list, as data: each screen writes its own words (D67). */
+  needsLook: NeedsLook[];
 }
+
+/** One line of the dashboard's "Needs a look". The `tone` is the colour of its dot: red, amber or grey. */
+export type NeedsLook =
+  | { kind: 'double'; tone: 'red'; count: number; table: TableRef; minutes: number }
+  | { kind: 'discounts'; tone: 'amber'; count: number; total: Rs }
+  | { kind: 'stock'; tone: 'amber'; low: { name: string; left: number }[]; soldOut: string[] }
+  | { kind: 'discard'; tone: 'grey'; count: number; table: TableRef; reason?: DiscardReason };
 
 export type ReportPeriod = 'day' | 'month' | 'year';
 export interface ReportsQuery {
@@ -517,9 +533,17 @@ export interface Reports {
   profit: [Rs, Rs];
   creditPendingAtEnd: Rs;
   byGame: Record<string, [Rs, Rs]>;
-  byTable: Record<string, Rs>;
-  byMethod: Record<string, [Rs, Rs]>;
+  /** Frames and Century for each table, the most first (screen 37, "By table"). */
+  byTable: { table: TableRef; earned: Rs }[];
+  /** Money received by payment method: the name the owners gave it, and [this period, the one compared with]. */
+  byMethod: { id: string; name: string; amounts: [Rs, Rs] }[];
   year: Record<string, Rs>;
+  /** What each picker offers, newest first: months (`2026-09`), days (`2026-10-03`) or years (`2026`). */
+  periods: string[];
+  /** The running total of each period (day by day for a month, month by month for a year); empty for a day. */
+  race: { shown: Rs[]; compared: Rs[] };
+  /** Tables that were out of order in the period shown. */
+  closedTables: { table: TableRef; days: number; note?: string }[];
 }
 
 export interface ActivityQuery {
@@ -533,6 +557,20 @@ export interface ActivityList {
   /** How many of each type, for the filter chips. */
   counts: Record<string, number>;
   needsDecision: number;
+  /** The disputes waiting for an owner, the oldest first (the amber banner). */
+  disputes: DisputeBrief[];
+}
+/** A fight on a table that the owners decide (D15), as the banner of screen 38 needs it. */
+export interface DisputeBrief {
+  /** The Activity event; `POST /activity/:id/decide` takes it. */
+  eventId: string;
+  at: ISO;
+  table: TableRef;
+  /** The two sides, in the order of the buttons "Faisal pays" and "Naveed pays". */
+  players: [PlayerName, PlayerName];
+  frameNo?: number;
+  amount: Rs;
+  note?: string;
 }
 export interface DecideRequest {
   /** Screen 38: "Faisal pays", "Naveed pays", "Half each", "Nobody pays". */

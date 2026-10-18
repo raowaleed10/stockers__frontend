@@ -1,5 +1,5 @@
 import type { ActivityQuery, PlayerFilter, ReportsQuery } from '@stockers/shared';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useAction } from '@/lib/use-action';
 import * as calls from './calls';
 import { ownerKeys as keys } from './keys';
@@ -13,8 +13,13 @@ export const usePublicOwners = () =>
   useQuery({ queryKey: keys.publicOwners, queryFn: calls.getPublicOwners });
 export const useDashboard = () =>
   useQuery({ queryKey: keys.dashboard, queryFn: calls.getDashboard });
+// The page keeps the last report on screen while the next one is on its way, so the pickers never blink.
 export const useReports = (query: ReportsQuery = {}) =>
-  useQuery({ queryKey: keys.reports(query), queryFn: () => calls.getReports(query) });
+  useQuery({
+    queryKey: keys.reports(query),
+    queryFn: () => calls.getReports(query),
+    placeholderData: keepPreviousData,
+  });
 export const useActivity = (filters: ActivityQuery = {}) =>
   useQuery({ queryKey: keys.activity(filters), queryFn: () => calls.getActivity(filters) });
 export const useSheetFolders = () =>

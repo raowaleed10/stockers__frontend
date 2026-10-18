@@ -1,0 +1,69 @@
+{
+  "title": "رپورٹس",
+  "pdf": "PDF",
+  "excel": "ایکسل",
+  "periodLabel": "مدت کی قسم",
+  "day": "دن",
+  "month": "مہینہ",
+  "year": "سال",
+  "show": "دکھائیں",
+  "compared": "کا موازنہ",
+  "totals": "کل رقمیں",
+  "earned": "کمائی",
+  "expenses": "خرچے",
+  "profit": "منافع",
+  "vs": "پچھلی مدت {{amount}}",
+  "profitNote": "پچھلی مدت {{amount}}۔ خرچوں اور کینٹین کی خرید کے بعد۔",
+  "creditEnd": {
+    "day": "دن کے آخر میں ادھار باقی",
+    "month": "مہینے کے آخر میں ادھار باقی",
+    "year": "سال کے آخر میں ادھار باقی"
+  },
+  "creditNote": "کمائی میں شامل، ابھی وصول نہیں ہوا",
+  "race": {
+    "month": "مہینے بھر کی کمائی، دن بدن",
+    "year": "سال بھر کی کمائی، مہینہ بہ مہینہ",
+    "day": "دن {{n}}",
+    "summary": "کمائی کا جمع ہوتا کل: {{shown}} کا اختتام {{shownTotal}} پر، {{compared}} کا {{comparedTotal}} پر",
+    "tip": "{{step}}",
+    "shownEnd": "{{name}} {{amount}}"
+  },
+  "game": {
+    "title": "گیم کے لحاظ سے",
+    "game": "گیم",
+    "change": "تبدیلی",
+    "frames": "اسنوکر فریم",
+    "century": "سنچری",
+    "rooms": "روم",
+    "canteen": "$t(common:canteenSales)",
+    "unpriced": "پول، فوسبال، کیرم، لوڈو، پلے اسٹیشن",
+    "notPriced": "قیمت نہیں",
+    "total": "کل، روپے"
+  },
+  "table": {
+    "title": "ٹیبل کے لحاظ سے، {{period}}",
+    "note": "ہر ٹیبل کے فریم اور سنچری ملا کر۔",
+    "closed_one": "{{table}} {{count}} دن بند رہی: {{note}}۔",
+    "closed_other": "{{table}} {{count}} دن بند رہی: {{note}}۔"
+  },
+  "method": {
+    "title": "وصول شدہ رقم، ادائیگی کے طریقے سے",
+    "method": "طریقہ",
+    "total": "وصول، روپے",
+    "note": "واپس آیا پرانا ادھار شامل ہے۔ جو ابھی باقی ہے وہ ادھار باقی میں دکھتا ہے۔"
+  },
+  "year2": {
+    "title": "{{year}} مہینہ بہ مہینہ",
+    "sofar": "اس سال اب تک کی کمائی: {{amount}}",
+    "summary": "{{year}} میں ہر مہینے کی کمائی، {{first}} {{firstAmount}} سے {{last}} {{lastAmount}} تک",
+    "open": "اب تک"
+  },
+  "empty": "اس مدت کی کوئی رپورٹ نہیں۔",
+  "downloadFailed": "فائل نہیں بن سکی۔ دوبارہ کوشش کریں۔",
+  "methods": {
+    "cash": "کیش",
+    "bank": "$t(common:bankTransfer)",
+    "easypaisa": "Easypaisa",
+    "jazzcash": "JazzCash"
+  }
+}

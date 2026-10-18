@@ -38,7 +38,7 @@ test.describe('owner sign-in (screens 35 and 52)', () => {
     await page.getByRole('textbox', { name: 'Password' }).fill('stockers48');
     await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${BASE}/?$`));
-    await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /^Today/ })).toBeVisible();
     if (onPhone()) {
       await expect(page.getByRole('navigation', { name: 'Main' })).toBeVisible();
     } else {
@@ -141,7 +141,10 @@ test.describe('the owner frame (screens 36 and 53)', () => {
     ] as const) {
       await nav.getByRole('link', { name: new RegExp(`^${name}( \\d+ new)?$`) }).click();
       await expect(page).toHaveURL(new RegExp(`${BASE}${path === '/' ? '/?' : path}$`));
-      await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();
+      // The dashboard is titled with the day ("Today, Sat 3 Oct"); the other pages with their name.
+      await expect(
+        page.getByRole('heading', { level: 1, name: path === '/' ? /^Today/ : name }),
+      ).toBeVisible();
     }
     await nav.getByRole('button', { name: 'Sign out' }).click();
     await expect(page).toHaveURL(new RegExp(`${BASE}/sign-in`));

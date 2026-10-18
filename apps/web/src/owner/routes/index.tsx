@@ -1,7 +1,10 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { NotFound } from '@/ui/NotFound';
+import { Activity } from '../screens/activity/Activity';
+import { HomePage } from '../screens/dashboard/HomePage';
 import { OwnerPage } from '../screens/OwnerPage';
+import { Reports } from '../screens/reports/Reports';
 import { SignIn } from '../screens/SignIn';
 import { RequireOwner } from '../session/RequireOwner';
 
@@ -19,20 +22,20 @@ export function OwnerRoutes() {
     <Routes>
       <Route path="/sign-in" element={<SignIn />} />
       <Route element={<RequireOwner />}>
-        <Route path="/" element={<OwnerPage id="dashboard" />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/live" element={<OwnerPage id="live" />} />
         <Route path="/sheets" element={<OwnerPage id="sheets" />} />
         <Route path="/sheets/:key" element={<OwnerPage id="sheets" />} />
         <Route path="/sheets/:key/edit" element={<OwnerPage id="sheets" />} />
         <Route path="/players" element={<OwnerPage id="players" />} />
         <Route path="/players/:id" element={<OwnerPage id="players" />} />
-        <Route path="/reports" element={<OwnerPage id="reports" />} />
+        <Route path="/reports" element={<Reports />} />
         <Route path="/prices" element={<OwnerPage id="prices" />} />
         <Route path="/prices/add" element={<OwnerPage id="prices" />} />
         <Route path="/prices/:id" element={<OwnerPage id="prices" />} />
         <Route path="/canteen" element={<OwnerPage id="canteen" />} />
         <Route path="/expenses" element={<OwnerPage id="expenses" />} />
-        <Route path="/activity" element={<OwnerPage id="activity" />} />
+        <Route path="/activity" element={<Activity />} />
         <Route path="/workers" element={<OwnerPage id="workers" />} />
         <Route path="/settings" element={<OwnerPage id="settings" />} />
         <Route path="/alerts" element={<OwnerPage id="alerts" />} />

@@ -129,7 +129,9 @@ let devSharedCount = 0;
 try {
   const dev = await readTexts(DEV_LOCALES);
   // A dev sample that is word for word a real shipped text (a common word, say) is not dev-only text:
-  // finding it in a bundle proves nothing. Owner text is never excused like this.
+  // finding it in a bundle proves nothing. A real owner text excuses it too: an owner word that the kit also shows
+  // is not dev-only any more (nor one that is a part of a longer owner text), and the owner check above still fails if
+  // that word reaches the counter bundle.
   const shipped = new Set();
   for (const dir of [COMMON_LOCALES, COUNTER_LOCALES]) {
     try {
@@ -138,7 +140,10 @@ try {
       // folder missing: nothing shipped from there
     }
   }
-  devTexts = dev.filter((item) => !shipped.has(item.text));
+  devTexts = dev.filter(
+    (item) =>
+      !shipped.has(item.text) && !ownerTexts.some((owner) => owner.text.includes(item.text)),
+  );
   devSharedCount = dev.length - devTexts.length;
 } catch {
   // no dev language files yet

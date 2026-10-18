@@ -28,7 +28,7 @@ export function OwnerSidebar({
   return (
     <nav
       aria-label={t('menu')}
-      className="box-border flex w-[240px] shrink-0 flex-col gap-1 self-stretch bg-o-sidebar px-3.5 py-[22px] text-c-text"
+      className="box-border flex min-w-[240px] max-w-[241px] flex-[1_1_240px] flex-col gap-1 self-stretch bg-o-sidebar px-3.5 py-[22px] text-c-text"
     >
       <OwnerBrand look="sidebar" className="px-2.5 pb-[18px]" />
       {SIDEBAR_ITEMS.map((item) => (

@@ -32,6 +32,7 @@ The owners' portal has words the workers must not be able to read: profit, salar
 - This closes the open question "Owner words inside the shared language files" from P00.
 
 ## Layout rules
+- **Charts (owner, P12):** the plot of a chart (bars, lines, their axis labels and the amounts above the bars) keeps one order in both languages, the earliest on the left, so a label always sits under its own bar (`dir="ltr"` on the chart). The card around it mirrors: its title, its note, its legend. The horizontal bar lists (`HBarList`) are not plots, so they mirror and the bars grow from the start. The words in a tip follow the page. A change like `+5.1%` is kept as one left-to-right piece so its sign stays at the front.
 - Use logical utilities only: `ms-/me-/ps-/pe-`, `start-/end-`, `text-start/text-end`, `rounded-s-/rounded-e-`, `border-s/border-e`.
 - In Urdu, the whole page mirrors:
   - The waiting panel moves to the left.

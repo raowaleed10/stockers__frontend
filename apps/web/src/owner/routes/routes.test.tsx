@@ -16,7 +16,9 @@ beforeEach(() => {
 describe('owner routes', () => {
   it('shows the dashboard page inside the owner frame at /', async () => {
     renderOwner('/');
-    expect(await screen.findByRole('heading', { name: 'Dashboard' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: 'Today, Saturday 3 October' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: 'Owner menu' })).toBeInTheDocument();
   });
 

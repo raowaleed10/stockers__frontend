@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test';
 
 test('the owner dashboard page loads in Barlow on the owner background', async ({ page }) => {
   await page.goto('/owner-dev/');
-  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: /^Today/ })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 
   const look = await page.evaluate(() => ({
@@ -33,7 +33,7 @@ test('an address inside the owner path that does not exist shows "Page not found
 
 test('the mock API answers in the browser', async ({ page }) => {
   await page.goto('/owner-dev/');
-  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: /^Today/ })).toBeVisible();
   const body = await page.evaluate(() => fetch('/api/owner/health').then((r) => r.json()));
   expect(body).toEqual({ ok: true });
 });
